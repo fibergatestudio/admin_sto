@@ -16,11 +16,54 @@ class EmployeesAdminController extends Controller
 {
     /* Список всех сотрудников */
     public function view_employees(){
-        $employee_data = Employee::all();
+        $employee_data = Employee::where('status', 'active')->get();
 
 
         return view('employees_admin.employees_admin_index', ['employee_data' => $employee_data]);
 
+    }
+
+    /* Страница добавления сотрудника */
+    public function add_employee(){
+        return view('employees_admin.add_employee');
+    }
+
+    /* Обработка POST запроса добавления сотрудника */
+    public function add_employee_post(Request $request){
+        /* Создать нового сотрудника */
+        $new_employee = new Employee();
+        $new_employee->general_name = $request->name.' '.$request->surname;
+        $new_employee->status = 'active';
+        $new_employee->save();
+
+        /* Добавить ему нулевой баланс */
+        $new_employee_id = $new_employee->id;        
+        $new_employee_balance = new Employee_balance();
+        $new_employee_balance->balance = 0;
+        $new_employee_balance->employee_id = $new_employee_id;
+        $new_employee_balance->save();
+
+        /* Вернуться ко списку сотрудников */
+        return redirect()->route('view_employees');
+    }
+
+    /* Страница статусов сотрудника */
+    public function manage_employee_status($employee_id){
+        $employee = Employee::find($employee_id);
+
+        return view('employees_admin.manage_employee_status', ['employee' => $employee]);
+    }
+
+    /* Действие перевода сотрудника в архив */
+    public function archive_employee(Request $request){
+        /* Перевести сотрудника в архив */
+
+        $employee = Employee::find($request->employee_id);
+        $employee->status = 'archived';
+        $employee->save();
+        
+        /* Вернуться ко списку сотрудников */
+        return redirect()->route('view_employees');
     }
     
     /* Общая страница финансов по работнику */
@@ -107,6 +150,24 @@ class EmployeesAdminController extends Controller
         return redirect()->route('employee_fines', ['employee_id' => $fine->employee_id]);
     }
 
+    /* Добавить штраф вручную */
+
+    public function add_fine_manually(Request $request){
+        /* Добавление штрафа в режиме "ожидает применения" */
+        $new_fine = new Employee_fine;
+        $new_fine->employee_id = $request->employee_id;
+        $new_fine->amount = $request->fine_amount;
+        $new_fine->reason = $request->fine_reason;
+        $new_fine->status = 'pending';
+        $new_fine->date = date('Y-m-d');
+        $new_fine->save();
+
+        /* Редирект на страницу штрафов */
+        return redirect()->route('employee_fines', ['employee_id' => $request->employee_id]);
+
+
+    }
+
     /*
     ********** Блок с жетонами кофе **********
     */
@@ -157,5 +218,16 @@ class EmployeesAdminController extends Controller
         return redirect()->route('employee_finances_admin', ['employee_id' => $employee_id]);
 
 
+    }
+
+    /*
+    ********** Архив сотрудников **********
+    */
+
+    /* Отобразить архив сотрудников */
+    public function show_employee_archive(){
+        $archived_employees = Employee::where('status', 'archived')->get();
+
+        return view('employees_admin.employee_archive', ['archived_employees' => $archived_employees]);
     }
 }

@@ -34,34 +34,53 @@
             </tr>
         @endforeach
     </table>
-
-    {{-- !!! СДЕЛАТЬ МОДАЛЬНОЕ ОКНО ДОБАВЛЕНИЕ ШТРАФОВ ВРУЧНУЮ --}}
-    <div class="btn btn-primary">Добавить штраф вручную</div>
+    
+    <div class="btn btn-primary" data-toggle="modal" data-target="#addFineModal">Добавить штраф вручную</div>
     <div class="btn btn-secondary">История штрафов</div>
+
+    <a href="{{ url('supervisor/employee_finances/'.$employee->id) }}">
+        <div class="btn btn-danger">Вернуться</div>
+    </a>
 
 
     {{-- Добавление штрафа вручную - модальное окно --}}
-    <div class="modal" tabindex="-1" role="dialog">
+    <div class="modal" tabindex="-1" role="dialog" id="addFineModal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
+                    <h5 class="modal-title">Добавление штрафа вручную</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>{{-- / MODAL HEADER --}}
-                <div class="modal-body">
-                    {{-- Непосредственно форма --}}
-                        <form>
-                            @csrf
-                            
-                        </form>
-                    {{-- Конец формы --}}
-                </div>{{-- / MODAL BODY --}}
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>{{-- / MODAL FOOTER --}}
+                {{-- Непосредственно форма --}}
+                <form action="{{ url('/supervisor/employee_fines/add_fine_manually') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        {{-- ID сотрудника --}}
+                        <input type="hidden" name="employee_id" value="{{ $employee->id }}">
+                        
+                        {{-- Размер штрафа --}}
+                        <div class="form-group">
+                            <label>Размер штрафа</label>
+                            <input type="number" class="form-control" name="fine_amount">
+                        </div>
+
+                        {{-- Причина штрафа --}}
+                        <div class="form-group">
+                            <label>Причина наложения штрафа</label>
+                            <input type="text" class="form-control" name="fine_reason" placeholder="Причина наложения штрафа">
+                        </div>
+                        
+                        <b>* После добавления штраф попадёт на рассмотрение, где его нужно будет подтвердить</b>
+                        
+                    </div>{{-- / MODAL BODY --}}
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">Добавить</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    </div>{{-- / MODAL FOOTER --}}
+                </form>
+                {{-- Конец формы --}}
             </div>{{-- / MODAL CONTENT --}}
         </div>{{-- / MODAL DIALOG --}}
     </div>
