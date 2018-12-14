@@ -27,4 +27,11 @@
         </div>
     </a>
 
+    <hr>
+    <a href="{{ url('view_employees') }}">
+        <div class="btn btn-danger">
+            Вернуться
+        </div>
+    </a>
+
 @endsection

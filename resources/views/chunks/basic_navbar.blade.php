@@ -8,9 +8,28 @@
       <li class="nav-item active">
         <a class="nav-link" href="{{ url('view_employees') }}">
             Сотрудники
-            </span>
         </a>
       </li>
+
+      <li class="nav-item active">
+        <a class="nav-link" href="{{ url('admin/assignments_index') }}">
+            Наряды
+        </a>
+      </li>
+
+      <li class="nav-item active">
+        <a class="nav-link" href="{{ url('admin/clients_index') }}">
+            Клиенты
+        </a>
+      </li>
+      
+      <li class="nav-item active">
+        <a class="nav-link" href="{{ url('admin/cars_in_service/index') }}">
+            Машины в сервисе
+        </a>
+      </li>
+
+
       <li class="nav-item">
         <!-- <a class="nav-link" href="#">Features</a> -->
       </li>

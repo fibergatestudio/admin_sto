@@ -16,7 +16,29 @@
                         </div>
                     </a>
                 </td>
+
+                <td>
+                    <a href="{{ url('/supervisor/manage_employee_status/'.$employee->id) }}">
+                        <div class="btn btn-secondary">
+                            Статус сотрудника
+                        </div>
+                    </a>
+                </td>
+
             </tr>
         @endforeach
     </table>
+
+    <a href="{{ url('/add_employee') }}">
+        <div class="btn btn-primary">
+            Добавить сотрудника
+        </div>
+    </a>
+    <hr>
+    <a href="{{ url('admin/employee_archive') }}">
+        <div class="btn btn-secondary">
+            Архив сотрудников
+        </div>
+    </a>
+
 @endsection
