@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 use Illuminate\Support\Facades\DB;
 
-class CreateClientsTable extends Migration
+class CreateWorkzonesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,20 +15,22 @@ class CreateClientsTable extends Migration
      */
     public function up()
     {
-        Schema::create('clients', function (Blueprint $table) {
+        Schema::create('workzones', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('general_name');
+			$table->string('general_name');
+			$table->string('description')->nullable();
             $table->timestamps();
         });
 
         $demo_values = [
             [
                 'id' => 1,
-                'general_name' => 'Тестовый клиент'
+                'general_name' => 'Тестовый рабочий пост',
+                'description' => 'Тестовое описание'
             ]
         ];
 
-        DB::table('clients')->insert($demo_values);
+        DB::table('workzones')->insert($demo_values);
     }
 
     /**
@@ -38,6 +40,6 @@ class CreateClientsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('clients');
+        Schema::dropIfExists('workzones');
     }
 }

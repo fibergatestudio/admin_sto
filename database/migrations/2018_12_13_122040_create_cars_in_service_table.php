@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
+use Illuminate\Support\Facades\DB;
+
 class CreateCarsInServiceTable extends Migration
 {
     /**
@@ -20,6 +22,16 @@ class CreateCarsInServiceTable extends Migration
             $table->foreign('owner_client_id')->references('id')->on('clients');
             $table->timestamps();
         });
+
+        $demo_values = [
+            [
+                'id' => 1,
+                'general_name' => 'Тестовая машина',
+                'owner_client_id' => '1'
+            ]
+        ];
+
+        DB::table('cars_in_service')->insert($demo_values);
     }
 
     /**
