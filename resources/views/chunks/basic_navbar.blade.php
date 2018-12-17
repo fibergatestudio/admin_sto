@@ -10,6 +10,12 @@
             Сотрудники
         </a>
       </li>
+      
+      <li class="nav-item active">
+        <a class="nav-link" href="{{ url('admin/workzones/index') }}">
+            Рабочие зоны
+        </a>
+      </li>
 
       <li class="nav-item active">
         <a class="nav-link" href="{{ url('admin/assignments_index') }}">
@@ -29,6 +35,18 @@
         </a>
       </li>
 
+      <li class="nav-item active">
+        <a class="nav-link" href="{{ url('/logout') }}"
+          onclick="event.preventDefault();
+          document.getElementById('logout-form').submit();">
+            Выход
+        </a>
+      </li>
+
+      {{-- Стандартный логаут в ларавел осуществляется через POST форму --}}
+      <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+        {{ csrf_field() }}
+      </form>
 
       <li class="nav-item">
         <!-- <a class="nav-link" href="#">Features</a> -->
