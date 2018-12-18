@@ -25,5 +25,11 @@ class HomeController extends Controller
     {
         //return view('home');
         return redirect('view_employees');
+
+        /* Если пользователь администратор - отправляем его на админскую панель */
+        // ...
+
+        /* Если пользователь - сотрудник, то отправляем его на панель сотрудника */
+        // ...
     }
 }

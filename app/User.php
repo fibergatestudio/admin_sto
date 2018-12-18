@@ -28,8 +28,19 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    /* Проверка, является ли пользователь администратором */
     public function isAdmin(){
         if($this->role == 'admin')
+        {
+            return true;
+        } else{
+            return false;
+        }
+    }
+
+    /* Проверка, является ли пользователь сотрудником */
+    public function isEmployee(){
+        if($this->role == 'employee')
         {
             return true;
         } else{

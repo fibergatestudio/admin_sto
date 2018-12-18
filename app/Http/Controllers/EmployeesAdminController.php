@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
+use App\User;
 use App\Employee;
 use App\Employee_fine;
 use App\Employee_balance;
@@ -42,6 +44,16 @@ class EmployeesAdminController extends Controller
         $new_employee_balance->balance = 0;
         $new_employee_balance->employee_id = $new_employee_id;
         $new_employee_balance->save();
+
+        /* Создать аккаунт под сотрудника */
+        $login = $request->login;
+        $password = $request->password;
+        $new_user = new User();
+        $new_user->name = $login;
+        $new_user->password = Hash::make($password);
+        $new_user->email = 'test@test.com';
+        $new_user->role = 'employee';
+        $new_user->save();
 
         /* Вернуться ко списку сотрудников */
         return redirect()->route('view_employees');
