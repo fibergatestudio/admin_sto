@@ -32,10 +32,23 @@ class EmployeesAdminController extends Controller
 
     /* Обработка POST запроса добавления сотрудника */
     public function add_employee_post(Request $request){
+        /* Создать аккаунт под сотрудника */
+        $login = $request->login;
+        $password = $request->password;
+        $new_user = new User();
+        $new_user->name = $login;
+        $new_user->password = Hash::make($password);
+        $new_user->email = $login.'@test.com';
+        $new_user->role = 'employee';
+        $new_user->save();
+        $new_user_id = $new_user->id;
+        
         /* Создать нового сотрудника */
         $new_employee = new Employee();
         $new_employee->general_name = $request->name.' '.$request->surname;
         $new_employee->status = 'active';
+         /* Добавляем в таблицу работников ID соответствующего юзера */
+        $new_employee->user_id = $new_user_id; 
         $new_employee->save();
 
         /* Добавить ему нулевой баланс */
@@ -44,16 +57,6 @@ class EmployeesAdminController extends Controller
         $new_employee_balance->balance = 0;
         $new_employee_balance->employee_id = $new_employee_id;
         $new_employee_balance->save();
-
-        /* Создать аккаунт под сотрудника */
-        $login = $request->login;
-        $password = $request->password;
-        $new_user = new User();
-        $new_user->name = $login;
-        $new_user->password = Hash::make($password);
-        $new_user->email = 'test@test.com';
-        $new_user->role = 'employee';
-        $new_user->save();
 
         /* Вернуться ко списку сотрудников */
         return redirect()->route('view_employees');

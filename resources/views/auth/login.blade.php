@@ -65,9 +65,15 @@
                             </div>
                         </div>
                     </form>
-                </div>
-            </div>
-        </div>
+                </div>{{-- /card-body --}}
+            </div>{{-- /card --}}
+
+            <p style="margin-left: 10px; margin-top: 10px">
+                Тестовые аккаунты:<br>
+                Админский аккаунт: admin - admin<br>
+                Аккаунт рабочего: qwerty - qwerty
+            </p>
+        </div>{{-- col-md-8 --}}
     </div>
 </div>
 @endsection

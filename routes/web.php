@@ -146,3 +146,16 @@ Route::get('/admin/assignments_index', 'Assignments_Admin_Controller@assignments
 
 /****** РАБОТНИК : секция ******/
 Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
+
+    /* Мои наряды */
+    Route::get('/employee/my_assignments', 'Employee_Dashboard_Controller@my_assignments');
+
+    /* Страница управления нарядом */
+    Route::get('/employee/manage_assignment/{assignment_id}', 'Employee_Dashboard_Controller@manage_assignment');
+
+    /* Архив моих нарядов */
+    Route::get('/employee/my_assignments_archive', 'Employee_Dashboard_Controller@my_assignment_archive');
+
+
+/****** КЛИЕНТ : секция ******/
+// Route::get('/client/dashboard', ... );

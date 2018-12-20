@@ -31,6 +31,7 @@ class CreateAdminUser extends Migration
 
         DB::table('users')
             ->insert($data);
+
     }
 
     /**
