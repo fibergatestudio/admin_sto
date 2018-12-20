@@ -62,7 +62,7 @@ class EmployeesAdminController extends Controller
         $employee->status = 'archived';
         $employee->save();
         
-        /* Вернуться ко списку сотрудников */
+        /* Вернуться к списку сотрудников */
         return redirect()->route('view_employees');
     }
     
