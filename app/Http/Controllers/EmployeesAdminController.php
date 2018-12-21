@@ -85,11 +85,28 @@ class EmployeesAdminController extends Controller
     ********** Блок начислений (credit) **********
     */
 
-    public function employee_credit_page($employee_id){
-        $employee = Employee::find($employee_id);
+//    public function employee_credit_page($employee_id){
+//        $employee = Employee_balance::find($employee_id);
+//
+//        return view('employees_admin.employee_credit_page', ['employee' => $employee]);
+//
+//    }
 
-        return view('employees_admin.employee_credit_page', ['employee' => $employee]);
+    public function employee_credit_page(Request $request){
+        if($request->ajax() && !empty($request->all())){
+            $employee=Employee_balance::find($request->input('id'));
+        $employee->balance = $request->input('balance');
+        $employee->save();
+        return response()->json(['result'=>'Зарплата сотруднику изменена']);
+        }
+    }
 
+    /* История начислений */
+    public function index() {
+        $employee_balances = Employee_balance::where('employee_balances',1)->orderBy('id','balance')->take(10)->get();
+        return view('employees_admin.employee_credit_page')->with([
+            'employee_balances'=> $employee_balances
+        ]);
     }
 
     /*
