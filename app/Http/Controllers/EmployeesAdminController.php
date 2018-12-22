@@ -86,7 +86,7 @@ class EmployeesAdminController extends Controller
     */
 
     public function employee_credit_page($employee_id){
-        $employee = Employee_balance::find($employee_id);
+        $employee = Employee::find($employee_id);
 
         return view('employees_admin.employee_credit_page', ['employee' => $employee]);
 
@@ -95,7 +95,7 @@ class EmployeesAdminController extends Controller
     /* Начисления сотруднику : POST */
     public function employee_credit_page_post(Request $request){
         /* Начисления сотруднику в БД */
-        $new_employee_credit = new Employee_balance();
+        $new_employee_credit = new Employee();
         $new_employee_credit->balance = $request->balance;
         $new_employee_credit->employee_id = $request->employee_id;
         $new_employee_credit->save();
@@ -106,7 +106,7 @@ class EmployeesAdminController extends Controller
 
     /* История начислений */
     public function index() {
-        $employee_balances = Employee_balance::where('employee_balances',1)->orderBy('employee_id','balance')->take(10)->get();
+        $employee_balances = Employee::where('employee_balances',1)->orderBy('employee_id','balance')->take(10)->get();
         return view('employees_admin.employee_credit_page')->with([
             'employee_balances'=> $employee_balances
         ]);
