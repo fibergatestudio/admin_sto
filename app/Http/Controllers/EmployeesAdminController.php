@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
+use App\User;
 use App\Employee;
 use App\Employee_fine;
 use App\Employee_balance;
@@ -30,10 +32,24 @@ class EmployeesAdminController extends Controller
 
     /* Обработка POST запроса добавления сотрудника */
     public function add_employee_post(Request $request){
+        /* Создать аккаунт под сотрудника */
+        $login = $request->login;
+        $password = $request->password;
+        $new_user = new User();
+        $new_user->name = $login;
+        $new_user->password = Hash::make($password);
+        $new_user->email = $login.'@test.com';
+        $new_user->role = 'employee';
+        $new_user->general_name = $request->name.' '.$request->surname;
+        $new_user->save();
+        $new_user_id = $new_user->id;
+        
         /* Создать нового сотрудника */
         $new_employee = new Employee();
         $new_employee->general_name = $request->name.' '.$request->surname;
         $new_employee->status = 'active';
+         /* Добавляем в таблицу работников ID соответствующего юзера */
+        $new_employee->user_id = $new_user_id; 
         $new_employee->save();
 
         /* Добавить ему нулевой баланс */

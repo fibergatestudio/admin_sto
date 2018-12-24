@@ -1,9 +1,10 @@
-{{-- employee_coffee_tokens --}}
+@extends('layouts.limitless')
 
-@extends('layouts.basic_bootstrap_layout')
+@section('page_name')
+    Выдать жетоны на кофе
+@endsection
 
 @section('content')
-    <h2>Выдать жетоны</h2>
     <form action="{{ url('/supervisor/employee_coffee_tokens/add') }}" method="POST">
         @csrf
         <input type="hidden" name="employee_id" value="{{ $employee->id }}">

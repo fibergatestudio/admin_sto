@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Auth;
+
 class HomeController extends Controller
 {
     /**
@@ -24,6 +26,17 @@ class HomeController extends Controller
     public function index()
     {
         //return view('home');
-        return redirect('view_employees');
+        if(Auth::user()->isAdmin()){
+            return redirect('view_employees');
+        } else if (Auth::user()->isEmployee()) {
+            return redirect('employee/dashboard');
+        }
+        
+
+        /* Если пользователь администратор - отправляем его на админскую панель */
+        // ...
+
+        /* Если пользователь - сотрудник, то отправляем его на панель сотрудника */
+        // ...
     }
 }

@@ -1,9 +1,10 @@
-{{-- Страница ИСТОРИИ ШТРАФОВ по сотруднику --}}
+@extends('layouts.limitless')
 
-@extends('layouts.basic_bootstrap_layout')
+@section('page_name')
+Финансовый сектор
+@endsection
 
 @section('content')
-    <h2>Финансовый сектор</h2>
     @foreach($employee_data as $employee)
         {{ $employee->general_name }}
 

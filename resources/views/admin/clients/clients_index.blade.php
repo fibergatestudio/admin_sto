@@ -1,7 +1,10 @@
-@extends('layouts.basic_bootstrap_layout')
+@extends('layouts.limitless')
+
+@section('page_name')
+    Список клиентов
+@endsection
 
 @section('content')
-    <h2>Список клиентов</h2>
     @foreach($clients as $client)
         <a href="{{ url('admin/view_client/'.$client->id) }}">
             {{ $client->general_name }}

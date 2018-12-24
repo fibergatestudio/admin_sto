@@ -1,4 +1,8 @@
-@extends('layouts.basic_bootstrap_layout')
+@extends('layouts.limitless')
+
+@section('page_name')
+
+@endsection
 
 @section('content')
     {{-- Если клиент задан изначально--}}

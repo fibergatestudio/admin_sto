@@ -1,7 +1,10 @@
-@extends('layouts.basic_bootstrap_layout')
+@extends('layouts.limitless')
+
+@section('page_name')
+    Архив сотрудников
+@endsection
 
 @section('content')
-    <h2>Архив сотрудников</h2>
     @foreach($archived_employees as $archived_employee)
         {{ $archived_employee->general_name }}
     @endforeach

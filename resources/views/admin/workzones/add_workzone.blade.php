@@ -1,4 +1,9 @@
-@extends('layouts.basic_bootstrap_layout')
+@extends('layouts.limitless')
+
+@section('page_name')
+    Добавление нового рабочего поста
+@endsection
+
 
 @section('content')
     <h2>Добавление нового рабочего поста</h2>

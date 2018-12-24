@@ -1,7 +1,10 @@
-@extends('layouts.basic_bootstrap_layout')
+@extends('layouts.limitless')
+
+@section('page_name')
+    Страница машины: {{ $car->general_name }}
+@endsection
 
 @section('content')
-    <h2>Страница машины: {{ $car->general_name }}</h2>
     <p>Клиент: {{ $client->general_name }}</p>
     
     {{-- Добавить наряд по машине : переход на страницу --}}
@@ -10,6 +13,51 @@
             Добавить наряд 
         </div>
     </a>
+    <hr>
+    <h3>Примечания к авто</h3>
+    {{-- Вывод примечаний --}}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Текст</th>
+                <th>Автор</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {{-- Непосредственно вывод даныых --}}
+            @foreach($car_notes as $car_note)
+                <tr>
+                    {{-- Текст примечания --}}
+                    <td>{{ $car_note->text }}</td>
+
+                    {{-- Автор примечания --}}
+                    <td>{{ $car_note->author_name }}</td>
+
+                    {{-- Кнопки управления --}}
+                    <td>
+                        <a href="{{ url('admin/cars_in_service/delete_note/'.$car_note->id ) }}">
+                            <div class="btn btn-danger">
+                                X
+                            </div>
+                        </a>
+                    </td>
+                    
+                </tr>
+            @endforeach
+        </tbody>
+
+    </table>
+    {{-- Конец таблицы --}}
+
+    {{-- Кнопка добавить примечание--}}
+    <a href="{{ url('/admin/cars_in_service/add_note_to_car/'.$car->id) }}">
+        <div class="btn btn-primary">
+            Добавить примечание
+        </div>
+    </a>
+
 
 
     <hr>
