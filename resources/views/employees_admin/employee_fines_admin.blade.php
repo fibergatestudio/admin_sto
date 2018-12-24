@@ -1,10 +1,10 @@
-{{-- Страница ШТРАФОВ сотрудника (текущие) --}}
+@extends('layouts.limitless')
 
-@extends('layouts.basic_bootstrap_layout')
+@section('page_name')
+Штрафы сотрудника: {{ $employee->general_name }}
+@endsection
 
 @section('content')
-    <h2>Штрафы сотрудника: {{ $employee->general_name }}</h2>
-    
     <b>Ожидают подтверждения:</b>
     <table class="table">
         @foreach($fines as $fine)

@@ -40,6 +40,7 @@ class EmployeesAdminController extends Controller
         $new_user->password = Hash::make($password);
         $new_user->email = $login.'@test.com';
         $new_user->role = 'employee';
+        $new_user->general_name = $request->name.' '.$request->surname;
         $new_user->save();
         $new_user_id = $new_user->id;
         

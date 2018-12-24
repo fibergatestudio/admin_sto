@@ -1,79 +1,122 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Limitless - Responsive Web Application Kit by Eugene Kopyov</title>
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Вход</div>
+	<!-- Global stylesheets -->
+	<link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
+	<link href="global_assets/css/icons/icomoon/styles.css" rel="stylesheet" type="text/css">
+	<link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+	<link href="assets/css/bootstrap_limitless.min.css" rel="stylesheet" type="text/css">
+	<link href="assets/css/layout.min.css" rel="stylesheet" type="text/css">
+	<link href="assets/css/components.min.css" rel="stylesheet" type="text/css">
+	<link href="assets/css/colors.min.css" rel="stylesheet" type="text/css">
+	<!-- /global stylesheets -->
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
+	<!-- Core JS files -->
+	<script src="global_assets/js/main/jquery.min.js"></script>
+	<script src="global_assets/js/main/bootstrap.bundle.min.js"></script>
+	<script src="global_assets/js/plugins/loaders/blockui.min.js"></script>
+	<!-- /core JS files -->
 
-                        <div class="form-group row">
-                            <label for="email" class="col-sm-4 col-form-label text-md-right">Логин</label>
+	<!-- Theme JS files -->
+	<script src="assets/js/app.js"></script>
+	<!-- /theme JS files -->
 
-                            <div class="col-md-6">
-                                <input id="email" type="text" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="name" value="{{ old('email') }}" required autofocus>
+</head>
 
-                                @if ($errors->has('email'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
+<body>
 
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">Пароль</label>
+	<!-- Main navbar -->
+	<div class="navbar navbar-expand-md navbar-dark">
+		<div class="navbar-brand">
+			<a href="index.html" class="d-inline-block">
+				<img src="global_assets/images/logo_light.png" alt="">
+			</a>
+		</div>
 
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
+		<div class="d-md-none">
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-mobile">
+				<i class="icon-tree5"></i>
+			</button>
+		</div>
 
-                                @if ($errors->has('password'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
+		<div class="collapse navbar-collapse" id="navbar-mobile">
+			<ul class="navbar-nav">
+				
+			</ul>
 
-                        <div class="form-group row">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
 
-                                    <label class="form-check-label" for="remember">
-                                        Запомнить меня
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+		</div>
+	</div>
+	<!-- /main navbar -->
 
-                        <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Вход
-                                </button>
 
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        Забыли пароль?
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
-                    </form>
-                </div>{{-- /card-body --}}
-            </div>{{-- /card --}}
+	<!-- Page content -->
+	<div class="page-content">
 
-            <p style="margin-left: 10px; margin-top: 10px">
-                Тестовые аккаунты:<br>
-                Админский аккаунт: admin - admin<br>
-                Аккаунт рабочего: qwerty - qwerty
-            </p>
-        </div>{{-- col-md-8 --}}
-    </div>
-</div>
-@endsection
+		<!-- Main content -->
+		<div class="content-wrapper">
+
+			<!-- Content area -->
+			<div class="content d-flex justify-content-center align-items-center">
+
+				<!-- Login form -->
+				<form class="login-form" method="POST" action="{{ route('login') }}">
+                    @csrf
+					<div class="card mb-0">
+						<div class="card-body">
+							<div class="text-center mb-3">
+								<i class="icon-reading icon-2x text-slate-300 border-slate-300 border-3 rounded-round p-3 mb-3 mt-1"></i>
+								<h5 class="mb-0">Вход в систему</h5>
+								<span class="d-block text-muted">Введите ваши реквизиты</span>
+							</div>
+
+							<div class="form-group form-group-feedback form-group-feedback-left">
+								<input type="text" class="form-control" placeholder="Логин" name="name">
+								<div class="form-control-feedback">
+									<i class="icon-user text-muted"></i>
+								</div>
+							</div>
+
+							<div class="form-group form-group-feedback form-group-feedback-left">
+								<input type="password" class="form-control" placeholder="Пароль" name="password">
+								<div class="form-control-feedback">
+									<i class="icon-lock2 text-muted"></i>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<button type="submit" class="btn btn-primary btn-block">Войти <i class="icon-circle-right2 ml-2"></i></button>
+							</div>
+
+							<div class="text-center">
+								<a href="login_password_recover.html">Забыли пароль?</a>
+							</div>
+                            <hr>
+							<p>
+								Тестовые аккаунты:<br>
+								Админский аккаунт: admin - admin<br>
+								Аккаунт рабочего: qwerty - qwerty 
+							</p>
+						</div>
+					</div>
+				</form>
+				<!-- /login form -->
+
+			</div>
+			<!-- /content area -->
+
+
+
+		</div>
+		<!-- /main content -->
+
+	</div>
+	<!-- /page content -->
+
+</body>
+</html>

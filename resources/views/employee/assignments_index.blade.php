@@ -1,7 +1,10 @@
-@extends('layouts.employee_layout')
+@extends('layouts.limitless')
+
+@section('page_name')
+Мои активные наряды
+@endsection
 
 @section('content')
-    <h2>Мои активные наряды</h2>
     <table class="table">
         @foreach($assignments as $assignment)
             <tr>

@@ -1,8 +1,10 @@
-@extends('layouts.basic_bootstrap_layout')
+@extends('layouts.limitless')
+
+@section('page_name')
+    Форма добавления клиента
+@endsection
 
 @section('content')
-    <h2>Форма добавления клиента</h2>
-
     <form action="{{ url('admin/add_client') }}" method="POST">
         @csrf
         <div class="form-group">

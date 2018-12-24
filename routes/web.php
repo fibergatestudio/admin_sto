@@ -129,13 +129,23 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
     /* Добавление машины : страница */
     Route::get('admin/cars_in_service/add/{client_id?}', 'Cars_in_service_Admin_Controller@add_car')->middleware('can:admin_rights');
 
-    /* Добавление машины : POST */
-    Route::post('admin/cars_in_service/add', 'Cars_in_service_Admin_Controller@add_car_post')->middleware('can:admin_rights');
+        /* Добавление машины : POST */
+        Route::post('admin/cars_in_service/add', 'Cars_in_service_Admin_Controller@add_car_post')->middleware('can:admin_rights');
 
     /* Одна машина : страница */
     Route::get('admin/cars_in_service/view/{car_id}', 'Cars_in_service_Admin_Controller@single_car_view')->middleware('can:admin_rights');
 
+    /* Добавить примечание к машине : страница */
+    Route::get('/admin/cars_in_service/add_note_to_car/{car_id}', 'Cars_in_service_Admin_Controller@add_note_to_car_page');
 
+        /* Добавить примечание к машине : POST */
+        Route::post('admin/cars_in_service/add_note_to_car', 'Cars_in_service_Admin_Controller@add_note_to_car_post');
+
+        /* Удалить примечание */
+        Route::get('admin/cars_in_service/delete_note/{note_id}', 'Cars_in_service_Admin_Controller@delete_note');
+
+    /* История машины */
+    // ...
     
 /****** Наряды: Администратор ******/
 Route::get('/admin/assignments_index', 'Assignments_Admin_Controller@assignments_index')->middleware('can:admin_rights');

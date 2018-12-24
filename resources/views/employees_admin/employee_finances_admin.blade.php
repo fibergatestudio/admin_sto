@@ -1,9 +1,10 @@
-{{-- Общая страница ФИНАНСОВ по сотруднику --}}
+@extends('layouts.limitless')
 
-@extends('layouts.basic_bootstrap_layout')
+@section('page_name')
+Финансы по сотруднику: {{ $employee->general_name }}
+@endsection
 
 @section('content')
-    <h2>Финансы по сотруднику: {{ $employee->general_name }}</h2>
     Баланс сотрудника: {{ $balance }}<br>
     <hr>
     {{-- Начисления --}}

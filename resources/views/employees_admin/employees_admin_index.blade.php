@@ -1,7 +1,10 @@
-@extends('layouts.basic_bootstrap_layout')
+@extends('layouts.limitless')
+
+@section('page_name')
+    Сотрудники
+@endsection
 
 @section('content')
-    <h2>Сотрудники</h2>
     <table class="table">
         @foreach($employee_data as $employee)
             <tr>

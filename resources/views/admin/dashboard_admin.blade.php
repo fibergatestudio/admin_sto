@@ -1,6 +1,10 @@
-@extends('layouts.basic_bootstrap_layout')
+@extends('layouts.limitless')
+
+@section('page_name')
+Административнаая панель
+@endsection
+
 
 @section('content')
-<h2>Административнаая панель</h2>
-<p>Для навигации используйте верхнее меню</p>
+<p>Для навигации используйте боковое меню</p>
 @endsection

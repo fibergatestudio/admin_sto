@@ -5,10 +5,13 @@
     }
 ?>
 
-@extends('layouts.basic_bootstrap_layout')
+@extends('layouts.limitless')
+
+@section('page_name')
+    Страница нарядов
+@endsection
 
 @section('content')
-    <h2>Страница нарядов</h2>
     <table class="table">
         <thead>
             <tr>

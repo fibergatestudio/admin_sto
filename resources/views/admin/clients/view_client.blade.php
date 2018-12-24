@@ -1,7 +1,11 @@
-@extends('layouts.basic_bootstrap_layout')
+@extends('layouts.limitless')
+
+@section('page_name')
+    Карточка клиента: {{ $client->general_name }}
+@endsection
 
 @section('content')
-    <h2>Карточка клиента: {{ $client->general_name }}</h2>
+    
     <h3>Машины клиента:</h3>
     <p>
         @foreach($cars as $car)

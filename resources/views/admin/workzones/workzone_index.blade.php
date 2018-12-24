@@ -1,7 +1,10 @@
-@extends('layouts.basic_bootstrap_layout')
+@extends('layouts.limitless')
+
+@section('page_name')
+    Рабочие зоны
+@endsection
 
 @section('content')
-    <h2>Рабочие зоны</h2>
     @foreach($workzones as $workzone)
         {{ $workzone->general_name }}
         <br>

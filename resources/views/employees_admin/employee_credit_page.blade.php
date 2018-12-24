@@ -1,9 +1,10 @@
-{{-- employee_credit_page --}}
+@extends('layouts.limitless')
 
-@extends('layouts.basic_bootstrap_layout')
+@section('page_name')
+Страница начислений по сотруднику: {{ $employee->name }}
+@endsection
 
 @section('content')
-    <h2>Страница начислений по сотруднику: {{ $employee->name }}</h2>
     {{-- Форма начислить вручную --}}
     <h4>Пополнить вручную</h4>
     <form>

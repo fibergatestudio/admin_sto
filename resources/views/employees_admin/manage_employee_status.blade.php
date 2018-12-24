@@ -1,4 +1,8 @@
-@extends('layouts.basic_bootstrap_layout')
+@extends('layouts.limitless')
+
+@section('page_name')
+Управление статусом сотрудника: <b>{{ $employee->general_name }}</b>
+@endsection
 
 @section('content')
     <?php
@@ -8,7 +12,6 @@
         ];
     ?>
 
-    <h2>Управление статусом сотрудника: <b>{{ $employee->general_name }}</b></h2>
     <p>Текущий статус: {{ $status_array[$employee->status] }}</p>
     
     {{-- Перевести сотрудника в архив --}}
