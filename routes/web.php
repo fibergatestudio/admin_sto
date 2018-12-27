@@ -166,6 +166,20 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
     /* Архив моих нарядов */
     Route::get('/employee/my_assignments_archive', 'Employee_Dashboard_Controller@my_assignment_archive');
 
+/**** Смены : работник ****/
+
+    /* Страница смены (сегодня) */
+    Route::get('/employee/shifts/index', 'Employee_Dashboard_Controller@shifts_index');
+
+    /* Открыть смену */
+    Route::get('/employee/shifts/start', 'Employee_Dashboard_Controller@start_shift');
+
+    /* Закрыть смену */
+    // ...
+
+    /* История смен */
+    // ...
+
 
 /****** КЛИЕНТ : секция ******/
 // Route::get('/client/dashboard', ... );

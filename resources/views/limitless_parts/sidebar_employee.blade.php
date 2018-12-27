@@ -33,6 +33,12 @@
 								Мои наряды
 							</a>
       					</li>
+
+						<li class="nav-item">
+							<a class="nav-link" href="{{ url('employee/shifts/index') }}">
+								Мои cмены
+							</a>
+      					</li>
                         
 
 						

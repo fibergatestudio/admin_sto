@@ -55,4 +55,31 @@ class Employee_Dashboard_Controller extends Controller
     public function my_assignments_archive(){
         // ...
     }
+
+    /**** Смены ****/
+
+    /* Главная страница управления сменами */
+    public function shifts_index(){
+        // Получить сегодняшнюю смену
+        // ...
+        
+
+        return view('employee.shifts.shifts_index');
+    }
+
+    /* Открыть смену */
+    public function start_shift(){
+        // Получить ID сотрудника
+        $employee_user_id = Auth::user()->id;
+
+        // Проверить, открыта ли смена
+        // ...
+
+        // Если смена не открыта - открыть новую смену
+        // ...
+
+        // Вернуться на страницу управления сменами
+        return redirect('employee/shifts/index');
+
+    }
 }
