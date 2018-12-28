@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 use App\Assignment;
+use App\Shift;
 
 class Employee_Dashboard_Controller extends Controller
 {
@@ -62,9 +63,14 @@ class Employee_Dashboard_Controller extends Controller
     public function shifts_index(){
         // Получить сегодняшнюю смену
         // ...
+        $today = date('Y-m-d');
+        $today_shift = Shift::where('date', $today);
         
 
-        return view('employee.shifts.shifts_index');
+        return view('employee.shifts.shifts_index',
+            [
+                'today_shift' => $today_shift
+            ]);
     }
 
     /* Открыть смену */
@@ -76,10 +82,29 @@ class Employee_Dashboard_Controller extends Controller
         // ...
 
         // Если смена не открыта - открыть новую смену
-        // ...
+        $new_shift = new Shift();
+        $new_shift->new_shift($employee_user_id);
 
         // Вернуться на страницу управления сменами
-        return redirect('employee/shifts/index');
+        return back();
+
+    }
+
+    /* Закрыть смену */
+    public function end_shift(Request $request){
+        $shift_id = $request->shift_id;
+
+        // ... Проверка на право закрыть
+        // ... Проверка на статус смены (открыта ли?)
+
+        // Закрываем смену
+        $shift = Shift::find($shift_id);
+        $shift->closed_at = date('H:i:s');
+        $shift->status = 'closed';
+        $shift->save();
+
+        // И возвращаемся на страницу смен
+        return back();
 
     }
 }

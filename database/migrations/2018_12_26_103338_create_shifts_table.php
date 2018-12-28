@@ -19,9 +19,9 @@ class CreateShiftsTable extends Migration
             $table->foreign('employee_id')->references('id')->on('employees');
             $table->date('date');
             $table->time('opened_at');
-            $table->time('closed_at');
+            $table->time('closed_at')->nullable();
             $table->string('status');
-            $table->string('note');
+            $table->string('note')->nullable();;
             $table->timestamps();
         });
     }

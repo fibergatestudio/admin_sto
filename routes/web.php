@@ -175,7 +175,7 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
     Route::get('/employee/shifts/start', 'Employee_Dashboard_Controller@start_shift');
 
     /* Закрыть смену */
-    // ...
+    Route::post('/employee/shifts/end/', 'Employee_Dashboard_Controller@end_shift');
 
     /* История смен */
     // ...
