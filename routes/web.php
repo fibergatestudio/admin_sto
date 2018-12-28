@@ -120,6 +120,19 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
     /* Просмотр клиента: страница */
     Route::get('admin/view_client/{client_id}', 'Clients_Admin_Controller@view_client')->name('admin_view_client')->middleware('can:admin_rights');
 
+    
+    /*Добавить примечание о клиенте : страница*/
+    Route::get('/admin/clients/add_note_to_client/{client_id}', 'Clients_Admin_Controller@add_note_to_client_page');
+
+        /* Добавить примечание к клиенту : POST */
+        Route::post('admin/clients/add_note_to_client', 'Clients_Admin_Controller@add_note_to_client_post');
+
+        /* Удалить примечание */
+        Route::get('admin/clients/delete_client_note/{note_id}', 'Clients_Admin_Controller@delete_note');
+    /**/    
+    
+
+
 
 /****** Машины на обслуживании: Администратор ******/
     
