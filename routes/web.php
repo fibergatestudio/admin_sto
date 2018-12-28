@@ -153,6 +153,9 @@ Route::get('/admin/assignments_index', 'Assignments_Admin_Controller@assignments
     /* Добавление наряда на изначально выбранную машину : страница */
     Route::get('admin/assignments/add/{car_id}', 'Assignments_Admin_Controller@add_assignment_page')->middleware('can:admin_rights');
 
+/****** Финансы : Администратор ******/
+//Route::get('/admin/finances/index', 'Finances_Admin_Controller@finances_index')->middleware('can:admin_rights');
+
 
 /****** РАБОТНИК : секция ******/
 Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
