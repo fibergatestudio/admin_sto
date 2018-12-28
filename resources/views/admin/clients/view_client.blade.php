@@ -22,6 +22,15 @@
 
     <hr>
     
+        {{-- Добавить примечание к клиенту --}}
+    <a href="{{ url('admin/clients/add_note_to_client/'.$client->id) }}">
+        <div class="btn btn-primary">    
+            Добавить примечание к клиенту
+        </div>
+    </a>
+
+    <hr>
+    
     {{-- Вернуться к списку клиентов --}}
     <a href="{{ url('admin/clients_index') }}">
         <div class="btn btn-secondary">
