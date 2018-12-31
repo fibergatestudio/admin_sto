@@ -11,4 +11,11 @@ class Employee extends Model
         $employee = Employee::where('user_id', $employee_user_id)->first();
         return $employee;
     }
+
+    /* Задать новую ставку за смену */
+    public function set_new_wage($wage){
+        $this->standard_shift_wage = $wage;
+        $this->save();
+    }
+    
 }

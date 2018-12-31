@@ -29,6 +29,10 @@ class Shift extends Model
 
     // Закрыть текущую смену
     public function close_shift(){
-        // ...
+        // Меняем статус на закрыто
+        $this->status = 'closed';
+        $this->save();
+
+        return true; // Уведомление об успешном закрытии смены
     }
 }
