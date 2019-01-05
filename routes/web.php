@@ -166,8 +166,20 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
 /****** Наряды: Администратор ******/
 Route::get('/admin/assignments_index', 'Assignments_Admin_Controller@assignments_index')->middleware('can:admin_rights');
 
-    /* Добавление наряда на изначально выбранную машину : страница */
-    Route::get('admin/assignments/add/{car_id}', 'Assignments_Admin_Controller@add_assignment_page')->middleware('can:admin_rights');
+    /* Добавление наряда на изначально выбранную машину : Страница */
+    Route::get('/admin/assignments/add/{car_id}', 'Assignments_Admin_Controller@add_assignment_page')->middleware('can:admin_rights');
+
+        /* Добавление наряда на изначально выбранную машину : POST */
+        Route::post('/admin/assignments/add', 'Assignments_Admin_Controller@add_assignment_page_post');
+
+    /* Просмотр наряда : страница */
+    Route::get('admin/assignments/view/{assignment_id}', 'Assignments_Admin_Controller@view_assignment');
+
+    /* Добавление зонального наряда : страница */
+    Route::get('admin/assignments/add_sub_assignment/{assignment_id}', 'Assignments_Admin_Controller@add_sub_assignment_page');
+
+        /* Добавление зонального наряда : POST */
+        Route::post('admin/assignments/add_sub_assignment', 'Assignments_Admin_Controller@add_sub_assignment_post');
 
 /****** Финансы : Администратор ******/
 Route::get('/admin/finances/index', 'Finances_Admin_Controller@finances_index')->middleware('can:admin_rights');

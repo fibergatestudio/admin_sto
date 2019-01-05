@@ -11,19 +11,31 @@
     </p>
 
     {{-- Форма добавления наряда --}}
-    <form>
+    <form method="POST" action="{{ url('admin/assignments/add') }}">
         @csrf
-        
-        {{-- ... --}}
 
-        {{-- Описание --}}
-        
+        {{-- Идентификатор машины --}}
+        <input type="hidden" name="car_id" value="{{ $car->id }}">
+
+        {{-- Название --}}
+        <div class="form-group">
+            <label>Краткое описание</label>
+            <input type="text" name="assignment_description" class="form-control">
+        </div>
+
         {{-- Ответственный работник --}}
+        <div class="form-group">
+            <label>Ответственный сотрудник</label>
+            <select name="responsible_employee_id" class="form-control">
+                @foreach($employees as $employee)
+                    <option value="{{ $employee->id }}">{{ $employee->general_name }}</option>
+                @endforeach
+            </select>
+        </div>
 
-        
+
         <button type="submit" class="btn btn-primary">
             Создать наряд
-
         </button>
 
 

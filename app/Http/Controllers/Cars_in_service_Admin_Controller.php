@@ -11,6 +11,7 @@ use App\User;
 use App\Client;
 use App\Cars_in_service;
 use App\Cars_notes;
+use App\Assignment;
 
 class Cars_in_service_Admin_Controller extends Controller
 {
@@ -62,7 +63,10 @@ class Cars_in_service_Admin_Controller extends Controller
         // Получаем информацию о клиенте
         $client = Client::find($car_in_service->owner_client_id);
         
-        // Получаем информацию о примечаниях к машине
+        /* Получаем информацию об активных нарядах на машину */
+        $assignments = Assignment::where([['car_id', $car_id], ['status', 'active']])->get();
+
+        /* Получаем информацию о примечаниях к машине */
         $car_notes = 
             DB::table('cars_notes')
                 ->where('car_id', $car_in_service->id)
@@ -73,11 +77,12 @@ class Cars_in_service_Admin_Controller extends Controller
             $car_note->author_name = User::find($car_note->author_id)->general_name;
         }
 
-
+        /* Выводим представление */
         return view('admin.cars_in_service.single_car_page', [
             'car' => $car_in_service,
             'client' => $client,
-            'car_notes' => $car_notes
+            'car_notes' => $car_notes,
+            'assignments' => $assignments
         ]);
     }
 
