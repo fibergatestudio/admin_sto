@@ -9,7 +9,9 @@
     <h3>Машины клиента:</h3>
     <p>
         @foreach($cars as $car)
-            {{ $car->general_name }}
+            <a href="{{ url('admin/cars_in_service/view/'.$car->id) }}">
+                {{ $car->general_name }}
+            </a>
         @endforeach
     </p>
     

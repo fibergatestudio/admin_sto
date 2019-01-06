@@ -34,6 +34,13 @@
 	<script src="{{ url('global_assets/js/demo_pages/dashboard.js') }}"></script>
 	<!-- /theme JS files -->
 
+
+	{{-- Vue.JS --}}
+	{{-- development version, includes helpful console warnings --}}
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	{{-- End Vue.JS--}}
+
+
 </head>
 
 <body>

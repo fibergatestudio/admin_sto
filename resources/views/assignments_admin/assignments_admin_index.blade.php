@@ -18,7 +18,7 @@
             <th scope="col">Дата создания</th>
             <th scope="col">Ответственный сотрудник</th>
             <th scope="col">Авто</th>
-            <th scope="col">Зона</th>
+            <th scope="col"></th>
             </tr>
         </thead>
         @foreach($assignments as $assignment)
@@ -32,12 +32,9 @@
                 {{-- Машина --}}
                 <td>{{ $assignment->car_name }}</td>
 
-                {{-- Пост --}}
-                <td>{{ $assignment->workzone_name }}</td>
-
                 {{-- Кнопка подробнее --}}
                 <td>
-                    <a href="#">
+                    <a href="{{ url('/admin/assignments/view/'.$assignment->id) }}">
                         <div class="btn btn-secondary">
                             Подробнее
                         </div>

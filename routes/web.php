@@ -37,7 +37,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 /* Общая доска */
 Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('dashboard_admin')->middleware('can:admin_rights');
 
-/* Работа с клиентами*/
+/***** Работа с клиентами *****/
 
     /* Работа с заявками, зашедшими с формы */
         /* Просмотр всех заявок, зашедших с формы */
@@ -47,7 +47,7 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
         Route::post('/approve_appointment', 'ClientAppointmentsController@approve_appointment')->middleware('can:admin_rights');
 
 
-/* Работа с сотрудниками */
+/***** Работа с сотрудниками *****/
 
     /* Отобразить список сотрудников и переход к другим разделам */
     Route::get('/view_employees', 'EmployeesAdminController@view_employees')->name('view_employees')->middleware('can:admin_rights');
@@ -68,6 +68,9 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
 
     /* Страница финансов сотрудника */
     Route::get('/supervisor/employee_finances/{employee_id}', 'EmployeesAdminController@employee_finances')->name('employee_finances_admin')->middleware('can:admin_rights');
+
+        /* Изменить ставку сотруднику : POST */
+        Route::post('/admin/employee_finances/change_standard_shift_wage', 'EmployeesAdminController@change_standard_shift_wage');
 
     /* Страница начислений по сотруднику */
     Route::get('/supervisor/employee_finances/credit/{employee_id}', 'EmployeesAdminController@employee_credit_page')->middleware('can:admin_rights');
@@ -180,11 +183,55 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
 /****** Наряды: Администратор ******/
 Route::get('/admin/assignments_index', 'Assignments_Admin_Controller@assignments_index')->middleware('can:admin_rights');
 
-    /* Добавление наряда на изначально выбранную машину : страница */
-    Route::get('admin/assignments/add/{car_id}', 'Assignments_Admin_Controller@add_assignment_page')->middleware('can:admin_rights');
+    /* Добавление наряда на изначально выбранную машину : Страница */
+    Route::get('/admin/assignments/add/{car_id}', 'Assignments_Admin_Controller@add_assignment_page')->middleware('can:admin_rights');
+
+        /* Добавление наряда на изначально выбранную машину : POST */
+        Route::post('/admin/assignments/add', 'Assignments_Admin_Controller@add_assignment_page_post');
+
+    /* Просмотр наряда : страница */
+    Route::get('admin/assignments/view/{assignment_id}', 'Assignments_Admin_Controller@view_assignment');
+
+    /* Добавление зонального наряда : страница */
+    Route::get('admin/assignments/add_sub_assignment/{assignment_id}', 'Assignments_Admin_Controller@add_sub_assignment_page');
+
+        /* Добавление зонального наряда : POST */
+        Route::post('admin/assignments/add_sub_assignment', 'Assignments_Admin_Controller@add_sub_assignment_post');
+
+    /* Загрузка фотографии в CRM : Страница */
+    Route::get('/admin/assignments/{assignment_id}/add_photo_page', 'Assignments_Admin_Controller@add_photo_to_assignment_page');
+
+        /* Загрузка фотографий в CRM : Post */
+        Route::post('/admin/assignments/add_photo_to_assignment', 'Assignments_Admin_Controller@add_photo_to_assignment_post');
+
+/****** Финансы : Администратор ******/
+Route::get('/admin/finances/index', 'Finances_Admin_Controller@finances_index')->middleware('can:admin_rights');
 
 
-/****** РАБОТНИК : секция ******/
+/****** Supply orders : Администратор ******/
+
+/* Главная страница */
+Route::get('/admin/supply_orders/index', 'Supply_orders_Admin_Controller@supply_orders_index')->middleware('can:admin_rights');
+
+/* Добавить заказ */
+Route::get('/admin/supply_orders/new', 'Supply_orders_Admin_Controller@new_supply_order')->middleware('can:admin_rights');
+
+    /* Добавить заказ : POST */
+    Route::post('/admin/supply_orders/new', 'Supply_orders_Admin_Controller@new_supply_order_post')->middleware('can:admin_rights');
+
+/* Управление заказом : Страница */
+Route::get('/admin/supply_orders/manage/{supply_order_id}', 'Supply_orders_Admin_Controller@manage_supply_order');
+
+    /* Архивировать заказ */
+    Route::get('/admin/supply_orders/archive/{supply_order_id}', 'Supply_orders_Admin_Controller@archive_supply_order');
+
+/* Архив заказов */
+Route::get('/admin/supply_orders/archive', 'Supply_orders_Admin_Controller@archive_index');
+
+    /* Удалить заказ (доступно только в архиве) */
+    Route::get('/admin/supply_orders/archive/delete/{order_id}', 'Supply_orders_Admin_Controller@delete_archived_order');
+
+/********** РАБОТНИК : секция **********/
 Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
 
     /* Мои наряды */
@@ -195,6 +242,20 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
 
     /* Архив моих нарядов */
     Route::get('/employee/my_assignments_archive', 'Employee_Dashboard_Controller@my_assignment_archive');
+
+/**** Смены : работник ****/
+
+    /* Страница смены (сегодня) */
+    Route::get('/employee/shifts/index', 'Employee_Dashboard_Controller@shifts_index');
+
+    /* Открыть смену */
+    Route::get('/employee/shifts/start', 'Employee_Dashboard_Controller@start_shift');
+
+    /* Закрыть смену */
+    Route::post('/employee/shifts/end/', 'Employee_Dashboard_Controller@end_shift');
+
+    /* История смен */
+    // ...
 
 
 /****** КЛИЕНТ : секция ******/

@@ -5,12 +5,32 @@
 @endsection
 
 @section('content')
-    <p>Клиент: {{ $client->general_name }}</p>
+    {{-- Клиент-владелец : ссылка --}}
+    <p>Клиент-владелец: 
+        <a href="{{ url('admin/view_client/'.$client->id) }}">
+            {{ $client->general_name }}
+        </a>
     
+    </p>
+    <hr>
+    {{-- Текущие наряды : вывод --}}
+
+    Текущие наряды по авто:<br>
+    @foreach($assignments as $assignment)
+        {{-- Название наряда + переход на страницу наряда--}}
+        <a href="{{ url('admin/assignments/view/'.$assignment->id) }}">
+            {{ $assignment->description }}
+        </a>
+        <br>
+
+    @endforeach
+
+
+    <hr>
     {{-- Добавить наряд по машине : переход на страницу --}}
     <a href="{{ url('admin/assignments/add/'.$car->id) }}">
         <div class="btn btn-success">
-            Добавить наряд 
+            Добавить наряд на машину
         </div>
     </a>
     <hr>
@@ -58,13 +78,4 @@
         </div>
     </a>
 
-
-
-    <hr>
-    {{-- Возврат в карточку клиента : переход на страницу--}}
-    <a href="#">
-        <div class="btn btn-secondary">
-            В карточку клиента
-        </div>
-    </a>
 @endsection

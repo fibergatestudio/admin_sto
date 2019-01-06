@@ -75,6 +75,24 @@
 							</a>
 						</li>
 
+						<li class="nav-item">
+							<a href="{{ url('/admin/supply_orders/index') }}" class="nav-link {{ request()->is('admin/supply_orders/*') ? 'active' : ''}}">
+								<i class="icon-book3"></i>
+								<span>
+									Заказы на снабжение
+								</span>
+							</a>
+						</li>
+
+						<li class="nav-item">
+							<a href="{{ url('/admin/finances/index') }}" class="nav-link">
+								<i class="icon-book3"></i>
+								<span>
+									Финансы
+								</span>
+							</a>
+						</li>
+
 						
 						<li class="nav-item">
 							<a class="nav-link" href="{{ url('/logout') }}"

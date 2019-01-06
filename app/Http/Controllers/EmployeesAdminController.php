@@ -88,11 +88,6 @@ class EmployeesAdminController extends Controller
     /* Общая страница финансов по работнику */
     public function employee_finances($employee_id){
         $employee = Employee::find($employee_id);
-        $balance_dump = 
-            DB::table('employee_balances')
-                ->where('employee_id', '=', $employee_id)
-                ->first();
-
         $balance = $balance_dump->balance;
         return view('employees_admin.employee_finances_admin', ['employee' => $employee, 'balance' => $balance]);
     }
@@ -121,6 +116,15 @@ class EmployeesAdminController extends Controller
     /* - Удление примечания к сотруднику - */
     public function delete_employee_note($note_id){
         Employees_notes::find($note_id)->delete();
+        return back();
+    }
+
+    /* Изменение ставки сотрудника */
+    public function change_standard_shift_wage(Request $request){
+        // Задаём новую ставку
+        Employee::find($request->employee_id)->set_new_wage($request->new_wage);
+        
+        // Возвращаемся на предыдущую страницу
         return back();
     }
 
