@@ -8,6 +8,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 use App\Employee;
 use App\Client;
@@ -83,6 +86,11 @@ class Assignments_Admin_Controller extends Controller
         /* Получаем информацию по наряду */
         $assignment = Assignment::find($assignment_id);
 
+        //echo asset('storage/file.txt');
+        //Storage::get('/app/2/owl.jpg');
+
+        //echo "<img src='".Storage::url('/app/2/owl.jpg')."'>";
+
         /* Возвращаем представление */
         return view('admin.assignments.view_assignment_page', ['assignment' => $assignment]);
     }
@@ -112,9 +120,34 @@ class Assignments_Admin_Controller extends Controller
         /* Получаем данные из запроса */
         $main_assignment_id = $request->assignment_id; // ID "родительского" наряда
 
+        /* Сохранение зонального наряда */
         // ...
 
         /* Возвращаемся на страницу */
         return redirect('/admin/assignments/view/'.$main_assignment_id);
     }
+
+    /* Добавление фотографий к наряду : Страница */
+    public function add_photo_to_assignment_page($assignment_id){
+        /* Получаем текущий наряд, к которому будут добавляться фото */
+        $assignment = Assignment::find($assignment_id);
+        
+        /* Отображаем представление */
+        return view('admin.assignments.add_photo_to_assignment_page', ['assignment' => $assignment]);
+    }
+
+    /* Добавление фотографий к наряду : Обработка запроса */
+    public function add_photo_to_assignment_post(Request $request){
+        /* Получаем данные из запроса */
+        /* ID наряда, к которому добавляем фото */
+        $assignment_id = $request->assignment_id;
+
+        /* Сохраняем фото */
+        //print_r(Input::all()); - дебаг
+        $request->test->store('public/'.$assignment_id);
+        
+        /* Возвращаемся на страницу авто */
+        return redirect('admin/assignments/view/'.$assignment_id);
+    }
+
 }

@@ -181,6 +181,12 @@ Route::get('/admin/assignments_index', 'Assignments_Admin_Controller@assignments
         /* Добавление зонального наряда : POST */
         Route::post('admin/assignments/add_sub_assignment', 'Assignments_Admin_Controller@add_sub_assignment_post');
 
+    /* Загрузка фотографии в CRM : Страница */
+    Route::get('/admin/assignments/{assignment_id}/add_photo_page', 'Assignments_Admin_Controller@add_photo_to_assignment_page');
+
+        /* Загрузка фотографий в CRM : Post */
+        Route::post('/admin/assignments/add_photo_to_assignment', 'Assignments_Admin_Controller@add_photo_to_assignment_post');
+
 /****** Финансы : Администратор ******/
 Route::get('/admin/finances/index', 'Finances_Admin_Controller@finances_index')->middleware('can:admin_rights');
 
