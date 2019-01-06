@@ -28,6 +28,14 @@
                     </a>
                 </td>
 
+                 <td>
+                    <a href="{{ url('/admin/employee/'.$employee->id) }}">
+                        <div class="btn btn-secondary">
+                            Примечания
+                        </div>
+                    </a>
+                </td>
+
             </tr>
         @endforeach
     </table>

@@ -21,6 +21,43 @@
     </a>
 
     <hr>
+
+    <h3>Примечания к клиенту</h3>
+    {{-- Вывод примечаний --}}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Текст</th>
+                <th>Автор</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {{--  Вывод данных --}}
+            @foreach($client_notes as $client_note)
+                <tr>
+                    {{-- Текст примечания --}}
+                    <td>{{ $client_note->text }}</td>
+
+                    {{-- Автор примечания --}}
+                    <td>{{ $client_note->author_name }}</td>
+
+                    {{-- Кнопки управления --}}
+                    <td>
+                        <a href="{{ url('admin/client/delete_client_note/'.$client_note->id ) }}">
+                            <div class="btn btn-danger">
+                                X
+                            </div>
+                        </a>
+                    </td>
+                    
+                </tr>
+            @endforeach
+        </tbody>
+
+    </table>
+    {{-- Конец таблицы --}}
     
         {{-- Добавить примечание к клиенту --}}
     <a href="{{ url('admin/clients/add_note_to_client/'.$client->id) }}">

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 use App\User;
 use App\Employee;
@@ -13,6 +14,8 @@ use App\Employee_fine;
 use App\Employee_balance;
 use App\Employee_balance_log;
 use App\Coffee_token_log;
+use App\Employees_notes;
+
 
 class EmployeesAdminController extends Controller
 {
@@ -92,10 +95,53 @@ class EmployeesAdminController extends Controller
 
         $balance = $balance_dump->balance;
         return view('employees_admin.employee_finances_admin', ['employee' => $employee, 'balance' => $balance]);
+    }
+
+    /* - Добавления примечания к сотруднику: страница - */
+    public function add_note_to_employee_page($employee_id){
+        $employee = Employee::find($employee_id);
+        return view('employees_admin.add_note_to_employee', ['employee' => $employee]);
+    }
+
+    /* - Добавление примечания к сотруднику: POST - */
+    public function add_note_to_employee_post(Request $request){
+        //Добавить примечание
+        $employee = Employee::find($request->employee_id);
+        $new_employee_note_entry = new Employees_notes();
+        $new_employee_note_entry->employee_id = $employee->id;
+        $new_employee_note_entry->author_id = Auth::user()->id;
+        $new_employee_note_entry->text = $request->note_content;
+        $new_employee_note_entry->type = 'note';
+        $new_employee_note_entry->save();
+
+        //Возврат на страницу сотрудника
+        return redirect ('/admin/employee/' .$employee->id);
+    }     
+
+    /* - Удление примечания к сотруднику - */
+    public function delete_employee_note($note_id){
+        Employees_notes::find($note_id)->delete();
+        return back();
+    }
+
+    public function single_employee_notes($employee_id){
+        $employee = Employee::find($employee_id);
+
+        $employee_notes = DB::table('employees_notes')->where('employee_id', $employee->id)->get();
+
+        foreach($employee_notes as $employee_note){
+            $employee_note->author_name = User::find($employee_note->author_id)->general_name;
+        }
+
+        return view('employees_admin.single_employee_notes', [
+            'employee' => $employee,
+            'employee_notes' => $employee_notes
+        ]);
+    }
 
         
 
-    }
+    
 
     /*
     ********** Блок начислений (credit) **********

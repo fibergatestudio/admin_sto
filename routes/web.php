@@ -91,6 +91,20 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
         Route::post('/supervisor/employee_coffee_tokens/add',
                     'EmployeesAdminController@employee_coffee_token_issue')->middleware('can:admin_rights');
 
+
+        /* - Добавление примечания к сотруднику: страница - */
+        Route::get('/admin/employee/add_note_to_employee/{employee_id}', 'EmployeesAdminController@add_note_to_employee_page')->middleware('can:admin_rights');
+
+        /* - Добавление примечания к сотруднику: POST  - */
+        Route::post('/admin/employee/add_note_to_employee', 'EmployeesAdminController@add_note_to_employee_post')->middleware('can:admin_rights');
+
+        /* - Страница всех примечаний сотрудника - */
+        Route::get('/admin/employee/{employee_id}', 'EmployeesAdminController@single_employee_notes')->middleware('can:admin_rights');
+
+        /* - Удаление примечания к сотруднику - */
+        Route::get('/admin/employee/delete_employee_note/{note_id}', 'EmployeesAdminController@delete_employee_note')->middleware('can:admin_rights');
+
+
 /****** Рабочие зоны: Администратор ******/
 
     /* Просмотр рабочих зон */
@@ -118,7 +132,7 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
         Route::post('admin/add_client', 'Clients_Admin_Controller@add_client_post')->middleware('can:admin_rights');
 
     /* Просмотр клиента: страница */
-    Route::get('admin/view_client/{client_id}', 'Clients_Admin_Controller@view_client')->name('admin_view_client')->middleware('can:admin_rights');
+    Route::get('admin/view_client/{client_id}', 'Clients_Admin_Controller@single_client_view')->name('admin_view_client')->middleware('can:admin_rights');
 
     
     /*Добавить примечание о клиенте : страница*/
@@ -127,8 +141,11 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
         /* Добавить примечание к клиенту : POST */
         Route::post('admin/clients/add_note_to_client', 'Clients_Admin_Controller@add_note_to_client_post');
 
+        /* Один клиент : страница */
+    Route::get('admin/clietns/view/{client_id}', 'Clients_Admin_Controller@single_client_view')->middleware('can:admin_rights');
+
         /* Удалить примечание */
-        Route::get('admin/clients/delete_client_note/{note_id}', 'Clients_Admin_Controller@delete_note');
+        Route::get('admin/client/delete_client_note/{note_id}', 'Clients_Admin_Controller@delete_client_note');
     /**/    
     
 
