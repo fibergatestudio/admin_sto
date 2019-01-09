@@ -74,7 +74,7 @@
     {{-- Вернуться : кнопка --}}
     <a href="{{ url('supply_officer/all_orders') }}">
         <div class="btn btn-dark">
-            Вернуться
+            К списку активных заказов
         </div>
     </a>
     

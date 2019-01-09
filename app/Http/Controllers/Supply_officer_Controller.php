@@ -51,7 +51,7 @@ class Supply_officer_Controller extends Controller
             $supply_order->date_of_creation = $supply_order->get_creation_date();
             /* Количество позиций */
             $supply_order->entries_count = $supply_order->get_entries_count();
-            /* Общее кол-во единиц*/
+            /* Общее кол-во единиц*
             $supply_order->items_count = $supply_order->get_items_count();
 
             /* Дата завершения в виде ДД.ММ.ГГГГ */
@@ -59,6 +59,7 @@ class Supply_officer_Controller extends Controller
 
             /* Ответственное лицо */
             $supply_order->responsible_officer_name = $supply_order->get_responsible_officer_name();
+            
         }
         
         /* Возвращаем представление с данными */

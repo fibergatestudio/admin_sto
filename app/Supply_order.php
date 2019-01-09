@@ -19,8 +19,13 @@ class Supply_order extends Model
 
     /*** Получить имя сотрудника, выполнившего заказ ***/
     public function get_responsible_officer_name(){
-        $user = User::find($this->responisble_supply_officer_id);
-        return $user->general_name;
+        $user = User::find($this->responsible_supply_officer_id);
+        if(!empty($user)){
+            return $user->general_name;
+        } else {
+            return '';
+        }
+        
     }
 
     /*** Получить дату создания заказа ***/
