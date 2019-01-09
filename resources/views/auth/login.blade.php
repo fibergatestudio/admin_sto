@@ -100,12 +100,13 @@
 							<p>
 								Тестовые аккаунты:<br>
 								Админский аккаунт: admin - admin<br>
-								Аккаунт рабочего: qwerty - qwerty 
+								Аккаунт рабочего: qwerty - qwerty<br>
+								Снабженец: supply - supply
 							</p>
 						</div>
 					</div>
 				</form>
-				<!-- /login form -->
+				{{-- /login form --}}
 
 			</div>
 			<!-- /content area -->

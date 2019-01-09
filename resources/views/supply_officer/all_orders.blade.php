@@ -1,11 +1,11 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    Заказы для поставщиков
+    Список заказов
 @endsection
 
 @section('content')
-    {{-- Выводим заказы --}}
+    {{-- Вывод списка всех заказов --}}
     <table class="table">
         <thead>
             <tr>
@@ -47,9 +47,9 @@
 
                     <td>
                         {{-- Кнопка управления --}}
-                        <a href="{{ url('/admin/supply_orders/manage/'.$supply_order->id) }}">
+                        <a href="{{ url('supply_officer/view_order/'.$supply_order->id) }}">
                             <div class="btn btn-primary">
-                                Управление
+                                Детали и управление
                             </div>
                         </a>
                     </td>
@@ -57,21 +57,5 @@
             @endforeach
         </tbody>
     </table>
-    {{-- Конец вывода --}}
-    <hr>
-
-    {{-- Новый заказ : кнопка --}}
-    <a href="{{ url('admin/supply_orders/new') }}">
-        <div class="btn btn-success">
-            Новый заказ
-        </div>
-    </a>
-
-    {{-- Архив : переход --}}
-    <a href="{{ url('admin/supply_orders/archive') }}">
-        <div class="btn btn-light">
-            Архив
-        </div>
-    
-    </a>
+    {{-- Конец вывода заказов --}}
 @endsection

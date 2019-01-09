@@ -1,3 +1,8 @@
+{{-- Секции в этом шаблоне: --}}
+{{-- page_name - название страницы, "завёрнуто" в h2 --}}
+{{-- content - основной контент в wrapper'е --}}
+{{-- custom_scripts - место под кастомные скрипты, перед закрывающим тегом body --}}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -116,7 +121,9 @@
                 @if(Auth::user()->isAdmin())
 					@include('limitless_parts.sidebar_admin')
 				@elseif(Auth::user()->isEmployee())
-				@include('limitless_parts.sidebar_employee')
+					@include('limitless_parts.sidebar_employee')
+				@elseif(Auth::user()->isSupplyOfficer())
+					@include('limitless_parts.sidebar_supply_officer')
 				@endif
 
 
@@ -193,5 +200,7 @@
 	</div>
 	<!-- /page content -->
 
+
+	@yield('custom_scripts')
 </body>
 </html>

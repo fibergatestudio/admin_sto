@@ -86,13 +86,51 @@ class Assignments_Admin_Controller extends Controller
         /* Получаем информацию по наряду */
         $assignment = Assignment::find($assignment_id);
 
-        //echo asset('storage/file.txt');
-        //Storage::get('/app/2/owl.jpg');
+        /* Получаем список зональных нарядов */
+        $sub_assignments = 
+            DB::table('sub_assignments')
+            ->where('assignment_id', $assignment_id)
+            ->join('workzones', 'sub_assignments.workzone_id', '=', 'workzones.id')
+            ->select('sub_assignments.*', 'workzones.general_name')
+            ->get();
 
-        //echo "<img src='".Storage::url('/app/2/owl.jpg')."'>";
+        /* Собираем допонлительные данные */
+        foreach($sub_assignments as $sub_assignment){
+            /* Название рабочей зоны */
+            $sub_assignment->workzone_name = Workzone::find($sub_assignment->workzone_id)->general_name;
+            
+            /* Имя ответственного работника */
+            $sub_assignment->responsible_employee = Employee::find($sub_assignment->responsible_employee_id)->general_name;
+        }
+
+        /* Получаем список картинок по наряду */
+        $images = [];
+        foreach(Storage::files('public/'.$assignment_id) as $file){
+             $images[] = $file;
+        }
+        
 
         /* Возвращаем представление */
-        return view('admin.assignments.view_assignment_page', ['assignment' => $assignment]);
+        return view('admin.assignments.view_assignment_page',
+            [
+                'assignment' => $assignment,
+                'sub_assignments' => $sub_assignments,
+                'image_urls'=> $images,                
+            ]);
+    }
+
+    /* Изменение названия наряда */
+    public function change_assignment_name(Request $request){
+        /* Меняем название наряда */
+        $assignment_id = $request->assignment_id;
+        $new_name = $request->new_name;
+
+        $assignment = Assignment::find($assignment_id);
+        $assignment->description = $new_name;
+        $assignment->save();
+        
+        /* Возвращаемся на страницу наряда */
+        return back();
     }
 
     /* Добавление зонального наряда : страница */
@@ -119,9 +157,20 @@ class Assignments_Admin_Controller extends Controller
         
         /* Получаем данные из запроса */
         $main_assignment_id = $request->assignment_id; // ID "родительского" наряда
-
-        /* Сохранение зонального наряда */
-        // ...
+        $sub_assignment_name = $request->name; // Название зонального наряда
+        $sub_assignment_description = $request->description; // Описание зонального наряда
+        $workzone_id = $request->workzone; // ID рабочей зоны
+        $responsible_employee_id = $request->responsible_employee; // ID ответственного лица (employee.id)
+        
+        /* Создание нового зонального наряда */
+        $sub_assignment = new Sub_assignment();
+        $sub_assignment->assignment_id = $main_assignment_id;
+        $sub_assignment->name = $sub_assignment_name;
+        $sub_assignment->description = $sub_assignment_description;
+        $sub_assignment->workzone_id = $workzone_id;
+        $sub_assignment->responsible_employee_id = $responsible_employee_id;
+        $sub_assignment->date_of_creation = date('Y-m-d');
+        $sub_assignment->save();
 
         /* Возвращаемся на страницу */
         return redirect('/admin/assignments/view/'.$main_assignment_id);
@@ -143,11 +192,31 @@ class Assignments_Admin_Controller extends Controller
         $assignment_id = $request->assignment_id;
 
         /* Сохраняем фото */
-        //print_r(Input::all()); - дебаг
         $request->test->store('public/'.$assignment_id);
         
         /* Возвращаемся на страницу авто */
         return redirect('admin/assignments/view/'.$assignment_id);
+    }
+
+    /* Удаление фотографий : страница */
+    public function delete_photos_page($assignment_id){
+        /* Получить список фотографий по наряду */
+        $images = [];
+        foreach(Storage::files('public/'.$assignment_id) as $file){
+             $images[] = $file;
+        }
+        
+        /* Вывести страницу */
+        return view('admin.assignments.delete_photos_from_assignment_page', ['images' => $images, 'assignment_id' => $assignment_id]);
+    }
+
+    /* Удаление фотографий : POST */
+    public function delete_photos_post(Request $request){
+        /* Удалить фото */
+        Storage::delete($request->path_to_file);
+        
+        /* Вернуться на страницу удаления фотографий */
+        return redirect('admin/assignments/'.$request->assignment_id.'/delete_photos_page');
     }
 
 }

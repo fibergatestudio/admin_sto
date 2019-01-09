@@ -12,7 +12,7 @@ use App\Supply_order_log;
 
 class Supply_orders_Admin_Controller extends Controller
 {
-    /* Главная страница */
+    /* Главная страница со списком заказов */
     public function supply_orders_index(){
 
         /* Получаем из базы данные обо всех активных заказах на поставку */
@@ -48,6 +48,7 @@ class Supply_orders_Admin_Controller extends Controller
         /* Вносим заказ в базу */
         $new_order = new Supply_order();
         $new_order->creator_id = Auth::user()->id; // Создатель заказа
+        $new_order->urgency = $request->urgency; // Срочность заказа
         $new_order->save();
         
         /* Вносим предметы из заказа в базу */

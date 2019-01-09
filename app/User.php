@@ -48,4 +48,14 @@ class User extends Authenticatable
         }
     }
 
+    /* Проверка, является ли пользователь снабженцем */
+    public function isSupplyOfficer(){
+        if($this->role == 'supply_officer')
+        {
+            return true;
+        } else{
+            return false;
+        }
+    }
+
 }

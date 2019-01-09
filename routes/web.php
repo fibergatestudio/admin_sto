@@ -19,20 +19,21 @@ Route::get('/', function () {
 /* Стандартная авторизация ларавела */
 Auth::routes();
 
+/* Путь с редиректами по ролям */
 Route::get('/home', 'HomeController@index')->name('home');
 
-/*
-********** Общедоступные (публичные) пути **********
-*/
+/****************************************/
+/***** Общедоступные (публичные) пути ***/
+/****************************************/
 
     /* Страница с формой записи + пути для обработки данных из формы */
     Route::get('/make_appointment', 'PublicFrontController@show_make_appointment_form');
     Route::post('/make_appointment', 'PublicFrontController@appointment_form_post_processing');
 
 
-/*
-********** АДМИНИСТРАТОР: секция **********
-*/
+/****************************************/
+/********** АДМИНИСТРАТОР: секция *******/
+/****************************************/
 
 /* Общая доска */
 Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('dashboard_admin')->middleware('can:admin_rights');
@@ -175,6 +176,9 @@ Route::get('/admin/assignments_index', 'Assignments_Admin_Controller@assignments
     /* Просмотр наряда : страница */
     Route::get('admin/assignments/view/{assignment_id}', 'Assignments_Admin_Controller@view_assignment');
 
+        /* Изменение названия наряда */
+        Route::post('/admin/assignments/change_name', 'Assignments_Admin_Controller@change_assignment_name');
+
     /* Добавление зонального наряда : страница */
     Route::get('admin/assignments/add_sub_assignment/{assignment_id}', 'Assignments_Admin_Controller@add_sub_assignment_page');
 
@@ -186,6 +190,12 @@ Route::get('/admin/assignments_index', 'Assignments_Admin_Controller@assignments
 
         /* Загрузка фотографий в CRM : Post */
         Route::post('/admin/assignments/add_photo_to_assignment', 'Assignments_Admin_Controller@add_photo_to_assignment_post');
+
+    /* Удаление фотографий : Страница */
+    Route::get('/admin/assignments/{assignment_id}/delete_photos_page', 'Assignments_Admin_Controller@delete_photos_page');
+
+        /* Удаление фотографий : POST */
+        Route::post('/admin/assignments/delete_photo_from_assignment', 'Assignments_Admin_Controller@delete_photos_post');
 
 /****** Финансы : Администратор ******/
 Route::get('/admin/finances/index', 'Finances_Admin_Controller@finances_index')->middleware('can:admin_rights');
@@ -214,7 +224,9 @@ Route::get('/admin/supply_orders/archive', 'Supply_orders_Admin_Controller@archi
     /* Удалить заказ (доступно только в архиве) */
     Route::get('/admin/supply_orders/archive/delete/{order_id}', 'Supply_orders_Admin_Controller@delete_archived_order');
 
+/****************************************/
 /********** РАБОТНИК : секция **********/
+/****************************************/
 Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
 
     /* Мои наряды */
@@ -240,6 +252,26 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
     /* История смен */
     // ...
 
+/****************************************/
+/********** СНАБЖЕНЕЦ : секция **********/
+/****************************************/
+    
+    /* Главная страница */
+    Route::get('/supply_officer/index', 'Supply_officer_Controller@index')->middleware('can:supply_officer_rights');
 
-/****** КЛИЕНТ : секция ******/
+    /* Активные заказы : список */
+    Route::get('/supply_officer/all_orders', 'Supply_officer_Controller@all_orders')->middleware('can:supply_officer_rights');
+
+    /* Выполненные заказы : список */
+    Route::get('/supply_officer/completed_orders', 'Supply_officer_Controller@completed_orders')->middleware('can:supply_officer_rights');
+
+    /* Страница одного заказа : просмотр */
+    Route::get('/supply_officer/view_order/{order_id}', 'Supply_officer_Controller@view_order')->middleware('can:supply_officer_rights');
+
+    /* Заказ выполнен : POST */
+    Route::post('/supply_officer/order_completed_action', 'Supply_officer_Controller@order_completed_action')->middleware('can:supply_officer_rights');
+
+/****************************************/
+/*********** КЛИЕНТ : секция ************/
+/****************************************/
 // Route::get('/client/dashboard', ... );

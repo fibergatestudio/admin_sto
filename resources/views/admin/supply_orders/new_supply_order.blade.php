@@ -8,10 +8,22 @@
     <form class="form" action="{{ url('admin/supply_orders/new') }}" method="POST">
         @csrf
 
-        {{-- Счётчик количества вхождение --}}
-        <input id="counter" type="hidden" name="entries_count" value="1">
+        {{-- Счётчик количества вхождений --}}
+        <input type="hidden" id="counter" name="entries_count" value="1">
 
+        {{-- Срочность --}}
+        
+        <div class="form-group">
+            <label>Срочность заказа: </label>
+            <select name="urgency">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+        </div>
 
+        {{-- Строки под элементы заказа на Vue.JS --}}
         <div id="app1">
             
             <div v-for="id in ids" class="form-group">
@@ -46,8 +58,7 @@
                     currentCounter = currentCounter + 1;
                     this.ids.push({id: currentCounter});
                     document.getElementById("counter").value = currentCounter;
-
-                }
+                },
             }
         });
     </script>

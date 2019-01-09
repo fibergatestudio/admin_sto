@@ -26,17 +26,18 @@ class HomeController extends Controller
     public function index()
     {
         //return view('home');
+        
+        /* Если пользователь администратор - отправляем его на админскую панель */
         if(Auth::user()->isAdmin()){
             return redirect('view_employees');
         } else if (Auth::user()->isEmployee()) {
+            /* Если пользователь - сотрудник, то отправляем его на панель сотрудника */
             return redirect('employee/dashboard');
+        } else if (Auth::user()->isSupplyOfficer()){
+            /* Если пользователь - снабженец, то отправляем его на панель снабженца */
+            return redirect('supply_officer/index');
         }
         
 
-        /* Если пользователь администратор - отправляем его на админскую панель */
-        // ...
-
-        /* Если пользователь - сотрудник, то отправляем его на панель сотрудника */
-        // ...
     }
 }
