@@ -32,7 +32,7 @@
                         <li class="nav-item">
 							<a href="{{ url('view_employees') }}" class="nav-link {{ request()->is('view_employees') ? 'active' : ''}}">
 
-								<i class="icon-book3"></i>
+								<i class="icon-profile"></i>
 								<span>
 									Сотрудники
 								</span>
@@ -41,7 +41,7 @@
 
                         <li class="nav-item">
 							<a href="{{ url('admin/workzones/index') }}" class="nav-link">
-								<i class="icon-book3"></i>
+								<i class="icon-grid5"></i>
 								<span>
 									Рабочие зоны
 								</span>
@@ -50,7 +50,7 @@
 
                         <li class="nav-item">
 							<a href="{{ url('admin/assignments_index') }}" class="nav-link">
-								<i class="icon-book3"></i>
+								<i class="icon-list3"></i>
 								<span>
 									Наряды
 								</span>
@@ -59,7 +59,7 @@
 
                         <li class="nav-item">
 							<a href="{{ url('admin/clients_index') }}" class="nav-link">
-								<i class="icon-book3"></i>
+								<i class="icon-users2"></i>
 								<span>
 									Клиенты
 								</span>
@@ -68,7 +68,7 @@
 
                         <li class="nav-item">
 							<a href="{{ url('admin/cars_in_service/index') }}" class="nav-link">
-								<i class="icon-book3"></i>
+								<i class="icon-wrench"></i>
 								<span>
 									Машины в сервисе
 								</span>
