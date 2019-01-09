@@ -9,12 +9,22 @@
     
         {{-- Имя заказчика --}}
         Имя заказчика: {{ $supply_order->creator_name }}<br>
+        
         {{-- Дата создания в виде ДД.ММ.ГГГГ --}}
-        Дата создания: {{ $supply_order->date_of_creation }}
+        Дата создания: {{ $supply_order->date_of_creation }}<br>
+
+        {{-- Статус --}}
+        Статус заказа:
+        @if($supply_order->status == 'active')
+            <span class="badge badge-primary">Активный</span>
+        @elseif($supply_order->status == 'completed')
+            <span class="badge badge-success">Выполненный</span>
+        @endif
         
 
     <hr>
     {{-- Вывод деталей по заказу --}}
+    Список заказанного:
     <table class="table">
         <thead>
             <tr>
@@ -48,15 +58,17 @@
 
     <hr>
     {{-- Заказ выполнен : Кнопка --}}
-    <form method="POST" action="{{ url('supply_officer/order_completed_action') }}">
-        @csrf
-        {{-- ID выполненного заказа --}}
-        <input type="hidden" name="order_id" value="{{ $supply_order->id }}">
+    @if($supply_order->status == 'active')
+        <form method="POST" action="{{ url('supply_officer/order_completed_action') }}">
+            @csrf
+            {{-- ID выполненного заказа --}}
+            <input type="hidden" name="order_id" value="{{ $supply_order->id }}">
 
-        <button type="submit" class="btn btn-success">
-            Заказ выполнен
-        </button>
-    </form>
+            <button type="submit" class="btn btn-success">
+                Заказ выполнен
+            </button>
+        </form>
+    @endif
 
     <hr>
     {{-- Вернуться : кнопка --}}

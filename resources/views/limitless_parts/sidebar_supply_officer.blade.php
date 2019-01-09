@@ -30,7 +30,13 @@
 					
 						<li class="nav-item">
 							<a class="nav-link" href="{{ url('supply_officer/all_orders') }}">
-								Заказы на снабжение
+								Заказы на снабжение (активные)
+							</a>
+      					</li>
+
+						<li class="nav-item">
+							<a class="nav-link" href="{{ url('supply_officer/completed_orders') }}">
+								Выполненные заказы
 							</a>
       					</li>
 						

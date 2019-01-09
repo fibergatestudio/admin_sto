@@ -40,7 +40,32 @@ class Supply_officer_Controller extends Controller
 
     /*** Выполненные заказы : список ***/
     public function completed_orders(){
-        // ...
+        /* Получаем из базы данные обо всех активных заказах на поставку */
+        $supply_orders = Supply_order::where('status', 'completed')->get();
+        
+        /* Собираем дополнительные данные */
+        foreach($supply_orders as $supply_order){
+            /* Имя заказчика */
+            $supply_order->creator_name = $supply_order->get_creator_name();
+            /* Дата создания в виде ДД.ММ.ГГГГ */
+            $supply_order->date_of_creation = $supply_order->get_creation_date();
+            /* Количество позиций */
+            $supply_order->entries_count = $supply_order->get_entries_count();
+            /* Общее кол-во единиц*/
+            $supply_order->items_count = $supply_order->get_items_count();
+
+            /* Дата завершения в виде ДД.ММ.ГГГГ */
+            $supply_order->date_of_completion = $supply_order->get_completion_date();
+
+            /* Ответственное лицо */
+            $supply_order->responsible_officer_name = $supply_order->get_responsible_officer_name();
+        }
+        
+        /* Возвращаем представление с данными */
+        return view('supply_officer.completed_orders',
+            [
+                'supply_orders' => $supply_orders
+            ]);
     }
 
     /*** Просмтор заказа по ID ***/
@@ -51,8 +76,10 @@ class Supply_officer_Controller extends Controller
         /* Получаем дополнительные данные по заказу */
         /* Имя заказчика */
         $supply_order->creator_name = $supply_order->get_creator_name();
+        
         /* Дата создания в виде ДД.ММ.ГГГГ */
         $supply_order->date_of_creation = $supply_order->get_creation_date();
+
         /* Количество позиций */
         $supply_order->entries_count = $supply_order->get_entries_count();
         /* Общее кол-во единиц*/
@@ -66,7 +93,7 @@ class Supply_officer_Controller extends Controller
             [
                 'supply_order' => $supply_order,
                 'supply_order_items' => $supply_order_items            
-            ]);
+            ]); 
     }
     
     /*** Заказ выполнен : POST ***/
@@ -75,7 +102,9 @@ class Supply_officer_Controller extends Controller
         $order_id = $request->order_id;
 
         /* Меняем статус на "выполнено" */
-        // ...
+        $order = Supply_order::find($order_id);
+        $order->set_to_completed();
+        $order->save();
 
         /* Редирект на страницу выполненных заказов */
         return redirect('supply_officer/completed_orders');
