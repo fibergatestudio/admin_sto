@@ -9,7 +9,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>Admin STO</title>
+	<title>СТО - Административная панель</title>
 
 	<!-- Global stylesheets -->
 	<link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
@@ -34,7 +34,6 @@
 	<script src="{{ url('global_assets/js/plugins/forms/selects/bootstrap_multiselect.js') }}"></script>
 	<script src="{{ url('global_assets/js/plugins/ui/moment/moment.min.js') }}"></script>
 	<script src="{{ url('global_assets/js/plugins/pickers/daterangepicker.js') }}"></script>
-
 	<script src="{{ url('assets/js/app.js') }}"></script>
 	<script src="{{ url('global_assets/js/demo_pages/dashboard.js') }}"></script>
 	<!-- /theme JS files -->
@@ -53,9 +52,8 @@
 	<!-- Main navbar -->
 	<div class="navbar navbar-expand-md navbar-dark">
 		<div class="navbar-brand">
-			<a href="index.html" class="d-inline-block">
-				
-                <img src="{{ url('global_assets/images/logo_light.png') }}" alt="">
+			<a href="/" class="d-inline-block">
+                <h5>СТО</h5>
 			</a>
 		</div>
 
