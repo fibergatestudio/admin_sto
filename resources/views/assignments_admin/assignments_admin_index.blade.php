@@ -16,6 +16,7 @@
         <thead>
             <tr>
             <th scope="col">Дата создания</th>
+            <th scope="col">Название</th>
             <th scope="col">Ответственный сотрудник</th>
             <th scope="col">Авто</th>
             <th scope="col"></th>
@@ -26,6 +27,9 @@
                 {{-- Дата --}}
                 <td>{{ beautify_date($assignment->date_of_creation) }}</td>
                 
+                {{-- Название наряда --}}
+                <td>{{ $assignment->description }}</td>
+
                 {{-- Ответственный сотрудник --}}
                 <td>{{ $assignment->employee_name }}</td>
                 

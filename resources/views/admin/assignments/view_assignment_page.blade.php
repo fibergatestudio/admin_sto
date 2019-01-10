@@ -41,8 +41,6 @@
   </form>
 </div>
 
-
-
 @endsection
 
 @section('content')

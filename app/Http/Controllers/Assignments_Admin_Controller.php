@@ -86,6 +86,11 @@ class Assignments_Admin_Controller extends Controller
         /* Получаем информацию по наряду */
         $assignment = Assignment::find($assignment_id);
 
+        /* Получаем дополнительную информацию по нарядам */
+        // ...
+        // ... Имя клиента
+        // ... Авто
+
         /* Получаем список зональных нарядов */
         $sub_assignments = 
             DB::table('sub_assignments')
@@ -94,7 +99,7 @@ class Assignments_Admin_Controller extends Controller
             ->select('sub_assignments.*', 'workzones.general_name')
             ->get();
 
-        /* Собираем допонлительные данные */
+        /* Собираем дополнительные данные по зональным нарядам */
         foreach($sub_assignments as $sub_assignment){
             /* Название рабочей зоны */
             $sub_assignment->workzone_name = Workzone::find($sub_assignment->workzone_id)->general_name;
