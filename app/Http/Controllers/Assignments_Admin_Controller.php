@@ -87,9 +87,10 @@ class Assignments_Admin_Controller extends Controller
         $assignment = Assignment::find($assignment_id);
 
         /* Получаем дополнительную информацию по нарядам */
-        // ...
-        // ... Имя клиента
-        // ... Авто
+        /* Имя клиента */
+        $assignment->client_name = $assignment->get_client_name();
+        /* Авто */
+        $assignment->car_name = $assignment->get_car_name();
 
         /* Получаем список зональных нарядов */
         $sub_assignments = 

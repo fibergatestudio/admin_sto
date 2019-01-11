@@ -17,6 +17,8 @@ class Employee_Dashboard_Controller extends Controller
         return view('employee.employee_dashboard_index');
     }
 
+    /***** НАРЯДЫ *****/
+
     /* Показать наряды сотрудника */
     public function my_assignments(){
         $user = Auth::user();
@@ -24,7 +26,6 @@ class Employee_Dashboard_Controller extends Controller
         $employee = DB::table('employees')->where('user_id', $employee_user_id)->first();
         $employee_id = $employee->id;
         
-
         // ... !!! ID пользователя и ID сотрудника отличаются
         // Получить employee_id
         
@@ -45,11 +46,16 @@ class Employee_Dashboard_Controller extends Controller
 
     /* Один наряд сотрудника : управление */
     public function manage_assignment($assignment_id){
-        $assignment = Assignment::find($assignment_id); // Получаем наряд
+        /* Получаем наряд */
+        $assignment = Assignment::find($assignment_id); 
+        
         // .. Собираем информацию по наряду
+        
+        
         // .. Собираем историю по наряду
         
-        // ..
+        /* Возвращаем страницу */
+        return view('employee.assignment', ['assignment' => $assignment]);
     }
     
     /* Архив нарядов сотрудника */

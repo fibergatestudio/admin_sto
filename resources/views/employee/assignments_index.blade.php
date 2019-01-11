@@ -13,7 +13,7 @@
                 
                 {{-- Управление : переход --}}
                 <td>
-                    <a href="#">
+                    <a href="{{ url('/employee/manage_assignment/'.$assignment->id) }}">
                         <div class="btn btn-primary">
                             Управление
                         </div>
