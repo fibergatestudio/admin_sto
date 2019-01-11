@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use App\Assignment;
 use App\Shift;
 use App\Assignments_income;
+use App\Assignments_expense;
 
 class Employee_Dashboard_Controller extends Controller
 {
@@ -53,12 +54,15 @@ class Employee_Dashboard_Controller extends Controller
         // .. Собираем информацию по наряду
         
         /* Получаем доходную часть */
-        $assignment_income = Assignments_income::where('assignment_id', $assignment_id)->get();;
+        $assignment_income = Assignments_income::where('assignment_id', $assignment_id)->get();
+        /* Получаем расходную часть */
+        $assignment_expense = Assignments_expense::where('assignment_id', $assignment_id)->get();
+        
         
         // .. Собираем историю по наряду
         
         /* Возвращаем страницу */
-        return view('employee.assignment', ['assignment' => $assignment, 'assignment_income' => $assignment_income]);
+        return view('employee.assignment', ['assignment' => $assignment, 'assignment_income' => $assignment_income, 'assignment_expense' => $assignment_expense]);
     }
     
 
@@ -71,6 +75,20 @@ class Employee_Dashboard_Controller extends Controller
         $new_income_entry->basis = $request->basis; /* Основание для захода денег */
         $new_income_entry->description = $request->description; /* Описание для захода */
         $new_income_entry->save();
+
+
+        /* Возвращаемся обратно на страницу наряда */
+        return back();
+    }
+    /* Добавить расход денег : POST */
+    public function add_expense_post(Request $request){
+        /* Создаём новое вхождение по заходу денег и вносим туда информацию */
+        $new_expense_entry = new Assignments_expense();
+        $new_expense_entry->assignment_id = $request->assignment_id; /* Идентификатор наряда */
+        $new_expense_entry->amount = $request->amount; /* Сумма расхода */
+        $new_expense_entry->basis = $request->basis; /* Основание для расхода денег */
+        $new_expense_entry->description = $request->description; /* Описание для расхода */
+        $new_expense_entry->save();
 
 
         /* Возвращаемся обратно на страницу наряда */
