@@ -229,11 +229,19 @@ Route::get('/admin/supply_orders/archive', 'Supply_orders_Admin_Controller@archi
 /****************************************/
 Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
 
+
+/**** Наряды : работник ****/
     /* Мои наряды */
     Route::get('/employee/my_assignments', 'Employee_Dashboard_Controller@my_assignments');
 
-    /* Страница управления нарядом */
+    /* Страница управления одним нарядом */
     Route::get('/employee/manage_assignment/{assignment_id}', 'Employee_Dashboard_Controller@manage_assignment');
+
+        /* Добавить доходную часть : POST */
+        Route::post('/employee/manage_assignment/add_income_entry', 'Employee_Dashboard_Controller@add_income_post');
+
+        /* Добавить расходную часть : POST */
+        // ...
 
     /* Архив моих нарядов */
     Route::get('/employee/my_assignments_archive', 'Employee_Dashboard_Controller@my_assignment_archive');

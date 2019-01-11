@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Assignment;
 use App\Shift;
+use App\Assignments_income;
 
 class Employee_Dashboard_Controller extends Controller
 {
@@ -51,13 +52,31 @@ class Employee_Dashboard_Controller extends Controller
         
         // .. Собираем информацию по наряду
         
+        /* Получаем доходную часть */
+        $assignment_income = Assignments_income::where('assignment_id', $assignment_id)->get();;
         
         // .. Собираем историю по наряду
         
         /* Возвращаем страницу */
-        return view('employee.assignment', ['assignment' => $assignment]);
+        return view('employee.assignment', ['assignment' => $assignment, 'assignment_income' => $assignment_income]);
     }
     
+
+    /* Добавить заход денег : POST */
+    public function add_income_post(Request $request){
+        /* Создаём новое вхождение по заходу денег и вносим туда информацию */
+        $new_income_entry = new Assignments_income();
+        $new_income_entry->assignment_id = $request->assignment_id; /* Идентификатор наряда */
+        $new_income_entry->amount = $request->amount; /* Сумма захода */
+        $new_income_entry->basis = $request->basis; /* Основание для захода денег */
+        $new_income_entry->description = $request->description; /* Описание для захода */
+        $new_income_entry->save();
+
+
+        /* Возвращаемся обратно на страницу наряда */
+        return back();
+    }
+
     /* Архив нарядов сотрудника */
     public function my_assignments_archive(){
         // ...
