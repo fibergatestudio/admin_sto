@@ -78,7 +78,7 @@ class EmployeesAdminController extends Controller
         $employee->status = 'archived';
         $employee->save();
         
-        /* Вернуться ко списку сотрудников */
+        /* Вернуться к списку сотрудников */
         return redirect()->route('view_employees');
     }
     
@@ -108,6 +108,26 @@ class EmployeesAdminController extends Controller
 
         return view('employees_admin.employee_credit_page', ['employee' => $employee]);
 
+    }
+
+    /* Начисления сотруднику : POST */
+    public function employee_credit_page_post(Request $request){
+        /* Начисления сотруднику в БД */
+        $new_employee_credit = new Employee();
+        $new_employee_credit->balance = $request->balance;
+        $new_employee_credit->employee_id = $request->employee_id;
+        $new_employee_credit->save();
+
+        /*  */
+        return response()->json(['result'=>'Начисления сотруднику произведены']);
+    }
+
+    /* История начислений */
+    public function index() {
+        $employee_balances = Employee::where('employee_balances',1)->orderBy('employee_id','balance')->take(10)->get();
+        return view('employees_admin.employee_credit_page')->with([
+            'employee_balances'=> $employee_balances
+        ]);
     }
 
     /*

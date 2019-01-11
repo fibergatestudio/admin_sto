@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Employee extends Model
 {
+<<<<<<< HEAD
     /* Получить employee.id по user.id работника */
     public static function get_employee_by_user_id($employee_user_id){
         $employee = Employee::where('user_id', $employee_user_id)->first();
@@ -18,4 +19,7 @@ class Employee extends Model
         $this->save();
     }
     
+=======
+    protected $table = 'employee_balances';// таблица связанная с моделью (начисление баланса сотруднику)
+>>>>>>> master
 }
