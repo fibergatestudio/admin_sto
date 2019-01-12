@@ -4,11 +4,10 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
-<<<<<<< HEAD
 
 use Illuminate\Support\Facades\Gate;
-=======
->>>>>>> master
+
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,10 +18,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-<<<<<<< HEAD
+
         // Фикс ошибки с длиной ключа для MariaDB
-=======
->>>>>>> master
+
         Schema::defaultStringLength(191);
     }
 
@@ -36,3 +34,4 @@ class AppServiceProvider extends ServiceProvider
         //
     }
 }
+

@@ -101,6 +101,17 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
         Route::post('/supervisor/employee_coffee_tokens/add',
                     'EmployeesAdminController@employee_coffee_token_issue')->middleware('can:admin_rights');
 
+    /* Страница добавления скана паспорта сотрудника*/
+    Route::get('/add_passport_scan/{employee_id}', 'EmployeesAdminController@add_passport_scan')->middleware('can:admin_rights');
+
+        // Добавление скана паспорта в БД
+        Route::post('/add_passport_scan_post/{employee_id}', 'EmployeesAdminController@add_passport_scan_post')->middleware('can:admin_rights');
+
+        // Список сотрудников с паспортами
+        Route::get('/passport_scans/', 'EmployeesAdminController@show_passport_scan')->middleware('can:admin_rights');
+
+
+
 /****** Рабочие зоны: Администратор ******/
 
     /* Просмотр рабочих зон */

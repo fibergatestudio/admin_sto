@@ -51,7 +51,7 @@
         </div>
     </a>
     
-    <a class="btn btn-secondary" href="{{ url('/passport_scans/') }}">Сканы паспортов</a>
+    <a class="btn btn-secondary" href="{{ url('/add_passport_scan/'.$employee->id) }}">Сканы паспортов</a>
     
 
 @endsection

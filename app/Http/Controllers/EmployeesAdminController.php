@@ -99,6 +99,36 @@ class EmployeesAdminController extends Controller
         return back();
     }
 
+    // Страница добавления скана паспорта сотрудника
+    public function add_passport_scan($employee_id){
+        $employee = Employee::find($employee_id);
+
+        return view('employees_admin.add_passport_scan', ['employee'=>$employee]);
+    }
+
+    // Добавление скана паспорта в БД
+    public function add_passport_scan_post(Request $request, $employee_id){
+        $employee = Employee::find($employee_id);
+
+        if($request->hasFile('scan')) {
+            $scan = $request->file('scan');
+            $fileName = $scan->getClientOriginalName();
+            $destinationPath = public_path('/passportscans');
+            $scan->move($destinationPath, $fileName);
+            $employee->link_scan = './passportscans/'.$fileName;
+        } 
+        $employee->save();
+
+        return redirect()->route('view_employees');
+    }
+
+    // Список сотрудников с паспортами
+    public function show_passport_scan(){
+        $employee_data = Employee::all();
+
+        return view('employees_admin.employees_passports', ['employee_data' => $employee_data]);
+    }
+
     /*
     ********** Блок начислений (credit) **********
     */
