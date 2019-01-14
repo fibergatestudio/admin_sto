@@ -179,6 +179,7 @@ Route::get('/admin/assignments_index', 'Assignments_Admin_Controller@assignments
         /* Изменение названия наряда */
         Route::post('/admin/assignments/change_name', 'Assignments_Admin_Controller@change_assignment_name');
 
+
     /* Добавление зонального наряда : страница */
     Route::get('admin/assignments/add_sub_assignment/{assignment_id}', 'Assignments_Admin_Controller@add_sub_assignment_page');
 
@@ -196,6 +197,19 @@ Route::get('/admin/assignments_index', 'Assignments_Admin_Controller@assignments
 
         /* Удаление фотографий : POST */
         Route::post('/admin/assignments/delete_photo_from_assignment', 'Assignments_Admin_Controller@delete_photos_post');
+
+    /* АДМИН УПРАВЛЕНИЕ НАРЯДАМИ
+    /* Админ страница управления одним нарядом */
+    Route::get('/admin/manage_assignment/{assignment_id}', 'Employee_Dashboard_Controller@manage_assignment');
+
+        /* Админ Добавить доходную часть : POST */
+        Route::post('/admin/manage_assignment/add_income_entry', 'Employee_Dashboard_Controller@add_income_post');
+
+         /* Админ Добавить расходную часть : POST */
+         Route::post('/admin/manage_assignment/add_expense_entry', 'Employee_Dashboard_Controller@add_expense_post');
+
+         /* Админ Добавить список выполненых работ : POST */
+         Route::post('/admin/manage_assignment/add_works_entry', 'Employee_Dashboard_Controller@add_works_post');
 
 /****** Финансы : Администратор ******/
 Route::get('/admin/finances/index', 'Finances_Admin_Controller@finances_index')->middleware('can:admin_rights');

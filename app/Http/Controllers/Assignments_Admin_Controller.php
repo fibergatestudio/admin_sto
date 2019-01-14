@@ -19,6 +19,10 @@ use App\Assignment;
 use App\Sub_assignment;
 use App\Workzone;
 
+use App\Assignments_income;
+use App\Assignments_expense;
+use App\Assignments_completed_works;
+
 class Assignments_Admin_Controller extends Controller
 {
     
@@ -92,6 +96,13 @@ class Assignments_Admin_Controller extends Controller
         /* Авто */
         $assignment->car_name = $assignment->get_car_name();
 
+                /* Получаем доходную часть */
+                $assignment_income = Assignments_income::where('assignment_id', $assignment_id)->get();
+                /* Получаем расходную часть */
+                $assignment_expense = Assignments_expense::where('assignment_id', $assignment_id)->get();
+                /* Получаем выполненые работы */
+                $assignment_work = Assignments_completed_works::where('assignment_id', $assignment_id)->get();
+
         /* Получаем список зональных нарядов */
         $sub_assignments = 
             DB::table('sub_assignments')
@@ -121,7 +132,10 @@ class Assignments_Admin_Controller extends Controller
             [
                 'assignment' => $assignment,
                 'sub_assignments' => $sub_assignments,
-                'image_urls'=> $images,                
+                'image_urls'=> $images,
+                'assignment_income' => $assignment_income, 
+                'assignment_expense' => $assignment_expense, 
+                'assignment_work' => $assignment_work           
             ]);
     }
 
