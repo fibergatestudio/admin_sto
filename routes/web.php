@@ -253,6 +253,9 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
         /* Добавить расходную часть : POST */
         Route::post('/employee/manage_assignment/add_expense_entry', 'Employee_Dashboard_Controller@add_expense_post');
 
+        /* Добавить список выполненых работ : POST */
+        Route::post('/employee/manage_assignment/add_works_entry', 'Employee_Dashboard_Controller@add_works_post');
+
     /* Архив моих нарядов */
     Route::get('/employee/my_assignments_archive', 'Employee_Dashboard_Controller@my_assignment_archive');
 
