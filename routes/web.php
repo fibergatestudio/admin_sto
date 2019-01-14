@@ -283,3 +283,7 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
 /*********** КЛИЕНТ : секция ************/
 /****************************************/
 // Route::get('/client/dashboard', ... );
+
+
+/* Тестовый контроллер */
+Route::get('/test', 'TestController@test_car_import');
