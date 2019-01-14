@@ -54,7 +54,7 @@
                             {{-- Описание - не обязательно --}}
                             <div class="form-group">
                                 <label>Описание</label>
-                                <textarea name="description" class="form-control"></textarea>
+                                <textarea name="description" class="form-control" required></textarea>
                             </div>
 
                         
@@ -118,7 +118,7 @@
                             {{-- Описание - не обязательно --}}
                             <div class="form-group">
                                 <label>Описание</label>
-                                <textarea name="description" class="form-control"></textarea>
+                                <textarea name="description" class="form-control" required></textarea>
                             </div>
 
                         
