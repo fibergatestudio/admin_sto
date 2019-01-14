@@ -11,6 +11,7 @@ use App\Assignment;
 use App\Shift;
 use App\Assignments_income;
 use App\Assignments_expense;
+use App\Assignments_completed_works;
 
 class Employee_Dashboard_Controller extends Controller
 {
@@ -57,12 +58,14 @@ class Employee_Dashboard_Controller extends Controller
         $assignment_income = Assignments_income::where('assignment_id', $assignment_id)->get();
         /* Получаем расходную часть */
         $assignment_expense = Assignments_expense::where('assignment_id', $assignment_id)->get();
+        /* Получаем выполненые работы */
+        $assignment_work = Assignments_completed_works::where('assignment_id', $assignment_id)->get();
         
         
         // .. Собираем историю по наряду
         
         /* Возвращаем страницу */
-        return view('employee.assignment', ['assignment' => $assignment, 'assignment_income' => $assignment_income, 'assignment_expense' => $assignment_expense]);
+        return view('employee.assignment', ['assignment' => $assignment, 'assignment_income' => $assignment_income, 'assignment_expense' => $assignment_expense, 'assignment_work' => $assignment_work]);
     }
     
 
@@ -82,13 +85,26 @@ class Employee_Dashboard_Controller extends Controller
     }
     /* Добавить расход денег : POST */
     public function add_expense_post(Request $request){
-        /* Создаём новое вхождение по заходу денег и вносим туда информацию */
+        /* Создаём новое вхождение по расходу денег и вносим туда информацию */
         $new_expense_entry = new Assignments_expense();
         $new_expense_entry->assignment_id = $request->assignment_id; /* Идентификатор наряда */
         $new_expense_entry->amount = $request->amount; /* Сумма расхода */
         $new_expense_entry->basis = $request->basis; /* Основание для расхода денег */
         $new_expense_entry->description = $request->description; /* Описание для расхода */
         $new_expense_entry->save();
+
+
+        /* Возвращаемся обратно на страницу наряда */
+        return back();
+    }
+    /* Добавить выполненые работы : POST */
+    public function add_works_post(Request $request){
+        /* Создаём новое вхождение по выполненым работам и вносим туда информацию */
+        $new_works_entry = new Assignments_completed_works();
+        $new_works_entry->assignment_id = $request->assignment_id; /* Идентификатор наряда */
+        $new_works_entry->basis = $request->basis; /* Основание для расхода денег */
+        $new_works_entry->description = $request->description; /* Описание для расхода */
+        $new_works_entry->save();
 
 
         /* Возвращаемся обратно на страницу наряда */
