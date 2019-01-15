@@ -96,6 +96,7 @@ class Assignments_Admin_Controller extends Controller
         /* Авто */
         $assignment->car_name = $assignment->get_car_name();
 
+                /* Доход/расход/работы */
                 /* Получаем доходную часть */
                 $assignment_income = Assignments_income::where('assignment_id', $assignment_id)->get();
                 /* Получаем расходную часть */
@@ -138,6 +139,7 @@ class Assignments_Admin_Controller extends Controller
                 'assignment_work' => $assignment_work           
             ]);
     }
+
 
     /* Изменение названия наряда */
     public function change_assignment_name(Request $request){

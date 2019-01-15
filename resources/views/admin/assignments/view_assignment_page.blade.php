@@ -397,7 +397,6 @@
                             </div>
 
                         
-
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
@@ -409,6 +408,32 @@
     </form>
 
     <hr>
+
+    {{--   car_model_list --}}
+    <h2>Список моделей</h2>
+    
+    {{-- Вывод списока моделей машин --}}
+    <table class="table">
+    <thead>
+        <tr>
+            <th>1</th>
+            <th>2</th>
+            <th>2</th>
+            <th></th>{{-- Кнопки управления --}}
+        </tr>
+    </thead>
+    <tbody> 
+    @foreach($assignment_work as $work_entry)
+    <tr>
+        <td>
+        {{ $work_entry->brand }}<br>
+        </td>
+    </tr>
+    @endforeach
+    </tbody>
+    </table>
+
+
 
 @endsection
 
