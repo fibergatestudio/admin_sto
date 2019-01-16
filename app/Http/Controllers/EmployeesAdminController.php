@@ -17,6 +17,7 @@ use App\Coffee_token_log;
 use App\Employees_notes;
 
 
+
 class EmployeesAdminController extends Controller
 {
     /* Список всех сотрудников */
@@ -88,8 +89,7 @@ class EmployeesAdminController extends Controller
     /* Общая страница финансов по работнику */
     public function employee_finances($employee_id){
         $employee = Employee::find($employee_id);
-        $balance = $balance_dump->balance;
-        return view('employees_admin.employee_finances_admin', ['employee' => $employee, 'balance' => $balance]);
+        return view('employees_admin.employee_finances_admin', ['employee' => $employee]);
     }
 
     /* - Добавления примечания к сотруднику: страница - */
@@ -111,7 +111,31 @@ class EmployeesAdminController extends Controller
 
         //Возврат на страницу сотрудника
         return redirect ('/admin/employee/' .$employee->id);
-    }     
+    }
+
+
+
+    /* -- Редактирование примечания к сотруднику : страница -- */
+    public function edit_employee_note($note_id){
+        
+        $employee_note = Employees_notes::find($note_id);
+        $employee_id = $employee_note->employee_id;
+
+        return view('employees_admin.edit_employee_note', [
+            'note_id' => $note_id,
+            'employee_id' => $employee_id,
+            'employee_note' => $employee_note
+        ]);   
+    }
+
+    /* -- Редактирование примечания к сотруднику : POST --*/
+    public function edit_employee_note_post(Request $request){
+        $employee_note_entry = Employees_notes::find($request->note_id);
+        $employee_note_entry->text = $request->text;
+        $employee_note_entry->save();
+
+        return redirect('/admin/employee/' .$employee_note_entry->employee_id);
+    }       
 
     /* - Удление примечания к сотруднику - */
     public function delete_employee_note($note_id){
@@ -127,20 +151,23 @@ class EmployeesAdminController extends Controller
         // Возвращаемся на предыдущую страницу
         return back();
     }
-
+    /* - Страница добавления примечания к сотруднику */
     public function single_employee_notes($employee_id){
         $employee = Employee::find($employee_id);
 
+
         $employee_notes = DB::table('employees_notes')->where('employee_id', $employee->id)->get();
+
 
         foreach($employee_notes as $employee_note){
             $employee_note->author_name = User::find($employee_note->author_id)->general_name;
+  
         }
-
+      
         return view('employees_admin.single_employee_notes', [
             'employee' => $employee,
-            'employee_notes' => $employee_notes
-        ]);
+            'employee_notes' => $employee_notes,
+            ]);
     }
 
         
@@ -154,8 +181,39 @@ class EmployeesAdminController extends Controller
     public function employee_credit_page($employee_id){
         $employee = Employee::find($employee_id);
 
-        return view('employees_admin.employee_credit_page', ['employee' => $employee]);
+        //данные о последних 10 операциях 
+        $balance = Employee_balance_log::where('employee_id', $employee_id)->orderBy('created_at', 'desc')->get();
 
+        return view('employees_admin.employee_credit_page', ['employee' => $employee, 'balance' => $balance]);
+    }
+
+    public function add_employee_payment_manualy(Request $request){
+
+        $request->validate([
+            'balance' => 'required|numeric'
+        ]);
+
+        /* -----Добавить начисление ------ */       
+        $balance = Employee::find($request->employee_id);
+        $balance_entry->balance = $request->balance;
+        $balance_entry->date = date('Y-m-d');
+        $balance_entry->save();
+
+        return redirect('/supervisor/employee_finances/credit/{employee_id}', compact('balance'));
+
+
+
+
+        // Добавить запись в общие логи
+        $employee_balance = new Employee_balance;
+        $employee_balance->amount = $amount;
+        $employee_balance->action = 'dposit';
+        $employee_balance->source = 'auto';
+        $employee_balance->date = date('Y-m-d');
+        $employee_balance->employee_id = $employee_id;
+        $employee_balance->save();
+
+        return back();
     }
 
     /*

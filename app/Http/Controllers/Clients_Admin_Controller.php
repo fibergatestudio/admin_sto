@@ -65,8 +65,24 @@ class Clients_Admin_Controller extends Controller
 
         // И вернуться на страницу клиента
         return redirect('admin/view_client/'.$client->id);
-
     }
+
+    /* - Редактирование примечания о клиенте : страница - */
+    public function edit_client_note($note_id){
+        $client_note = Clients_notes::find($note_id);
+        return view('admin.clients.edit_client_note', compact(['note_id', 'client_note']));
+    }  
+
+    /* - Редактирование примечания о клиенте : POST - */
+    public function edit_client_note_post(Request $request){
+        $client_note_entry = Clients_notes::find($request->note_id);
+        $client_note_entry->text = $request->text;
+        $client_note_entry->save();
+
+        return redirect('admin/view_client/' .$client_note_entry->client_id);
+    }
+
+    
     /* Удаление примечания к клиенту */
     public function delete_client_note($note_id){
         // Удалить примечание

@@ -33,6 +33,9 @@
 
                     {{-- Кнопки управления --}}
                     <td>
+                        <a href="{{ url('admin/employee/edit_note/'.$employee_note->id) }}" ">Редактировать</a>
+                    </td>
+                    <td>
                         <a href="{{ url('admin/employee/delete_employee_note/'.$employee_note->id ) }}">
                             <div class="btn btn-danger">
                                 X
@@ -46,5 +49,7 @@
 
     </table>
     {{-- Конец таблицы --}}
+
+
 
 @endsection

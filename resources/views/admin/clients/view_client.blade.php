@@ -47,6 +47,10 @@
 
                     {{-- Кнопки управления --}}
                     <td>
+                        <a href="{{ url('admin/clients/edit_client_note/'.$client_note->id ) }}">Редактирование
+                        </a>
+                    </td>
+                    <td>
                         <a href="{{ url('admin/client/delete_client_note/'.$client_note->id ) }}">
                             <div class="btn btn-danger">
                                 X

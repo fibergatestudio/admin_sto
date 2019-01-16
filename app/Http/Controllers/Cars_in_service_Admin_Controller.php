@@ -86,14 +86,14 @@ class Cars_in_service_Admin_Controller extends Controller
         ]);
     }
 
-    /* Добавление примечания к машине : страница */
+    /* - Добавление примечания к машине : страница - */
     public function add_note_to_car_page($car_id){
         $car = Cars_in_service::find($car_id);
         $client = $car->get_client();
         return view('admin.cars_in_service.add_note_to_car', ['car' => $car, 'client' => $client]);
     }
 
-    /* Добавление примечания к машине : POST */
+    /* - Добавление примечания к машине : POST - */
     public function add_note_to_car_post(Request $request){
         // Добавить примечание
         $car = Cars_in_service::find($request->car_id);
@@ -106,6 +106,27 @@ class Cars_in_service_Admin_Controller extends Controller
 
         // И вернуться на страницу машины
         return redirect('admin/cars_in_service/view/'.$car->id);
+    }
+
+    /* - Редактирование примечания к машине : старница - */
+    public function edit_note_to_car($note_id){
+        $car_note = Cars_notes::find($note_id);
+        return view('admin.cars_in_service.edit_note_to_car', 
+            [
+                'note_id' => $note_id, 
+                'car_note' => $car_note
+            ]);
+
+
+    }
+
+    /* - Редактирование примечания к машине : POST - */
+    public function edit_note_to_car_post(Request $request){
+        $car_note_entry = Cars_notes::find($request->note_id);
+        $car_note_entry->text = $request->text;
+        $car_note_entry->save();
+
+        return redirect('admin/cars_in_service/view/' .$car_note_entry->car_id);
     }
 
     /* Удаление примечания к машине */

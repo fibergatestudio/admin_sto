@@ -57,6 +57,11 @@
 
                     {{-- Кнопки управления --}}
                     <td>
+                        <a href="{{ url('admin/cars_in_service/edit_note_to_car/'.$car_note->id) }}">                            
+                                Редактировать            
+                        </a>
+                    </td>
+                    <td>
                         <a href="{{ url('admin/cars_in_service/delete_note/'.$car_note->id ) }}">
                             <div class="btn btn-danger">
                                 X

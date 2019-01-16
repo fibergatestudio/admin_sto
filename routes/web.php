@@ -72,8 +72,11 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
         /* Изменить ставку сотруднику : POST */
         Route::post('/admin/employee_finances/change_standard_shift_wage', 'EmployeesAdminController@change_standard_shift_wage');
 
-    /* Страница начислений по сотруднику */
+    /* --- Страница начислений по сотруднику --- */
     Route::get('/supervisor/employee_finances/credit/{employee_id}', 'EmployeesAdminController@employee_credit_page')->middleware('can:admin_rights');
+
+    /* - Страница начислений по сотруднику : POST - */
+    	Route::post('/supervisor/employee_finances/credit/add_payment_manualy', 'EmployeesAdminController@add_employee_payment_manualy')->middleware('can:admin_rights');
 
     /* Страница штрафов сотрудника */
     Route::get('/supervisor/employee_fines/{employee_id}', 'EmployeesAdminController@view_employee_fines')->name('employee_fines')->middleware('can:admin_rights');
@@ -104,6 +107,12 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
         /* - Страница всех примечаний сотрудника - */
         Route::get('/admin/employee/{employee_id}', 'EmployeesAdminController@single_employee_notes')->middleware('can:admin_rights');
 
+        /* -- Редактировать примечание к сотруднику : страница -- */
+        Route::get('/admin/employee/edit_note/{note_id}', 'EmployeesAdminController@edit_employee_note')->middleware('can:admin_rights');
+
+        /* -- Редактировать примечание сотрудника : POST --*/
+        Route::post('admin/employee/edit_employee_note', 'EmployeesAdminController@edit_employee_note_post')->middleware('can:admin_rights');
+
         /* - Удаление примечания к сотруднику - */
         Route::get('/admin/employee/delete_employee_note/{note_id}', 'EmployeesAdminController@delete_employee_note')->middleware('can:admin_rights');
 
@@ -132,7 +141,7 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
     Route::get('admin/add_client', 'Clients_Admin_Controller@add_client_page')->middleware('can:admin_rights');
     
         /* Добавить клиента: POST запрос */
-        Route::post('admin/add_client', 'Clients_Admin_Controller@add_client_post')->middleware('can:admin_rights');
+        Route::post('admin/add_client', 'Clients_Admin_Controller@add_client_post')->middleware('can:admin_rights'); 
 
     /* Просмотр клиента: страница */
     Route::get('admin/view_client/{client_id}', 'Clients_Admin_Controller@single_client_view')->name('admin_view_client')->middleware('can:admin_rights');
@@ -143,6 +152,12 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
 
         /* Добавить примечание к клиенту : POST */
         Route::post('admin/clients/add_note_to_client', 'Clients_Admin_Controller@add_note_to_client_post');
+
+    /* - Редактирование примечания о клиенте : страница - */
+    Route::get('/admin/clients/edit_client_note/{note_id}', 'Clients_Admin_Controller@edit_client_note')->middleware('can:admin_rights');
+
+    	/* - Редактирование примечания о клиенте : POST - */
+    	Route::post('/admin/clients/edit_client_note', 'Clients_Admin_Controller@edit_client_note_post')->middleware('can:admin_rights');
 
         /* Один клиент : страница */
     Route::get('admin/clietns/view/{client_id}', 'Clients_Admin_Controller@single_client_view')->middleware('can:admin_rights');
@@ -169,13 +184,19 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
     Route::get('admin/cars_in_service/view/{car_id}', 'Cars_in_service_Admin_Controller@single_car_view')->middleware('can:admin_rights');
 
     /* Добавить примечание к машине : страница */
-    Route::get('/admin/cars_in_service/add_note_to_car/{car_id}', 'Cars_in_service_Admin_Controller@add_note_to_car_page');
+    Route::get('/admin/cars_in_service/add_note_to_car/{car_id}', 'Cars_in_service_Admin_Controller@add_note_to_car_page')->middleware('can:admin_rights');;
 
-        /* Добавить примечание к машине : POST */
-        Route::post('admin/cars_in_service/add_note_to_car', 'Cars_in_service_Admin_Controller@add_note_to_car_post');
+        /* - Добавить примечание к машине : POST - */
+        Route::post('admin/cars_in_service/add_note_to_car', 'Cars_in_service_Admin_Controller@add_note_to_car_post')->middleware('can:admin_rights');;
 
-        /* Удалить примечание */
-        Route::get('admin/cars_in_service/delete_note/{note_id}', 'Cars_in_service_Admin_Controller@delete_note');
+        /* - Редактировать примечание к машине : страница - */
+        Route::get('admin/cars_in_service/edit_note_to_car/{note_id}', 'Cars_in_service_Admin_Controller@edit_note_to_car')->middleware('can:admin_rights');;
+
+        /* - Редактировать примечание к машине : POST - */
+        Route::post('admin/cars_in_service/edit_note_to_car', 'Cars_in_service_Admin_Controller@edit_note_to_car_post')->middleware('can:admin_rights');; 
+
+        /* -  Удалить примечание - */
+        Route::get('admin/cars_in_service/delete_note/{note_id}', 'Cars_in_service_Admin_Controller@delete_note')->middleware('can:admin_rights');;
 
     /* История машины */
     // ...
