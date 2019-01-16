@@ -217,6 +217,18 @@ Route::get('/admin/finances/index', 'Finances_Admin_Controller@finances_index')-
 /****** Модели машин : Администратор ******/
 Route::get('/admin/cars/index', 'Cars_Admin_Controller@cars_index')->middleware('can:admin_rights');
 
+        /* Добавить модель машины */
+        Route::post('/admin/cars/add_car_entry', 'Cars_Admin_Controller@add_car_entry')->middleware('can:admin_rights');
+
+        /* Страница редактирования модели машины */
+        Route::get('/admin/cars/{car_entry_id}/car_edit', 'Cars_Admin_Controller@edit_car_entry')->middleware('can:admin_rights');
+
+            /* Редактировать модель машины */
+            Route::post('/admin/cars/{car_entry_id}/submit_car_entry', 'Cars_Admin_Controller@submit_car_entry')->middleware('can:admin_rights');
+
+        /* Удалить модель машины */
+        Route::get('/admin/cars/{car_entry_id}/delete', 'Cars_Admin_Controller@delete_car_entry')->middleware('can:admin_rights');
+
 
 /****** Supply orders : Администратор ******/
 
