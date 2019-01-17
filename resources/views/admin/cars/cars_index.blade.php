@@ -18,6 +18,8 @@
 
 @section('content')
 
+
+    {{-- Пагинация --}}
     <div class="row text-center">
         <div class="col-lg-12">
             <ul class="pagination">
@@ -55,7 +57,6 @@
                 </td>
                 <td>
                     <a href="{{ url('/admin/cars/'.$model->id.'/delete') }}">
-                    
                         <button type="button" class="btn btn-warning">
                             Удалить
                         </button>
@@ -65,6 +66,7 @@
         @endforeach
     </table>
 
+    {{-- Пагинация --}}
     <div class="row text-center">
         <div class="col-lg-12">
             <ul class="pagination">

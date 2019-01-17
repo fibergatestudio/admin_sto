@@ -285,8 +285,21 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
         /* Добавить список выполненых работ : POST */
         Route::post('/employee/manage_assignment/add_works_entry', 'Employee_Dashboard_Controller@add_works_post');
 
+            /* Наряд выполнен : POST */
+            Route::get('/employee/manage_assignment/{assignment_id}/assignment_complete', 'Employee_Dashboard_Controller@assignment_complete');
+
+            /* Наряд невыполнен : POST */
+            Route::get('/employee/manage_assignment/{assignment_id}/assignment_uncomplete', 'Employee_Dashboard_Controller@assignment_uncomplete');
+
     /* Архив моих нарядов */
     Route::get('/employee/my_assignments_archive', 'Employee_Dashboard_Controller@my_assignment_archive');
+
+    /* Выполненые наряды */
+    Route::get('/employee/my_completed_assignments', 'Employee_Dashboard_Controller@my_complete_assignments');
+
+    /* Невыполненые наряды */
+    Route::get('/employee/my_uncompleted_assignments', 'Employee_Dashboard_Controller@my_uncomplete_assignments');
+
 
 /**** Смены : работник ****/
 

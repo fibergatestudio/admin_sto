@@ -31,13 +31,38 @@
 					
 						<li class="nav-item">
 							<a class="nav-link" href="{{ url('employee/my_assignments') }}">
+							<i class="icon-list"></i>
+							<span>
 								Мои наряды
+							</span>
 							</a>
       					</li>
 
+						
+						<li class="nav-item">
+							<a class="nav-link" href="{{ url('employee/my_completed_assignments') }}">
+							<i class="icon-check"></i>
+								<span>
+									Выполненые наряды
+								</span>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{ url('employee/my_uncompleted_assignments') }}">
+							<i class="icon-fire"></i>
+								<span>
+									Невыполненые наряды
+								</span>
+							</a>
+						</li>
+						
+
 						<li class="nav-item">
 							<a class="nav-link" href="{{ url('employee/shifts/index') }}">
+							<i class="icon-book"></i>
+							<span>
 								Мои cмены
+							</span>
 							</a>
       					</li>
                         
