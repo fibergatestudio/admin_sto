@@ -179,6 +179,7 @@ Route::get('/admin/assignments_index', 'Assignments_Admin_Controller@assignments
         /* Изменение названия наряда */
         Route::post('/admin/assignments/change_name', 'Assignments_Admin_Controller@change_assignment_name');
 
+
     /* Добавление зонального наряда : страница */
     Route::get('admin/assignments/add_sub_assignment/{assignment_id}', 'Assignments_Admin_Controller@add_sub_assignment_page');
 
@@ -197,8 +198,36 @@ Route::get('/admin/assignments_index', 'Assignments_Admin_Controller@assignments
         /* Удаление фотографий : POST */
         Route::post('/admin/assignments/delete_photo_from_assignment', 'Assignments_Admin_Controller@delete_photos_post');
 
+    /* АДМИН УПРАВЛЕНИЕ НАРЯДАМИ
+    /* Админ страница управления одним нарядом */
+    Route::get('/admin/manage_assignment/{assignment_id}', 'Assignments_Admin_Controller@manage_assignment');
+
+        /* Админ Добавить доходную часть : POST */
+        Route::post('/admin/manage_assignment/add_income_entry', 'Assignments_Admin_Controller@add_income_post');
+
+         /* Админ Добавить расходную часть : POST */
+         Route::post('/admin/manage_assignment/add_expense_entry', 'Assignments_Admin_Controller@add_expense_post');
+
+         /* Админ Добавить список выполненых работ : POST */
+         Route::post('/admin/manage_assignment/add_works_entry', 'Assignments_Admin_Controller@add_works_post');
+
 /****** Финансы : Администратор ******/
 Route::get('/admin/finances/index', 'Finances_Admin_Controller@finances_index')->middleware('can:admin_rights');
+
+/****** Модели машин : Администратор ******/
+Route::get('/admin/cars/index', 'Cars_Admin_Controller@cars_index')->middleware('can:admin_rights');
+
+        /* Добавить модель машины */
+        Route::post('/admin/cars/add_car_entry', 'Cars_Admin_Controller@add_car_entry')->middleware('can:admin_rights');
+
+        /* Страница редактирования модели машины */
+        Route::get('/admin/cars/{car_entry_id}/car_edit', 'Cars_Admin_Controller@edit_car_entry')->middleware('can:admin_rights');
+
+            /* Редактировать модель машины */
+            Route::post('/admin/cars/{car_entry_id}/submit_car_entry', 'Cars_Admin_Controller@submit_car_entry')->middleware('can:admin_rights');
+
+        /* Удалить модель машины */
+        Route::get('/admin/cars/{car_entry_id}/delete', 'Cars_Admin_Controller@delete_car_entry')->middleware('can:admin_rights');
 
 
 /****** Supply orders : Администратор ******/
@@ -256,8 +285,21 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
         /* Добавить список выполненых работ : POST */
         Route::post('/employee/manage_assignment/add_works_entry', 'Employee_Dashboard_Controller@add_works_post');
 
+            /* Наряд выполнен : POST */
+            Route::get('/employee/manage_assignment/{assignment_id}/assignment_complete', 'Employee_Dashboard_Controller@assignment_complete');
+
+            /* Наряд невыполнен : POST */
+            Route::get('/employee/manage_assignment/{assignment_id}/assignment_uncomplete', 'Employee_Dashboard_Controller@assignment_uncomplete');
+
     /* Архив моих нарядов */
     Route::get('/employee/my_assignments_archive', 'Employee_Dashboard_Controller@my_assignment_archive');
+
+    /* Выполненые наряды */
+    Route::get('/employee/my_completed_assignments', 'Employee_Dashboard_Controller@my_complete_assignments');
+
+    /* Невыполненые наряды */
+    Route::get('/employee/my_uncompleted_assignments', 'Employee_Dashboard_Controller@my_uncomplete_assignments');
+
 
 /**** Смены : работник ****/
 

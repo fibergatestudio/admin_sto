@@ -3,9 +3,31 @@
 @section('page_name')
     Наряд # {{ $assignment->id }}<br>
     {{ $assignment->description }}
+
 @endsection
 
 @section('content')
+
+<div class="row">
+        <div class="col-md-2">
+            <p>Статус: {{ $assignment->status }}</p>
+        </div>
+        <div class="col-md-2">
+            <a href="{{ url('/employee/manage_assignment/'.$assignment->id.'/assignment_complete') }}">
+                <button type="button" class="btn btn-success">
+                    Выполнить
+                </button>
+            </a>
+        </div>
+        <div class="col-md-2">
+            <a href="{{ url('/employee/manage_assignment/'.$assignment->id.'/assignment_uncomplete') }}">
+                <button type="button" class="btn btn-warning">
+                    Невыполнить
+                </button>
+            </a>
+        </div>
+    </div>
+
     {{-- Доходная часть --}}
     <h2>Доходная часть</h2>
     
@@ -35,7 +57,7 @@
         @endforeach
         </tbody>
     </table>
-    <p>Сумма заходов: {{ $income_entry->sum('amount') }}<br></p>
+    <p>Сумма заходов: {{ $assignment_income->sum('amount') }}<br></p>
 
     {{-- Добавить заход денег : Кнопка открытия модального окна --}}
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addIncomeModal">
@@ -120,7 +142,7 @@
         @endforeach
         </tbody>
     </table>
-    <p>Сумма расходов: {{ $expense_entry->sum('amount') }}<br></p>
+    <p>Сумма расходов: {{ $assignment_expense->sum('amount') }}<br></p>
 
     {{-- Добавить расход денег : Кнопка открытия модального окна --}}
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addExpenseModal">

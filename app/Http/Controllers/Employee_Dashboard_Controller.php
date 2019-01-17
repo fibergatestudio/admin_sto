@@ -39,12 +39,62 @@ class Employee_Dashboard_Controller extends Controller
                 ->where(
                     [
                         ['responsible_employee_id', '=', $employee_id],
-                        ['status', '=', 'active']
                     ]
                 )
                 ->get();
         
         return view('employee.assignments_index', ['assignments' => $assignments_data]);
+    }
+
+    public function my_complete_assignments(){
+        $user = Auth::user();
+        $employee_user_id = $user->id;
+        $employee = DB::table('employees')->where('user_id', $employee_user_id)->first();
+        $employee_id = $employee->id;
+        
+        // ... !!! ID пользователя и ID сотрудника отличаются
+        // Получить employee_id
+        
+
+        /* Получаем информацию о нарядах */
+        $assignments_data =
+            DB::table('assignments')
+                ->where(
+                    [
+                        ['responsible_employee_id', '=', $employee_id],
+                        ['status', '=', 'complete']
+                    ]
+                )
+                ->get();
+        
+        
+        return view('employee.my_completed_assignments', ['assignments' => $assignments_data]);
+    }
+
+    public function my_uncomplete_assignments(){
+        $user = Auth::user();
+        $employee_user_id = $user->id;
+        $employee = DB::table('employees')->where('user_id', $employee_user_id)->first();
+        $employee_id = $employee->id;
+        
+        // ... !!! ID пользователя и ID сотрудника отличаются
+        // Получить employee_id
+        
+
+        /* Получаем информацию о нарядах */
+        $assignments_data =
+            DB::table('assignments')
+                ->where(
+                    [
+                        ['responsible_employee_id', '=', $employee_id],
+                        ['status', '=', 'active']
+                    ]
+                )
+                ->get();
+        
+        
+        
+        return view('employee.my_uncompleted_assignments', ['assignments' => $assignments_data]);
     }
 
     /* Один наряд сотрудника : управление */
@@ -66,6 +116,34 @@ class Employee_Dashboard_Controller extends Controller
         
         /* Возвращаем страницу */
         return view('employee.assignment', ['assignment' => $assignment, 'assignment_income' => $assignment_income, 'assignment_expense' => $assignment_expense, 'assignment_work' => $assignment_work]);
+    }
+
+    /* Пометить наряд выполнено */
+    public function assignment_complete($assignment_id){
+
+        $complete = 'complete';
+
+        $complete_assignment = Assignment::find($assignment_id);
+        $complete_assignment->status = $complete;
+        $complete_assignment->save();
+
+        /* Возвращаемся обратно на страницу нарядов */
+        return back();
+
+    }
+
+    /* Пометить наряд невыполнено */
+    public function assignment_uncomplete($assignment_id){
+
+        $uncomplete = 'active';
+
+        $uncomplete_assignment = Assignment::find($assignment_id);
+        $uncomplete_assignment->status = $uncomplete;
+        $uncomplete_assignment->save();
+
+        /* Возвращаемся обратно на страницу нарядов */
+        return back();
+
     }
     
 

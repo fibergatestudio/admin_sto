@@ -92,6 +92,15 @@
 								</span>
 							</a>
 						</li>
+						{{-- Модели Машин --}}
+						<li class="nav-item">
+							<a href="{{ url('/admin/cars/index') }}" class="nav-link">
+								<i class="icon-car"></i>
+								<span>
+									Модели Машин
+								</span>
+							</a>
+						</li>
 
 						
 						<li class="nav-item">
