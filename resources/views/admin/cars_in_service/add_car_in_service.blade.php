@@ -63,11 +63,40 @@
                     </div>
                 </a>
                 <hr>
+                
                 {{-- Название машины --}}
                 <div class="form-group">
                     <label>Название машины</label>
                     <input type="text" name="car_general_name" class="form-control">
                 </div>
+
+                {{-- Модель и марка --}}
+                {{-- Марка : от неё будут подтягивать подсказки --}}
+                {{-- ... --}}
+
+                {{-- Модель : подтягивается с базы --}}
+                {{-- ... --}}
+                
+
+                {{-- Пробег --}}
+                {{-- Километры --}}
+                <div class="form-group">
+                    {{-- ... --}}
+                    <label>Пробег в километрах</label>
+                    <input type="number" name="mileage_km" class="form-control" min="0" value="0" id="mileageKM">
+                </div>
+                
+                
+                {{-- Мили --}}
+                <div class="form-group"> 
+                    <label>Пробег в милях</label>
+                    <input type="number" name="mileage_miles" class="form-control" min="0" value="0" id="mileageMiles">
+                </div>
+
+                {{-- Скрипт на автоматический пересчёт - внизу, в секции custom_scripts --}}
+                
+                
+
 
                 <button type="submit" class="btn btn-success">
                     Добавить авто
@@ -90,12 +119,31 @@
         
 
     @endif
-
-
-
-
     
+@endsection
 
+@section('custom_scripts')
 
-    
+{{-- Скрипт автоматического пересчёта пробега километры-мили --}}
+<script>
+
+{{-- Коэффициент 1 миля = Х километров --}}
+var milesToKilometers = 1.609;
+
+{{-- При вводе километров --}}
+$("#mileageKM").change(function(){
+    {{-- Получаем текущие километры --}}
+    var currentKilometers = $("#mileageKM").val();
+    {{-- Задаём мили --}}
+    $("#mileageMiles").val((currentKilometers/milesToKilometers).toFixed(2));
+});
+
+{{-- При вводе миль --}}
+$("#mileageMiles").change(function(){
+    {{-- Получаем текущие мили --}}
+    var currentMiles = $("#mileageMiles").val();
+    {{-- Задаём километры --}}
+    $("#mileageKM").val((currentMiles*milesToKilometers).toFixed(2));
+});
+
 @endsection

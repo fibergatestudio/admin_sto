@@ -44,7 +44,16 @@
 	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 	{{-- End Vue.JS--}}
 
+	{{-- Typeahead --}}
+	
+		{{-- JS --}}
+		{{-- ... --}}
 
+		{{-- CSS --}}
+		{{-- ... --}}
+		
+	{{-- /end typeahead --}}
+	
 </head>
 
 <body>
