@@ -105,13 +105,17 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
     Route::get('/add_passport_scan/{employee_id}', 'EmployeesAdminController@add_passport_scan')->middleware('can:admin_rights');
 
         // Добавление скана паспорта в БД
-        Route::post('/add_passport_scan_post/{employee_id}', 'EmployeesAdminController@add_passport_scan_post')->middleware('can:admin_rights');
-
-        // Список сотрудников с паспортами
-        Route::get('/passport_scans/', 'EmployeesAdminController@show_passport_scan')->middleware('can:admin_rights');
-
-
-
+        Route::post('/add_passport_scan_post/', 'EmployeesAdminController@add_passport_scan_post')->middleware('can:admin_rights');
+        
+    // Страница сотрудника со сканами его паспорта
+    Route::get('/passport_scans/{employee_id}', 'EmployeesAdminController@show_employee_passport')->middleware('can:admin_rights');
+    
+    // Страница удаления сканов паспортов
+    Route::get('/passport_scans_delete/{employee_id}', 'EmployeesAdminController@passport_scans_delete')->middleware('can:admin_rights');
+    
+    // Удаление скана паспорта сотрудника
+    Route::post('/passport_scans_delete_post/', 'EmployeesAdminController@passport_scans_delete_post')->middleware('can:admin_rights');
+    
 /****** Рабочие зоны: Администратор ******/
 
     /* Просмотр рабочих зон */

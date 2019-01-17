@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 use App\User;
 use App\Employee;
@@ -106,29 +107,44 @@ class EmployeesAdminController extends Controller
         return view('employees_admin.add_passport_scan', ['employee'=>$employee]);
     }
 
-    // Добавление скана паспорта в БД
-    public function add_passport_scan_post(Request $request, $employee_id){
+    // Хранение файла скана паспорта 
+    public function add_passport_scan_post(Request $request){ 
+        $employee_id = $request->employee_id;
         $employee = Employee::find($employee_id);
+        
+        $request->scan->store('public/employee/'.$employee_id);
 
-        if($request->hasFile('scan')) {
-            $scan = $request->file('scan');
-            $fileName = $scan->getClientOriginalName();
-            $destinationPath = public_path('/passportscans');
-            $scan->move($destinationPath, $fileName);
-            $employee->link_scan = './passportscans/'.$fileName;
-        } 
-        $employee->save();
-
-        return redirect()->route('view_employees');
+        return redirect('/passport_scans/'.$request->employee_id);
     }
-
-    // Список сотрудников с паспортами
-    public function show_passport_scan(){
-        $employee_data = Employee::all();
-
-        return view('employees_admin.employees_passports', ['employee_data' => $employee_data]);
+    
+    // Страница сотрудника со сканами его паспорта
+    public function show_employee_passport($employee_id) {
+        $employee = Employee::find($employee_id);         
+        $images = [];
+        foreach(Storage::files('public/employee/'.$employee_id) as $file){
+             $images[] = $file;
+        }       
+        
+        return view('employees_admin.employee_passports', compact('employee', 'images'));
     }
-
+    // Страница удаления сканов
+    public function passport_scans_delete($employee_id){
+        // Получаем список сканов паспорта сотрудника
+        $images = [];
+        foreach(Storage::files('public/employee/'.$employee_id) as $file){
+             $images[] = $file;
+        }
+        return view('employees_admin.passports_scans_delete', compact('employee_id', 'images'));
+    }
+    // Удаление сканов : POST 
+    public function passport_scans_delete_post(Request $request){
+        /* Удалить фото */
+        Storage::delete($request->path_to_file);
+        
+        /* Вернуться на страницу удаления фотографий */
+        return redirect('passport_scans_delete/'.$request->employee_id);
+    }
+    
     /*
     ********** Блок начислений (credit) **********
     */

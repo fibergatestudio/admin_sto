@@ -7,10 +7,11 @@
 @section('content')
 
 {{-- Форма --}}
-<form action="{{ url('/add_passport_scan_post/'.$employee->id) }}" method="POST" enctype="multipart/form-data">
+<form action="{{ url('/add_passport_scan_post/') }}" method="POST" enctype="multipart/form-data">
     @csrf
     {{-- ID сотрудника --}}
     <input type="hidden" name="employee_id" value="{{ $employee->id }}">
+    <input type="hidden" name="employee_name" value="{{ $employee->general_name }}">
     <div>
         {{ $employee->general_name}}
     </div>

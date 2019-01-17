@@ -29,11 +29,11 @@
                 </td>
 
                 <td>
-                    @if(!isset($employee->link_scan))
+                    
                         <a class="btn btn-secondary" href="{{ url('/add_passport_scan/'.$employee->id) }}">Добавить скан паспорта</a>
-                    @else
-                        <img src="{{$employee->link_scan}}" alt="" width="100px" height="100px">
-                    @endif
+                    
+                        <a class="btn btn-secondary" href="{{ url('/passport_scans/'.$employee->id) }}">Посмотреть скан паспорта</a>
+                    
                 </td>
             </tr>
         @endforeach
@@ -51,7 +51,7 @@
         </div>
     </a>
     
-    <a class="btn btn-secondary" href="{{ url('/passport_scans/') }}">Сканы паспортов</a>
+    
     
 
 @endsection
