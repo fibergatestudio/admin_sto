@@ -39,7 +39,8 @@
 
         {{-- Форма добавления машины с выбором клиента --}}
         <h2>Форма добавления авто</h2>
-        <form action="{{ url('admin/cars_in_service/add') }}" method="POST">
+
+        <form action="{{ url('admin/cars_in_service/add') }}" method="POST" enctype="multipart/form-data">
             @csrf
             
                 {{-- Выбор клиента --}}
@@ -64,6 +65,13 @@
                 </a>
                 <hr>
                 
+                {{-- Прикрепить документ --}}
+
+                <div class="form-group">
+                    <label>Прикрепить документ</label>
+                    <input type="file" name="document">
+                </div>
+
                 {{-- Название машины --}}
                 <div class="form-group">
                     <label>Название машины</label>
@@ -102,6 +110,37 @@
                 </div>
 
                 {{-- Скрипт на автоматический пересчёт - внизу, в секции custom_scripts --}}
+
+                {{-- Новые поля --}}
+                {{-- Год выпуска --}}
+                <div class="form-group">
+                    <label>Год выпуска</label>
+                    <input type="number" min="1900" max="2099" step="1" value="2019" name="release_year" id="releaseyear" class="form-control typeahead">
+                </div>
+
+                {{-- Регистрационный номер --}}
+                <div class="form-group">
+                    <label>Регистрационный номер</label>
+                    <input type="number" name="reg_number" id="regnumber" class="form-control typeahead">
+                </div>
+
+                {{-- Тип топлива --}}
+                <div class="form-group">
+                    <label>Тип топлива</label>
+                    <input type="text" name="fuel_type" id="fueltype" class="form-control typeahead">
+                </div>
+
+                {{-- VIN --}}
+                <div class="form-group">
+                    <label>VIN</label>
+                    <input type="text" name="vin_number" id="vinnumber" class="form-control typeahead">
+                </div>
+
+                {{-- Обьем мотора --}}
+                <div class="form-group">
+                    <label>Объем мотора</label>
+                    <input type="text" name="engine_capacity" id="enginecapacity" class="form-control typeahead">
+                </div>
                 
                 
 
@@ -111,6 +150,7 @@
                 </button>
                 
             </form>
+
         @else
         {{-- Если клиентов нет --}}
             <p>На данный момент в базе нет клиентов. Пожалуйста, добавьте сначала нового клиента. Это можно сделать, нажав на вот эту кнопку:</p>
@@ -141,15 +181,16 @@ $("#mileageKM").change(function(){
     {{-- Получаем текущие километры --}}
     var currentKilometers = $("#mileageKM").val();
     {{-- Задаём мили --}}
-    $("#mileageMiles").val((currentKilometers/milesToKilometers).toFixed(2));
+    $("#mileageMiles").val(Math.round(currentKilometers/milesToKilometers));
 });
 
 {{-- При вводе миль --}}
 $("#mileageMiles").change(function(){
     {{-- Получаем текущие мили --}}
     var currentMiles = $("#mileageMiles").val();
+    //var currentMiles = $(Math.round("#mileageMiles").val());
     {{-- Задаём километры --}}
-    $("#mileageKM").val((currentMiles*milesToKilometers).toFixed(2));
+    $("#mileageKM").val(Math.round(currentMiles*milesToKilometers));
 });
 
 
