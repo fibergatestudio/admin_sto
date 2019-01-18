@@ -76,7 +76,13 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
     /* Страница начислений по сотруднику */
     Route::get('/supervisor/employee_finances/credit/{employee_id}', 'EmployeesAdminController@employee_credit_page')->middleware('can:admin_rights');
 
-    /* Страница штрафов сотрудника */
+    /* Страница начислений по сотруднику /POST */
+    Route::post('/supervisor/employee_finances/credit', 'EmployeesAdminController@employee_credit_page_post')->middleware('can:admin_rights');
+
+        /* Отображение истории начислений*/
+        Route::get('/supervisor/employee_finances/credit', 'EmployeesAdminController@index')->middleware('can:admin_rights');
+
+/* Страница штрафов сотрудника */
     Route::get('/supervisor/employee_fines/{employee_id}', 'EmployeesAdminController@view_employee_fines')->name('employee_fines')->middleware('can:admin_rights');
 
         /* Применить штраф */
@@ -95,6 +101,21 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
         Route::post('/supervisor/employee_coffee_tokens/add',
                     'EmployeesAdminController@employee_coffee_token_issue')->middleware('can:admin_rights');
 
+    /* Страница добавления скана паспорта сотрудника*/
+    Route::get('/add_passport_scan/{employee_id}', 'EmployeesAdminController@add_passport_scan')->middleware('can:admin_rights');
+
+        // Добавление скана паспорта в БД
+        Route::post('/add_passport_scan_post/', 'EmployeesAdminController@add_passport_scan_post')->middleware('can:admin_rights');
+        
+    // Страница сотрудника со сканами его паспорта
+    Route::get('/passport_scans/{employee_id}', 'EmployeesAdminController@show_employee_passport')->middleware('can:admin_rights');
+    
+    // Страница удаления сканов паспортов
+    Route::get('/passport_scans_delete/{employee_id}', 'EmployeesAdminController@passport_scans_delete')->middleware('can:admin_rights');
+    
+    // Удаление скана паспорта сотрудника
+    Route::post('/passport_scans_delete_post/', 'EmployeesAdminController@passport_scans_delete_post')->middleware('can:admin_rights');
+    
 /****** Рабочие зоны: Администратор ******/
 
     /* Просмотр рабочих зон */

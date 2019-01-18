@@ -28,6 +28,13 @@
                     </a>
                 </td>
 
+                <td>
+                    
+                        <a class="btn btn-secondary" href="{{ url('/add_passport_scan/'.$employee->id) }}">Добавить скан паспорта</a>
+                    
+                        <a class="btn btn-secondary" href="{{ url('/passport_scans/'.$employee->id) }}">Посмотреть скан паспорта</a>
+                    
+                </td>
             </tr>
         @endforeach
     </table>
@@ -43,5 +50,8 @@
             Архив сотрудников
         </div>
     </a>
+    
+    
+    
 
 @endsection
