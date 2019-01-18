@@ -22,7 +22,6 @@
             <button type="submit" class="btn btn-success">Загрузить</button>
         </div>
     </div>
-    
 </form>
 {{-- Конец формы --}}
 
