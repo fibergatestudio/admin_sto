@@ -132,8 +132,8 @@
 				@elseif(Auth::user()->isSupplyOfficer())
 					@include('limitless_parts.sidebar_supply_officer')
 				@endif
-
-
+					@elseif(Auth::user()->isClient())
+						@include('limitless_parts.sidebar_client')
 			</div>
 			<!-- /sidebar content -->
 			
