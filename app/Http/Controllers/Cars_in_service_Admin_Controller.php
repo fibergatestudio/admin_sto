@@ -12,6 +12,7 @@ use App\Client;
 use App\Cars_in_service;
 use App\Cars_notes;
 use App\Assignment;
+use App\Car_model_list;
 
 class Cars_in_service_Admin_Controller extends Controller
 {
@@ -40,9 +41,21 @@ class Cars_in_service_Admin_Controller extends Controller
             $clients = Client::all();
             return view('admin.cars_in_service.add_car_in_service', ['client' => '', 'clients' => $clients]);
         }
-        
-
     }
+
+    /* API для брендов машин */
+    /* Возвращает список всех брендов авто */
+    public function api_brands(){
+        $brands = Car_model_list::select('brand')->distinct()->get();
+        $brands_array = [];
+        foreach($brands as $brand){
+            $brands_array[] = $brand->brand;
+        }
+        print_r(json_encode($brands_array));
+    }
+
+    /* API для моделей машин */
+    // ...
 
     /* Добавление машины : POST */
     public function add_car_post(Request $request){

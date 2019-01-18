@@ -72,10 +72,17 @@
 
                 {{-- Модель и марка --}}
                 {{-- Марка : от неё будут подтягивать подсказки --}}
-                {{-- ... --}}
+                <div class="form-group">
+                    <label>Марка машины</label>
+                    <input type="text" name="car_brand" class="form-control typeahead">
+                </div>
 
                 {{-- Модель : подтягивается с базы --}}
                 {{-- ... --}}
+                <div class="form-group">
+                    <label>Модель машины</label>
+                    <input type="text" name="car_model" class="form-control">
+                </div>
                 
 
                 {{-- Пробег --}}
@@ -113,12 +120,12 @@
                     </div>
                 </a>
         @endif {{-- Конец условия проверки пустая ли база клиентов--}}
-            
-
-
-        
 
     @endif
+
+    {{-- Typeahead test --}}
+    <input class="typeahead" type="text" placeholder="States of USA">
+
     
 @endsection
 
@@ -146,4 +153,62 @@ $("#mileageMiles").change(function(){
     $("#mileageKM").val((currentMiles*milesToKilometers).toFixed(2));
 });
 
+{{-- Typeahead --}}
+
+
+
+
+console.log('ok');
+var substringMatcher = function(strs) {
+  return function findMatches(q, cb) {
+    var matches, substringRegex;
+
+    // an array that will be populated with substring matches
+    matches = [];
+
+    // regex used to determine if a string contains the substring `q`
+    substrRegex = new RegExp(q, 'i');
+
+    // iterate through the pool of strings and for any string that
+    // contains the substring `q`, add it to the `matches` array
+    $.each(strs, function(i, str) {
+      if (substrRegex.test(str)) {
+        matches.push(str);
+      }
+    });
+
+    cb(matches);
+  };
+};
+
+$.get( "{{ url ('admin/cars_in_service/api_brands') }} ", function(data) {
+  
+  var states = JSON.parse(data);
+  alert( "success" );
+  console.log(states);
+
+  $('.typeahead').typeahead({
+  hint: true,
+  highlight: true,
+  minLength: 1
+},
+{
+  name: 'states',
+  source: substringMatcher(states)
+});
+
+})
+  .done(function() {
+    //alert( "second success" );
+  })
+  .fail(function() {
+    alert( "error" );
+  })
+  .always(function() {
+    //alert( "finished" );
+  });
+
+
+
+</script>
 @endsection

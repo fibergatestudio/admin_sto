@@ -146,6 +146,12 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
     /* Добавление машины : страница */
     Route::get('admin/cars_in_service/add/{client_id?}', 'Cars_in_service_Admin_Controller@add_car')->middleware('can:admin_rights');
 
+        /* API для марок машин */
+        Route::get('admin/cars_in_service/api_brands', 'Cars_in_service_Admin_Controller@api_brands')->middleware('can:admin_rights');
+
+        /* API для моделей машин */
+        // ...
+
         /* Добавление машины : POST */
         Route::post('admin/cars_in_service/add', 'Cars_in_service_Admin_Controller@add_car_post')->middleware('can:admin_rights');
 

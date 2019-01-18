@@ -47,10 +47,10 @@
 	{{-- Typeahead --}}
 	
 		{{-- JS --}}
-		{{-- ... --}}
+		<script src="{{ url('js/typeahead.bundle.js') }}"></script>
 
 		{{-- CSS --}}
-		{{-- ... --}}
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-typeahead/2.10.6/jquery.typeahead.css" rel="stylesheet" type="text/css">
 		
 	{{-- /end typeahead --}}
 	
