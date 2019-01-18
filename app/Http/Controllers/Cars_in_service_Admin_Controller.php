@@ -82,7 +82,7 @@ class Cars_in_service_Admin_Controller extends Controller
         $new_car_in_service->engine_capacity = $request->engine_capacity;
         $new_car_in_service->save();
 
-        $request->document->store('public1');
+        $request->document->store('public1'); //Заливка файла 
 
         /* И перенаправить на страницу клиента */
         return redirect()->route('admin_view_client', ['client_id' => $request->client_id]);
