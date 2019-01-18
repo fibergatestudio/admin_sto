@@ -188,7 +188,7 @@
         @endforeach
         </tbody>
     </table>
-    <p>Сумма заходов: {{ $income_entry->sum('amount') }}<br></p>
+    <p>Сумма заходов: {{ $assignment_income->sum('amount') }}<br></p>
 
     {{-- Добавить заход денег : Кнопка открытия модального окна --}}
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addIncomeModal">
@@ -273,7 +273,7 @@
         @endforeach
         </tbody>
     </table>
-    <p>Сумма расходов: {{ $expense_entry->sum('amount') }}<br></p>
+    <p>Сумма расходов: {{ $assignment_expense->sum('amount') }}<br></p>
 
     {{-- Добавить расход денег : Кнопка открытия модального окна --}}
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addExpenseModal">
