@@ -30,9 +30,9 @@
 
                 <td>
                     
-                        <a class="btn btn-secondary" href="{{ url('/add_passport_scan/'.$employee->id) }}">Добавить скан паспорта</a>
+                        <a class="btn btn-secondary" href="{{ url('/add_documents/'.$employee->id) }}">Добавить документы</a>
                     
-                        <a class="btn btn-secondary" href="{{ url('/passport_scans/'.$employee->id) }}">Посмотреть скан паспорта</a>
+                        <a class="btn btn-secondary" href="{{ url('/documents/'.$employee->id) }}">Посмотреть документы</a>
                     
                 </td>
             </tr>

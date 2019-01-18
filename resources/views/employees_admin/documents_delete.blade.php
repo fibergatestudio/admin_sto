@@ -1,7 +1,7 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    Страница удаления сканов паспорта
+    Страница удаления документов сотрудника
 @endsection
 
 @section('content')
@@ -10,7 +10,7 @@
         <img src="..{{ Storage::url($image) }}" width="200px">
 
         {{-- Кнопка удаления --}}
-        <form method="POST" action="{{ url('/passport_scans_delete_post/') }}">
+        <form method="POST" action="{{ url('/documents_delete_post/') }}">
             @csrf
 
             {{-- ID работника --}}
@@ -27,6 +27,6 @@
         <hr>
     @endforeach
 
-    {{-- Кнопка вернуться : на страницу со сканами --}}
-    <a class="btn btn-light" href="{{ url('/passport_scans/'.$employee_id) }}">Вернуться</a>
+    {{-- Кнопка вернуться : на страницу с документами --}}
+    <a class="btn btn-light" href="{{ url('/documents/'.$employee_id) }}">Вернуться</a>
 @endsection
