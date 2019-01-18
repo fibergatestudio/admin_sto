@@ -51,14 +51,8 @@ class EmployeesAdminController extends Controller
         $new_employee->status = 'active';
          /* Добавляем в таблицу работников ID соответствующего юзера */
         $new_employee->user_id = $new_user_id; 
+        $new_employee->balance = 0;
         $new_employee->save();
-
-        /* Добавить ему нулевой баланс */
-        $new_employee_id = $new_employee->id;        
-        $new_employee_balance = new Employee_balance();
-        $new_employee_balance->balance = 0;
-        $new_employee_balance->employee_id = $new_employee_id;
-        $new_employee_balance->save();
 
         /* Вернуться ко списку сотрудников */
         return redirect()->route('view_employees');

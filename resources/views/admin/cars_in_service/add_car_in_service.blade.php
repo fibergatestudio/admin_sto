@@ -71,7 +71,7 @@
                 </div>
 
                 {{-- Модель и марка --}}
-                {{-- Марка : от неё будут подтягивать подсказки --}}
+                {{-- Марка : от неё будут подтягивать подсказки . Используется Typeahead --}}
                 <div class="form-group">
                     <label>Марка машины</label>
                     <input type="text" name="car_brand" class="form-control typeahead">
@@ -122,8 +122,6 @@
         @endif {{-- Конец условия проверки пустая ли база клиентов--}}
 
     @endif
-
-    {{-- Typeahead test --}}
     
 
     

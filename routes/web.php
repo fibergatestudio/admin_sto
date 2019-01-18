@@ -170,8 +170,8 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
         /* API для марок машин */
         Route::get('admin/cars_in_service/api_brands', 'Cars_in_service_Admin_Controller@api_brands')->middleware('can:admin_rights');
 
-        /* API для моделей машин */
-        // ...
+        /* API для моделей машин (подтягиваются по бренду) */
+        Route::get('admin/cars_in_service/api_models/{brand}', 'Cars_in_service_Admin_Controller@api_models')->middleware('can:admin_rights');
 
         /* Добавление машины : POST */
         Route::post('admin/cars_in_service/add', 'Cars_in_service_Admin_Controller@add_car_post')->middleware('can:admin_rights');

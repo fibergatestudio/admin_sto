@@ -54,8 +54,18 @@ class Cars_in_service_Admin_Controller extends Controller
         print_r(json_encode($brands_array));
     }
 
-    /* API для моделей машин */
-    // ...
+    /* API для моделей машин (возвращают список по бренду) */
+    public function api_models($brand){
+        /* Получить список моделей */
+        $models = Car_model_list::select('model')->where('brand', $brand)->distinct()->get();
+        $model_array = [];
+        foreach($models as $model){
+            $model_array[] = $model;
+        }
+
+        /* Вывести в JSON формате */
+        print_r(json_encode($model_array));
+    }
 
     /* Добавление машины : POST */
     public function add_car_post(Request $request){
