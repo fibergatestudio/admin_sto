@@ -124,7 +124,7 @@
     @endif
 
     {{-- Typeahead test --}}
-    <input class="typeahead" type="text" placeholder="States of USA">
+    
 
     
 @endsection
@@ -184,7 +184,6 @@ var substringMatcher = function(strs) {
 $.get( "{{ url ('admin/cars_in_service/api_brands') }} ", function(data) {
   
   var states = JSON.parse(data);
-  alert( "success" );
   console.log(states);
 
   $('.typeahead').typeahead({
