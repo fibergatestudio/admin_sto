@@ -74,14 +74,15 @@
                 {{-- Марка : от неё будут подтягивать подсказки . Используется Typeahead --}}
                 <div class="form-group">
                     <label>Марка машины</label>
-                    <input type="text" name="car_brand" class="form-control typeahead">
+                    <input type="text" name="car_brand" id="carBrand" class="form-control typeahead">
                 </div>
 
                 {{-- Модель : подтягивается с базы --}}
                 {{-- ... --}}
                 <div class="form-group">
                     <label>Модель машины</label>
-                    <input type="text" name="car_model" class="form-control">
+                    <select id="carModel" name="car_model" class="form-control">
+                    </select>
                 </div>
                 
 
@@ -90,14 +91,14 @@
                 <div class="form-group">
                     {{-- ... --}}
                     <label>Пробег в километрах</label>
-                    <input type="number" name="mileage_km" class="form-control" min="0" value="0" id="mileageKM">
+                    <input type="number" name="mileage_km" class="form-control" min="0" value="0" id="mileageKM" step="any">
                 </div>
                 
                 
                 {{-- Мили --}}
                 <div class="form-group"> 
                     <label>Пробег в милях</label>
-                    <input type="number" name="mileage_miles" class="form-control" min="0" value="0" id="mileageMiles">
+                    <input type="number" name="mileage_miles" class="form-control" min="0" value="0" id="mileageMiles" step="any">
                 </div>
 
                 {{-- Скрипт на автоматический пересчёт - внизу, в секции custom_scripts --}}
@@ -151,10 +152,38 @@ $("#mileageMiles").change(function(){
     $("#mileageKM").val((currentMiles*milesToKilometers).toFixed(2));
 });
 
+
+{{-- Подтягиваем список моделей по бренду --}}
+
+    {{-- При изменении значения бренда --}}
+    $("#carBrand").change(function(){
+        {{-- Получаем название бренда и подтягиваем по API список моделей --}}
+        var brandName = $("#carBrand").val();
+        console.log(brandName);
+        var urlToFetch = "{{ url('admin/cars_in_service/api_models/') }}"+"/"+brandName;
+        console.log(urlToFetch)
+        $.get(urlToFetch, function(data){
+            {{-- При успехе --}}
+            console.log('success');
+            //console.log(data);
+            {{-- Очищаем select --}}
+            $("#carModel").empty();
+            {{-- Подставляем новые модели--}}
+            var modelsArray = JSON.parse(data);
+            console.log(modelsArray);
+            for(var modelIteration in modelsArray){
+                console.log(modelsArray[modelIteration]);
+                $("#carModel").append('<option value="'+modelsArray[modelIteration]+'">'+modelsArray[modelIteration]+'</option>');
+            }
+        }
+        
+        );{{-- /.get --}}
+    
+    }); {{-- /carBrand.change--}}
+
+{{-- Конец работы с моделями--}}
+
 {{-- Typeahead --}}
-
-
-
 
 console.log('ok');
 var substringMatcher = function(strs) {

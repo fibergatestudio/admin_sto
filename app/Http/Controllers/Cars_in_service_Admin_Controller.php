@@ -60,7 +60,7 @@ class Cars_in_service_Admin_Controller extends Controller
         $models = Car_model_list::select('model')->where('brand', $brand)->distinct()->get();
         $model_array = [];
         foreach($models as $model){
-            $model_array[] = $model;
+            $model_array[] = $model->model;
         }
 
         /* Вывести в JSON формате */
