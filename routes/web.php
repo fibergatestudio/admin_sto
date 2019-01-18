@@ -19,6 +19,12 @@ Route::get('/', function () {
 /* Стандартная авторизация ларавела */
 Auth::routes();
 
+
+/*Путь к клиенту*/
+Route::get('/client', 'Client_Controller@client')->middleware('can:client_rights');
+/*Деавторизация*/
+Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
+
 /* Путь с редиректами по ролям */
 Route::get('/home', 'HomeController@index')->name('home');
 
