@@ -1,167 +1,16 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-Наряд: {{ $assignment->description }} 
-
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-light" data-toggle="modal" data-target="#exampleModal1" style="margin-left: 10px">
-  Изменить название
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <form action="{{ url('/admin/assignments/change_name') }}" method="POST">
-    @csrf
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Смена названия наряда</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          
-          {{-- ID наряда --}}
-          <input type="hidden" name="assignment_id" value="{{ $assignment->id }}">
-          
-          {{-- Новое название --}}
-          <div class="form-group">
-            <label>Новое название:</label>
-            <input type="text" name="new_name" class="form-control" required>
-          </div>
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-          <button type="button" class="btn btn-primary">Изменить</button>
-        </div>
-      </div>
-    </div>
-  </form>
-</div>
+Зональный наряд: {{ $sub_assignment->name }}
 
 @endsection
 
 @section('content')
     {{-- Статическая информация по наряду --}}
-    Клиент: {{ $assignment->client_name }} <br>
-    Авто: {{ $assignment->car_name }}<br>
+    Описание наряда: {{ $sub_assignment->description }}<br>
     <hr>
 
-    {{-- Зональные наряды --}}
-    <h3>Текущие зональные наряды:</h3>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Название</th>
-          <th>Рабочая зона</th>
-          <th>Ответственный сотрудник </th>
-          <th></th>{{-- Кнопка просмотр --}}
-        </tr>
-      </thead>
-      <tbody>
-        @foreach($sub_assignments as $sub_assignment)
-          <tr>
-            <td>{{ $sub_assignment->name }} {{-- Название наряда --}}</td>
-            <td>{{ $sub_assignment->workzone_name }} {{-- Название рабочей зоны --}}</td>
-            <td>{{ $sub_assignment->responsible_employee }} {{-- Название ответственного сотрудника --}}</td>
-
-            {{-- url('admin/assignments/view/'.$assignment->id.'/management') --}}
-
-            <td>
-              {{-- Кнопка управления --}}
-              <a href="{{ url('admin/assignments/view/'.$sub_assignment->id.'/management') }}">
-                <div class="btn btn-light">
-                  Управление зональным нарядом
-                </div>
-              </a>
-            </td>
-          </tr>
-        @endforeach
-      </tbody>
-    </table>
-    
-    {{-- Добавить новый зональный наряд : Переход --}}
-    <a href="{{ url('admin/assignments/add_sub_assignment/'.$assignment->id) }}">
-        <div class="btn btn-light">
-            Новый зональный наряд
-        </div>
-    </a>
-    
-
-    {{-- История --}}
-    {{-- ... --}}
-
-    {{-- Финансы --}}
-    {{-- ... --}}
-
     <hr>
-    {{-- Фотографии : вывод --}}
-    <h3>Фотографии:</h3>
-    <div class="row">
-		<div class="row">
-            
-            {{-- Цикл вывода фотографий --}}
-            @foreach($image_urls as $image_url)
-
-                
-                <div class="col-lg-2 col-md-3 col-xs-6 thumb">
-                    <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title=""
-                    data-image="{{ Storage::url($image_url) }}"
-                    data-target="#image-gallery">
-                        <img class="img-thumbnail"
-                            src="{{ Storage::url($image_url) }}"
-                            alt="Another alt text">
-                    </a>
-                </div>
-            @endforeach
-            
-        </div>{{-- /row --}}
-
-        {{-- Модальное окно для вывода лайтбокса --}}
-        <div class="modal fade" id="image-gallery" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="image-gallery-title"></h4>
-                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <center>
-                            <img id="image-gallery-image" class="img-responsive" src="">
-                        </center>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light float-left" id="show-previous-image"><=
-                        </button>
-
-                        <button type="button" id="show-next-image" class="btn btn-light float-right">=>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {{-- Конец модального окна для вывода лайтбокса --}}
-	</div>
-    {{-- Конец вывод фотографий --}}
-
-    {{-- Фотографии : переход на страницу загрузки --}}
-    <a href="{{ url('/admin/assignments/'.$assignment->id.'/add_photo_page') }}">
-        <div class="btn btn-light">
-            К загрузке фотографий
-        </div>
-    </a>
-
-    {{-- Удаление фотографий : переход на страницу --}}
-    <a href="{{ url('/admin/assignments/'.$assignment->id.'/delete_photos_page') }}">
-        <div class="btn btn-dark">
-            К удалению фотографий
-        </div>
-    </a><br>
-    <br>
-
     {{-- Доходная часть --}}
     <h2>Доходная часть</h2>
     
@@ -176,37 +25,37 @@
             </tr>
         </thead>
         <tbody>
-        @foreach($assignment_income as $income_entry)
+        @foreach($zonal_assignment_income as $income_entry)
         <tr>
             <td>
-            {{ $income_entry->amount }}<br>
+            {{ $income_entry->zonal_amount }}<br>
             </td>
             <td>
-            {{ $income_entry->basis }}<br>
+            {{ $income_entry->zonal_basis }}<br>
             </td>
             <td>
-            {{ $income_entry->description }}<br>
+            {{ $income_entry->zonal_description }}<br>
             </td>
         </tr>
         @endforeach
         </tbody>
     </table>
-    <p>Сумма заходов: {{ $assignment_income->sum('amount') }}<br></p>
+    <p>Сумма зональных заходов: {{ $zonal_assignment_income->sum('zonal_amount') }}<br></p>
 
     {{-- Добавить заход денег : Кнопка открытия модального окна --}}
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addIncomeModal">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addZonalIncomeModal">
         Добавить заход денег
     </button>
 
-    {{-- Добавить заход денег : Форма и модальное окно --}}
-    <form action="{{ url('/admin/manage_assignment/add_income_entry') }}" method="POST">
+    {{-- Добавить зональный заход денег : Форма и модальное окно --}}
+    <form action="{{ url('admin/assignments/view/'.$sub_assignment->id.'/management/add_zonal_assignment_income') }}" method="POST">
         @csrf
 
-        <div class="modal fade" id="addIncomeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="addZonalIncomeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Добавить заход денег</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Добавить зональный заход денег</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
@@ -215,23 +64,24 @@
                         
                             {{-- ID наряда --}}
                             <input type="hidden" name="assignment_id" value="{{ $assignment->id }}">
+                            <input type="hidden" name="assignment_id" value="{{ $sub_assignment->id }}">
 
                             {{-- Сумма --}}
                             <div class="form-group">
                                 <label>Сумма</label>
-                                <input type="number" name="amount" min="0" class="form-control" required>
+                                <input type="number" name="zonal_amount" min="0" class="form-control" required>
                             </div>
                             
                             {{-- Основание --}}
                             <div class="form-group">
                                 <label>Основание (реквизиты документа или действие)</label>
-                                <input type="text" name="basis" class="form-control" required>
+                                <input type="text" name="zonal_basis" class="form-control" required>
                             </div>
 
                             {{-- Описание - не обязательно --}}
                             <div class="form-group">
                                 <label>Описание</label>
-                                <textarea name="description" class="form-control" required></textarea>
+                                <textarea name="zonal_description" class="form-control" required></textarea>
                             </div>
 
                         
@@ -261,37 +111,37 @@
             </tr>
         </thead>
         <tbody>
-        @foreach($assignment_expense as $expense_entry)
+        @foreach($zonal_assignment_expense as $expense_entry)
         <tr>
             <td>
-            {{ $expense_entry->amount }}<br>
+            {{ $expense_entry->zonal_amount }}<br>
             </td>
             <td>
-            {{ $expense_entry->basis }}<br>
+            {{ $expense_entry->zonal_basis }}<br>
             </td>
             <td>
-            {{ $expense_entry->description }}<br>
+            {{ $expense_entry->zonal_description }}<br>
             </td>
         </tr>
         @endforeach
         </tbody>
     </table>
-    <p>Сумма расходов: {{ $assignment_expense->sum('amount') }}<br></p>
+    <p>Сумма зональных расходов: {{ $zonal_assignment_expense->sum('zonal_amount') }}<br></p>
 
     {{-- Добавить расход денег : Кнопка открытия модального окна --}}
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addExpenseModal">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addZonalExpenseModal">
         Добавить расход денег
     </button>
 
-    {{-- Добавить расход денег : Форма и модальное окно --}}
-    <form action="{{ url('/admin/manage_assignment/add_expense_entry') }}" method="POST">
+    {{-- Добавить зональный расход денег : Форма и модальное окно --}}
+    <form action="{{ url('admin/assignments/view/'.$sub_assignment->id.'/management/add_zonal_assignment_expense') }}" method="POST">
         @csrf
 
-        <div class="modal fade" id="addExpenseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="addZonalExpenseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Добавить расход денег</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Добавить зональный расход денег</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
@@ -300,23 +150,25 @@
                         
                             {{-- ID наряда --}}
                             <input type="hidden" name="assignment_id" value="{{ $assignment->id }}">
+                            <input type="hidden" name="assignment_id" value="{{ $sub_assignment->id }}">
+                            
 
                             {{-- Сумма --}}
                             <div class="form-group">
                                 <label>Сумма</label>
-                                <input type="number" name="amount" min="0" class="form-control" required>
+                                <input type="number" name="zonal_amount" min="0" class="form-control" required>
                             </div>
                             
                             {{-- Основание --}}
                             <div class="form-group">
                                 <label>Основание (реквизиты документа или действие)</label>
-                                <input type="text" name="basis" class="form-control" required>
+                                <input type="text" name="zonal_basis" class="form-control" required>
                             </div>
 
                             {{-- Описание - не обязательно --}}
                             <div class="form-group">
                                 <label>Описание</label>
-                                <textarea name="description" class="form-control" required></textarea>
+                                <textarea name="zonal_description" class="form-control" required></textarea>
                             </div>
 
                         
@@ -347,32 +199,34 @@
         </tr>
     </thead>
     <tbody>
-    @foreach($assignment_work as $work_entry)
+    
+    @foreach($zonal_assignment_work as $work_entry)
     <tr>
         <td>
-        {{ $work_entry->basis }}<br>
+        {{ $work_entry->zonal_basis }}<br>
         </td>
         <td>
-        {{ $work_entry->description }}<br>
+        {{ $work_entry->zonal_description }}<br>
         </td>
         <td>
         {{ date('d m Y', $work_entry->created_at->timestamp) }}<br>
         </td>
     </tr>
     @endforeach
+    
     </tbody>
     </table>
 
     {{-- Добавить список выполненных работ : Кнопка открытия модального окна --}}
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addWorksModal">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addZonalWorksModal">
         Добавить список выполненных работ
     </button>
 
-    {{-- Добавить выполненую работа : Форма и модальное окно --}}
-    <form action="{{ url('/admin/manage_assignment/add_works_entry') }}" method="POST">
+    {{-- Добавить зональную выполненую работу : Форма и модальное окно --}}
+    <form action="{{ url('admin/assignments/view/'.$sub_assignment->id.'/management/add_zonal_assignment_works') }}" method="POST">
         @csrf
 
-        <div class="modal fade" id="addWorksModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="addZonalWorksModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -385,18 +239,19 @@
                         
                             {{-- ID наряда --}}
                             <input type="hidden" name="assignment_id" value="{{ $assignment->id }}">
+                            <input type="hidden" name="sub_assignment_id" value="{{ $sub_assignment->id }}"> 
 
                             
                             {{-- Основание --}}
                             <div class="form-group">
                                 <label>Основание (реквизиты документа или действие)</label>
-                                <input type="text" name="basis" class="form-control" required>
+                                <input type="text" name="zonal_basis" class="form-control" required>
                             </div>
 
                             {{-- Описание - не обязательно --}}
                             <div class="form-group">
                                 <label>Описание</label>
-                                <textarea name="description" class="form-control" required></textarea>
+                                <textarea name="zonal_description" class="form-control" required></textarea>
                             </div>
 
                         

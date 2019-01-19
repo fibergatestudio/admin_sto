@@ -115,7 +115,13 @@ class Employee_Dashboard_Controller extends Controller
         // .. Собираем историю по наряду
         
         /* Возвращаем страницу */
-        return view('employee.assignment', ['assignment' => $assignment, 'assignment_income' => $assignment_income, 'assignment_expense' => $assignment_expense, 'assignment_work' => $assignment_work]);
+        return view('employee.assignment', 
+        [
+            'assignment' => $assignment, 
+            'assignment_income' => $assignment_income, 
+            'assignment_expense' => $assignment_expense, 
+            'assignment_work' => $assignment_work
+        ]);
     }
 
     /* Пометить наряд выполнено */

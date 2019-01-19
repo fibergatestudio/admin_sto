@@ -23,6 +23,10 @@ use App\Assignments_income;
 use App\Assignments_expense;
 use App\Assignments_completed_works;
 
+use App\Zonal_assignments_income;
+use App\Zonal_assignments_expense;
+use App\Zonal_assignments_completed_works;
+
 class Assignments_Admin_Controller extends Controller
 {
     
@@ -140,7 +144,6 @@ class Assignments_Admin_Controller extends Controller
             ]);
     }
 
-
     /* Изменение названия наряда */
     public function change_assignment_name(Request $request){
         /* Меняем название наряда */
@@ -239,6 +242,70 @@ class Assignments_Admin_Controller extends Controller
         
         /* Вернуться на страницу удаления фотографий */
         return redirect('admin/assignments/'.$request->assignment_id.'/delete_photos_page');
+    }
+
+    public function assignment_management($sub_assignment_id){
+
+        $sub_assignment = Sub_assignment::find($sub_assignment_id); 
+        $assignment = Assignment::find($sub_assignment->assignment_id); 
+        
+        // .. Собираем информацию по наряду
+        
+        /* Получаем доходную часть */
+        $zonal_assignment_income = Zonal_assignments_income::where('sub_assignment_id', $sub_assignment_id)->get();
+        /* Получаем расходную часть */
+        $zonal_assignment_expense = Zonal_assignments_expense::where('sub_assignment_id', $sub_assignment_id)->get();
+        /* Получаем выполненые работы */
+        $zonal_assignment_work = Zonal_assignments_completed_works::where('sub_assignment_id', $sub_assignment_id)->get();
+    
+        return view('admin.assignments.assignment_management',
+        [
+            'assignment' =>  $assignment,
+            'sub_assignment' => $sub_assignment,
+            'zonal_assignment_income' => $zonal_assignment_income, 
+            'zonal_assignment_expense' => $zonal_assignment_expense, 
+            'zonal_assignment_work' => $zonal_assignment_work
+        ]);
+    }
+    /* Добавить зональный заход денег : POST */
+    public function add_zonal_assignment_income(Request $request){
+        /* Создаём новое вхождение по заходу денег и вносим туда информацию */
+        $new_zonal_income_entry = new Zonal_assignments_income();
+        $new_zonal_income_entry->sub_assignment_id = $request->sub_assignment_id; /* Идентификатор наряда  */ // окау, я до этого пробовал подобное, ща
+        $new_zonal_income_entry->zonal_amount = $request->zonal_amount; /* Сумма захода */
+        $new_zonal_income_entry->zonal_basis = $request->zonal_basis; /* Основание для захода денег */
+        $new_zonal_income_entry->zonal_description = $request->zonal_description; /* Описание для захода */
+        $new_zonal_income_entry->save();
+
+        /* Возвращаемся обратно на страницу наряда */
+        return back();
+    }
+    /* Добавить зональный расход денег : POST */
+    public function add_zonal_assignment_expense(Request $request){
+        /* Создаём новое вхождение по расходу денег и вносим туда информацию */
+        $new_zonal_expense_entry = new Zonal_assignments_expense();
+        $new_zonal_expense_entry->sub_assignment_id = $request->sub_assignment_id; /* Идентификатор наряда */
+        $new_zonal_expense_entry->zonal_amount = $request->zonal_amount; /* Сумма расхода */
+        $new_zonal_expense_entry->zonal_basis = $request->zonal_basis; /* Основание для расхода денег */
+        $new_zonal_expense_entry->zonal_description = $request->zonal_description; /* Описание для расхода */
+        $new_zonal_expense_entry->save();
+
+
+        /* Возвращаемся обратно на страницу наряда */
+        return back();
+    }
+    /* Добавить зональные выполненые работы : POST */
+    public function add_zonal_assignment_works(Request $request){
+        /* Создаём новое вхождение по выполненым работам и вносим туда информацию */
+        $new_zonal_works_entry = new Zonal_assignments_completed_works();
+        $new_zonal_works_entry->sub_assignment_id = $request->sub_assignment_id; /* Идентификатор наряда */
+        $new_zonal_works_entry->zonal_basis = $request->zonal_basis; /* Основание для расхода денег */
+        $new_zonal_works_entry->zonal_description = $request->zonal_description; /* Описание для расхода */
+        $new_zonal_works_entry->save();
+
+
+        /* Возвращаемся обратно на страницу наряда */
+        return back();
     }
 
 }
