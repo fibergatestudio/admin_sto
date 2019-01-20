@@ -130,7 +130,25 @@ class Assignments_Admin_Controller extends Controller
         foreach(Storage::files('public/'.$assignment_id) as $file){
              $images[] = $file;
         }
+
+        /* Получаем список картинок по наряду */
+        $accepted_images = [];
+        foreach(Storage::files('public/'.$assignment_id.'/accepted') as $file){
+             $accepted_images[] = $file;
+        }
+
+        /* Получаем список картинок по наряду */
+        $repair_images = [];
+        foreach(Storage::files('public/'.$assignment_id.'/repair') as $file){
+             $repair_images[] = $file;
+        }
         
+        /* Получаем список картинок по наряду */
+        $finished_images = [];
+        foreach(Storage::files('public/'.$assignment_id.'/finished') as $file){
+             $finished_images[] = $file;
+        }
+
 
         /* Возвращаем представление */
         return view('admin.assignments.view_assignment_page',
@@ -138,6 +156,9 @@ class Assignments_Admin_Controller extends Controller
                 'assignment' => $assignment,
                 'sub_assignments' => $sub_assignments,
                 'image_urls'=> $images,
+                'accepted_image_urls'=> $accepted_images,
+                'repair_image_urls'=> $repair_images,
+                'finished_image_urls'=> $finished_images,
                 'assignment_income' => $assignment_income, 
                 'assignment_expense' => $assignment_expense, 
                 'assignment_work' => $assignment_work           
@@ -223,6 +244,45 @@ class Assignments_Admin_Controller extends Controller
         return redirect('admin/assignments/view/'.$assignment_id);
     }
 
+    /* Добавление фотографий принятой машины к наряду : Обработка запроса */
+    public function add_accepted_photo_to_assignment_post(Request $request){
+        /* Получаем данные из запроса */
+        /* ID наряда, к которому добавляем фото */
+        $assignment_id = $request->assignment_id;
+
+        /* Сохраняем фото */
+        $request->accepted_photo->store('public/'.$assignment_id.'/accepted');
+        
+        /* Возвращаемся на страницу авто */
+        return redirect('admin/assignments/view/'.$assignment_id);
+    }
+
+    /* Добавление фотографий процесса ремонта к наряду : Обработка запроса */
+    public function add_repair_photo_to_assignment_post(Request $request){
+        /* Получаем данные из запроса */
+        /* ID наряда, к которому добавляем фото */
+        $assignment_id = $request->assignment_id;
+
+        /* Сохраняем фото */
+        $request->repair_photo->store('public/'.$assignment_id.'/repair');
+        
+        /* Возвращаемся на страницу авто */
+        return redirect('admin/assignments/view/'.$assignment_id);
+    }
+
+    /* Добавление фотографий готовой машины к наряду : Обработка запроса */
+    public function add_finished_photo_to_assignment_post(Request $request){
+        /* Получаем данные из запроса */
+        /* ID наряда, к которому добавляем фото */
+        $assignment_id = $request->assignment_id;
+
+        /* Сохраняем фото */
+        $request->finished_photo->store('public/'.$assignment_id.'/finished');
+        
+        /* Возвращаемся на страницу авто */
+        return redirect('admin/assignments/view/'.$assignment_id);
+    }
+
     /* Удаление фотографий : страница */
     public function delete_photos_page($assignment_id){
         /* Получить список фотографий по наряду */
@@ -230,9 +290,34 @@ class Assignments_Admin_Controller extends Controller
         foreach(Storage::files('public/'.$assignment_id) as $file){
              $images[] = $file;
         }
+
+        /* Получаем список картинок по наряду */
+        $accepted_images = [];
+        foreach(Storage::files('public/'.$assignment_id.'/accepted') as $file){
+                $accepted_images[] = $file;
+        }
+
+        /* Получаем список картинок по наряду */
+        $repair_images = [];
+        foreach(Storage::files('public/'.$assignment_id.'/repair') as $file){
+                $repair_images[] = $file;
+        }
+        
+        /* Получаем список картинок по наряду */
+        $finished_images = [];
+        foreach(Storage::files('public/'.$assignment_id.'/finished') as $file){
+                $finished_images[] = $file;
+        }
         
         /* Вывести страницу */
-        return view('admin.assignments.delete_photos_from_assignment_page', ['images' => $images, 'assignment_id' => $assignment_id]);
+        return view('admin.assignments.delete_photos_from_assignment_page', 
+        [
+            'images' => $images,
+            'accepted_image_urls'=> $accepted_images,
+            'repair_image_urls'=> $repair_images,
+            'finished_image_urls'=> $finished_images,
+            'assignment_id' => $assignment_id
+            ]);
     }
 
     /* Удаление фотографий : POST */

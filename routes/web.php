@@ -230,6 +230,12 @@ Route::get('/admin/assignments_index', 'Assignments_Admin_Controller@assignments
 
         /* Загрузка фотографий в CRM : Post */
         Route::post('/admin/assignments/add_photo_to_assignment', 'Assignments_Admin_Controller@add_photo_to_assignment_post');
+        /* Загрузка фото принятой машины в CRM : Post */
+        Route::post('/admin/assignments/add_accepted_photo_to_assignment', 'Assignments_Admin_Controller@add_accepted_photo_to_assignment_post');
+        /* Загрузка фото процесса ремонта в CRM : Post */
+        Route::post('/admin/assignments/add_repair_photo_to_assignment', 'Assignments_Admin_Controller@add_repair_photo_to_assignment_post');
+        /* Загрузка фото готовой машины в CRM : Post */
+        Route::post('/admin/assignments/add_finished_photo_to_assignment', 'Assignments_Admin_Controller@add_finished_photo_to_assignment_post');
 
     /* Удаление фотографий : Страница */
     Route::get('/admin/assignments/{assignment_id}/delete_photos_page', 'Assignments_Admin_Controller@delete_photos_page');
