@@ -6,6 +6,8 @@
 
 @section('content')
     {{-- Выводим заказы --}}
+    @foreach($supply_orders as $supply_order)
+    <h6>Заказ</h6>
     <table class="table">
         <thead>
             <tr>
@@ -13,39 +15,42 @@
                 <th>Дата создания</th>
                 <th>Кол-во позиций</th>
                 <th>Кол-во товара</th>
-                <th>Срочность</th>
+                <th>Комментарий</th>
                 <th></th>{{-- Кнопки управления --}}
             </tr>
         </thead>
         <tbody>
-            @foreach($supply_orders as $supply_order)
+            
                 <tr>
-                    <td>
+                    <td >
                         {{-- Имя заказчика --}}
                         {{ $supply_order->creator_name }}<br>
                     </td>
                     
-                    <td>
+                    <td >
                         {{-- Дата создания --}}
                         {{ $supply_order->date_of_creation }}
                     </td>
 
-                    <td>
+                    <td >
                         {{-- Количество пунктов --}}
                         {{ $supply_order->entries_count }}
                     </td>
-
+                
                     <td>
                         {{-- Количество предметов (штук) --}}
                         {{ $supply_order->items_count }}
                     </td>
-
-                    <td>
-                        {{-- Срочность --}}
-                        {{ $supply_order->urgency }}
+                     
+                   
+                    
+                    <td >
+                        {{-- Комментарий --}}
+                        {{ $supply_order->order_comment }}
+                          
                     </td>
 
-                    <td>
+                    <td >
                         {{-- Кнопка управления --}}
                         <a href="{{ url('/admin/supply_orders/manage/'.$supply_order->id) }}">
                             <div class="btn btn-primary">
@@ -53,10 +58,46 @@
                             </div>
                         </a>
                     </td>
-                </tr>
+                </tr> 
+        </tbody>
+    </table>
+    <div>
+        <span>Подробности заказа</span>
+    </div>
+    <table class="table" >
+        <thead>
+            <tr>
+                <th>Название товара</th>
+                <th>Количество</th>
+                <th>Срочность</th>                
+            </tr>
+        </thead>
+        <tbody> 
+            @foreach($supply_order->items as $supply_order->item)
+                <tr>
+                    <td >
+                        {{-- Название --}}
+                        {{ $supply_order->item->item }}<br>
+                    </td>
+                    
+                    <td >
+                        {{-- Количество --}}
+                        {{ $supply_order->item->number }}
+                    </td>
+
+                    <td>
+                        {{-- Срочност --}}
+                        <span class="urgency">{{ $supply_order->item->urgency }}</span>
+                    </td>
+                                   
+                </tr> 
             @endforeach
         </tbody>
     </table>
+    <hr>
+   @endforeach
+        
+    
     {{-- Конец вывода --}}
     <hr>
 
@@ -74,4 +115,22 @@
         </div>
     
     </a>
+    
+    {{--Выделение цветом --}}
+    <script>
+        $(document).ready(function() {
+            var urgency = $('.urgency').text();
+            console.log(urgency);
+            if (urgency == "Не горит"){
+                $('span .urgency').css('backgroundcolor', '#008000');
+            }
+            if (urgency == 'Горит'){
+                $('.urgency').css('backgroundcolor', '#FFFF00');
+            }
+            if (urgency == 'Очень горит'){
+                $('.urgency').css('backgroundcolor', '#FF0000');
+            }
+            
+	})	
+    </script>
 @endsection

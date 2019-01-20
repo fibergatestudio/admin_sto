@@ -13,11 +13,13 @@
                 <th>Дата создания</th>
                 <th>Кол-во позиций</th>
                 <th>Кол-во товара</th>
+                <th>Комментарий к заказу</th>
                 <th></th>{{-- Кнопки управления --}}
             </tr>
         </thead>
+        @foreach($archived_orders as $supply_order)
         <tbody>
-            @foreach($archived_orders as $supply_order)
+            
                 <tr>
                     <td>
                         {{-- Имя заказчика --}}
@@ -38,6 +40,11 @@
                         {{-- Количество предметов (штук) --}}
                         {{ $supply_order->items_count }}
                     </td>
+                    
+                    <td>
+                        {{-- Комментарий --}}
+                        {{ $supply_order->order_comment }}
+                    </td>
 
                     <td>
                         {{-- Кнопки управления --}}
@@ -56,7 +63,40 @@
                         </a>
                     </td>
                 </tr>
-            @endforeach
+            
         </tbody>
     </table>
+    <div>
+        <span>Подробности заказа</span>
+    </div>
+    <table class="table" >
+        <thead>
+            <tr>
+                <th>Название товара</th>
+                <th>Количество</th>
+                <th>Срочность</th>                
+            </tr>
+        </thead>
+        <tbody> 
+            @foreach($supply_order->items as $supply_order->item)
+                <tr>
+                    <td >
+                        {{-- Название --}}
+                        {{ $supply_order->item->item }}<br>
+                    </td>
+                    
+                    <td >
+                        {{-- Количество --}}
+                        {{ $supply_order->item->number }}
+                    </td>
+
+                    <td>
+                        {{-- Срочност --}}
+                        <span class="urgency">{{ $supply_order->item->urgency }}</span>
+                    </td>
+                                   
+                </tr> 
+            @endforeach
+        </tbody>
+    @endforeach
 @endsection

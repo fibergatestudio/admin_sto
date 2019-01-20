@@ -58,9 +58,14 @@ class Supply_order extends Model
             $general_count += $supply_order_entry->number;
         }
         return $general_count;
+    }    
+    
+    /*** Получить какой товар в заказе ***/
+    public function get_order_items(){
+        $supply_order_items = Supply_order_item::where('supply_order_id', $this->id)->get();
+                
+        return $supply_order_items;
     }
-
-
 
 
     /*** Изменить статус на "выполнен" ***/
@@ -75,5 +80,9 @@ class Supply_order extends Model
         $this->responsible_supply_officer_id = Auth::user()->id; // users.id
 
         $this->save();
+    }
+    
+    public function items(){
+        return $this->hasMany('Supply_order_item');
     }
 }
