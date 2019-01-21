@@ -236,6 +236,13 @@ Route::get('/admin/supply_orders/new', 'Supply_orders_Admin_Controller@new_suppl
 /* Управление заказом : Страница */
 Route::get('/admin/supply_orders/manage/{supply_order_id}', 'Supply_orders_Admin_Controller@manage_supply_order');
 
+/* Редактирование заказа : Страница */
+Route::get('/admin/supply_orders/edit/{supply_order_id}', 'Supply_orders_Admin_Controller@edit_supply_order');
+
+/* Редактирование заказа : POST */
+Route::post('/admin/supply_orders/edit_post/{supply_order_id}', 'Supply_orders_Admin_Controller@edit_supply_order_post');
+
+
     /* Архивировать заказ */
     Route::get('/admin/supply_orders/archive/{supply_order_id}', 'Supply_orders_Admin_Controller@archive_supply_order');
 

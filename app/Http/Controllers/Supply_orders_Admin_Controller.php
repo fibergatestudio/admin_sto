@@ -103,6 +103,45 @@ class Supply_orders_Admin_Controller extends Controller
                     'supply_order' => $supply_order,                    
                 ]);
     }
+    
+    /* Редактирование заказа : страница*/
+    public function edit_supply_order($supply_order_id){
+        $supply_order = Supply_order::find($supply_order_id);
+        $supply_order->items = $supply_order->get_order_items();
+        
+        return view('admin.supply_orders.edit_supply_order', 
+                [
+                    'supply_order' => $supply_order,                    
+                ]);
+    }
+    
+    /* Редактирование заказа : POST*/
+    public function edit_supply_order_post(Request $request, $supply_order_id){
+        /* Вносим измененный  заказ в базу */
+        $edit_order = Supply_order::find($supply_order_id);        
+        $edit_order->order_comment = $request->order_comment; // комментарий к заказу
+        $edit_order->save();
+        
+        /* Вносим измененные предметы из заказа в базу */
+        $counter = intval($request->entries_count);
+        for($i = 1; $i <= $counter; $i++){
+            // Получает данные из POST запроса
+            $item_count_name = 'count.'.$i; 
+            $item_urgency_name = 'urgency.'.$i; 
+            $item_count = $request->$item_count_name; 
+            $item_urgency = $request->$item_urgency_name; 
+
+            // Внести в базу
+            $edit_order_item = Supply_order_item::where('supply_order_id', $supply_order_id)->find($i);            
+            $edit_order_item->number = $item_count;
+            $edit_order_item->urgency = $item_urgency;
+            
+            $edit_order_item->save();
+            
+        }
+        return redirect('/admin/supply_orders/index');
+    }
+    
 
     /* Архивировать заказ : действие */
     public function archive_supply_order($supply_order_id){

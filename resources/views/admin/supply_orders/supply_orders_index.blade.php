@@ -122,15 +122,15 @@
             var urgency = $('.urgency').text();
             console.log(urgency);
             if (urgency == "Не горит"){
-                $('span .urgency').css('backgroundcolor', '#008000');
+                $('.urgency').addClass("badge badge-success");
             }
-            if (urgency == 'Горит'){
-                $('.urgency').css('backgroundcolor', '#FFFF00');
+            if (urgency == "Горит"){
+                $('.urgency').addClass("badge badge-warning");
             }
-            if (urgency == 'Очень горит'){
-                $('.urgency').css('backgroundcolor', '#FF0000');
+            if (urgency == "Очень горит"){
+                $('.urgency').addClass("badge badge-danger");
             }
-            
+           
 	})	
     </script>
 @endsection

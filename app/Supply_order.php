@@ -82,7 +82,5 @@ class Supply_order extends Model
         $this->save();
     }
     
-    public function items(){
-        return $this->hasMany('Supply_order_item');
-    }
+    
 }

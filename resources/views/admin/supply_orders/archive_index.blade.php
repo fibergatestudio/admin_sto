@@ -99,4 +99,23 @@
             @endforeach
         </tbody>
     @endforeach
+    
+    
+    {{--Выделение цветом --}}
+    <script>
+        $(document).ready(function() {
+            var urgency = $('.urgency').text();
+            console.log(urgency);
+            if (urgency == "Не горит"){
+                $('.urgency').addClass("badge badge-success");
+            }
+            if (urgency == "Горит"){
+                $('.urgency').addClass("badge badge-warning");
+            }
+            if (urgency == "Очень горит"){
+                $('.urgency').addClass("badge badge-danger");
+            }
+           
+	})	
+    </script>
 @endsection
