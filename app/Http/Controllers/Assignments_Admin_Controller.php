@@ -352,12 +352,58 @@ class Assignments_Admin_Controller extends Controller
             'zonal_assignment_work' => $zonal_assignment_work
         ]);
     }
+
+        /* Добавить заход денег : POST */
+        public function add_income_post(Request $request){
+            /* Создаём новое вхождение по заходу денег и вносим туда информацию */
+            $new_income_entry = new Assignments_income();
+            $new_income_entry->assignment_id = $request->assignment_id; /* Идентификатор наряда */
+            $new_income_entry->amount = $request->amount; /* Сумма захода */
+            $new_income_entry->currency = $request->currency; /* Валюта захода */
+            $new_income_entry->basis = $request->basis; /* Основание для захода денег */
+            $new_income_entry->description = $request->description; /* Описание для захода */
+            $new_income_entry->save();
+    
+            
+    
+            /* Возвращаемся обратно на страницу наряда */
+            return back();
+        }
+        /* Добавить расход денег : POST */
+        public function add_expense_post(Request $request){
+            /* Создаём новое вхождение по расходу денег и вносим туда информацию */
+            $new_expense_entry = new Assignments_expense();
+            $new_expense_entry->assignment_id = $request->assignment_id; /* Идентификатор наряда */
+            $new_expense_entry->amount = $request->amount; /* Сумма расхода */
+            $new_expense_entry->currency = $request->currency; /* Валюта расхода */
+            $new_expense_entry->basis = $request->basis; /* Основание для расхода денег */
+            $new_expense_entry->description = $request->description; /* Описание для расхода */
+            $new_expense_entry->save();
+    
+    
+            /* Возвращаемся обратно на страницу наряда */
+            return back();
+        }
+        /* Добавить выполненые работы : POST */
+        public function add_works_post(Request $request){
+            /* Создаём новое вхождение по выполненым работам и вносим туда информацию */
+            $new_works_entry = new Assignments_completed_works();
+            $new_works_entry->assignment_id = $request->assignment_id; /* Идентификатор наряда */
+            $new_works_entry->basis = $request->basis; /* Основание для расхода денег */
+            $new_works_entry->description = $request->description; /* Описание для расхода */
+            $new_works_entry->save();
+    
+    
+            /* Возвращаемся обратно на страницу наряда */
+            return back();
+        }
     /* Добавить зональный заход денег : POST */
     public function add_zonal_assignment_income(Request $request){
         /* Создаём новое вхождение по заходу денег и вносим туда информацию */
         $new_zonal_income_entry = new Zonal_assignments_income();
         $new_zonal_income_entry->sub_assignment_id = $request->sub_assignment_id; /* Идентификатор наряда  */ // окау, я до этого пробовал подобное, ща
         $new_zonal_income_entry->zonal_amount = $request->zonal_amount; /* Сумма захода */
+        $new_zonal_income_entry->zonal_currency = $request->currency; /* Валюта захода */
         $new_zonal_income_entry->zonal_basis = $request->zonal_basis; /* Основание для захода денег */
         $new_zonal_income_entry->zonal_description = $request->zonal_description; /* Описание для захода */
         $new_zonal_income_entry->save();
@@ -371,6 +417,7 @@ class Assignments_Admin_Controller extends Controller
         $new_zonal_expense_entry = new Zonal_assignments_expense();
         $new_zonal_expense_entry->sub_assignment_id = $request->sub_assignment_id; /* Идентификатор наряда */
         $new_zonal_expense_entry->zonal_amount = $request->zonal_amount; /* Сумма расхода */
+        $new_zonal_expense_entry->zonal_currency = $request->currency; /* Валюта расхода */
         $new_zonal_expense_entry->zonal_basis = $request->zonal_basis; /* Основание для расхода денег */
         $new_zonal_expense_entry->zonal_description = $request->zonal_description; /* Описание для расхода */
         $new_zonal_expense_entry->save();

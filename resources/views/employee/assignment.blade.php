@@ -36,6 +36,7 @@
         <thead>
             <tr>
                 <th>Сумма</th>
+                <th>Валюта</th>
                 <th>Основание</th>
                 <th>Описание</th>
                 <th></th>{{-- Кнопки управления --}}
@@ -48,6 +49,9 @@
             {{ $income_entry->amount }}<br>
             </td>
             <td>
+            {{ $income_entry->currency }}<br>
+            </td>
+            <td>
             {{ $income_entry->basis }}<br>
             </td>
             <td>
@@ -57,7 +61,7 @@
         @endforeach
         </tbody>
     </table>
-    <p>Сумма заходов: {{ $assignment_income->sum('amount') }}<br></p>
+    <!--<p>Сумма заходов: {{ $assignment_income->sum('amount') }}<br></p>-->
 
     {{-- Добавить заход денег : Кнопка открытия модального окна --}}
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addIncomeModal">
@@ -82,10 +86,22 @@
                             {{-- ID наряда --}}
                             <input type="hidden" name="assignment_id" value="{{ $assignment->id }}">
 
-                            {{-- Сумма --}}
-                            <div class="form-group">
-                                <label>Сумма</label>
-                                <input type="number" name="amount" min="0" class="form-control" required>
+                            <div class="form-row">
+                                {{-- Сумма --}}
+                                <div class="form-group col-md-6">
+                                    <label>Сумма</label>
+                                    <input type="number" name="amount" min="0" class="form-control" required>
+                                </div>
+                                {{-- Валюта --}}
+                                <div class="form-group col-md-6">
+                                    <label>Валюта</label>
+                                    <!--<input type="number" name="amount" min="0" class="form-control" required>-->
+                                    <select name="currency"class="form-control">
+                                        <option value="UAH">UAH</option>
+                                        <option value="USD">USD</option>
+                                        <option value="EUR">EUR</option>
+                                    </select>
+                                </div>
                             </div>
                             
                             {{-- Основание --}}
@@ -121,6 +137,7 @@
         <thead>
             <tr>
                 <th>Сумма</th>
+                <th>Валюта</th>
                 <th>Основание</th>
                 <th>Описание</th>
                 <th></th>{{-- Кнопки управления --}}
@@ -133,6 +150,9 @@
             {{ $expense_entry->amount }}<br>
             </td>
             <td>
+            {{ $expense_entry->currency }}<br>
+            </td>
+            <td>
             {{ $expense_entry->basis }}<br>
             </td>
             <td>
@@ -142,7 +162,7 @@
         @endforeach
         </tbody>
     </table>
-    <p>Сумма расходов: {{ $assignment_expense->sum('amount') }}<br></p>
+    <!--<p>Сумма расходов: {{ $assignment_expense->sum('amount') }}<br></p>-->
 
     {{-- Добавить расход денег : Кнопка открытия модального окна --}}
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addExpenseModal">
@@ -167,10 +187,22 @@
                             {{-- ID наряда --}}
                             <input type="hidden" name="assignment_id" value="{{ $assignment->id }}">
 
-                            {{-- Сумма --}}
-                            <div class="form-group">
-                                <label>Сумма</label>
-                                <input type="number" name="amount" min="0" class="form-control" required>
+                            <div class="form-row">
+                                {{-- Сумма --}}
+                                <div class="form-group col-md-6">
+                                    <label>Сумма</label>
+                                    <input type="number" name="amount" min="0" class="form-control" required>
+                                </div>
+                                {{-- Валюта --}}
+                                <div class="form-group col-md-6">
+                                    <label>Валюта</label>
+                                    <!--<input type="number" name="amount" min="0" class="form-control" required>-->
+                                    <select name="currency"class="form-control">
+                                        <option value="UAH">UAH</option>
+                                        <option value="USD">USD</option>
+                                        <option value="EUR">EUR</option>
+                                    </select>
+                                </div>
                             </div>
                             
                             {{-- Основание --}}

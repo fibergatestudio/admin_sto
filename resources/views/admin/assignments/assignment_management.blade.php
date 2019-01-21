@@ -19,6 +19,7 @@
         <thead>
             <tr>
                 <th>Сумма</th>
+                <th>Валюта</th>
                 <th>Основание</th>
                 <th>Описание</th>
                 <th></th>{{-- Кнопки управления --}}
@@ -31,6 +32,9 @@
             {{ $income_entry->zonal_amount }}<br>
             </td>
             <td>
+            {{ $income_entry->zonal_currency }}<br>
+            </td>
+            <td>
             {{ $income_entry->zonal_basis }}<br>
             </td>
             <td>
@@ -40,7 +44,7 @@
         @endforeach
         </tbody>
     </table>
-    <p>Сумма зональных заходов: {{ $zonal_assignment_income->sum('zonal_amount') }}<br></p>
+    <!--<p>Сумма зональных заходов: {{ $zonal_assignment_income->sum('zonal_amount') }}<br></p>-->
 
     {{-- Добавить заход денег : Кнопка открытия модального окна --}}
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addZonalIncomeModal">
@@ -66,11 +70,24 @@
                             <input type="hidden" name="assignment_id" value="{{ $assignment->id }}">
                             <input type="hidden" name="assignment_id" value="{{ $sub_assignment->id }}">
 
-                            {{-- Сумма --}}
-                            <div class="form-group">
-                                <label>Сумма</label>
-                                <input type="number" name="zonal_amount" min="0" class="form-control" required>
+                            <div class="form-row">
+                                {{-- Сумма --}}
+                                <div class="form-group col-md-6">
+                                    <label>Сумма</label>
+                                    <input type="number" name="zonal_amount" min="0" class="form-control" required>
+                                </div>
+                                {{-- Валюта --}}
+                                <div class="form-group col-md-6">
+                                    <label>Валюта</label>
+                                    <!--<input type="number" name="amount" min="0" class="form-control" required>-->
+                                    <select name="currency"class="form-control">
+                                        <option value="UAH">UAH</option>
+                                        <option value="USD">USD</option>
+                                        <option value="EUR">EUR</option>
+                                    </select>
+                                </div>
                             </div>
+                        
                             
                             {{-- Основание --}}
                             <div class="form-group">
@@ -105,6 +122,7 @@
         <thead>
             <tr>
                 <th>Сумма</th>
+                <th>Валюта</th>
                 <th>Основание</th>
                 <th>Описание</th>
                 <th></th>{{-- Кнопки управления --}}
@@ -117,6 +135,9 @@
             {{ $expense_entry->zonal_amount }}<br>
             </td>
             <td>
+            {{ $expense_entry->zonal_currency }}<br>
+            </td>
+            <td>
             {{ $expense_entry->zonal_basis }}<br>
             </td>
             <td>
@@ -126,7 +147,7 @@
         @endforeach
         </tbody>
     </table>
-    <p>Сумма зональных расходов: {{ $zonal_assignment_expense->sum('zonal_amount') }}<br></p>
+    <!--<p>Сумма зональных расходов: {{ $zonal_assignment_expense->sum('zonal_amount') }}<br></p>-->
 
     {{-- Добавить расход денег : Кнопка открытия модального окна --}}
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addZonalExpenseModal">
@@ -153,10 +174,22 @@
                             <input type="hidden" name="assignment_id" value="{{ $sub_assignment->id }}">
                             
 
-                            {{-- Сумма --}}
-                            <div class="form-group">
-                                <label>Сумма</label>
-                                <input type="number" name="zonal_amount" min="0" class="form-control" required>
+                            <div class="form-row">
+                                {{-- Сумма --}}
+                                <div class="form-group col-md-6">
+                                    <label>Сумма</label>
+                                    <input type="number" name="zonal_amount" min="0" class="form-control" required>
+                                </div>
+                                {{-- Валюта --}}
+                                <div class="form-group col-md-6">
+                                    <label>Валюта</label>
+                                    <!--<input type="number" name="amount" min="0" class="form-control" required>-->
+                                    <select name="currency"class="form-control">
+                                        <option value="UAH">UAH</option>
+                                        <option value="USD">USD</option>
+                                        <option value="EUR">EUR</option>
+                                    </select>
+                                </div>
                             </div>
                             
                             {{-- Основание --}}
