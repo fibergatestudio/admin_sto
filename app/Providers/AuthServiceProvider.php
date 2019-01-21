@@ -44,5 +44,9 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('client_rights', function($user){
             return $user->isClient();
         });
+        /* Гейт : Мастер */
+        Gate::define('master_rights', function($user){
+            return $user->isMaster();
+        });
     }
 }
