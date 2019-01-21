@@ -15,7 +15,7 @@ class AddNewFieldsToCarsInService extends Migration
     {
         Schema::table('cars_in_service', function (Blueprint $table) {
             $table->mediumInteger('release_year')->nullable();
-            $table->mediumInteger('reg_number')->nullable();
+            $table->string('reg_number')->nullable();
             $table->string('fuel_type')->nullable();
             $table->string('vin_number')->nullable();
             $table->mediumInteger('engine_capacity')->nullable();

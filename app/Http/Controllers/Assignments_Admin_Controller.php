@@ -291,19 +291,19 @@ class Assignments_Admin_Controller extends Controller
              $images[] = $file;
         }
 
-        /* Получаем список картинок по наряду */
+        /* Получаем список фото принятых машин по наряду */
         $accepted_images = [];
         foreach(Storage::files('public/'.$assignment_id.'/accepted') as $file){
                 $accepted_images[] = $file;
         }
 
-        /* Получаем список картинок по наряду */
+        /* Получаем список фото процесса ремонта по наряду */
         $repair_images = [];
         foreach(Storage::files('public/'.$assignment_id.'/repair') as $file){
                 $repair_images[] = $file;
         }
         
-        /* Получаем список картинок по наряду */
+        /* Получаем список фото выдачи готовых машин по наряду */
         $finished_images = [];
         foreach(Storage::files('public/'.$assignment_id.'/finished') as $file){
                 $finished_images[] = $file;

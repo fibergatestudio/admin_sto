@@ -7,6 +7,9 @@
 @section('content')
 
 {{-- Форма --}}
+
+{{-- Убрать --}}
+<p>Загрузка фото в общую папку (убрать)</p>
 <form action="{{ url('admin/assignments/add_photo_to_assignment') }}" method="POST" enctype="multipart/form-data">
     @csrf
     {{-- ID наряда, к которому сохраняется фотография --}}

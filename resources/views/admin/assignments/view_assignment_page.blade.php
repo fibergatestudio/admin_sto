@@ -41,6 +41,43 @@
   </form>
 </div>
 
+<!-- Вызов попапа принятия аванса -->
+<button type="button" class="btn btn-success" data-toggle="modal" data-target="#prepaidModal1" style="margin-left: 10px">
+    Принять аванс
+</button>
+
+<!-- Модальное окно принятия аванса -->
+<div class="modal fade" id="prepaidModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <form action="{{ url('/admin/assignments/change_name') }}" method="POST">
+    @csrf
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="prepaidModalLabel">Форма принятия аванса</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          
+          {{-- ID наряда --}}
+          <input type="hidden" name="assignment_id" value="{{ $assignment->id }}">
+          
+          {{-- Новое название --}}
+          <div class="form-group">
+            <label>Тест</label>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+          <button type="button" class="btn btn-primary">Принять</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
 @endsection
 
 @section('content')
@@ -101,7 +138,7 @@
     <h3>Фотографии:</h3>
     <div class="row">
 
-        <div class="row">
+        <div class="col-sm-4">
             
             {{-- Цикл вывода фотографий --}}
             <p>Принятая машина:</p>
@@ -119,7 +156,7 @@
             
         </div>{{-- /row --}}
 
-        <div class="row">
+        <div class="col-sm-4">
             
             {{-- Цикл вывода фотографий --}}
             <p>Процесс ремонта:</p>
@@ -137,7 +174,7 @@
             
         </div>{{-- /row --}}
 
-        <div class="row">
+        <div class="col-sm-4">
             
         {{-- Цикл вывода фотографий --}}
         <p>Выдача готовой:</p>
