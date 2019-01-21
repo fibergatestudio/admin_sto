@@ -37,7 +37,14 @@ class HomeController extends Controller
             /* Если пользователь - снабженец, то отправляем его на панель снабженца */
             return redirect('supply_officer/index');
         }
-        
+        else if (Auth::user()->isClient()){
+            /* Если пользователь - клиент, то отправляем его на панель клиента */
+            return redirect('/client');
+        }
+        else if (Auth::user()->isMaster()){
+            /* Если пользователь - мастер, то отправляем его на панель мастера */
+            return redirect('/master');
+        }
 
     }
 }
