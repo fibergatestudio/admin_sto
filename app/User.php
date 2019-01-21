@@ -68,5 +68,14 @@ class User extends Authenticatable
             return false;
         }
     }
+    /* Проверка, является ли пользователь мастером */
+    public function isMaster(){
+        if($this->role == 'master')
+        {
+            return true;
+        } else{
+            return false;
+        }
+    }
 
 }
