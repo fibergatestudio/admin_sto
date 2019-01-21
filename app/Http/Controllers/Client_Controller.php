@@ -17,4 +17,10 @@ class Client_Controller extends Controller
             return view('client.client')->with(array('cars' => $car));
         }
     }
+
+
+    public function master()
+    {
+        return view('master.master');
+    }
 }
