@@ -15,9 +15,9 @@
             <label class="col-md-2" style="display: inline-block" for="item_urgency">Срочность</label>
             @foreach ($supply_order->items as $supply_order->item)
             <div>                
-                <input type="text" name="item.{{$loop->iteration}}" class="form-control col-md-4" style="display: inline-block" required id="item_name" value="{{$supply_order->item->item}}">
-                <input type="number" name="count.{{$loop->iteration}}" class="form-control col-md-1" style="display: inline-block" value="{{$supply_order->item->number}}" min="1" required id="item_numbers">
-                <select name="urgency.{{$loop->iteration}}" class="form-control col-md-3" style="display: inline-block" required id="item_urgency">
+                <input type="text" name="item{{$loop->iteration}}" class="form-control col-md-4" style="display: inline-block" required id="item_name" value="{{$supply_order->item->item}}">
+                <input type="number" name="count{{$loop->iteration}}" class="form-control col-md-1" style="display: inline-block" value="{{$supply_order->item->number}}" min="1" required id="item_numbers">
+                <select name="urgency{{$loop->iteration}}" class="form-control col-md-3" style="display: inline-block" required id="item_urgency">
                     <option selected="selected" value="{{$supply_order->item->urgency}}">{{$supply_order->item->urgency}}</option>
                     <option value="Не горит">Не горит</option>
                     <option value="Горит">Горит</option>

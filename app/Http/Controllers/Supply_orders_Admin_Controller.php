@@ -126,8 +126,8 @@ class Supply_orders_Admin_Controller extends Controller
         $counter = intval($request->entries_count);
         for($i = 1; $i <= $counter; $i++){
             // Получает данные из POST запроса
-            $item_count_name = 'count.'.$i; 
-            $item_urgency_name = 'urgency.'.$i; 
+            $item_count_name = 'count'.$i; 
+            $item_urgency_name = 'urgency'.$i; 
             $item_count = $request->$item_count_name; 
             $item_urgency = $request->$item_urgency_name; 
 
