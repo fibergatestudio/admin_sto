@@ -1,10 +1,11 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-Редактировать заказ
+Редактировать заказ 
 @endsection
 
 @section('content')
+    <h5><span class="badge badge-warning">Заказ {{ $supply_order->id }}</span></h5>
     <form class="form" action="{{ url('admin/supply_orders/edit_post/'.$supply_order->id) }}" method="POST">
         @csrf
         

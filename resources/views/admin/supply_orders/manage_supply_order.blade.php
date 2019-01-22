@@ -8,7 +8,7 @@
     {{-- Непосредственно управление заказов --}}
     {{-- ... ---}}
 
-    <h6>Заказ</h6>
+    <h5><span class="badge badge-warning">Заказ {{ $supply_order->id }}</span></h5>
     <table class="table">
         <thead>
             <tr>
@@ -81,7 +81,13 @@
 
                     <td>
                         {{-- Срочност --}}
-                        <span class="urgency">{{ $supply_order->item->urgency }}</span>
+                        @if($supply_order->item->urgency == 'Не горит')
+                        <span class="badge badge-success">{{$supply_order->item->urgency}}</span>
+                        @elseif($supply_order->item->urgency == 'Горит')
+                        <span class="badge badge-warning">{{$supply_order->item->urgency}}</span>
+                        @elseif($supply_order->item->urgency == 'Очень горит')
+                        <span class="badge badge-danger">{{$supply_order->item->urgency}}</span>
+                        @endif
                     </td>
                                    
                 </tr> 
@@ -108,21 +114,5 @@
         </div>
     </a>
     
-    {{--Выделение цветом --}}
-    <script>
-        $(document).ready(function() {
-            var urgency = $('.urgency').text();
-            console.log(urgency);
-            if (urgency == "Не горит"){
-                $('.urgency').addClass("badge badge-success");
-            }
-            if (urgency == "Горит"){
-                $('.urgency').addClass("badge badge-warning");
-            }
-            if (urgency == "Очень горит"){
-                $('.urgency').addClass("badge badge-danger");
-            }
-           
-	})	
-    </script>
+    
 @endsection

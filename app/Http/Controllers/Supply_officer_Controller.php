@@ -29,6 +29,8 @@ class Supply_officer_Controller extends Controller
             $supply_order->entries_count = $supply_order->get_entries_count();
             /* Общее кол-во единиц*/
             $supply_order->items_count = $supply_order->get_items_count();
+            /*Товар по данному заказу*/ 
+            $supply_order->items = $supply_order->get_order_items();
         }
         
         /* Возвращаем представление с данными */
@@ -51,7 +53,7 @@ class Supply_officer_Controller extends Controller
             $supply_order->date_of_creation = $supply_order->get_creation_date();
             /* Количество позиций */
             $supply_order->entries_count = $supply_order->get_entries_count();
-            /* Общее кол-во единиц*
+            /* Общее кол-во единиц*/
             $supply_order->items_count = $supply_order->get_items_count();
 
             /* Дата завершения в виде ДД.ММ.ГГГГ */

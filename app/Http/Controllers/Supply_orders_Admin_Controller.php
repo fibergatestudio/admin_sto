@@ -123,22 +123,21 @@ class Supply_orders_Admin_Controller extends Controller
         $edit_order->save();
         
         /* Вносим измененные предметы из заказа в базу */
-        $counter = intval($request->entries_count);
-        for($i = 1; $i <= $counter; $i++){
-            // Получает данные из POST запроса
-            $item_count_name = 'count'.$i; 
+        $items = Supply_order_item::where('supply_order_id', $supply_order_id)->get();
+        $i = 1;
+        foreach ($items as $item){
+            $item_count_name = 'count'.$i;
             $item_urgency_name = 'urgency'.$i; 
             $item_count = $request->$item_count_name; 
             $item_urgency = $request->$item_urgency_name; 
-
-            // Внести в базу
-            $edit_order_item = Supply_order_item::where('supply_order_id', $supply_order_id)->find($i);            
-            $edit_order_item->number = $item_count;
-            $edit_order_item->urgency = $item_urgency;
             
-            $edit_order_item->save();
+            $item->number = $item_count;
+            $item->urgency = $item_urgency;
             
-        }
+            $item->save();
+            $i++;
+        }      
+       
         return redirect('/admin/supply_orders/index');
     }
     

@@ -6,6 +6,8 @@
 
 @section('content')
 {{-- Выводим заказы --}}
+    @foreach($archived_orders as $supply_order)
+    <h5><span class="badge badge-secondary">Заказ {{ $supply_order->id }}</span></h5>
     <table class="table">
         <thead>
             <tr>
@@ -17,7 +19,7 @@
                 <th></th>{{-- Кнопки управления --}}
             </tr>
         </thead>
-        @foreach($archived_orders as $supply_order)
+       
         <tbody>
             
                 <tr>
@@ -62,8 +64,7 @@
                             </div>
                         </a>
                     </td>
-                </tr>
-            
+                </tr>            
         </tbody>
     </table>
     <div>
@@ -92,30 +93,21 @@
 
                     <td>
                         {{-- Срочност --}}
-                        <span class="urgency">{{ $supply_order->item->urgency }}</span>
+                        @if($supply_order->item->urgency == 'Не горит')
+                        <span class="badge badge-success">{{$supply_order->item->urgency}}</span>
+                        @elseif($supply_order->item->urgency == 'Горит')
+                        <span class="badge badge-warning">{{$supply_order->item->urgency}}</span>
+                        @elseif($supply_order->item->urgency == 'Очень горит')
+                        <span class="badge badge-danger">{{$supply_order->item->urgency}}</span>
+                        @endif
                     </td>
                                    
                 </tr> 
             @endforeach
         </tbody>
+    </table>
+     <hr>
     @endforeach
+      
     
-    
-    {{--Выделение цветом --}}
-    <script>
-        $(document).ready(function() {
-            var urgency = $('.urgency').text();
-            console.log(urgency);
-            if (urgency == "Не горит"){
-                $('.urgency').addClass("badge badge-success");
-            }
-            if (urgency == "Горит"){
-                $('.urgency').addClass("badge badge-warning");
-            }
-            if (urgency == "Очень горит"){
-                $('.urgency').addClass("badge badge-danger");
-            }
-           
-	})	
-    </script>
 @endsection
