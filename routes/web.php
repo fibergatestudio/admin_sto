@@ -61,8 +61,15 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
 
     /* Страница управления статусом сотрудника*/
     Route::get('/supervisor/manage_employee_status/{employee_id}', 'EmployeesAdminController@manage_employee_status');
+
         /* Действие архивация сотрудника (условное "увольнение") */
         Route::post('/archive_employee', 'EmployeesAdminController@archive_employee')->middleware('can:admin_rights');
+
+        /* Редактирование сотрудника */
+        Route::get('/supervisor/manage_employee_status/{employee_id}/employee_edit', 'EmployeesAdminController@employee_edit');
+
+            /* Применить изменения сотрудника */
+            Route::post('/supervisor/manage_employee_status/{employee_id}/employee_edit/apply_employee_edit', 'EmployeesAdminController@apply_employee_edit');
     
     /* Страница архива сотрудников */
     Route::get('/admin/employee_archive', 'EmployeesAdminController@show_employee_archive')->middleware('can:admin_rights');
