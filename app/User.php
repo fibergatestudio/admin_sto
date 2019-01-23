@@ -58,4 +58,24 @@ class User extends Authenticatable
         }
     }
 
+
+    /* Проверка, является ли пользователь кдиентом */
+    public function isClient(){
+        if($this->role == 'client')
+        {
+            return true;
+        } else{
+            return false;
+        }
+    }
+    /* Проверка, является ли пользователь мастером */
+    public function isMaster(){
+        if($this->role == 'master')
+        {
+            return true;
+        } else{
+            return false;
+        }
+    }
+
 }

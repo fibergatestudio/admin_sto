@@ -131,9 +131,11 @@
 					@include('limitless_parts.sidebar_employee')
 				@elseif(Auth::user()->isSupplyOfficer())
 					@include('limitless_parts.sidebar_supply_officer')
+					@elseif(Auth::user()->isClient())
+						@include('limitless_parts.sidebar_client')
+				@elseif(Auth::user()->isMaster())
+					@include('limitless_parts.sidebar_master')
 				@endif
-
-
 			</div>
 			<!-- /sidebar content -->
 			
