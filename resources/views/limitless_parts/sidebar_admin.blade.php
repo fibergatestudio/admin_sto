@@ -101,7 +101,6 @@
 								</span>
 							</a>
 						</li>
-
 						
 						<li class="nav-item">
 							<a class="nav-link" href="{{ url('/logout') }}"
@@ -113,6 +112,25 @@
 									Выход
 								</span>
 
+							</a>
+						</li>
+						<hr>
+						<!-- Тест телеграма -->
+						<li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs">Телеграм</div> <i class="icon-menu" title="Main"></i></li>
+
+						<li class="nav-item">
+							<a href="{{ url('/send-message') }}" class="nav-link">
+								<span>
+									Отправить сообщение
+								</span>
+							</a>
+						</li>
+
+						<li class="nav-item">
+							<a href="{{ url('/send-photo') }}" class="nav-link">
+								<span>
+									Отправить фото
+								</span>
 							</a>
 						</li>
 

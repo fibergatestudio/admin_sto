@@ -18,6 +18,7 @@ use App\Cars_in_service;
 use App\Assignment;
 use App\Sub_assignment;
 use App\Workzone;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 use App\Assignments_income;
 use App\Assignments_expense;
@@ -75,6 +76,10 @@ class Assignments_Admin_Controller extends Controller
         $assignment_description = $request->assignment_description;
         $car_id = $request->car_id;
 
+        /* Информация о клиенте и его машине для телеграма */
+        $client = Client::get_client_by_car_id($car_id);
+        $car = Cars_in_service::find($car_id);
+
         /* Создаём новый наряд и сохраняем его*/
         $new_assignment = new Assignment();
         $new_assignment->responsible_employee_id = $responsible_employee_id;
@@ -83,6 +88,23 @@ class Assignments_Admin_Controller extends Controller
         $new_assignment->date_of_creation = date('Y-m-d');
         $new_assignment->status = 'active';
         $new_assignment->save();
+        
+        /* Оповещения для телеграма */
+        $text = "У вас новый наряд!\n"
+            . "<b>Клиент: </b>\n"
+            . "$client->general_name\n"
+            . "<b>Авто: </b>\n"
+            . "$car->general_name\n"
+            . "<b>Дата: </b>\n"
+            . "$new_assignment->date_of_creation\n"
+            . "<b>Описание: </b>\n"
+            .  $assignment_description;
+ 
+        Telegram::sendMessage([
+            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+            'parse_mode' => 'HTML',
+            'text' => $text
+        ]);
 
 
         /* Возвращаемся на страницу нарядов по авто */
