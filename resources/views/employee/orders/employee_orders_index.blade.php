@@ -1,13 +1,16 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    Архив заказов на поставку
+    Заказы для поставщиков
 @endsection
 
 @section('content')
-{{-- Выводим заказы --}}
-    @foreach($archived_orders as $supply_order)
-    <h5><span class="badge badge-secondary">Заказ {{ $supply_order->id }}</span></h5>
+    {{-- Выводим заказы --}}
+    
+    @foreach($supply_orders as $supply_order)
+    @if(Auth::user()->id == $supply_order->creator_id)
+    <h5><span class="badge badge-primary">Заказ {{ $supply_order->id }}</span></h5>
+    <span class="badge badge-primary">{{ $supply_order->status }}</span>
     <table class="table">
         <thead>
             <tr>
@@ -15,56 +18,50 @@
                 <th>Дата создания</th>
                 <th>Кол-во позиций</th>
                 <th>Кол-во товара</th>
-                <th>Комментарий к заказу</th>
+                <th>Комментарий</th>
                 <th></th>{{-- Кнопки управления --}}
             </tr>
         </thead>
-       
         <tbody>
             
                 <tr>
-                    <td>
+                    <td >
                         {{-- Имя заказчика --}}
                         {{ $supply_order->creator_name }}<br>
                     </td>
                     
-                    <td>
+                    <td >
                         {{-- Дата создания --}}
                         {{ $supply_order->date_of_creation }}
                     </td>
 
-                    <td>
+                    <td >
                         {{-- Количество пунктов --}}
                         {{ $supply_order->entries_count }}
                     </td>
-
+                
                     <td>
                         {{-- Количество предметов (штук) --}}
                         {{ $supply_order->items_count }}
                     </td>
+                     
+                   
                     
-                    <td>
+                    <td >
                         {{-- Комментарий --}}
                         {{ $supply_order->order_comment }}
+                          
                     </td>
 
-                    <td>
-                        {{-- Кнопки управления --}}
-                        {{-- Просмотреть 
-                        <a href="#">
+                    <td >
+                        {{-- Кнопка управления --}}
+                        <a href="{{ url('/admin/supply_orders/manage/'.$supply_order->id) }}">
                             <div class="btn btn-primary">
-                                Просмотр
-                            </div>
-                        </a>--}}
-                        
-                        {{-- Удалить --}}
-                        <a href="{{ url('/admin/supply_orders/archive/delete/'.$supply_order->id) }}">
-                            <div class="btn btn-danger">
-                                Удалить
+                                Управление
                             </div>
                         </a>
                     </td>
-                </tr>            
+                </tr> 
         </tbody>
     </table>
     <div>
@@ -99,15 +96,35 @@
                         <span class="badge badge-warning">{{$supply_order->item->urgency}}</span>
                         @elseif($supply_order->item->urgency == 'Очень горит')
                         <span class="badge badge-danger">{{$supply_order->item->urgency}}</span>
-                        @endif
+                        @endif                        
                     </td>
                                    
                 </tr> 
             @endforeach
         </tbody>
     </table>
-     <hr>
-    @endforeach
-      
+    <hr>
+   @endif 
+   @endforeach
+       
+    
+    {{-- Конец вывода --}}
+    <hr>
+
+    {{-- Новый заказ : кнопка --}}
+    <a href="{{ url('admin/supply_orders/new') }}">
+        <div class="btn btn-success">
+            Новый заказ
+        </div>
+    </a>
+
+    {{-- Архив : переход --}}
+    <a href="{{ url('admin/supply_orders/archive') }}">
+        <div class="btn btn-light">
+            Архив
+        </div>
+    
+    </a>
+    
     
 @endsection

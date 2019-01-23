@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\DB;
 
 use App\Assignment;
 use App\Shift;
+use App\Supply_order;
+use App\Supply_order_item;
 
 class Employee_Dashboard_Controller extends Controller
 {
@@ -106,5 +108,36 @@ class Employee_Dashboard_Controller extends Controller
         // И возвращаемся на страницу смен
         return back();
 
+    }
+    
+    
+    /**** Заказы ****/
+    
+    /* Страница со списком заказов */
+    public function employee_orders_index(){
+
+        /* Получаем из базы данные обо всех активных заказах на поставку */
+        $supply_orders = Supply_order::where('status', 'active')->get();
+        
+        /* Собираем дополнительные данные */
+        foreach($supply_orders as $supply_order){
+            /* Имя заказчика */
+            $supply_order->creator_name = $supply_order->get_creator_name();
+            /* Дата создания в виде ДД.ММ.ГГГГ */
+            $supply_order->date_of_creation = $supply_order->get_creation_date();
+            /* Количество позиций */
+            $supply_order->entries_count = $supply_order->get_entries_count();
+            /* Общее кол-во единиц*/
+            $supply_order->items_count = $supply_order->get_items_count();
+            /*Товар по данному заказу*/ 
+            $supply_order->items = $supply_order->get_order_items();
+                 
+        }
+             
+        /* Возвращаем представление с данными */
+        return view('employee.orders.employee_orders_index',
+            [
+                'supply_orders' => $supply_orders,                
+            ]);
     }
 }

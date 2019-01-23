@@ -279,6 +279,11 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
 
     /* История смен */
     // ...
+    
+/**** Заказы : работник *****/   
+    
+    /* Мои заказы */
+    Route::get('/employee/orders/index', 'Employee_Dashboard_Controller@employee_orders_index');
 
 /****************************************/
 /********** СНАБЖЕНЕЦ : секция **********/
