@@ -23,4 +23,11 @@ class Client_Controller extends Controller
     {
         return view('master.master');
     }
+
+    public function master_employees()
+    {
+        $employees = Employee::get();
+        return view('master.employees')->with(array('employees' => $employees));
+
+    }
 }
