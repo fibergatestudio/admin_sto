@@ -115,7 +115,13 @@ class Employee_Dashboard_Controller extends Controller
         // .. Собираем историю по наряду
         
         /* Возвращаем страницу */
-        return view('employee.assignment', ['assignment' => $assignment, 'assignment_income' => $assignment_income, 'assignment_expense' => $assignment_expense, 'assignment_work' => $assignment_work]);
+        return view('employee.assignment', 
+        [
+            'assignment' => $assignment, 
+            'assignment_income' => $assignment_income, 
+            'assignment_expense' => $assignment_expense, 
+            'assignment_work' => $assignment_work
+        ]);
     }
 
     /* Пометить наряд выполнено */
@@ -153,10 +159,12 @@ class Employee_Dashboard_Controller extends Controller
         $new_income_entry = new Assignments_income();
         $new_income_entry->assignment_id = $request->assignment_id; /* Идентификатор наряда */
         $new_income_entry->amount = $request->amount; /* Сумма захода */
+        $new_income_entry->currency = $request->currency; /* Валюта захода */
         $new_income_entry->basis = $request->basis; /* Основание для захода денег */
         $new_income_entry->description = $request->description; /* Описание для захода */
         $new_income_entry->save();
 
+        
 
         /* Возвращаемся обратно на страницу наряда */
         return back();
@@ -167,6 +175,7 @@ class Employee_Dashboard_Controller extends Controller
         $new_expense_entry = new Assignments_expense();
         $new_expense_entry->assignment_id = $request->assignment_id; /* Идентификатор наряда */
         $new_expense_entry->amount = $request->amount; /* Сумма расхода */
+        $new_expense_entry->currency = $request->currency; /* Валюта расхода */
         $new_expense_entry->basis = $request->basis; /* Основание для расхода денег */
         $new_expense_entry->description = $request->description; /* Описание для расхода */
         $new_expense_entry->save();

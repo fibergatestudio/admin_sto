@@ -203,6 +203,18 @@ Route::get('/admin/assignments_index', 'Assignments_Admin_Controller@assignments
     /* Просмотр наряда : страница */
     Route::get('admin/assignments/view/{assignment_id}', 'Assignments_Admin_Controller@view_assignment');
 
+        /* Управление зонального наряда */
+        Route::get('admin/assignments/view/{sub_assignment_id}/management', 'Assignments_Admin_Controller@assignment_management');
+
+             /* Добавить зональную доходную часть : POST */
+            Route::post('admin/assignments/view/{sub_assignment_id}/management/add_zonal_assignment_income', 'Assignments_Admin_Controller@add_zonal_assignment_income');
+
+            /* Добавить зональную расходную часть : POST */
+            Route::post('admin/assignments/view/{sub_assignment_id}/management/add_zonal_assignment_expense', 'Assignments_Admin_Controller@add_zonal_assignment_expense');
+
+            /* Добавить зональный список выполненых работ : POST */
+            Route::post('admin/assignments/view/{sub_assignment_id}/management/add_zonal_assignment_works', 'Assignments_Admin_Controller@add_zonal_assignment_works');
+
         /* Изменение названия наряда */
         Route::post('/admin/assignments/change_name', 'Assignments_Admin_Controller@change_assignment_name');
 
@@ -218,6 +230,12 @@ Route::get('/admin/assignments_index', 'Assignments_Admin_Controller@assignments
 
         /* Загрузка фотографий в CRM : Post */
         Route::post('/admin/assignments/add_photo_to_assignment', 'Assignments_Admin_Controller@add_photo_to_assignment_post');
+        /* Загрузка фото принятой машины в CRM : Post */
+        Route::post('/admin/assignments/add_accepted_photo_to_assignment', 'Assignments_Admin_Controller@add_accepted_photo_to_assignment_post');
+        /* Загрузка фото процесса ремонта в CRM : Post */
+        Route::post('/admin/assignments/add_repair_photo_to_assignment', 'Assignments_Admin_Controller@add_repair_photo_to_assignment_post');
+        /* Загрузка фото готовой машины в CRM : Post */
+        Route::post('/admin/assignments/add_finished_photo_to_assignment', 'Assignments_Admin_Controller@add_finished_photo_to_assignment_post');
 
     /* Удаление фотографий : Страница */
     Route::get('/admin/assignments/{assignment_id}/delete_photos_page', 'Assignments_Admin_Controller@delete_photos_page');

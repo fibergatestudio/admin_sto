@@ -41,6 +41,43 @@
   </form>
 </div>
 
+<!-- Вызов попапа принятия аванса --> <!-- Тест -->
+<button type="button" class="btn btn-success" data-toggle="modal" data-target="#prepaidModal1" style="margin-left: 10px">
+    Принять аванс
+</button>
+
+<!-- Модальное окно принятия аванса -->
+<div class="modal fade" id="prepaidModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <form action="{{ url('/admin/assignments/change_name') }}" method="POST">
+    @csrf
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="prepaidModalLabel">Форма принятия аванса</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          
+          {{-- ID наряда --}}
+          <input type="hidden" name="assignment_id" value="{{ $assignment->id }}">
+          
+          {{-- Новое название --}}
+          <div class="form-group">
+            <label>Тест</label>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+          <button type="button" class="btn btn-primary">Принять</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
 @endsection
 
 @section('content')
@@ -66,11 +103,14 @@
             <td>{{ $sub_assignment->name }} {{-- Название наряда --}}</td>
             <td>{{ $sub_assignment->workzone_name }} {{-- Название рабочей зоны --}}</td>
             <td>{{ $sub_assignment->responsible_employee }} {{-- Название ответственного сотрудника --}}</td>
+
+            {{-- url('admin/assignments/view/'.$assignment->id.'/management') --}}
+
             <td>
               {{-- Кнопка управления --}}
-              <a href="{{ url('') }}">
+              <a href="{{ url('admin/assignments/view/'.$sub_assignment->id.'/management') }}">
                 <div class="btn btn-light">
-                  Управление
+                  Управление зональным нарядом
                 </div>
               </a>
             </td>
@@ -97,12 +137,12 @@
     {{-- Фотографии : вывод --}}
     <h3>Фотографии:</h3>
     <div class="row">
-		<div class="row">
+
+        <div class="col-sm-4">
             
             {{-- Цикл вывода фотографий --}}
-            @foreach($image_urls as $image_url)
-
-                
+            <p>Принятая машина:</p>
+            @foreach($accepted_image_urls as $image_url)
                 <div class="col-lg-2 col-md-3 col-xs-6 thumb">
                     <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title=""
                     data-image="{{ Storage::url($image_url) }}"
@@ -113,6 +153,42 @@
                     </a>
                 </div>
             @endforeach
+            
+        </div>{{-- /row --}}
+
+        <div class="col-sm-4">
+            
+            {{-- Цикл вывода фотографий --}}
+            <p>Процесс ремонта:</p>
+            @foreach($repair_image_urls as $image_url)
+                <div class="col-lg-2 col-md-3 col-xs-6 thumb">
+                    <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title=""
+                    data-image="{{ Storage::url($image_url) }}"
+                    data-target="#image-gallery">
+                        <img class="img-thumbnail"
+                            src="{{ Storage::url($image_url) }}"
+                            alt="Another alt text">
+                    </a>
+                </div>
+            @endforeach
+            
+        </div>{{-- /row --}}
+
+        <div class="col-sm-4">
+            
+        {{-- Цикл вывода фотографий --}}
+        <p>Выдача готовой:</p>
+        @foreach($finished_image_urls as $image_url)
+            <div class="col-lg-2 col-md-3 col-xs-6 thumb">
+                <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title=""
+                data-image="{{ Storage::url($image_url) }}"
+                data-target="#image-gallery">
+                    <img class="img-thumbnail"
+                        src="{{ Storage::url($image_url) }}"
+                        alt="Another alt text">
+                </a>
+            </div>
+        @endforeach
             
         </div>{{-- /row --}}
 
@@ -167,6 +243,7 @@
         <thead>
             <tr>
                 <th>Сумма</th>
+                <th>Валюта</th>
                 <th>Основание</th>
                 <th>Описание</th>
                 <th></th>{{-- Кнопки управления --}}
@@ -179,6 +256,9 @@
             {{ $income_entry->amount }}<br>
             </td>
             <td>
+            {{ $income_entry->currency }}<br>
+            </td>
+            <td>
             {{ $income_entry->basis }}<br>
             </td>
             <td>
@@ -188,7 +268,7 @@
         @endforeach
         </tbody>
     </table>
-    <p>Сумма заходов: {{ $assignment_income->sum('amount') }}<br></p>
+    <!--<p>Сумма заходов: {{ $assignment_income->sum('amount') }}<br></p>-->
 
     {{-- Добавить заход денег : Кнопка открытия модального окна --}}
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addIncomeModal">
@@ -213,11 +293,23 @@
                             {{-- ID наряда --}}
                             <input type="hidden" name="assignment_id" value="{{ $assignment->id }}">
 
+                            <div class="form-row">
                             {{-- Сумма --}}
-                            <div class="form-group">
+                            <div class="form-group col-md-6">
                                 <label>Сумма</label>
                                 <input type="number" name="amount" min="0" class="form-control" required>
                             </div>
+                            {{-- Валюта --}}
+                            <div class="form-group col-md-6">
+                                <label>Валюта</label>
+                                <!--<input type="number" name="amount" min="0" class="form-control" required>-->
+                                <select name="currency"class="form-control">
+                                    <option value="UAH">UAH</option>
+                                    <option value="USD">USD</option>
+                                    <option value="EUR">EUR</option>
+                                </select>
+                            </div>
+                        </div>
                             
                             {{-- Основание --}}
                             <div class="form-group">
@@ -252,6 +344,7 @@
         <thead>
             <tr>
                 <th>Сумма</th>
+                <th>Валюта</th>
                 <th>Основание</th>
                 <th>Описание</th>
                 <th></th>{{-- Кнопки управления --}}
@@ -264,6 +357,9 @@
             {{ $expense_entry->amount }}<br>
             </td>
             <td>
+            {{ $expense_entry->currency }}<br>
+            </td>
+            <td>
             {{ $expense_entry->basis }}<br>
             </td>
             <td>
@@ -273,7 +369,7 @@
         @endforeach
         </tbody>
     </table>
-    <p>Сумма расходов: {{ $expense_entry->sum('amount') }}<br></p>
+    <!--<p>Сумма расходов: {{ $assignment_expense->sum('amount') }}<br></p>-->
 
     {{-- Добавить расход денег : Кнопка открытия модального окна --}}
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addExpenseModal">
@@ -298,10 +394,22 @@
                             {{-- ID наряда --}}
                             <input type="hidden" name="assignment_id" value="{{ $assignment->id }}">
 
-                            {{-- Сумма --}}
-                            <div class="form-group">
-                                <label>Сумма</label>
-                                <input type="number" name="amount" min="0" class="form-control" required>
+                            <div class="form-row">
+                                {{-- Сумма --}}
+                                <div class="form-group col-md-6">
+                                    <label>Сумма</label>
+                                    <input type="number" name="amount" min="0" class="form-control" required>
+                                </div>
+                                {{-- Валюта --}}
+                                <div class="form-group col-md-6">
+                                    <label>Валюта</label>
+                                    <!--<input type="number" name="amount" min="0" class="form-control" required>-->
+                                    <select name="currency"class="form-control">
+                                        <option value="UAH">UAH</option>
+                                        <option value="USD">USD</option>
+                                        <option value="EUR">EUR</option>
+                                    </select>
+                                </div>
                             </div>
                             
                             {{-- Основание --}}
