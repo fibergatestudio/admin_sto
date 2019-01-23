@@ -2,6 +2,12 @@
 
 @section('page_name')
 Финансы по сотруднику: {{ $employee->general_name }}
+{{-- Вернуться : Кнопка --}}
+    <a href="{{ url('view_employees') }}">
+        <div class="btn btn-danger">
+            Вернуться
+        </div>
+    </a>
 @endsection
 
 @section('content')
@@ -35,18 +41,12 @@
     
     {{-- Жетоны на кофе : Кнопка --}}
     <a href="{{ url('/supervisor/employee_coffee_tokens/'.$employee->id ) }}">
-        <div class="btn btn-light">
+        <div class="btn btn-info">
             Жетоны на кофе
         </div>
     </a>
 
     <hr>
-    {{-- Вернуться : Кнопка --}}
-    <a href="{{ url('view_employees') }}">
-        <div class="btn btn-danger">
-            Вернуться
-        </div>
-    </a>
 
     {{-- Модальное окно : изменить ставку --}}
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -91,6 +91,63 @@
                 {{-- Конец формы изменения ставки --}}
             </div>
             
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <b>Последние штрафы:</b>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Дата</th>
+                        <th>Сумма</th>
+                        <th>Статус</th>
+                        <th>Основание</th>
+                    </tr>
+                </thead>
+                @foreach($employee_fines as $employee_fines)
+                <tr>
+                    <td>
+                        {{ $employee_fines->date }}
+                    </td>
+                    <td>
+                        {{ $employee_fines->amount }}
+                    </td>
+                    <td>
+                        {{ $employee_fines->status }}
+                    </td>
+                    <td>
+                        {{ $employee_fines->reason }}
+                    </td>
+                </tr>
+                @endforeach
+            </table>
+        </div>
+        <div class="form-group col-md-6">
+            <b>Жетоны:</b>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Кол-во жетонов</th>
+                        <th>Сумма</th>
+                        <th>Дата</th>
+                    </tr>
+                </thead>
+                @foreach($token_logs as  $token_logs)
+                <tr>
+                    <td>
+                    {{ $token_logs->token_count}}
+                    </td>
+                    <td>
+                    {{ $token_logs->token_count*5}}
+                    </td>
+                    <td>
+                    {{ $token_logs->date }}
+                    </td>
+                </tr>
+                @endforeach
+            </table>
         </div>
     </div>
 

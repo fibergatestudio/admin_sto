@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use App\User;
 use App\Employee;
 use App\Employee_fine;
-use App\Employee_balance;
+//use App\Employee_balance;
 use App\Employee_balance_log;
 use App\Coffee_token_log;
 
@@ -76,12 +76,68 @@ class EmployeesAdminController extends Controller
         /* Вернуться к списку сотрудников */
         return redirect()->route('view_employees');
     }
+
+    public function employee_edit($employee_id){
+
+        //$employee = Employee::find($employee_id)->first();
+        $employee = Employee::find($employee_id);
+
+        $employee_edit = DB::table('employees')->where('id', $employee_id)->first();
+
+        return view('employees_admin.employee_edit_admin', 
+        [
+            'employee_edit' => $employee_edit,
+            'employee' => $employee
+            
+        ]);
+    }
+
+    public function apply_employee_edit(request $request){
+
+        $employee_id = $request->id;
+
+        $date_join = $request->date_join;
+        $fio = $request->fio;
+        $passport = $request->passport;
+        $id_code = $request->id_code;
+        $reserve_phone = $request->reserve_phone;
+        $hour_from = $request->hour_from ;
+        $hour_to = $request->hour_to;
+
+        $employee = Employee::find($employee_id);
+        $employee->date_join = $date_join;
+        $employee->fio = $fio;
+        $employee->passport =  $passport;
+        $employee->id_code = $id_code;
+        $employee->reserve_phone = $reserve_phone;
+        $employee->hour_from = $hour_from;
+        $employee->hour_to = $hour_to;
+        $employee->save();
+
+        if(!empty($request->document)){
+            $request->scan_doc>store('public/doc_scan/'.$employee_id);
+        }
+        
+        /* Возвращаемся на страницу */
+
+        return back();
+    }
     
     /* Общая страница финансов по работнику */
     public function employee_finances($employee_id){
         $employee = Employee::find($employee_id);
+
+        $employee_fines = DB::table('employee_fines')->where('employee_id', '=', $employee_id)->get();
+
+        $token_logs = Coffee_token_log::where('employee_id', $employee_id)->get();
         
-        return view('employees_admin.employee_finances_admin', ['employee' => $employee]);
+        return view('employees_admin.employee_finances_admin',
+        [
+             'employee' => $employee,
+             'employee_fines' => $employee_fines,
+             'token_logs' => $token_logs
+             
+        ]);
 
     }
 
@@ -202,14 +258,14 @@ class EmployeesAdminController extends Controller
         $fine->save();
 
         // Вычесть из баланса сумму штрафа
-        $employee_balance = DB::table('employee_balances')
-            ->where('employee_id', '=', $fine->employee_id)
+        $employee_balance = DB::table('employees')
+            ->where('id', '=', $fine->employee_id)
             ->first();
         
         $new_balance = $employee_balance->balance - $fine->amount;
 
-        DB::table('employee_balances')
-            ->where('employee_id', '=', $fine->employee_id)
+        DB::table('employees')
+            ->where('id', '=', $fine->employee_id)
             ->update(['balance' => $new_balance]);
 
         // Редирект на страницу штрафов сотрудника
@@ -242,14 +298,10 @@ class EmployeesAdminController extends Controller
 
         /* Редирект на страницу штрафов */
         return redirect()->route('employee_fines', ['employee_id' => $request->employee_id]);
-
-
     }
-
     /*
     ********** Блок с жетонами кофе **********
     */
-    
     /* Страница "жетоны кофе" */
     public function employee_coffee_token_index($employee_id){
         $employee = Employee::find($employee_id);
@@ -270,9 +322,13 @@ class EmployeesAdminController extends Controller
         // Вычесть стоимость жетонов с баланса
         $token_price = 5; // Сделать подтягивание с базы
         $token_total = $token_price * $token_count;
-        $employee_balance = Employee_balance::where('employee_id', $employee_id)->first();
-        $employee_balance->balance = $employee_balance->balance - $token_total;
-        $employee_balance->save();
+        $employee_balance = DB::table('employees')->where('id', '=', $employee_id)->first();
+        $new_employee_balance = $employee_balance->balance - $token_total;
+        //$employee_balance->save();
+
+        DB::table('employees')
+        ->where('id', '=', $employee_id)
+        ->update(['balance' => $new_employee_balance]);
 
         // Добавить жетоны в историю
         $employee_coffee_log_entry = new Coffee_token_log;

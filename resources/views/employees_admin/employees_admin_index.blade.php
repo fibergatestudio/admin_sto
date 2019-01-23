@@ -21,6 +21,14 @@
                 </td>
 
                 <td>
+                    <a href="{{ url('/supervisor/manage_employee_status/'.$employee->id.'/employee_edit') }}">
+                        <div class="btn btn-success">
+                            Редактировать сотрудника
+                        </div>
+                    </a>
+                </td>
+                {{-- Кнопка редактирования сотрудника --}}
+                <td>
                     <a href="{{ url('/supervisor/manage_employee_status/'.$employee->id) }}">
                         <div class="btn btn-secondary">
                             Статус сотрудника

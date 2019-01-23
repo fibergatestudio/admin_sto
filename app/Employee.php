@@ -23,8 +23,8 @@ class Employee extends Model
     //protected $table = 'employee_balances';// таблица связанная с моделью (начисление баланса сотруднику)
 
     //вместо выше написанной строки
-    public function employee_balance(){
-        return $this->hasOne('Employee_balance'); // связь с моделью Employee_balance (начисление баланса сотруднику)
-    }
+    //public function employee_balance(){
+    //    return $this->hasOne('Employee_balance'); // связь с моделью Employee_balance (начисление баланса сотруднику)
+    //}
 
 }

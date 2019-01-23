@@ -64,7 +64,6 @@ class Cars_Admin_Controller extends Controller
         
         /* Возвращаемся на страницу */
         return back();
-
     }
 
     /* Удаление машины */
