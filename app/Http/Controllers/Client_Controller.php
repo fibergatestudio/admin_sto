@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Client;
 use Auth;
+use App\Employee;
 use App\Cars_in_service;
 
 class Client_Controller extends Controller
