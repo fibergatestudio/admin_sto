@@ -24,6 +24,10 @@ Auth::routes();
 Route::get('/client', 'Client_Controller@client')->middleware('can:client_rights');
 /*Путь к мастеру*/
 Route::get('/master', 'Client_Controller@master')->middleware('can:master_rights');
+
+
+/*Путь к управлению нарядами мастером*/
+Route::get('/master/assignments', 'Client_Controller@master_assignments')->middleware('can:master_rights');
 /*Деавторизация*/
 /*Деавторизация*/
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
