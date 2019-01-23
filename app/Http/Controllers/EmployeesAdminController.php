@@ -140,49 +140,49 @@ class EmployeesAdminController extends Controller
         return back();
     }
 
-    // Страница добавления скана паспорта сотрудника
-    public function add_passport_scan($employee_id){
+    // Страница добавления документов сотрудника
+    public function add_documents($employee_id){
         $employee = Employee::find($employee_id);
 
-        return view('employees_admin.add_passport_scan', ['employee'=>$employee]);
+        return view('employees_admin.add_documents', ['employee'=>$employee]);
     }
 
-    // Хранение файла скана паспорта 
-    public function add_passport_scan_post(Request $request){ 
+    // Хранение файла документа POST
+    public function add_documents_post(Request $request){ 
         $employee_id = $request->employee_id;
         $employee = Employee::find($employee_id);
         
         $request->scan->store('public/employee/'.$employee_id);
 
-        return redirect('/passport_scans/'.$request->employee_id);
+        return redirect('/documents/'.$request->employee_id);
     }
     
-    // Страница сотрудника со сканами его паспорта
-    public function show_employee_passport($employee_id) {
+    // Страница сотрудника его документами
+    public function show_employee_documents($employee_id) {
         $employee = Employee::find($employee_id);         
         $images = [];
         foreach(Storage::files('public/employee/'.$employee_id) as $file){
              $images[] = $file;
         }       
         
-        return view('employees_admin.employee_passports', compact('employee', 'images'));
+        return view('employees_admin.employee_documents', compact('employee', 'images'));
     }
-    // Страница удаления сканов
-    public function passport_scans_delete($employee_id){
+    // Страница удаления документов
+    public function documents_delete($employee_id){
         // Получаем список сканов паспорта сотрудника
         $images = [];
         foreach(Storage::files('public/employee/'.$employee_id) as $file){
              $images[] = $file;
         }
-        return view('employees_admin.passports_scans_delete', compact('employee_id', 'images'));
+        return view('employees_admin.documents_delete', compact('employee_id', 'images'));
     }
-    // Удаление сканов : POST 
-    public function passport_scans_delete_post(Request $request){
-        /* Удалить фото */
+    // Удаление документов : POST 
+    public function documents_delete_post(Request $request){
+        /* Удалить документ */
         Storage::delete($request->path_to_file);
         
-        /* Вернуться на страницу удаления фотографий */
-        return redirect('passport_scans_delete/'.$request->employee_id);
+        /* Вернуться на страницу удаления документов */
+        return redirect('documents_delete/'.$request->employee_id);
     }
     
     /*

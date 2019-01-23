@@ -1,13 +1,13 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    Сканы паспорта сотрудника - {{$employee->general_name}}
+    Документы сотрудника - {{$employee->general_name}}
 @endsection
 
 @section('content')
     <div class="row">
         <div class="row">    
-            {{-- Цикл вывода сканов --}}
+            {{-- Цикл вывода документов --}}
             
             @foreach($images as $image)
 
@@ -49,11 +49,11 @@
         </div>
         {{-- Конец модального окна для вывода лайтбокса --}}    
     </div>
-     {{-- Фотографии : переход на страницу загрузки --}}   
-    <a class="btn btn-light" href="{{ url('/add_passport_scan/'.$employee->id) }}">Добавить скан паспорта</a>
+     {{-- Документы : переход на страницу загрузки --}}   
+    <a class="btn btn-light" href="{{ url('/add_documents/'.$employee->id) }}">Добавить документ</a>
      
-    {{-- Удаление фотографий : переход на страницу --}}              
-    <a class="btn btn-secondary" href="{{ url('/passport_scans_delete/'.$employee->id) }}">Удалить скан паспорта</a>
+    {{-- Удаление документов : переход на страницу --}}              
+    <a class="btn btn-secondary" href="{{ url('/documents_delete/'.$employee->id) }}">Удалить документ</a>
 
        
 @endsection
