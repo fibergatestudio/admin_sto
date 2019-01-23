@@ -101,20 +101,20 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
         Route::post('/supervisor/employee_coffee_tokens/add',
                     'EmployeesAdminController@employee_coffee_token_issue')->middleware('can:admin_rights');
 
-    /* Страница добавления скана паспорта сотрудника*/
-    Route::get('/add_passport_scan/{employee_id}', 'EmployeesAdminController@add_passport_scan')->middleware('can:admin_rights');
+    /* Страница добавления документов сотрудника*/
+    Route::get('/add_documents/{employee_id}', 'EmployeesAdminController@add_documents')->middleware('can:admin_rights');
 
-        // Добавление скана паспорта в БД
-        Route::post('/add_passport_scan_post/', 'EmployeesAdminController@add_passport_scan_post')->middleware('can:admin_rights');
+        // Добавление документов POST
+        Route::post('/add_documents_post/', 'EmployeesAdminController@add_documents_post')->middleware('can:admin_rights');
         
-    // Страница сотрудника со сканами его паспорта
-    Route::get('/passport_scans/{employee_id}', 'EmployeesAdminController@show_employee_passport')->middleware('can:admin_rights');
+    // Страница сотрудника с его документами
+    Route::get('/documents/{employee_id}', 'EmployeesAdminController@show_employee_documents')->middleware('can:admin_rights');
     
-    // Страница удаления сканов паспортов
-    Route::get('/passport_scans_delete/{employee_id}', 'EmployeesAdminController@passport_scans_delete')->middleware('can:admin_rights');
+    // Страница удаления документов
+    Route::get('/documents_delete/{employee_id}', 'EmployeesAdminController@documents_delete')->middleware('can:admin_rights');
     
-    // Удаление скана паспорта сотрудника
-    Route::post('/passport_scans_delete_post/', 'EmployeesAdminController@passport_scans_delete_post')->middleware('can:admin_rights');
+    // Удаление документов сотрудника POST
+    Route::post('/documents_delete_post/', 'EmployeesAdminController@documents_delete_post')->middleware('can:admin_rights');
     
 /****** Рабочие зоны: Администратор ******/
 
@@ -288,6 +288,13 @@ Route::get('/admin/supply_orders/new', 'Supply_orders_Admin_Controller@new_suppl
 
 /* Управление заказом : Страница */
 Route::get('/admin/supply_orders/manage/{supply_order_id}', 'Supply_orders_Admin_Controller@manage_supply_order');
+
+/* Редактирование заказа : Страница */
+Route::get('/admin/supply_orders/edit/{supply_order_id}', 'Supply_orders_Admin_Controller@edit_supply_order');
+
+/* Редактирование заказа : POST */
+Route::post('/admin/supply_orders/edit_post/{supply_order_id}', 'Supply_orders_Admin_Controller@edit_supply_order_post');
+
 
     /* Архивировать заказ */
     Route::get('/admin/supply_orders/archive/{supply_order_id}', 'Supply_orders_Admin_Controller@archive_supply_order');

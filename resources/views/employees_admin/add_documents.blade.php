@@ -1,13 +1,13 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-Добавление скана паспорта
+Добавление документов
 @endsection
 
 @section('content')
 
 {{-- Форма --}}
-<form action="{{ url('/add_passport_scan_post/') }}" method="POST" enctype="multipart/form-data">
+<form action="{{ url('/add_documents_post/') }}" method="POST" enctype="multipart/form-data">
     @csrf
     {{-- ID сотрудника --}}
     <input type="hidden" name="employee_id" value="{{ $employee->id }}">

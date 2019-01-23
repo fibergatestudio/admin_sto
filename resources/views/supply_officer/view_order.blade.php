@@ -31,6 +31,7 @@
                 <th>Название</th>
                 <th>Описание</th>
                 <th>Количество</th>
+                <th>Срочность</th>
             </tr>
         </thead>
         <tbody>
@@ -49,6 +50,17 @@
                     <td>
                         {{-- Количество --}}
                         {{ $item->number }}
+                    </td>
+                    
+                    <td>
+                        {{-- Срочност --}}
+                        @if($item->urgency == 'Не горит')
+                        <span class="badge badge-success">{{$item->urgency}}</span>
+                        @elseif($item->urgency == 'Горит')
+                        <span class="badge badge-warning">{{$item->urgency}}</span>
+                        @elseif($item->urgency == 'Очень горит')
+                        <span class="badge badge-danger">{{$item->urgency}}</span>
+                        @endif                        
                     </td>
                 </tr>
             @endforeach
