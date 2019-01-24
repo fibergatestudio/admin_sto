@@ -19,9 +19,18 @@ Route::get('/', function () {
 /* Стандартная авторизация ларавела */
 Auth::routes();
 
-
 /*Путь к клиенту*/
 Route::get('/client', 'Client_Controller@client')->middleware('can:client_rights');
+
+/*Путь к нарядам клиента*/
+Route::get('/client/assignments/{id}', 'Client_Controller@assignments')->middleware('can:client_rights');
+
+/*Путь к зональным нарядам клиента*/
+Route::get('/client/sub_assignments/{id}', 'Client_Controller@sub_assignments')->middleware('can:client_rights');
+
+/*Путь к архивным нарядам клиента*/
+Route::get('/client/assignments_archive/{id}', 'Client_Controller@assignments_archive')->middleware('can:client_rights');
+
 /*Путь к мастеру*/
 Route::get('/master', 'Client_Controller@master')->middleware('can:master_rights');
 
