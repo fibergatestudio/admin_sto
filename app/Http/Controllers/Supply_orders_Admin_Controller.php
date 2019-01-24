@@ -226,7 +226,7 @@ class Supply_orders_Admin_Controller extends Controller
         $supply_order->save();
         
         /* Редирект на страницу заказов */
-        return redirect('/admin/supply_orders/index');
+        return redirect('/admin/supply_orders/worker');
     }
     
 }
