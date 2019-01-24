@@ -21,19 +21,24 @@ class TelegramBotController extends Controller
  
     public function storeMessage(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'message' => 'required'
-        ]);
+        // $request->validate([
+        //     'email' => 'required|email',
+        //     'message' => 'required'
+        // ]);
+
+
  
-        $text = "У вас новый контакт!\n"
-            . "<b>Email адрес: </b>\n"
-            . "$request->email\n"
-            . "<b>Сообщение: </b>\n"
-            . $request->message;
+        // $text = "У вас новый контакт!\n"
+        //     . "<b>Email адрес: </b>\n"
+        //     . "$request->email\n"
+        //     . "<b>Сообщение: </b>\n"
+        //     . $request->message;
+
+        $recipient = $request->id;
+        $text = $request->message;
  
         Telegram::sendMessage([
-            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+            'chat_id' => $recipient,
             'parse_mode' => 'HTML',
             'text' => $text
         ]);

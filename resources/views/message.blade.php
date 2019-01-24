@@ -7,9 +7,13 @@
 @section('content')
     <form action="{{ url('/store-message') }}" method="post">
         {{ csrf_field() }}
-        <div class="form-group">
+        <!--<div class="form-group">
             <label for="email">Email адрес</label>
             <input type="email" class="form-control" id="email" name="email" placeholder="Введите email адрес">
+        </div>-->
+        <div class="form-group">
+            <label for="message">Кому</label>
+            <textarea name="id" id="id" class="form-control" placeholder="Введите айди" rows="1"></textarea>
         </div>
         <div class="form-group">
             <label for="message">Сообщение</label>

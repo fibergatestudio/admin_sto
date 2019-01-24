@@ -11,9 +11,9 @@ use Illuminate\Support\Facades\Storage;
 use App\User;
 use App\Employee;
 use App\Employee_fine;
-//use App\Employee_balance;
 use App\Employee_balance_log;
 use App\Coffee_token_log;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 class EmployeesAdminController extends Controller
 {
@@ -267,7 +267,21 @@ class EmployeesAdminController extends Controller
         DB::table('employees')
             ->where('id', '=', $fine->employee_id)
             ->update(['balance' => $new_balance]);
+            
+         /* Оповещения для телеграма */
+         $text = "У вас новый штраф!\n"
+         . "<b>Размер штрафа: </b>\n"
+         . "$fine->amount\n"
+         . "<b>Сумма с вычетом штрафа: </b>\n"
+         . "$new_balance";
 
+        Telegram::sendMessage([
+            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+            'parse_mode' => 'HTML',
+            'text' => $text
+        ]);
+
+        
         // Редирект на страницу штрафов сотрудника
         return redirect()->route('employee_fines', ['employee_id' => $fine->employee_id]);
 
