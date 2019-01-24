@@ -1,13 +1,24 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    Заказы для поставщиков
+    Завершенные заказы
 @endsection
 
 @section('content')
+
+        <div class="row">
+            {{-- Возврат : кнопка --}}
+            <div class="col-2">
+                <a href="{{ url('employee/orders/index') }}" class="btn btn-info">Вернуться в заказы</a>
+            </div>             
+        </div>
+        <hr>
     {{-- Выводим заказы --}}
+    
     @foreach($supply_orders as $supply_order)
+    
     <h5><span class="badge badge-primary">Заказ {{ $supply_order->id }}</span></h5>
+    <h6>Статус <span class="badge badge-primary">{{ $supply_order->status }}</span></h6>
     <table class="table">
         <thead>
             <tr>
@@ -16,7 +27,7 @@
                 <th>Кол-во позиций</th>
                 <th>Кол-во товара</th>
                 <th>Комментарий</th>
-                <th></th>{{-- Кнопки управления --}}
+                
             </tr>
         </thead>
         <tbody>
@@ -50,14 +61,7 @@
                           
                     </td>
 
-                    <td >
-                        {{-- Кнопка управления --}}
-                        <a href="{{ url('/admin/supply_orders/manage/'.$supply_order->id) }}">
-                            <div class="btn btn-primary">
-                                Управление
-                            </div>
-                        </a>
-                    </td>
+                    
                 </tr> 
         </tbody>
     </table>
@@ -87,13 +91,9 @@
 
                     <td>
                         {{-- Срочност --}}
-                        @if($supply_order->item->urgency == 'Не горит')
-                        <span class="badge badge-success">{{$supply_order->item->urgency}}</span>
-                        @elseif($supply_order->item->urgency == 'Горит')
-                        <span class="badge badge-warning">{{$supply_order->item->urgency}}</span>
-                        @elseif($supply_order->item->urgency == 'Очень горит')
-                        <span class="badge badge-danger">{{$supply_order->item->urgency}}</span>
-                        @endif                        
+                        
+                        {{$supply_order->item->urgency}}
+                                              
                     </td>
                                    
                 </tr> 
@@ -101,33 +101,10 @@
         </tbody>
     </table>
     <hr>
+  
    @endforeach
-        
+       
     
     {{-- Конец вывода --}}
-    <hr>
-
-    {{-- Новый заказ : кнопка --}}
-    <a href="{{ url('admin/supply_orders/new') }}">
-        <div class="btn btn-success">
-            Новый заказ
-        </div>
-    </a>
-
-    {{-- Архив : переход --}}
-    <a href="{{ url('admin/supply_orders/archive') }}">
-        <div class="btn btn-light">
-            Архив
-        </div>    
-    </a>
-    <hr>
-        
-        <div class="row">
-            {{-- Заказы для подтверждения : кнопка --}}
-            <div class="col-2">
-                <a href="{{ url('admin/supply_orders/worker') }}" class="btn btn-info">Заказы для подтверждения</a>
-            </div>           
-        </div>
     
-    
-@endsection
+    @endsection

@@ -1,7 +1,7 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    Заказы для поставщиков
+    Заказы для поставщиков (необходимо подтвердить)
 @endsection
 
 @section('content')
@@ -51,12 +51,13 @@
                     </td>
 
                     <td >
-                        {{-- Кнопка управления --}}
-                        <a href="{{ url('/admin/supply_orders/manage/'.$supply_order->id) }}">
+                        {{-- Кнопки управления --}}
+                        <a href="{{ url('/admin/supply_orders/edit/'.$supply_order->id) }}">
                             <div class="btn btn-primary">
-                                Управление
+                                Редактировать
                             </div>
                         </a>
+                        
                     </td>
                 </tr> 
         </tbody>
@@ -101,33 +102,19 @@
         </tbody>
     </table>
     <hr>
+    <a href="{{ url('/admin/supply_orders/confirm/'.$supply_order->id) }}">
+        <div class="btn btn-primary">
+                Подтвердить
+        </div>
+    </a>
+    <hr>
    @endforeach
         
     
     {{-- Конец вывода --}}
     <hr>
 
-    {{-- Новый заказ : кнопка --}}
-    <a href="{{ url('admin/supply_orders/new') }}">
-        <div class="btn btn-success">
-            Новый заказ
-        </div>
-    </a>
-
-    {{-- Архив : переход --}}
-    <a href="{{ url('admin/supply_orders/archive') }}">
-        <div class="btn btn-light">
-            Архив
-        </div>    
-    </a>
-    <hr>
-        
-        <div class="row">
-            {{-- Заказы для подтверждения : кнопка --}}
-            <div class="col-2">
-                <a href="{{ url('admin/supply_orders/worker') }}" class="btn btn-info">Заказы для подтверждения</a>
-            </div>           
-        </div>
+    
     
     
 @endsection

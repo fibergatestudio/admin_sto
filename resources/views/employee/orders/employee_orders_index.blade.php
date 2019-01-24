@@ -5,12 +5,29 @@
 @endsection
 
 @section('content')
+
+        <div class="row">
+            {{-- Новый заказ : кнопка --}}
+            <div class="col-2">
+                <a href="{{ url('employee/order/new') }}" class="btn btn-success">Новый заказ</a>
+            </div>           
+        
+            {{-- Заказы со статусом активный (подтвержденные) : кнопка --}}
+            <div class="col-2">
+                <a href="{{ url('employee/orders/active') }}" class="btn btn-info">Утвержденные заказы</a>
+            </div> 
+            {{-- Завершенные заказы : переход --}}
+            <div class="col-2">
+                <a href="{{ url('employee/orders/completed') }}" class="btn btn-info">Завершенные заказы</a>
+            </div> 
+        </div>
+        <hr>
     {{-- Выводим заказы --}}
     
     @foreach($supply_orders as $supply_order)
-    @if(Auth::user()->id == $supply_order->creator_id)
+    
     <h5><span class="badge badge-primary">Заказ {{ $supply_order->id }}</span></h5>
-    <span class="badge badge-primary">{{ $supply_order->status }}</span>
+    <h6>Статус <span class="badge badge-primary">{{ $supply_order->status }}</span></h6>
     <table class="table">
         <thead>
             <tr>
@@ -55,9 +72,9 @@
 
                     <td >
                         {{-- Кнопка управления --}}
-                        <a href="{{ url('/admin/supply_orders/manage/'.$supply_order->id) }}">
+                        <a href="{{ url('/employee/order/edit/'.$supply_order->id) }}">
                             <div class="btn btn-primary">
-                                Управление
+                                Редактировать
                             </div>
                         </a>
                     </td>
@@ -104,27 +121,10 @@
         </tbody>
     </table>
     <hr>
-   @endif 
+  
    @endforeach
        
     
     {{-- Конец вывода --}}
-    <hr>
-
-    {{-- Новый заказ : кнопка --}}
-    <a href="{{ url('admin/supply_orders/new') }}">
-        <div class="btn btn-success">
-            Новый заказ
-        </div>
-    </a>
-
-    {{-- Архив : переход --}}
-    <a href="{{ url('admin/supply_orders/archive') }}">
-        <div class="btn btn-light">
-            Архив
-        </div>
     
-    </a>
-    
-    
-@endsection
+    @endsection

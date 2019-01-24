@@ -120,6 +120,7 @@ class Supply_orders_Admin_Controller extends Controller
         /* Вносим измененный  заказ в базу */
         $edit_order = Supply_order::find($supply_order_id);        
         $edit_order->order_comment = $request->order_comment; // комментарий к заказу
+        $edit_order->ststus = 'active';
         $edit_order->save();
         
         /* Вносим измененные предметы из заказа в базу */
@@ -190,6 +191,42 @@ class Supply_orders_Admin_Controller extends Controller
 
     }
     
+    /* Заказы требующие подтверждения (статус - worker) */
+    public function supply_orders_worker_index(){
+
+        /* Получаем из базы данные обо всех рабочих заказах на поставку */
+        $supply_orders = Supply_order::where('status', 'worker')->get();
+        
+        /* Собираем дополнительные данные */
+        foreach($supply_orders as $supply_order){
+            /* Имя заказчика */
+            $supply_order->creator_name = $supply_order->get_creator_name();
+            /* Дата создания в виде ДД.ММ.ГГГГ */
+            $supply_order->date_of_creation = $supply_order->get_creation_date();
+            /* Количество позиций */
+            $supply_order->entries_count = $supply_order->get_entries_count();
+            /* Общее кол-во единиц*/
+            $supply_order->items_count = $supply_order->get_items_count();
+            /*Товар по данному заказу*/ 
+            $supply_order->items = $supply_order->get_order_items();
+                 
+        }
+             
+        /* Возвращаем представление с данными */
+        return view('admin.supply_orders.supply_orders_worker_index',
+            [
+                'supply_orders' => $supply_orders,                
+            ]);
+    }
     
+    /*Подтверждение заказа (статус изменяется на - active )*/
+    public function confirm_supply_order($supply_order_id){
+        $supply_order = Supply_order::find($supply_order_id);
+        $supply_order->status = 'active';
+        $supply_order->save();
+        
+        /* Редирект на страницу заказов */
+        return redirect('/admin/supply_orders/index');
+    }
     
 }
