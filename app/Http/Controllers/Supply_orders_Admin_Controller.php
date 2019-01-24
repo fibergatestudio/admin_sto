@@ -69,7 +69,18 @@ class Supply_orders_Admin_Controller extends Controller
         }
 
         /* Вносим в лог запись о том, что заказ создан*/
-        // ...
+        $new_order_log = new Supply_order_logs();
+        $new_order_log_entry->supply_order_id = $supply_order_id;
+        $new_order_log_entry->author_id = $author_id;
+
+        /* - Имя автора - */
+        $author = Users::find($responcible_supply_officier_id);
+        $author_name = $author->general_name;
+        /* - Номер заказа - */
+        $order = Supply_orders::find($supply_order_id);
+        $order_number = $order->id;
+
+        $new_order_log_entry->log_entry_content = 'Создан заказ № '.$order_number.'сотрудником - '.$author_name;  // дописать дату ***
 
         // ... Сделать редирект на страницу индекс с заказами
         return redirect('/admin/supply_orders/index');

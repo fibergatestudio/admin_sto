@@ -147,7 +147,7 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
     Route::get('admin/view_client/{client_id}', 'Clients_Admin_Controller@single_client_view')->name('admin_view_client')->middleware('can:admin_rights');
 
     
-    /*Добавить примечание о клиенте : страница*/
+    /* Добавить примечание о клиенте : страница */
     Route::get('/admin/clients/add_note_to_client/{client_id}', 'Clients_Admin_Controller@add_note_to_client_page');
 
         /* Добавить примечание к клиенту : POST */
