@@ -31,8 +31,11 @@ Route::get('/client/sub_assignments/{id}', 'Client_Controller@sub_assignments')-
 /*Путь к архивным нарядам клиента*/
 Route::get('/client/assignments_archive/{id}', 'Client_Controller@assignments_archive')->middleware('can:client_rights');
 
-/*Путь к мастеру*/
-Route::get('/master', 'Client_Controller@master')->middleware('can:master_rights');
+/*Путь к управлению нарядами мастером*/
+Route::get('/master/assignments', 'Client_Controller@master_assignments')->middleware('can:master_rights');
+
+/*Путь к профилям рабочих для просмотра мастером*/
+Route::get('/master/employees', 'Client_Controller@master_employees')->middleware('can:master_rights');
 
 
 /*Путь к профилям рабочих для просмотра мастером*/
