@@ -140,11 +140,13 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
     /* Добавление рабочей зоны : страница */
     Route::get('admin/workzones/add', 'Workzones_Admin_Controller@add_workzone')->middleware('can:admin_rights');
 
-        /* Добавление рабочей зоны : действие */
-        Route::post('admin/workzones/add', 'Workzones_Admin_Controller@add_workzone_post')->middleware('can:admin_rights');
-
-    /* Изменение рабочей зоны */
+       /* Изменение рабочей зоны */
     Route::get('admin/workzones/edit/{workzone_id}', 'Workzones_Admin_Controller@edit_workzone')->middleware('can:admin_rights');
+  /* Изменение рабочей зоны */
+        Route::post('/admin/workzones/edit', 'Workzones_Admin_Controller@edit_workzone_id')->middleware('can:admin_rights');
+        /* удалить рабочую зону */
+ Route::get('admin/workzones/delete/{workzone_id}', 'Workzones_Admin_Controller@delete_workzone')->middleware('can:admin_rights');
+    
 
     
 
