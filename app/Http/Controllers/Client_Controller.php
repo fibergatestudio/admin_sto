@@ -5,6 +5,7 @@ use App\Assignment;
 use App\Client;
 use Auth;
 use App\Employee;
+use App\employee_fine;
 use App\Sub_assignment;
 use App\Cars_in_service;
 
