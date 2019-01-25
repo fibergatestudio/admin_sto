@@ -36,7 +36,7 @@
 								Мои наряды
 							</span>
 							</a>
-      					</li>
+                                                </li>
 
 						
 						<li class="nav-item">
@@ -64,8 +64,13 @@
 								Мои cмены
 							</span>
 							</a>
-      					</li>
-                        
+                                                </li>
+                                                    <!-- Заказы работника -->
+                                                <li class="nav-item">
+							<a class="nav-link" href="{{ url('/employee/orders/index') }}">
+								Мои заказы
+							</a>
+                                                </li>
 
 						
 						<li class="nav-item">

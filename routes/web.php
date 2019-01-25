@@ -303,16 +303,21 @@ Route::get('/admin/supply_orders/new', 'Supply_orders_Admin_Controller@new_suppl
     Route::post('/admin/supply_orders/new', 'Supply_orders_Admin_Controller@new_supply_order_post')->middleware('can:admin_rights');
 
 /* Управление заказом : Страница */
-Route::get('/admin/supply_orders/manage/{supply_order_id}', 'Supply_orders_Admin_Controller@manage_supply_order');
+Route::get('/admin/supply_orders/manage/{supply_order_id}', 'Supply_orders_Admin_Controller@manage_supply_order')->middleware('can:admin_rights');
 
 /* Редактирование заказа : Страница */
-Route::get('/admin/supply_orders/edit/{supply_order_id}', 'Supply_orders_Admin_Controller@edit_supply_order');
+Route::get('/admin/supply_orders/edit/{supply_order_id}', 'Supply_orders_Admin_Controller@edit_supply_order')->middleware('can:admin_rights');
 
 /* Редактирование заказа : POST */
-Route::post('/admin/supply_orders/edit_post/{supply_order_id}', 'Supply_orders_Admin_Controller@edit_supply_order_post');
+Route::post('/admin/supply_orders/edit_post/{supply_order_id}', 'Supply_orders_Admin_Controller@edit_supply_order_post')->middleware('can:admin_rights');
 
+/*Заказы для подтверждения (статус - worker)*/
+Route::get('/admin/supply_orders/worker', 'Supply_orders_Admin_Controller@supply_orders_worker_index')->middleware('can:admin_rights');
 
-    /* Архивировать заказ */
+/*Подтверждение заказа (статус изменяется на - active )*/
+Route::get('/admin/supply_orders/confirm/{supply_order_id}', 'Supply_orders_Admin_Controller@confirm_supply_order')->middleware('can:admin_rights');
+   
+/* Архивировать заказ */
     Route::get('/admin/supply_orders/archive/{supply_order_id}', 'Supply_orders_Admin_Controller@archive_supply_order');
 
 /* Архив заказов */
@@ -382,6 +387,29 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
 
     /* История смен */
     // ...
+    
+/**** Заказы : работник *****/   
+    
+    /* Мои заказы */
+    Route::get('/employee/orders/index', 'Employee_Dashboard_Controller@employee_orders_index');
+    
+    /* Новый заказ : страница  */
+    Route::get('/employee/order/new', 'Employee_Dashboard_Controller@employee_order_new');
+    
+    /* Новый заказ : POST  */
+    Route::post('/employee/order/new_post', 'Employee_Dashboard_Controller@employee_order_new_post');
+    
+    /* Редакторование заказа : страница*/
+    Route::get('/employee/order/edit/{supply_order_id}', 'Employee_Dashboard_Controller@employee_order_edit');
+    
+    /* Редактирование заказа : POST*/
+     Route::post('/employee/order/edit_post/{supply_order_id}', 'Employee_Dashboard_Controller@employee_order_edit_post');
+    
+    /* Подтвержденные заказы */
+    Route::get('/employee/orders/active', 'Employee_Dashboard_Controller@employee_orders_active_index');
+    
+    /* Завершенные заказы */
+    Route::get('/employee/orders/completed', 'Employee_Dashboard_Controller@employee_orders_completed_index');
 
 /****************************************/
 /********** СНАБЖЕНЕЦ : секция **********/
