@@ -40,6 +40,9 @@ Route::get('/master/assignments', 'Client_Controller@master_assignments')->middl
 /*Путь к профилям рабочих для просмотра мастером*/
 Route::get('/master/employees', 'Client_Controller@master_employees')->middleware('can:master_rights');
 
+/*Путь к профилям рабочих для просмотра финансов сотрудника*/
+Route::get('/master/employee_finances/{id}', 'Client_Controller@employee_finances')->middleware('can:master_rights');
+
 /*Деавторизация*/
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 /*Деавторизация*/
