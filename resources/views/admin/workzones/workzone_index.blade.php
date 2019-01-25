@@ -21,15 +21,15 @@
     </a>
 
 </div>
-<div class="col">
-      {{-- Кнопка удалить --}}
+ <!--<div class="col">
+     {{-- Кнопка удалить --}}
       <a href="{{ url('admin/workzones/delete/'.$workzone->id) }}">
         <div class="btn btn-warning" style="margin-left: 10px">
             Удалить
         </div>
     </a>
 
-</div>
+</div>-->
 </div>
 </div>
 @endforeach
