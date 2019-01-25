@@ -97,6 +97,13 @@ class Client_Controller extends Controller
     {
         $employees = Employee::get();
         return view('master.employees')->with(array('employees' => $employees));
-
     }
+
+    public function employee_finances($id)
+    {
+        $employee = Employee::where('id',$id)->get();
+        $employee_fines = employee_fine::where('employee_id', $id)->get();
+        return view('master.employee_finances')->with(array('employee' => $employee[0],'employee_fines'=>$employee_fines));
+    }
+
 }
