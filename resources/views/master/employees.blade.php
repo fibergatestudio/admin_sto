@@ -7,9 +7,7 @@
         <thead>
         <tr>
             <th>Ответственный работник</th>
-            <th>Статус</th>
-            <th>Смена заработной платы</th>
-            <th>Баланс</th>
+            <th>Статус сотрудника</th>
             <th></th>
             <th></th>
         </tr>
@@ -18,20 +16,14 @@
             <tr>
                 <td>{{($employee->general_name)}} {{-- Ответственный работник --}}</td>
                 <td>{{($employee->status)}} {{--  Статус --}}</td>
-                <td>{{($employee->standard_shift_wage)}} {{-- Смена заработной платы --}}</td>
-                <td>{{($employee->balance)}} {{-- Баланс --}}</td>
                 <td>
-                    <a href="{{ url('/master/assignments/'.$employee->id) }}">
-                        <div class="btn btn-secondary">
-                            Наряды работника
+                    <a href="{{ url('/master/employee_finances/'.$employee->id) }}">
+                        <div class="btn btn-primary">
+                            Финансы сотрудника
                         </div>
                     </a>
                 </td>
-                <td></td>
             </tr>
         @endforeach
-
-
-
     </table>
 @endsection
