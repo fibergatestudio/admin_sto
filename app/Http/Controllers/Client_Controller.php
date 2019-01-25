@@ -94,13 +94,13 @@ class Client_Controller extends Controller
         return view('master.master');
     }
 
-    public function master_employees()
+    public function master_employees() //просмотр работников
     {
         $employees = Employee::get();
         return view('master.employees')->with(array('employees' => $employees));
     }
 
-    public function employee_finances($id)
+    public function employee_finances($id) //просмотр финансов работника мастером
     {
         $employee = Employee::where('id',$id)->get();
         $employee_fines = employee_fine::where('employee_id', $id)->get();
