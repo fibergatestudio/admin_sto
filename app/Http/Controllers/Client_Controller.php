@@ -39,7 +39,13 @@ class Client_Controller extends Controller
         });
 
         if(!$assignments->isEmpty()) {
-            return view('client.assignments')->with(array('assignments' => $assignments));
+            $empty = 0;
+            return view('client.assignments')->with(array('assignments' => $assignments,'empty'=>$empty));
+        }
+        else
+        {
+            $empty = 1;
+            return view('client.assignments')->with(array('empty'=>$empty));
         }
 
     }
