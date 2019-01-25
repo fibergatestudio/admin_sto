@@ -120,18 +120,21 @@ class Supply_orders_Admin_Controller extends Controller
         /* Вносим измененный  заказ в базу */
         $edit_order = Supply_order::find($supply_order_id);        
         $edit_order->order_comment = $request->order_comment; // комментарий к заказу
-        $edit_order->ststus = 'active';
+        $edit_order->status = 'active';
         $edit_order->save();
         
         /* Вносим измененные предметы из заказа в базу */
         $items = Supply_order_item::where('supply_order_id', $supply_order_id)->get();
         $i = 1;
         foreach ($items as $item){
+            $item_input_name = 'item'.$i;
             $item_count_name = 'count'.$i;
             $item_urgency_name = 'urgency'.$i; 
+            $item_name = $request->$item_input_name;
             $item_count = $request->$item_count_name; 
             $item_urgency = $request->$item_urgency_name; 
             
+            $item->item = $item_name;
             $item->number = $item_count;
             $item->urgency = $item_urgency;
             
