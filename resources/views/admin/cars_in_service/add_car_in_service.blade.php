@@ -76,14 +76,14 @@
                     {{-- Название машины --}}
                     <div class="form-group col-md-6" >
                         <label>Название машины</label>
-                        <input type="text" name="car_general_name" class="form-control">
+                        <input type="text" name="car_general_name" class="form-control" required>
                     </div>
 
                     {{-- Модель и марка --}}
                     {{-- Марка : от неё будут подтягивать подсказки . Используется Typeahead --}}
                     <div class="form-group col-md-6">
                         <label>Марка машины</label>
-                        <input type="text" name="car_brand" id="carBrand" class="form-control typeahead">
+                        <input type="text" name="car_brand" id="carBrand" class="form-control typeahead" required>
                     </div>
 
                 </div>
@@ -102,7 +102,7 @@
                     {{-- ... --}}
                     <div class="form-group col-md-6">
                         <label>Модель машины</label>
-                        <select id="carModel" name="car_model" class="form-control">
+                        <select id="carModel" name="car_model" class="form-control" required>
                         </select>
                     </div>
 

@@ -21,6 +21,7 @@ class AddNewFieldsToEmployees extends Migration
             $table->string('reserve_phone')->nullable();
             $table->string('hour_from')->nullable();
             $table->string('hour_to')->nullable();
+            $table->string('telegram_id')->nullable();
         });
     }
 
@@ -39,6 +40,7 @@ class AddNewFieldsToEmployees extends Migration
             $table->dropColumn('reserve_phone');
             $table->dropColumn('hour_from');
             $table->dropColumn('hour_to');
+            $table->dropColumn('telegram_id');
         });
     }
 }

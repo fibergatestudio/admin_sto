@@ -29,4 +29,4 @@ class ChangeUrgencyToStringSupplyOrdersTable extends Migration
             $table->dropColumn('urgency');
         });
     }
-}
+} 

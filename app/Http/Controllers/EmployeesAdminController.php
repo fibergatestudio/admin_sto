@@ -103,6 +103,7 @@ class EmployeesAdminController extends Controller
         $reserve_phone = $request->reserve_phone;
         $hour_from = $request->hour_from ;
         $hour_to = $request->hour_to;
+        $telegram_id = $request->telegram_id;
 
         $employee = Employee::find($employee_id);
         $employee->date_join = $date_join;
@@ -112,6 +113,7 @@ class EmployeesAdminController extends Controller
         $employee->reserve_phone = $reserve_phone;
         $employee->hour_from = $hour_from;
         $employee->hour_to = $hour_to;
+        $employee->telegram_id = $telegram_id;
         $employee->save();
 
         if(!empty($request->document)){
