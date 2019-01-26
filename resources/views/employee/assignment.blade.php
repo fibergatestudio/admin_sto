@@ -22,7 +22,7 @@
         <div class="col-md-2">
             <a href="{{ url('/employee/manage_assignment/'.$assignment->id.'/assignment_uncomplete') }}">
                 <button onClick="fnFunction(arg)" type="button" class="btn btn-warning">
-                    Невыполнить
+                    Не выполнить
                 </button>
             </a>
         </div>
