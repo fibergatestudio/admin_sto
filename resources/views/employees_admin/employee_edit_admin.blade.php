@@ -12,7 +12,8 @@
                 <th>Дата принятия</th>
                 <th>ФИО</th>
                 <th>Номер Паспорта</th>
-                <th>ИН</th>
+                <th>Баланс</th>
+                <th>Телефон</th>
                 <th>Резервный телефон</th>
                 <th>Работает С</th>
                 <th>По</th>
@@ -34,7 +35,10 @@
                 {{ $employee_edit->passport }}
             </td>
             <td>
-                {{ $employee_edit->id_code }}
+                {{ $employee_edit->balance }}
+            </td>
+            <td>
+                {{ $employee_edit->phone }}
             </td>
             <td>
                 {{ $employee_edit->reserve_phone }}
@@ -62,10 +66,10 @@
                 <input type="hidden" name="id" value="{{ $employee->id }}">
 
                 {{-- Прикрепить скан паспорта --}}
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label>Скан паспорта</label>
                     <input type="file" name="scan_doc">
-                </div>
+                </div> -->
 
                 <div class="form-row">
 
@@ -90,8 +94,8 @@
                     </div>
 
                     <div class="form-group col-md-6">
-                        <label>Идентификационный код</label>
-                        <input type="text" name="id_code" value="{{ $employee_edit->id_code }}" class="form-control">
+                        <label>Телефон</label>
+                        <input type="text" name="phone" value="{{ $employee_edit->phone }}" class="form-control">
                     </div>
 
                 </div>

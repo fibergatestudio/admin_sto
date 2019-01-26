@@ -99,8 +99,8 @@ class EmployeesAdminController extends Controller
         $date_join = $request->date_join;
         $fio = $request->fio;
         $passport = $request->passport;
-        $id_code = $request->id_code;
         $reserve_phone = $request->reserve_phone;
+        $phone = $request->phone;
         $hour_from = $request->hour_from ;
         $hour_to = $request->hour_to;
         $telegram_id = $request->telegram_id;
@@ -109,8 +109,8 @@ class EmployeesAdminController extends Controller
         $employee->date_join = $date_join;
         $employee->fio = $fio;
         $employee->passport =  $passport;
-        $employee->id_code = $id_code;
         $employee->reserve_phone = $reserve_phone;
+        $employee->phone = $phone;
         $employee->hour_from = $hour_from;
         $employee->hour_to = $hour_to;
         $employee->telegram_id = $telegram_id;
