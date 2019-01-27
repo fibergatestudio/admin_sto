@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Schema;
 
 use Illuminate\Support\Facades\Gate;
 
-
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Auth;
 
 class AppServiceProvider extends ServiceProvider
 {

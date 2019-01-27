@@ -12,6 +12,8 @@ use App\Shift;
 use App\Assignments_income;
 use App\Assignments_expense;
 use App\Assignments_completed_works;
+use App\Coffee_token_log;
+use App\Employee;
 
 class Employee_Dashboard_Controller extends Controller
 {
@@ -19,6 +21,46 @@ class Employee_Dashboard_Controller extends Controller
     public function index(){
         return view('employee.employee_dashboard_index');
     }
+    /***** МОЙ ПРОФИЛЬ *****/
+
+    public function employee_profile(){
+
+        $user = Auth::user();
+        $employee_user_id = $user->id;
+        $employee = DB::table('employees')->where('user_id', $employee_user_id)->first();
+        $employee_id = $employee->id;
+
+        $employee_edit = DB::table('employees')->where('id', $employee_id)->first();
+
+        return view('employee.employee_profile',
+        [
+            'employee_edit' => $employee_edit,
+            'employee' => $employee_id
+        ]);
+
+        // View::share('employee_edit', $employee_edit);
+    }
+    /***** ИСТОРИЯ ФИНАНСОВ *****/
+
+       public function finance_history(){
+
+        $user = Auth::user();
+        $employee_user_id = $user->id;
+        $employee = DB::table('employees')->where('user_id', $employee_user_id)->first();
+        $employee_id = $employee->id;
+
+
+        $employee_fines = DB::table('employee_fines')->where('employee_id', '=', $employee_id)->get();
+
+        $token_logs = Coffee_token_log::where('employee_id', $employee_id)->get();
+
+        return view('employee.finance_history',
+        [
+            'employee_fines' => $employee_fines,
+            'token_logs' => $token_logs
+        ]);
+    }
+
 
     /***** НАРЯДЫ *****/
 

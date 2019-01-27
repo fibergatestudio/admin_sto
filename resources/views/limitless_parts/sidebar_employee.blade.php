@@ -11,7 +11,7 @@
                                     {{ Auth::user()->general_name }}
                                 </div>
 								<div class="font-size-xs opacity-50">
-									
+									Баланс:
 								</div>
 							</div>
 
@@ -29,6 +29,16 @@
 						<!-- Main -->
 						<li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs">Меню</div> <i class="icon-menu" title="Main"></i></li>
 					
+
+						<li class="nav-item">
+							<a class="nav-link" href="{{ url('employee/employee_profile') }}">
+							<i class="icon-person"></i>
+							<span>
+								Мой профиль
+							</span>
+							</a>
+      					</li>
+
 						<li class="nav-item">
 							<a class="nav-link" href="{{ url('employee/my_assignments') }}">
 							<i class="icon-list"></i>
@@ -62,6 +72,15 @@
 							<i class="icon-book"></i>
 							<span>
 								Мои cмены
+							</span>
+							</a>
+      					</li>
+
+						<li class="nav-item">
+							<a class="nav-link" href="{{ url('employee/finance_history') }}">
+							<i class="icon-history"></i>
+							<span>
+								История финансов
 							</span>
 							</a>
       					</li>

@@ -327,6 +327,13 @@ Route::get('/admin/supply_orders/archive', 'Supply_orders_Admin_Controller@archi
 /****************************************/
 Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
 
+/**** Профиль ****/
+    /* Мой профиль */
+    Route::get('/employee/employee_profile', 'Employee_Dashboard_Controller@employee_profile');
+
+/**** История Финансов ****/
+    /* Мой профиль */
+    Route::get('/employee/finance_history', 'Employee_Dashboard_Controller@finance_history');
 
 /**** Наряды : работник ****/
     /* Мои наряды */

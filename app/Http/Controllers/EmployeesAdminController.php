@@ -125,6 +125,7 @@ class EmployeesAdminController extends Controller
         return back();
     }
     
+    
     /* Общая страница финансов по работнику */
     public function employee_finances($employee_id){
         $employee = Employee::find($employee_id);
