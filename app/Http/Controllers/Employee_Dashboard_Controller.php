@@ -15,6 +15,8 @@ use App\Assignments_completed_works;
 use App\Coffee_token_log;
 use App\Employee;
 
+use Telegram\Bot\Laravel\Facades\Telegram;
+
 class Employee_Dashboard_Controller extends Controller
 {
     /* Главная страница для ЛК сотрудника */
@@ -206,7 +208,20 @@ class Employee_Dashboard_Controller extends Controller
         $new_income_entry->description = $request->description; /* Описание для захода */
         $new_income_entry->save();
 
-        
+
+        $text = "У вас новый заход денег!\n"
+        . "<b>Сумма: </b>\n"
+        . "$new_income_entry->amount\n"
+        . "<b>Основание: </b>\n"
+        . " $new_income_entry->basis\n"
+        . "<b>Описание: </b>\n"
+        .  $new_income_entry->description;
+
+        Telegram::sendMessage([
+            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+            'parse_mode' => 'HTML',
+            'text' => $text
+        ]);
 
         /* Возвращаемся обратно на страницу наряда */
         return back();
@@ -223,6 +238,22 @@ class Employee_Dashboard_Controller extends Controller
         $new_expense_entry->save();
 
 
+
+        $text = "У вас новый расход денег!\n"
+        . "<b>Сумма: </b>\n"
+        . "$new_expense_entry->amount\n"
+        . "<b>Основание: </b>\n"
+        . "$new_expense_entry->basis\n"
+        . "<b>Описание: </b>\n"
+        .  $new_expense_entry->description;
+
+        Telegram::sendMessage([
+            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+            'parse_mode' => 'HTML',
+            'text' => $text
+        ]);
+
+
         /* Возвращаемся обратно на страницу наряда */
         return back();
     }
@@ -231,10 +262,22 @@ class Employee_Dashboard_Controller extends Controller
         /* Создаём новое вхождение по выполненым работам и вносим туда информацию */
         $new_works_entry = new Assignments_completed_works();
         $new_works_entry->assignment_id = $request->assignment_id; /* Идентификатор наряда */
-        $new_works_entry->basis = $request->basis; /* Основание для расхода денег */
+        $new_works_entry->basis = $request->basis; /* Основание для работы */
         $new_works_entry->description = $request->description; /* Описание для расхода */
         $new_works_entry->save();
 
+
+        $text = "У вас выполнения работа!\n"
+        . "<b>Основание: </b>\n"
+        . "$new_works_entry->basis\n"
+        . "<b>Описание: </b>\n"
+        .  $new_works_entry->description;
+
+        Telegram::sendMessage([
+            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+            'parse_mode' => 'HTML',
+            'text' => $text
+        ]);
 
         /* Возвращаемся обратно на страницу наряда */
         return back();
