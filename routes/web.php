@@ -35,6 +35,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 /********** АДМИНИСТРАТОР: секция *******/
 /****************************************/
 
+
 /* Общая доска */
 Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('dashboard_admin')->middleware('can:admin_rights');
 
@@ -209,6 +210,8 @@ Route::get('/admin/assignments_index', 'Assignments_Admin_Controller@assignments
 
     /* Просмотр наряда : страница */
     Route::get('admin/assignments/view/{assignment_id}', 'Assignments_Admin_Controller@view_assignment');
+    /* Обновление (перестановка) елементов таблицы */
+    Route::post('admin/assignments/view/{assignment_id}', 'Assignments_Admin_Controller@updateOrder');
 
         /* Управление зонального наряда */
         Route::get('admin/assignments/view/{sub_assignment_id}/management', 'Assignments_Admin_Controller@assignment_management');

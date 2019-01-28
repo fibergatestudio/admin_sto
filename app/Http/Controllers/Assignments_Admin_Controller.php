@@ -135,8 +135,10 @@ class Assignments_Admin_Controller extends Controller
             DB::table('sub_assignments')
             ->where('assignment_id', $assignment_id)
             ->join('workzones', 'sub_assignments.workzone_id', '=', 'workzones.id')
+            ->orderBy('order','ASC')
             ->select('sub_assignments.*', 'workzones.general_name')
             ->get();
+
 
         /* Собираем дополнительные данные по зональным нарядам */
         foreach($sub_assignments as $sub_assignment){
@@ -186,6 +188,26 @@ class Assignments_Admin_Controller extends Controller
                 'assignment_work' => $assignment_work           
             ]);
     }
+
+
+    /* Обновления позации элемента таблицы */
+    public function updateOrder(Request $request){
+
+        $sub_assignments = Sub_assignment::all();
+
+        foreach ($sub_assignments as $sub_assignment) {
+            $sub_assignment->timestamps = false; // To disable update_at field updation
+            $id = $sub_assignment->id;
+
+            foreach ($request->order as $order) {
+                if ($order['id'] == $id) {
+                    $sub_assignment->update(['order' => $order['position']]);
+                }
+            }
+        }
+        return response('Update Successfully.', 200);
+    }
+
 
     /* Изменение названия наряда */
     public function change_assignment_name(Request $request){

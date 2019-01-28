@@ -88,24 +88,30 @@
 
     {{-- Зональные наряды --}}
     <h3>Текущие зональные наряды:</h3>
-    <table class="table">
+    <table id="table" class="table">
       <thead>
         <tr>
+          <th>#</th>
           <th>Название</th>
           <th>Рабочая зона</th>
           <th>Ответственный сотрудник </th>
           <th></th>{{-- Кнопка просмотр --}}
         </tr>
       </thead>
-      <tbody>
+      <tbody id="tablecontents">
         @foreach($sub_assignments as $sub_assignment)
-          <tr>
+          <tr class="row1" data-id="{{ $sub_assignment->id }}">
+            <td>
+                <div style="color:rgb(124,77,255); padding-left: 10px; float: left; font-size: 20px; cursor: pointer;" title="change display order">
+                <i class="fa fa-ellipsis-v"></i>
+                <i class="fa fa-ellipsis-v"></i>
+                </div>
+            </td>
             <td>{{ $sub_assignment->name }} {{-- Название наряда --}}</td>
             <td>{{ $sub_assignment->workzone_name }} {{-- Название рабочей зоны --}}</td>
             <td>{{ $sub_assignment->responsible_employee }} {{-- Название ответственного сотрудника --}}</td>
 
             {{-- url('admin/assignments/view/'.$assignment->id.'/management') --}}
-
             <td>
               {{-- Кнопка управления --}}
               <a href="{{ url('admin/assignments/view/'.$sub_assignment->id.'/management') }}">
@@ -125,6 +131,7 @@
             Новый зональный наряд
         </div>
     </a>
+    <button class="btn btn-default" onclick="window.location.reload()"><b>Обновить страницу (Для теста)</b></button>
     
 
     {{-- История --}}
@@ -535,6 +542,52 @@
   margin-bottom: 15px;
 }
 </style>
+
+<!-- Скрипты для таблиц -->
+ <script type="text/javascript">
+ $(function () {
+   $("#table").DataTable();
+
+   $( "#tablecontents" ).sortable({
+     items: "tr",
+     cursor: 'move',
+     opacity: 0.6,
+     update: function() {
+         sendOrderToServer();
+     }
+   });
+
+   function sendOrderToServer() {
+
+     var order = [];
+     $('tr.row1').each(function(index,element) {
+       order.push({
+         id: $(this).attr('data-id'),
+         position: index+1
+       });
+     });
+
+     $.ajax({
+       type: "POST", 
+       dataType: "json", 
+       url: "{{ url('/admin/assignments/view/'.$assignment->id) }}",
+       data: {
+         order:order,
+         _token: '{{csrf_token()}}'
+       },
+       success: function(response) {
+           if (response.status == "success") {
+             console.log(response);
+           } else {
+             console.log(response);
+           }
+       }
+     });
+
+   }
+ });
+
+</script>
 
 <script>
 

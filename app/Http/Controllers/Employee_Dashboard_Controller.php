@@ -40,7 +40,7 @@ class Employee_Dashboard_Controller extends Controller
 
         // View::share('employee_edit', $employee_edit);
     }
-    /***** ИСТОРИЯ ФИНАНСОВ *****/
+    /***** ИСТОРИЯ ФИНАНСОВ *****/ 
 
        public function finance_history(){
 

@@ -27,6 +27,13 @@
 	<script src="{{ url('global_assets/js/plugins/loaders/blockui.min.js') }}"></script>
 	<!-- /core JS files -->
 
+
+	<script src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
+	<script type="text/javascript" src="//code.jquery.com/ui/1.12.1/jquery-ui.js" ></script>
+	<script type="text/javascript" src="//cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script>
+
+
+
 	<!-- Theme JS files -->
 	<script src="{{ url('global_assets/js/plugins/visualization/d3/d3.min.js') }}"></script>
 	<script src="{{ url('global_assets/js/plugins/visualization/d3/d3_tooltip.js') }}"></script>

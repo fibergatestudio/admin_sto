@@ -13,6 +13,7 @@ class AddUrgencyToSupplyOrdersTable extends Migration
      */
     public function up()
     {
+        /* Проблема, нужна проверка */
         Schema::table('supply_orders', function (Blueprint $table) {
             $table->tinyInteger('urgency')->default(1);
         });
@@ -25,6 +26,7 @@ class AddUrgencyToSupplyOrdersTable extends Migration
      */
     public function down()
     {
+        /* Проблема, нужна проверка */
         Schema::table('supply_orders', function (Blueprint $table) {
             $table->dropColumn('urgency');
         });
