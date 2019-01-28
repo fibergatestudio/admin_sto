@@ -11,7 +11,8 @@
                                     {{ Auth::user()->general_name }}
                                 </div>
 								<div class="font-size-xs opacity-50">
-									Баланс:
+								<!-- Вывод баланса аккаунта -->
+									Баланс: {{ Auth::user()->getBalance() }}
 								</div>
 							</div>
 

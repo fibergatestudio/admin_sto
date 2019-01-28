@@ -6,6 +6,8 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+use App\Employee;
+
 class User extends Authenticatable
 {
     use Notifiable;
@@ -56,6 +58,19 @@ class User extends Authenticatable
         } else{
             return false;
         }
+    }
+
+    /* Получить баланс пользователя */
+    public function getBalance(){
+        /* Проверяем, является ли пользователь сотрудником - если нет, то возвращаем N/A */
+        if(!$this->isEmployee()){
+            return 'N/A';
+        }
+        
+        /* Получаем employee по user.id */
+        $employee_data = Employee::where('user_id', $this->id)->first();
+        return $employee_data->balance;
+
     }
 
 }
