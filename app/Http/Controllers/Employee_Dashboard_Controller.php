@@ -357,11 +357,13 @@ class Employee_Dashboard_Controller extends Controller
         $items = Supply_order_item::where('supply_order_id', $supply_order_id)->get();
         $i = 1;
         foreach ($items as $item){
+            $item_input_name = 'item'.$i;
             $item_count_name = 'count'.$i;
             $item_urgency_name = 'urgency'.$i; 
             $item_count = $request->$item_count_name; 
             $item_urgency = $request->$item_urgency_name; 
             
+            $item->item = $item_name;
             $item->number = $item_count;
             $item->urgency = $item_urgency;
             
