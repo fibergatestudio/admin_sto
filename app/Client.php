@@ -8,6 +8,7 @@ use App\Cars_in_service;
 
 class Client extends Model
 {
+    protected $table = "clients";
     /* Получить клиента по машине */
     public static function get_client_by_car_id($car_id){
         
