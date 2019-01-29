@@ -267,7 +267,7 @@ class Employee_Dashboard_Controller extends Controller
         $new_works_entry->save();
 
 
-        $text = "У вас выполнения работа!\n"
+        $text = "У вас выполненая работа!\n"
         . "<b>Основание: </b>\n"
         . "$new_works_entry->basis\n"
         . "<b>Описание: </b>\n"
