@@ -1,6 +1,6 @@
 @extends('layouts.limitless')
 @section('page_name')
-    Сторінка мастера
+    Страница мастера
 @endsection
 @section('content')
 @endsection
