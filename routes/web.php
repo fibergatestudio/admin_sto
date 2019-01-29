@@ -19,15 +19,33 @@ Route::get('/', function () {
 /* Стандартная авторизация ларавела */
 Auth::routes();
 
-
 /*Путь к клиенту*/
 Route::get('/client', 'Client_Controller@client')->middleware('can:client_rights');
+
+/*Путь к нарядам клиента*/
+Route::get('/client/assignments/{id}', 'Client_Controller@assignments')->middleware('can:client_rights');
+
+/*Путь к зональным нарядам клиента*/
+Route::get('/client/sub_assignments/{id}', 'Client_Controller@sub_assignments')->middleware('can:client_rights');
+
+/*Путь к архивным нарядам клиента*/
+Route::get('/client/assignments_archive/{id}', 'Client_Controller@assignments_archive')->middleware('can:client_rights');
+
 /*Путь к мастеру*/
 Route::get('/master', 'Client_Controller@master')->middleware('can:master_rights');
-/*Деавторизация*/
+
+/*Путь к управлению нарядами мастером*/
+Route::get('/master/assignments', 'Client_Controller@master_assignments')->middleware('can:master_rights');
+
+/*Путь к профилям рабочих для просмотра мастером*/
+Route::get('/master/employees', 'Client_Controller@master_employees')->middleware('can:master_rights');
+
+/*Путь к профилям рабочих для просмотра финансов сотрудника*/
+Route::get('/master/employee_finances/{id}', 'Client_Controller@employee_finances')->middleware('can:master_rights');
+
 /*Деавторизация*/
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
-
+/*Деавторизация*/
 /* Путь с редиректами по ролям */
 Route::get('/home', 'HomeController@index')->name('home');
 

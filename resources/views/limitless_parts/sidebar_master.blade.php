@@ -6,7 +6,7 @@
 		<li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs">Меню</div> <i class="icon-menu" title="Main"></i></li>
 
 		<li class="nav-item">
-			<a class="nav-link" href="{{ url('/assignments ') }}">
+			<a class="nav-link" href="{{ url('master/assignments ') }}">
 				<i class="icon-list"></i>
 				<span>
 								Управление нарядами
@@ -15,7 +15,7 @@
 		</li>
 
 		<li class="nav-item">
-			<a class="nav-link" href="{{ url('/employees') }}">
+			<a class="nav-link" href="{{ url('master/employees') }}">
 				<i class="icon-list"></i>
 				<span>
 								Просмотр профилей
