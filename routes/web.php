@@ -37,6 +37,10 @@ Route::get('/master', 'Client_Controller@master')->middleware('can:master_rights
 /*Путь к управлению нарядами мастером*/
 Route::get('/master/assignments', 'Client_Controller@master_assignments')->middleware('can:master_rights');
 
+
+/*Путь к  наряду на странице мастера*/
+Route::get('/master/assignments/view/{id}', 'Client_Controller@master_view_assignment')->middleware('can:master_rights');
+
 /*Путь к профилям рабочих для просмотра мастером*/
 Route::get('/master/employees', 'Client_Controller@master_employees')->middleware('can:master_rights');
 
