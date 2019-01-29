@@ -46,7 +46,7 @@
         </thead>
 
         <tbody>
-        {{-- Непосредственно вывод даныых --}}
+        {{-- Непосредственно вывод данных --}}
             @foreach($car_notes as $car_note)
                 <tr>
                     {{-- Текст примечания --}}
@@ -56,6 +56,11 @@
                     <td>{{ $car_note->author_name }}</td>
 
                     {{-- Кнопки управления --}}
+                    <td>
+                        <a href="{{ url('admin/cars_in_service/edit_note_to_car/'.$car_note->id) }}">                            
+                                Редактировать            
+                        </a>
+                    </td>
                     <td>
                         <a href="{{ url('admin/cars_in_service/delete_note/'.$car_note->id ) }}">
                             <div class="btn btn-danger">
