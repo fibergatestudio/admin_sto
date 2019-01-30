@@ -70,6 +70,16 @@ Route::get('/home', 'HomeController@index')->name('home');
 /* Общая доска */
 Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('dashboard_admin')->middleware('can:admin_rights');
 
+
+/***** Записи *****/
+
+    /* Страница записей */
+    Route::get('/records', 'RecordsController@records_index')->middleware('can:admin_rights');
+        /* Добавить запись */
+        Route::post('/add_record', 'RecordsController@add_record')->middleware('can:admin_rights');
+        /* Подтвердить запись */
+        Route::get('/complete_record/{record_id}', 'RecordsController@complete_record')->middleware('can:admin_rights');
+
 /***** Работа с клиентами *****/
 
     /* Работа с заявками, зашедшими с формы */

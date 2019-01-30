@@ -29,6 +29,17 @@
 						<li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs">Меню</div> <i class="icon-menu" title="Main"></i></li>
 					
 
+						<li class="nav-item">
+							<a href="{{ url('records') }}" class="nav-link">
+
+								<i class="icon-grid2"></i>
+								<span>
+									Записи
+								</span>
+							</a>
+						</li>
+
+
                         <li class="nav-item">
 							<a href="{{ url('view_employees') }}" class="nav-link {{ request()->is('view_employees') ? 'active' : ''}}">
 
