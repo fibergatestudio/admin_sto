@@ -8,8 +8,11 @@
 
 
 <div class="form-row">
-        <div class="form-group col-md-6">
-            <b>Последние штрафы:</b>
+    <div class="card card-outline-secondary col-md-6">
+        <div class="form-group">
+            <div class="card-header">
+                <h3 class="mb-0">Последние штрафы:</h3>
+            </div>
             <table class="table">
                 <thead>
                     <tr>
@@ -37,8 +40,12 @@
                 @endforeach
             </table>
         </div>
-        <div class="form-group col-md-6">
-            <b>Жетоны:</b>
+    </div>
+    <div class="card card-outline-secondary col-md-6">
+        <div class="form-group">
+            <div class="card-header">
+                <h3 class="mb-0">Жетоны:</h3>
+            </div>
             <table class="table">
                 <thead>
                     <tr>
@@ -62,7 +69,41 @@
                 @endforeach
             </table>
         </div>
+        </div>
     </div>
+<div class="form-row">
+    <div class="card card-outline-secondary col-md-6">
+        <div class="form-group">
+            <div class="card-header">
+                <h3 class="mb-0">Выплаты:</h3>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Дата</th>
+                        <th>Сумма</th>
+                        <th>Статус</th>
+                        <th>Основание</th>
+                    </tr>
+                </thead>
+                <tr>
+                    <td>
+
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
 
 
 @endsection

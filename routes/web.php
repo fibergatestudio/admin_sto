@@ -94,11 +94,17 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
     /* Страница начислений по сотруднику */
     Route::get('/supervisor/employee_finances/credit/{employee_id}', 'EmployeesAdminController@employee_credit_page')->middleware('can:admin_rights');
 
+        /* Страница выплат по сотруднику (to do)*/
+        Route::get('/supervisor/employee_finances/payout/{employee_id}', 'EmployeesAdminController@payout_page')->middleware('can:admin_rights');
+
     /* Страница начислений по сотруднику /POST */
     Route::post('/supervisor/employee_finances/credit', 'EmployeesAdminController@employee_credit_page_post')->middleware('can:admin_rights');
 
         /* Отображение истории начислений*/
         Route::get('/supervisor/employee_finances/credit', 'EmployeesAdminController@index')->middleware('can:admin_rights');
+
+        /* Применение изменения в балансе (начисление) */
+        Route::post('/supervisor/employee_finances/credit/{employee_id}/add_balance', 'EmployeesAdminController@add_balance')->middleware('can:admin_rights');
 
 /* Страница штрафов сотрудника */
     Route::get('/supervisor/employee_fines/{employee_id}', 'EmployeesAdminController@view_employee_fines')->name('employee_fines')->middleware('can:admin_rights');

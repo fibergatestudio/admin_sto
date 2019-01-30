@@ -221,6 +221,49 @@ class EmployeesAdminController extends Controller
         return response()->json(['result'=>'Начисления сотруднику произведены']);
     }
 
+    public function add_balance(request $request){
+
+        $employee_id = $request->employee_id;
+        $employee = Employee::find($employee_id);
+
+        $add_sum = $request->balance;
+        $balance = $employee->balance;
+
+        $new_balance = $balance + $add_sum;
+
+        DB::table('employees')
+            ->where('id', '=', $employee_id)
+            ->update(['balance' => $new_balance]);
+
+        //$new_balance->save();
+
+        /* Оповещения для телеграма */
+        $text = "У вас новое начисление!\n"
+        . "<b>Размер начисления: </b>\n"
+        . "$add_sum\n"
+        . "<b>Новый баланс: </b>\n"
+        . "$new_balance";
+
+       Telegram::sendMessage([
+           'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+           'parse_mode' => 'HTML',
+           'text' => $text
+       ]);
+        
+        /* Возвращаемся на страницу */
+
+        return back();
+    }
+
+    public function payout_page(){
+        // $employee_id = $request->employee_id;
+        // $employee = Employee::find($employee_id);
+
+
+        return view('employees_admin.payout_page');
+
+    }
+
     /* История начислений */
     public function index() {
         $employee_balances = Employee::where('employee_balances',1)->orderBy('employee_id','balance')->take(10)->get();

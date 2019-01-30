@@ -71,7 +71,7 @@
                 <span class="anchor" id="formUserEdit"></span>
                 <div class="card card-outline-secondary">
                     <div class="card-header">
-                        <h3 class="mb-0">Форма Записи</h3>
+                        <h3 class="mb-0">Форма Записи (тест)</h3>
                     </div>
                     <div class="card-body">
                         <form class="form" role="form" autocomplete="off">

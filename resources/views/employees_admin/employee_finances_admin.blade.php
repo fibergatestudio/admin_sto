@@ -31,6 +31,13 @@
             Начисления
         </div>
     </a>
+    {{-- Выплата : Кнопка --}}
+    <a href="{{ url('/supervisor/employee_finances/payout/'.$employee->id) }}">
+        <div class="btn btn-warning">
+            Выплата
+        </div>
+    </a>
+
     
     {{-- Штрафы : Кнопка --}}
     <a href="{{ url('/supervisor/employee_fines/'.$employee->id ) }}">
