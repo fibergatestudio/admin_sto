@@ -221,10 +221,12 @@ class EmployeesAdminController extends Controller
         return response()->json(['result'=>'Начисления сотруднику произведены']);
     }
 
+    /* Функция начисления сотруднику */
     public function add_balance(request $request){
 
         $employee_id = $request->employee_id;
         $employee = Employee::find($employee_id);
+        /* Получаем employee id */
 
         $add_sum = $request->balance;
         $balance = $employee->balance;
@@ -235,7 +237,6 @@ class EmployeesAdminController extends Controller
             ->where('id', '=', $employee_id)
             ->update(['balance' => $new_balance]);
 
-        //$new_balance->save();
 
         /* Оповещения для телеграма */
         $text = "У вас новое начисление!\n"
@@ -255,13 +256,49 @@ class EmployeesAdminController extends Controller
         return back();
     }
 
-    public function payout_page(){
-        // $employee_id = $request->employee_id;
-        // $employee = Employee::find($employee_id);
+    /*
+    ********** Блок выплат(payout) **********
+    */
+    /* Страница выплаты */
+    public function employee_payout_page($employee_id){
+
+        $employee = Employee::find($employee_id);
+
+        return view('employees_admin.employee_payout_page', ['employee' => $employee]);
+    }
+
+    public function employee_payout(Request $request){
+
+        $employee_id = $request->employee_id;
+        $employee = Employee::find($employee_id);
+        /* Получаем employee id */
+
+        $add_payout = $request->payout_balance;
+        $balance = $employee->balance;
+
+        $new_balance = $balance - $add_payout;
+
+        DB::table('employees')
+            ->where('id', '=', $employee_id)
+            ->update(['balance' => $new_balance]);
 
 
-        return view('employees_admin.payout_page');
+        /* Оповещения для телеграма */
+        $text = "У вас новая выплата!\n"
+        . "<b>Размер выплаты: </b>\n"
+        . "$add_payout\n"
+        . "<b>Остаток(после выплаты): </b>\n"
+        . "$new_balance";
 
+       Telegram::sendMessage([
+           'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+           'parse_mode' => 'HTML',
+           'text' => $text
+       ]);
+        
+        /* Возвращаемся на страницу */
+
+        return back();
     }
 
     /* История начислений */

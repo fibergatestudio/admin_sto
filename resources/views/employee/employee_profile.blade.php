@@ -5,6 +5,7 @@
 @endsection
 
 @section('content')
+{{-- Отображения данных текущего профиля --}}
 <div class="content py-5  bg-light">
     <div class="container">
         <div class="row">

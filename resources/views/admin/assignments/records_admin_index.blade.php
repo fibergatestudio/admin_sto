@@ -18,6 +18,7 @@
                 <th>Номер машины</th>
                 <th>Дата записи</th>
                 <th>Телефон</th>
+                <th>Время записи</th>
                 <th></th>{{-- Кнопки управления --}}
             </tr>
         </thead>
@@ -25,7 +26,11 @@
         @foreach($records as $record)
         <tr>
             <td>
-            {{ $record->status }}<br>
+                @if($record->status == 'confirmed')
+                <b class="badge bg-success" type="text">{{ $record->status }}</b><br>
+                @else
+                <b class="badge bg-warning" type="text">{{ $record->status }}</b><br>
+                @endif
             </td>
             <td>
             {{ $record->name }}<br>
@@ -49,17 +54,31 @@
             {{ $record->phone }}<br>
             </td>
             <td>
-            {{-- Кнопка подтверждения записи --}}
-            <a href="{{ url('/complete_record/'.$record->id) }}">
-                <div class="btn btn-primary">
-                    Подтвердить
-                </div>
-            </a>
+                @if($record->status == 'unconfirmed')
+                <form action="{{ url('/complete_record/'.$record->id) }}" method="POST">
+                @csrf
+                    <select class="dropdown" style='width:60px;' name="confirmed_time" onchange='return timeSchedvalue(this.value)'>
+                    <?php
+                        $time = '7:30';
+                        for ($i = 0; $i <= 24; $i++)
+                        {
+                            $next = strtotime('+30mins', strtotime($time)); // +30мин
+                            $time = date('G:i', $next); 
+                            echo "<option name=\"confirmed_time\" value=\"$time\">$time</option>";
+                        }
+                    ?>
+                    <input type="hidden" name="record_id" value="{{ $record->id }}">
+                    <input type="submit" value="Подтвердить" class="btn btn-primary"/>
+                </form>
+                @else
+                    {{ $record->confirmed_time }}
+                @endif
             </td>
         </tr>
         @endforeach
         </tbody>
     </table>
+</select> 
 
 {{-- Форма добавления записи --}}
 <form action="{{ url('/add_record') }}" method="POST">

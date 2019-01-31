@@ -18,7 +18,7 @@ class Cars_Admin_Controller extends Controller
             DB::table('car_model_list')
                 ->get();
 
-        $car_models =  DB::table('car_model_list')->paginate(20); /* Пагинация 20 записей на страницу */
+        $car_models =  DB::table('car_model_list')->orderBy('general_name','ASC')->paginate(20); /* Пагинация 20 записей на страницу */
 
         // Выводим
         return view('admin.cars.cars_index', ['car_models' => $car_models]);

@@ -47,8 +47,10 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
         /* Добавить запись */
         Route::post('/add_record', 'RecordsController@add_record')->middleware('can:admin_rights');
         /* Подтвердить запись */
-        Route::get('/complete_record/{record_id}', 'RecordsController@complete_record')->middleware('can:admin_rights');
+        Route::post('/complete_record/{record_id}', 'RecordsController@complete_record')->middleware('can:admin_rights');
 
+    /* Страница записей */
+        Route::get('/confirmed_records', 'RecordsController@confirmed_records_index')->middleware('can:admin_rights');
 /***** Работа с клиентами *****/
 
     /* Работа с заявками, зашедшими с формы */
@@ -91,11 +93,14 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
         /* Изменить ставку сотруднику : POST */
         Route::post('/admin/employee_finances/change_standard_shift_wage', 'EmployeesAdminController@change_standard_shift_wage');
 
+    /* Страница выплат по сотруднику */
+    Route::get('/supervisor/employee_finances/payout/{employee_id}', 'EmployeesAdminController@employee_payout_page')->middleware('can:admin_rights');
+
+        /* Применение выплаты */
+        Route::post('/supervisor/employee_finances/payout/{employee_id}/apply_payout', 'EmployeesAdminController@employee_payout')->middleware('can:admin_rights');
+
     /* Страница начислений по сотруднику */
     Route::get('/supervisor/employee_finances/credit/{employee_id}', 'EmployeesAdminController@employee_credit_page')->middleware('can:admin_rights');
-
-        /* Страница выплат по сотруднику (to do)*/
-        Route::get('/supervisor/employee_finances/payout/{employee_id}', 'EmployeesAdminController@payout_page')->middleware('can:admin_rights');
 
     /* Страница начислений по сотруднику /POST */
     Route::post('/supervisor/employee_finances/credit', 'EmployeesAdminController@employee_credit_page_post')->middleware('can:admin_rights');
