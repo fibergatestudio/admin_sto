@@ -50,12 +50,12 @@
 
                     <td>
                         {{-- Кнопки управления --}}
-                        {{-- Просмотреть --}}
+                        {{-- Просмотреть 
                         <a href="#">
                             <div class="btn btn-primary">
                                 Просмотр
                             </div>
-                        </a>
+                        </a>--}}
                         
                         {{-- Удалить --}}
                         <a href="{{ url('/admin/supply_orders/archive/delete/'.$supply_order->id) }}">

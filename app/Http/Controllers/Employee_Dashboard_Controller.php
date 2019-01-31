@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 use App\Assignment;
 use App\Shift;
+
 use App\Assignments_income;
 use App\Assignments_expense;
 use App\Assignments_completed_works;
@@ -16,6 +17,10 @@ use App\Coffee_token_log;
 use App\Employee;
 
 use Telegram\Bot\Laravel\Facades\Telegram;
+
+use App\Supply_order;
+use App\Supply_order_item;
+
 
 class Employee_Dashboard_Controller extends Controller
 {
@@ -337,5 +342,176 @@ class Employee_Dashboard_Controller extends Controller
         // И возвращаемся на страницу смен
         return back();
 
+    }
+    
+    
+    /**** Заказы ****/
+    
+    /* Страница со списком заказов */
+    public function employee_orders_index(){
+
+        /* Получаем из базы данные обо всех активных заказах на поставку */
+        $supply_orders = Supply_order::where('status', 'worker')->where('creator_id', Auth::user()->id)->get();
+        
+        /* Собираем дополнительные данные */
+        foreach($supply_orders as $supply_order){
+            /* Имя заказчика */
+            $supply_order->creator_name = $supply_order->get_creator_name();
+            /* Дата создания в виде ДД.ММ.ГГГГ */
+            $supply_order->date_of_creation = $supply_order->get_creation_date();
+            /* Количество позиций */
+            $supply_order->entries_count = $supply_order->get_entries_count();
+            /* Общее кол-во единиц*/
+            $supply_order->items_count = $supply_order->get_items_count();
+            /*Товар по данному заказу*/ 
+            $supply_order->items = $supply_order->get_order_items();
+                 
+        }
+             
+        /* Возвращаем представление с данными */
+        return view('employee.orders.employee_orders_index',
+            [
+                'supply_orders' => $supply_orders,                
+            ]);
+    }
+    
+    /* Новый ордер : страница */
+    public function employee_order_new(){
+        return view('employee.orders.employee_order_new');
+    }
+    
+    /* Новый ордер : POST */
+    public function employee_order_new_post(Request $request){
+        
+        /* Вносим заказ в базу */
+        $new_order = new Supply_order();
+        $new_order->creator_id = Auth::user()->id; // Создатель заказа
+        $new_order->order_comment = $request->order_comment; // комментарий к заказу
+        $new_order->status = 'worker';
+        $new_order->save();
+        
+        /* Вносим предметы из заказа в базу */
+        $counter = intval($request->entries_count);
+        for($i = 1; $i <= $counter; $i++){
+            // Получает данные из POST запроса
+            $item_input_name = 'item'.$i;
+            $item_count_name = 'count'.$i;
+            $item_urgency_name = 'urgency'.$i;
+            $item_name = $request->$item_input_name;
+            $item_count = $request->$item_count_name;
+            $item_urgency = $request->$item_urgency_name;
+
+            // Внести в базу
+            $new_order_item = new Supply_order_item();
+            $new_order_item->supply_order_id = $new_order->id;
+            $new_order_item->item = $item_name;
+            $new_order_item->number = $item_count;
+            $new_order_item->urgency = $item_urgency;
+            
+            $new_order_item->save();
+            
+        }
+
+        /* Вносим в лог запись о том, что заказ создан*/
+        // ...
+
+        // ... Сделать редирект на страницу индекс с заказами
+        return redirect('/employee/orders/index');
+    }
+    
+    /* Редактирование заказа : страница*/
+    public function employee_order_edit($supply_order_id){
+        $supply_order = Supply_order::find($supply_order_id);
+        $supply_order->items = $supply_order->get_order_items();
+        
+        return view('employee.orders.employee_order_edit', 
+                [
+                    'supply_order' => $supply_order,                    
+                ]);
+    }
+    
+    /* Редактирование заказа : POST*/
+    public function employee_order_edit_post(Request $request, $supply_order_id){
+        /* Вносим измененный  заказ в базу */
+        $edit_order = Supply_order::find($supply_order_id);        
+        $edit_order->order_comment = $request->order_comment; // комментарий к заказу
+        $edit_order->status = 'worker';
+        $edit_order->save();
+        
+        /* Вносим измененные предметы из заказа в базу */
+        $items = Supply_order_item::where('supply_order_id', $supply_order_id)->get();
+        $i = 1;
+        foreach ($items as $item){
+            $item_input_name = 'item'.$i;
+            $item_count_name = 'count'.$i;
+            $item_urgency_name = 'urgency'.$i; 
+            $item_name = $request->$item_input_name;
+            $item_count = $request->$item_count_name; 
+            $item_urgency = $request->$item_urgency_name; 
+            
+            $item->item = $item_name;
+            $item->number = $item_count;
+            $item->urgency = $item_urgency;
+            
+            $item->save();
+            $i++;
+        }      
+       
+        return redirect('/employee/orders/index');
+    }
+    
+    /* Подтвержденные заказы */
+    public function employee_orders_active_index(){
+
+        /* Получаем из базы данные обо всех активных заказах на поставку */
+        $supply_orders = Supply_order::where('status', 'active')->where('creator_id', Auth::user()->id)->get();
+        
+        /* Собираем дополнительные данные */
+        foreach($supply_orders as $supply_order){
+            /* Имя заказчика */
+            $supply_order->creator_name = $supply_order->get_creator_name();
+            /* Дата создания в виде ДД.ММ.ГГГГ */
+            $supply_order->date_of_creation = $supply_order->get_creation_date();
+            /* Количество позиций */
+            $supply_order->entries_count = $supply_order->get_entries_count();
+            /* Общее кол-во единиц*/
+            $supply_order->items_count = $supply_order->get_items_count();
+            /*Товар по данному заказу*/ 
+            $supply_order->items = $supply_order->get_order_items();
+                 
+        }
+             
+        /* Возвращаем представление с данными */
+        return view('employee.orders.employee_orders_active_index',
+            [
+                'supply_orders' => $supply_orders,                
+            ]);
+    }
+    
+    public function employee_orders_completed_index(){
+
+        /* Получаем из базы данные обо всех активных заказах на поставку */
+        $supply_orders = Supply_order::where('status', 'completed')->where('creator_id', Auth::user()->id)->get();
+        
+        /* Собираем дополнительные данные */
+        foreach($supply_orders as $supply_order){
+            /* Имя заказчика */
+            $supply_order->creator_name = $supply_order->get_creator_name();
+            /* Дата создания в виде ДД.ММ.ГГГГ */
+            $supply_order->date_of_creation = $supply_order->get_creation_date();
+            /* Количество позиций */
+            $supply_order->entries_count = $supply_order->get_entries_count();
+            /* Общее кол-во единиц*/
+            $supply_order->items_count = $supply_order->get_items_count();
+            /*Товар по данному заказу*/ 
+            $supply_order->items = $supply_order->get_order_items();
+                 
+        }
+             
+        /* Возвращаем представление с данными */
+        return view('employee.orders.employee_orders_completed_index',
+            [
+                'supply_orders' => $supply_orders,                
+            ]);
     }
 }

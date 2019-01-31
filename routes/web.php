@@ -19,6 +19,37 @@ Route::get('/', function () {
 /* Стандартная авторизация ларавела */
 Auth::routes();
 
+/*Путь к клиенту*/
+Route::get('/client', 'Client_Controller@client')->middleware('can:client_rights');
+
+/*Путь к нарядам клиента*/
+Route::get('/client/assignments/{id}', 'Client_Controller@assignments')->middleware('can:client_rights');
+
+/*Путь к зональным нарядам клиента*/
+Route::get('/client/sub_assignments/{id}', 'Client_Controller@sub_assignments')->middleware('can:client_rights');
+
+/*Путь к архивным нарядам клиента*/
+Route::get('/client/assignments_archive/{id}', 'Client_Controller@assignments_archive')->middleware('can:client_rights');
+
+/*Путь к мастеру*/
+Route::get('/master', 'Client_Controller@master')->middleware('can:master_rights');
+
+/*Путь к управлению нарядами мастером*/
+Route::get('/master/assignments', 'Client_Controller@master_assignments')->middleware('can:master_rights');
+
+
+/*Путь к  наряду на странице мастера*/
+Route::get('/master/assignments/view/{id}', 'Client_Controller@master_view_assignment')->middleware('can:master_rights');
+
+/*Путь к профилям рабочих для просмотра мастером*/
+Route::get('/master/employees', 'Client_Controller@master_employees')->middleware('can:master_rights');
+
+/*Путь к профилям рабочих для просмотра финансов сотрудника*/
+Route::get('/master/employee_finances/{id}', 'Client_Controller@employee_finances')->middleware('can:master_rights');
+
+/*Деавторизация*/
+Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
+/*Деавторизация*/
 /* Путь с редиректами по ролям */
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -83,7 +114,7 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
 
             /* Применить изменения сотрудника */
             Route::post('/supervisor/manage_employee_status/{employee_id}/employee_edit/apply_employee_edit', 'EmployeesAdminController@apply_employee_edit');
-    
+
     /* Страница архива сотрудников */
     Route::get('/admin/employee_archive', 'EmployeesAdminController@show_employee_archive')->middleware('can:admin_rights');
 
@@ -122,7 +153,7 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
 
         /* Добавить штраф вручную */
         Route::post('/supervisor/employee_fines/add_fine_manually', 'EmployeesAdminController@add_fine_manually')->middleware('can:admin_rights')->middleware('can:admin_rights');
-    
+
     /* Жетоны на кофе */
     Route::get('/supervisor/employee_coffee_tokens/{employee_id}', 'EmployeesAdminController@employee_coffee_token_index')->middleware('can:admin_rights');
 
@@ -135,16 +166,34 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
 
         // Добавление документов POST
         Route::post('/add_documents_post/', 'EmployeesAdminController@add_documents_post')->middleware('can:admin_rights');
-        
+
     // Страница сотрудника с его документами
     Route::get('/documents/{employee_id}', 'EmployeesAdminController@show_employee_documents')->middleware('can:admin_rights');
-    
+
     // Страница удаления документов
     Route::get('/documents_delete/{employee_id}', 'EmployeesAdminController@documents_delete')->middleware('can:admin_rights');
-    
+
     // Удаление документов сотрудника POST
     Route::post('/documents_delete_post/', 'EmployeesAdminController@documents_delete_post')->middleware('can:admin_rights');
-    
+
+    /* - Добавление примечания к сотруднику: страница - */
+    Route::get('/admin/employee/add_note_to_employee/{employee_id}', 'EmployeesAdminController@add_note_to_employee_page')->middleware('can:admin_rights');
+
+    /* - Добавление примечания к сотруднику: POST  - */
+    Route::post('/admin/employee/add_note_to_employee', 'EmployeesAdminController@add_note_to_employee_post')->middleware('can:admin_rights');
+
+    /* - Страница всех примечаний сотрудника - */
+    Route::get('/admin/employee/{employee_id}', 'EmployeesAdminController@single_employee_notes')->middleware('can:admin_rights');
+
+    /* -- Редактировать примечание к сотруднику : страница -- */
+    Route::get('/admin/employee/edit_note/{note_id}', 'EmployeesAdminController@edit_employee_note')->middleware('can:admin_rights');
+
+    /* -- Редактировать примечание сотрудника : POST --*/
+    Route::post('admin/employee/edit_employee_note', 'EmployeesAdminController@edit_employee_note_post')->middleware('can:admin_rights');
+
+    /* - Удаление примечания к сотруднику - */
+    Route::get('/admin/employee/delete_employee_note/{note_id}', 'EmployeesAdminController@delete_employee_note')->middleware('can:admin_rights');
+
 /****** Рабочие зоны: Администратор ******/
 
     /* Просмотр рабочих зон */
@@ -153,13 +202,15 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
     /* Добавление рабочей зоны : страница */
     Route::get('admin/workzones/add', 'Workzones_Admin_Controller@add_workzone')->middleware('can:admin_rights');
 
-        /* Добавление рабочей зоны : действие */
-        Route::post('admin/workzones/add', 'Workzones_Admin_Controller@add_workzone_post')->middleware('can:admin_rights');
-
-    /* Изменение рабочей зоны */
+       /* Изменение рабочей зоны */
     Route::get('admin/workzones/edit/{workzone_id}', 'Workzones_Admin_Controller@edit_workzone')->middleware('can:admin_rights');
+  /* Изменение рабочей зоны */
+        Route::post('/admin/workzones/edit', 'Workzones_Admin_Controller@edit_workzone_id')->middleware('can:admin_rights');
+        /* удалить рабочую зону */
+ Route::get('admin/workzones/delete/{workzone_id}', 'Workzones_Admin_Controller@delete_workzone')->middleware('can:admin_rights');
 
-    
+
+
 
 
 /****** Клиенты: Администратор ******/
@@ -167,29 +218,38 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
 
     /* Добавить клиента: страница */
     Route::get('admin/add_client', 'Clients_Admin_Controller@add_client_page')->middleware('can:admin_rights');
-    
+
         /* Добавить клиента: POST запрос */
         Route::post('admin/add_client', 'Clients_Admin_Controller@add_client_post')->middleware('can:admin_rights');
 
     /* Просмотр клиента: страница */
-    Route::get('admin/view_client/{client_id}', 'Clients_Admin_Controller@view_client')->name('admin_view_client')->middleware('can:admin_rights');
+    Route::get('admin/view_client/{client_id}', 'Clients_Admin_Controller@single_client_view')->name('admin_view_client')->middleware('can:admin_rights');
 
-    
+
     /*Добавить примечание о клиенте : страница*/
     Route::get('/admin/clients/add_note_to_client/{client_id}', 'Clients_Admin_Controller@add_note_to_client_page');
 
         /* Добавить примечание к клиенту : POST */
         Route::post('admin/clients/add_note_to_client', 'Clients_Admin_Controller@add_note_to_client_post');
 
+    /* - Редактирование примечания о клиенте : страница - */
+    Route::get('/admin/clients/edit_client_note/{note_id}', 'Clients_Admin_Controller@edit_client_note')->middleware('can:admin_rights');
+
+    	/* - Редактирование примечания о клиенте : POST - */
+    	Route::post('/admin/clients/edit_client_note', 'Clients_Admin_Controller@edit_client_note_post')->middleware('can:admin_rights');
+
+        /* Один клиент : страница */
+    Route::get('admin/clietns/view/{client_id}', 'Clients_Admin_Controller@single_client_view')->middleware('can:admin_rights');
+
         /* Удалить примечание */
-        Route::get('admin/clients/delete_client_note/{note_id}', 'Clients_Admin_Controller@delete_note');
-    /**/    
-    
+        Route::get('admin/client/delete_client_note/{note_id}', 'Clients_Admin_Controller@delete_client_note');
+    /**/
+
 
 
 
 /****** Машины на обслуживании: Администратор ******/
-    
+
     /* Страница всех машин на сервисе */
     Route::get('admin/cars_in_service/index', 'Cars_in_service_Admin_Controller@index')->middleware('can:admin_rights');
 
@@ -209,17 +269,23 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
     Route::get('admin/cars_in_service/view/{car_id}', 'Cars_in_service_Admin_Controller@single_car_view')->middleware('can:admin_rights');
 
     /* Добавить примечание к машине : страница */
-    Route::get('/admin/cars_in_service/add_note_to_car/{car_id}', 'Cars_in_service_Admin_Controller@add_note_to_car_page');
+    Route::get('/admin/cars_in_service/add_note_to_car/{car_id}', 'Cars_in_service_Admin_Controller@add_note_to_car_page')->middleware('can:admin_rights');;
 
-        /* Добавить примечание к машине : POST */
-        Route::post('admin/cars_in_service/add_note_to_car', 'Cars_in_service_Admin_Controller@add_note_to_car_post');
+        /* - Добавить примечание к машине : POST - */
+        Route::post('admin/cars_in_service/add_note_to_car', 'Cars_in_service_Admin_Controller@add_note_to_car_post')->middleware('can:admin_rights');;
 
-        /* Удалить примечание */
-        Route::get('admin/cars_in_service/delete_note/{note_id}', 'Cars_in_service_Admin_Controller@delete_note');
+        /* - Редактировать примечание к машине : страница - */
+        Route::get('admin/cars_in_service/edit_note_to_car/{note_id}', 'Cars_in_service_Admin_Controller@edit_note_to_car')->middleware('can:admin_rights');;
+
+        /* - Редактировать примечание к машине : POST - */
+        Route::post('admin/cars_in_service/edit_note_to_car', 'Cars_in_service_Admin_Controller@edit_note_to_car_post')->middleware('can:admin_rights');;
+
+        /* -  Удалить примечание - */
+        Route::get('admin/cars_in_service/delete_note/{note_id}', 'Cars_in_service_Admin_Controller@delete_note')->middleware('can:admin_rights');;
 
     /* История машины */
     // ...
-    
+
 /****** Наряды: Администратор ******/
 Route::get('/admin/assignments_index', 'Assignments_Admin_Controller@assignments_index')->middleware('can:admin_rights');
 
@@ -318,16 +384,21 @@ Route::get('/admin/supply_orders/new', 'Supply_orders_Admin_Controller@new_suppl
     Route::post('/admin/supply_orders/new', 'Supply_orders_Admin_Controller@new_supply_order_post')->middleware('can:admin_rights');
 
 /* Управление заказом : Страница */
-Route::get('/admin/supply_orders/manage/{supply_order_id}', 'Supply_orders_Admin_Controller@manage_supply_order');
+Route::get('/admin/supply_orders/manage/{supply_order_id}', 'Supply_orders_Admin_Controller@manage_supply_order')->middleware('can:admin_rights');
 
 /* Редактирование заказа : Страница */
-Route::get('/admin/supply_orders/edit/{supply_order_id}', 'Supply_orders_Admin_Controller@edit_supply_order');
+Route::get('/admin/supply_orders/edit/{supply_order_id}', 'Supply_orders_Admin_Controller@edit_supply_order')->middleware('can:admin_rights');
 
 /* Редактирование заказа : POST */
-Route::post('/admin/supply_orders/edit_post/{supply_order_id}', 'Supply_orders_Admin_Controller@edit_supply_order_post');
+Route::post('/admin/supply_orders/edit_post/{supply_order_id}', 'Supply_orders_Admin_Controller@edit_supply_order_post')->middleware('can:admin_rights');
 
+/*Заказы для подтверждения (статус - worker)*/
+Route::get('/admin/supply_orders/worker', 'Supply_orders_Admin_Controller@supply_orders_worker_index')->middleware('can:admin_rights');
 
-    /* Архивировать заказ */
+/*Подтверждение заказа (статус изменяется на - active )*/
+Route::get('/admin/supply_orders/confirm/{supply_order_id}', 'Supply_orders_Admin_Controller@confirm_supply_order')->middleware('can:admin_rights');
+
+/* Архивировать заказ */
     Route::get('/admin/supply_orders/archive/{supply_order_id}', 'Supply_orders_Admin_Controller@archive_supply_order');
 
 /* Архив заказов */
@@ -405,6 +476,29 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
     /* История смен */
     // ...
 
+/**** Заказы : работник *****/
+
+    /* Мои заказы */
+    Route::get('/employee/orders/index', 'Employee_Dashboard_Controller@employee_orders_index');
+
+    /* Новый заказ : страница  */
+    Route::get('/employee/order/new', 'Employee_Dashboard_Controller@employee_order_new');
+
+    /* Новый заказ : POST  */
+    Route::post('/employee/order/new_post', 'Employee_Dashboard_Controller@employee_order_new_post');
+
+    /* Редакторование заказа : страница*/
+    Route::get('/employee/order/edit/{supply_order_id}', 'Employee_Dashboard_Controller@employee_order_edit');
+
+    /* Редактирование заказа : POST*/
+     Route::post('/employee/order/edit_post/{supply_order_id}', 'Employee_Dashboard_Controller@employee_order_edit_post');
+
+    /* Подтвержденные заказы */
+    Route::get('/employee/orders/active', 'Employee_Dashboard_Controller@employee_orders_active_index');
+
+    /* Завершенные заказы */
+    Route::get('/employee/orders/completed', 'Employee_Dashboard_Controller@employee_orders_completed_index');
+
 /****************************************/
 /********** ТЕЛЕГРАМ : секция **********/
 /****************************************/
@@ -419,7 +513,7 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
 /****************************************/
 /********** СНАБЖЕНЕЦ : секция **********/
 /****************************************/
-    
+
     /* Главная страница */
     Route::get('/supply_officer/index', 'Supply_officer_Controller@index')->middleware('can:supply_officer_rights');
 

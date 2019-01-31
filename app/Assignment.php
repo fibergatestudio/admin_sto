@@ -9,6 +9,7 @@ use App\Client;
 
 class Assignment extends Model
 {
+    protected $table = "assignments";
     /* Получить имя клиента */
     public function get_client_name(){
         /* Получаем данные по машине */

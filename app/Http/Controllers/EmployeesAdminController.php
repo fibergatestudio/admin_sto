@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 use App\User;
 use App\Employee;
@@ -14,6 +15,8 @@ use App\Employee_fine;
 use App\Employee_balance_log;
 use App\Coffee_token_log;
 use Telegram\Bot\Laravel\Facades\Telegram;
+use App\Employees_notes;
+
 
 class EmployeesAdminController extends Controller
 {
@@ -44,13 +47,13 @@ class EmployeesAdminController extends Controller
         $new_user->general_name = $request->name.' '.$request->surname;
         $new_user->save();
         $new_user_id = $new_user->id;
-        
+
         /* Создать нового сотрудника */
         $new_employee = new Employee();
         $new_employee->general_name = $request->name.' '.$request->surname;
         $new_employee->status = 'active';
          /* Добавляем в таблицу работников ID соответствующего юзера */
-        $new_employee->user_id = $new_user_id; 
+        $new_employee->user_id = $new_user_id;
         $new_employee->balance = 0;
         $new_employee->save();
 
@@ -72,7 +75,7 @@ class EmployeesAdminController extends Controller
         $employee = Employee::find($request->employee_id);
         $employee->status = 'archived';
         $employee->save();
-        
+
         /* Вернуться к списку сотрудников */
         return redirect()->route('view_employees');
     }
@@ -84,11 +87,11 @@ class EmployeesAdminController extends Controller
 
         $employee_edit = DB::table('employees')->where('id', $employee_id)->first();
 
-        return view('employees_admin.employee_edit_admin', 
+        return view('employees_admin.employee_edit_admin',
         [
             'employee_edit' => $employee_edit,
             'employee' => $employee
-            
+
         ]);
     }
 
@@ -119,13 +122,13 @@ class EmployeesAdminController extends Controller
         if(!empty($request->document)){
             $request->scan_doc>store('public/doc_scan/'.$employee_id);
         }
-        
+
         /* Возвращаемся на страницу */
 
         return back();
     }
-    
-    
+
+
     /* Общая страница финансов по работнику */
     public function employee_finances($employee_id){
         $employee = Employee::find($employee_id);
@@ -133,25 +136,98 @@ class EmployeesAdminController extends Controller
         $employee_fines = DB::table('employee_fines')->where('employee_id', '=', $employee_id)->get();
 
         $token_logs = Coffee_token_log::where('employee_id', $employee_id)->get();
-        
+
         return view('employees_admin.employee_finances_admin',
         [
              'employee' => $employee,
              'employee_fines' => $employee_fines,
              'token_logs' => $token_logs
-             
+
         ]);
 
+        return view('employees_admin.employee_finances_admin', ['employee' => $employee]);
+    }
+
+    /* - Добавления примечания к сотруднику: страница - */
+    public function add_note_to_employee_page($employee_id){
+        $employee = Employee::find($employee_id);
+        return view('employees_admin.add_note_to_employee', ['employee' => $employee]);
+    }
+
+    /* - Добавление примечания к сотруднику: POST - */
+    public function add_note_to_employee_post(Request $request){
+        //Добавить примечание
+        $employee = Employee::find($request->employee_id);
+        $new_employee_note_entry = new Employees_notes();
+        $new_employee_note_entry->employee_id = $employee->id;
+        $new_employee_note_entry->author_id = Auth::user()->id;
+        $new_employee_note_entry->text = $request->note_content;
+        $new_employee_note_entry->type = 'note';
+        $new_employee_note_entry->save();
+
+        //Возврат на страницу сотрудника
+        return redirect ('/admin/employee/' .$employee->id);
+    }
+
+
+    /* -- Редактирование примечания к сотруднику : страница -- */
+    public function edit_employee_note($note_id){
+
+        $employee_note = Employees_notes::find($note_id);
+        $employee_id = $employee_note->employee_id;
+
+        return view('employees_admin.edit_employee_note', [
+            'note_id' => $note_id,
+            'employee_id' => $employee_id,
+            'employee_note' => $employee_note
+        ]);
+    }
+
+    /* -- Редактирование примечания к сотруднику : POST --*/
+    public function edit_employee_note_post(Request $request){
+        $employee_note_entry = Employees_notes::find($request->note_id);
+        $employee_note_entry->text = $request->text;
+        $employee_note_entry->save();
+
+        return redirect('/admin/employee/' .$employee_note_entry->employee_id);
+    }
+
+    /* - Удление примечания к сотруднику - */
+    public function delete_employee_note($note_id){
+        Employees_notes::find($note_id)->delete();
+        return back();
     }
 
     /* Изменение ставки сотрудника */
     public function change_standard_shift_wage(Request $request){
         // Задаём новую ставку
         Employee::find($request->employee_id)->set_new_wage($request->new_wage);
-        
+
         // Возвращаемся на предыдущую страницу
         return back();
     }
+    /* - Страница добавления примечания к сотруднику */
+    public function single_employee_notes($employee_id){
+        $employee = Employee::find($employee_id);
+
+
+        $employee_notes = DB::table('employees_notes')->where('employee_id', $employee->id)->get();
+
+
+        foreach($employee_notes as $employee_note){
+            $employee_note->author_name = User::find($employee_note->author_id)->general_name;
+
+        }
+
+        return view('employees_admin.single_employee_notes', [
+            'employee' => $employee,
+            'employee_notes' => $employee_notes,
+            ]);
+    }
+
+
+
+
 
     // Страница добавления документов сотрудника
     public function add_documents($employee_id){
@@ -161,23 +237,23 @@ class EmployeesAdminController extends Controller
     }
 
     // Хранение файла документа POST
-    public function add_documents_post(Request $request){ 
+    public function add_documents_post(Request $request){
         $employee_id = $request->employee_id;
         $employee = Employee::find($employee_id);
-        
+
         $request->scan->store('public/employee/'.$employee_id);
 
         return redirect('/documents/'.$request->employee_id);
     }
-    
+
     // Страница сотрудника его документами
     public function show_employee_documents($employee_id) {
-        $employee = Employee::find($employee_id);         
+        $employee = Employee::find($employee_id);
         $images = [];
         foreach(Storage::files('public/employee/'.$employee_id) as $file){
              $images[] = $file;
-        }       
-        
+        }
+
         return view('employees_admin.employee_documents', compact('employee', 'images'));
     }
     // Страница удаления документов
@@ -189,15 +265,15 @@ class EmployeesAdminController extends Controller
         }
         return view('employees_admin.documents_delete', compact('employee_id', 'images'));
     }
-    // Удаление документов : POST 
+    // Удаление документов : POST
     public function documents_delete_post(Request $request){
         /* Удалить документ */
         Storage::delete($request->path_to_file);
-        
+
         /* Вернуться на страницу удаления документов */
         return redirect('documents_delete/'.$request->employee_id);
     }
-    
+
     /*
     ********** Блок начислений (credit) **********
     */
@@ -205,8 +281,39 @@ class EmployeesAdminController extends Controller
     public function employee_credit_page($employee_id){
         $employee = Employee::find($employee_id);
 
-        return view('employees_admin.employee_credit_page', ['employee' => $employee]);
+        //данные о последних 10 операциях
+        $balance = Employee_balance_log::where('employee_id', $employee_id)->orderBy('created_at', 'desc')->get();
 
+        return view('employees_admin.employee_credit_page', ['employee' => $employee, 'balance' => $balance]);
+    }
+
+    public function add_employee_payment_manualy(Request $request){
+
+        $request->validate([
+            'balance' => 'required|numeric'
+        ]);
+
+        /* -----Добавить начисление ------ */
+        $balance = Employee::find($request->employee_id);
+        $balance_entry->balance = $request->balance;
+        $balance_entry->date = date('Y-m-d');
+        $balance_entry->save();
+
+        return redirect('/supervisor/employee_finances/credit/{employee_id}', compact('balance'));
+
+
+
+
+        // Добавить запись в общие логи
+        $employee_balance = new Employee_balance;
+        $employee_balance->amount = $amount;
+        $employee_balance->action = 'dposit';
+        $employee_balance->source = 'auto';
+        $employee_balance->date = date('Y-m-d');
+        $employee_balance->employee_id = $employee_id;
+        $employee_balance->save();
+
+        return back();
     }
 
     /* Начисления сотруднику : POST */
@@ -317,7 +424,7 @@ class EmployeesAdminController extends Controller
     public function view_employee_fines($employee_id){
         $employee = Employee::find($employee_id);
 
-        $fines = 
+        $fines =
             DB::table('employee_fines')
                 ->where([
                         ['employee_id', '=', $employee_id], ['status', '=', 'pending']
@@ -332,7 +439,7 @@ class EmployeesAdminController extends Controller
         );
 
     }
-    
+
     /* Применить штраф */
     public function apply_fine($fine_id){
         $fine = Employee_fine::find($fine_id);
@@ -344,13 +451,13 @@ class EmployeesAdminController extends Controller
         $employee_balance = DB::table('employees')
             ->where('id', '=', $fine->employee_id)
             ->first();
-        
+
         $new_balance = $employee_balance->balance - $fine->amount;
 
         DB::table('employees')
             ->where('id', '=', $fine->employee_id)
             ->update(['balance' => $new_balance]);
-            
+
          /* Оповещения для телеграма */
          $text = "У вас новый штраф!\n"
          . "<b>Размер штрафа: </b>\n"
@@ -364,7 +471,7 @@ class EmployeesAdminController extends Controller
             'text' => $text
         ]);
 
-        
+
         // Редирект на страницу штрафов сотрудника
         return redirect()->route('employee_fines', ['employee_id' => $fine->employee_id]);
 
@@ -412,10 +519,10 @@ class EmployeesAdminController extends Controller
         $request->validate([
             'token_count' => "required|numeric"
         ]);
-        
+
         $employee_id = $request->employee_id;
         $token_count = $request->token_count;
-        
+
         // Вычесть стоимость жетонов с баланса
         $token_price = 5; // Сделать подтягивание с базы
         $token_total = $token_price * $token_count;
