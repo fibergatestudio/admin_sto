@@ -31,8 +31,61 @@
                 {{-- url('admin/assignments/view/'.$assignment->id.'/management') --}}
 
                 <td>
+                    {{-- Редактировать модель машны : Кнопка открытия модального окна --}}
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#editCarModel{{$sub_assignment->id}}">
+                        Редактировать
+                    </button><br>
                 </td>
             </tr>
+
+            <form action="{{ url('/master/redact_subassignments/'.$sub_assignment->id) }}" method="POST">
+                @csrf
+
+                <div class="modal fade" id="editCarModel{{$sub_assignment->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Редактировать зональный наряд</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+                                <input type="hidden" name="id" value="{{ $sub_assignment->id }}">
+
+                                {{-- Название --}}
+                                <div class="form-group">
+                                    <label>Название</label>
+                                    <input type="text" name="new_name" class="form-control" value="{{ $sub_assignment->name }}" required >
+                                </div>
+
+                                {{-- Рабочая зона --}}
+                                <div class="form-group">
+                                    <label>Рабочая зона</label>
+                                    <select name="new_workzone" class="form-control">
+                                        @foreach ($workzones as $key => $value)
+                                            <option value="{{ $value }}"
+                                                    @if ($value == $sub_assignment->workzone_name )
+                                                    selected="selected"
+                                                    @endif
+                                            >{{ $value }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                                <button type="submit" class="btn btn-success">Сохранить</button>
+                            </div>
+                        </div>{{-- /modal-content --}}
+                    </div>
+                </div>
+
+            </form>
+
         @endforeach
         </tbody>
     </table>
@@ -67,7 +120,75 @@
                 <td>
                     {{ $income_entry->description }}<br>
                 </td>
+
+                <td>
+                    {{-- Редактировать модель машны : Кнопка открытия модального окна --}}
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#editCarModelModal{{$income_entry->id}}">
+                        Редактировать
+                    </button><br>
+                </td>
             </tr>
+
+            <form action="{{ url('/master/income_entry/'.$income_entry->id) }}" method="POST">
+                @csrf
+
+                <div class="modal fade" id="editCarModelModal{{$income_entry->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Редактировать доходную часть</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+                                <input type="hidden" name="id" value="{{ $income_entry->id }}">
+
+                                {{-- Сумма --}}
+                                <div class="form-group">
+                                    <label>Сумма</label>
+                                    <input type="text" name="new_amount" class="form-control" value="{{ $income_entry->amount }}" required >
+                                </div>
+
+                                {{-- Валюта --}}
+                                <div class="form-group">
+                                    <label>Валюта</label>
+                                    <select name="new_currency" class="form-control">
+                                        @foreach (array('UAH','USD','EUR') as $key => $value)
+                                            <option value="{{ $value }}"
+                                                    @if ($value == $income_entry->currency)
+                                                    selected="selected"
+                                                    @endif
+                                            >{{ $value }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                {{-- Основание --}}
+                                <div class="form-group">
+                                    <label>Основание</label>
+                                    <input type="text" name="new_basis" class="form-control" value="{{ $income_entry->basis  }}" required>
+                                </div>
+
+                                {{-- Описание --}}
+                                <div class="form-group">
+                                    <label>Описание</label>
+                                    <input type="text" name="new_description" class="form-control" value="{{ $income_entry->description  }}" required>
+                                </div>
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                                <button type="submit" class="btn btn-success">Сохранить</button>
+                            </div>
+                        </div>{{-- /modal-content --}}
+                    </div>
+                </div>
+
+            </form>
+
         @endforeach
         </tbody>
     </table>
@@ -105,11 +226,83 @@
                 <td>
                     {{ $expense_entry->description }}<br>
                 </td>
+
+                <td>
+                    {{-- Редактировать модель машны : Кнопка открытия модального окна --}}
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#editCar{{$expense_entry->id}}">
+                        Редактировать
+                    </button><br>
+                </td>
             </tr>
+
+            <form action="{{ url('/master/expense_entry/'.$expense_entry->id) }}" method="POST">
+                @csrf
+
+                <div class="modal fade" id="editCar{{$expense_entry->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Редактировать расходную часть</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+                                <input type="hidden" name="id" value="{{ $expense_entry->id }}">
+
+                                {{-- Название --}}
+                                <div class="form-group">
+                                    <label>Сумма</label>
+                                    <input type="text" name="new_amount" class="form-control" value="{{ $expense_entry->amount }}" required >
+                                </div>
+
+                                {{-- Рабочая зона --}}
+                                <div class="form-group">
+                                    <label>Валюта</label>
+                                    <select name="new_currency" class="form-control">
+                                        @foreach (array('UAH','USD','EUR') as $key => $value)
+                                            <option value="{{ $value }}"
+                                                    @if ($value == $expense_entry->currency )
+                                                    selected="selected"
+                                                    @endif
+                                            >{{ $value }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                {{-- Название --}}
+                                <div class="form-group">
+                                    <label>Основание</label>
+                                    <input type="text" name="new_basis" class="form-control" value="{{ $expense_entry->basis }}" required >
+                                </div>
+
+                                {{-- Название --}}
+                                <div class="form-group">
+                                    <label>Описание</label>
+                                    <input type="text" name="new_description" class="form-control" value="{{ $expense_entry->description }}" required >
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                                <button type="submit" class="btn btn-success">Сохранить</button>
+                            </div>
+                        </div>{{-- /modal-content --}}
+                    </div>
+                </div>
+            </form>
+
+
         @endforeach
         </tbody>
     </table>
     <!--<p>Сумма расходов: {{ $assignment_expense->sum('amount') }}<br></p>-->
+
+
+
+
 
     {{-- Добавить расход денег : Кнопка открытия модального окна --}}
     <hr>
@@ -139,7 +332,56 @@
                 <td>
                     {{ date('d m Y', $work_entry->created_at->timestamp) }}<br>
                 </td>
+
+                <td>
+                    {{-- Редактировать модель машны : Кнопка открытия модального окна --}}
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#edit{{$work_entry->id}}">
+                        Редактировать
+                    </button><br>
+                </td>
             </tr>
+
+
+            <form action="{{ url('/master/work_entry/'.$work_entry->id) }}" method="POST">
+                @csrf
+
+                <div class="modal fade" id="edit{{$work_entry->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Редактировать список выполненых работ</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+                                <input type="hidden" name="id" value="{{ $work_entry->id }}">
+
+                                {{-- Название --}}
+                                <div class="form-group">
+                                    <label>Название</label>
+                                    <input type="text" name="new_basis" class="form-control" value="{{ $work_entry->basis }}" required >
+                                </div>
+
+                                {{-- Название --}}
+                                <div class="form-group">
+                                    <label>Описание</label>
+                                    <input type="text" name="new_description" class="form-control" value="{{ $work_entry->description }}" required >
+                                </div>
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                                <button type="submit" class="btn btn-success">Сохранить</button>
+                            </div>
+                        </div>{{-- /modal-content --}}
+                    </div>
+                </div>
+
+            </form>
+
         @endforeach
         </tbody>
     </table>
