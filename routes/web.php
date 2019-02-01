@@ -41,11 +41,27 @@ Route::get('/master/assignments', 'Client_Controller@master_assignments')->middl
 /*Путь к  наряду на странице мастера*/
 Route::get('/master/assignments/view/{id}', 'Client_Controller@master_view_assignment')->middleware('can:master_rights');
 
+/*Редактирование зонального наряда мастером*/
+Route::post('/master/redact_subassignments/{id}', 'Client_Controller@redact_subassignments')->middleware('can:master_rights');///
+
+/*Редактирование доходной части наряда мастером*/
+Route::post('/master/income_entry/{id}', 'Client_Controller@income_entry')->middleware('can:master_rights');///
+
+/*Редактирование расходной части наряда мастером*/
+Route::post('/master/expense_entry/{id}', 'Client_Controller@expense_entry')->middleware('can:master_rights');///
+
+/*Редактирование списка выполненых работ мастером*/
+Route::post('/master/work_entry/{id}', 'Client_Controller@work_entry')->middleware('can:master_rights');
+
 /*Путь к профилям рабочих для просмотра мастером*/
 Route::get('/master/employees', 'Client_Controller@master_employees')->middleware('can:master_rights');
 
 /*Путь к профилям рабочих для просмотра финансов сотрудника*/
 Route::get('/master/employee_finances/{id}', 'Client_Controller@employee_finances')->middleware('can:master_rights');
+
+
+
+
 
 /*Деавторизация*/
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
