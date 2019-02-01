@@ -16,9 +16,9 @@ class CreateEmployeeBalanceLogsTable extends Migration
         Schema::create('employee_balance_logs', function (Blueprint $table) {
             $table->increments('id');
             $table->float('amount');
-            $table->string('reason')->nullable(); // Формальное основание для действия
-            $table->string('action')->nullable(); // Действие относительно балланса: + (deposit) или - (withdrawal)
-            $table->string('source')->nullable(); // Источник действия: manual (добавлено вручную), auto (добавлено системой)
+            $table->string('reason'); // Формальное основание для действия
+            $table->string('action'); // Действие относительно балланса: + (deposit) или - (withdrawal)
+            $table->string('source'); // Источник действия: manual (добавлено вручную), auto (добавлено системой)
             $table->date('date');
             $table->unsignedInteger('employee_id');
             $table->foreign('employee_id')->references('id')->on('employees');
