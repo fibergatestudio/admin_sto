@@ -62,7 +62,6 @@ Route::get('/master/employee_finances/{id}', 'Client_Controller@employee_finance
 
 
 
-
 /*Деавторизация*/
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 /*Деавторизация*/
