@@ -14,6 +14,7 @@ use App\Assignments_income;
 use App\Assignments_expense;
 use App\Assignments_completed_works;
 use App\Coffee_token_log;
+use App\Employee_balance_log;
 use App\Employee;
 
 use Telegram\Bot\Laravel\Facades\Telegram;
@@ -56,15 +57,34 @@ class Employee_Dashboard_Controller extends Controller
         $employee = DB::table('employees')->where('user_id', $employee_user_id)->first();
         $employee_id = $employee->id;
 
-
+        /* Получаем Штрафы */
         $employee_fines = DB::table('employee_fines')->where('employee_id', '=', $employee_id)->get();
 
+        /* Получаем Жетоны */
         $token_logs = Coffee_token_log::where('employee_id', $employee_id)->get();
+
+        /* Получаем Начислеения */
+        $balance_logs = Employee_balance_log::where(
+            [
+                ['employee_id', $employee_id],
+                ['action', '=', 'deposit']
+            ])->orderBy('created_at', 'desc')->get();
+
+        /* Получаем Выплаты */
+        $payout_logs = Employee_balance_log::where( 
+            [
+
+                ['employee_id', $employee_id],
+                ['action', '=', 'withdrawal'] 
+
+            ])->orderBy('created_at', 'desc')->get();
 
         return view('employee.finance_history',
         [
             'employee_fines' => $employee_fines,
-            'token_logs' => $token_logs
+            'token_logs' => $token_logs,
+            'balance_logs' => $balance_logs,
+            'payout_logs' => $payout_logs
         ]);
     }
 

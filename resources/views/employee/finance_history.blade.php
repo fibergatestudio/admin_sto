@@ -54,7 +54,7 @@
                         <th>Дата</th>
                     </tr>
                 </thead>
-                @foreach($token_logs as  $token_logs)
+                @foreach($token_logs as $token_logs)
                 <tr>
                     <td>
                     {{ $token_logs->token_count}}
@@ -85,14 +85,16 @@
                         <th>Сумма</th>
                     </tr>
                 </thead>
+                @foreach($balance_logs as $balance_log)
                 <tr>
                     <td>
-
+                    {{ $balance_log->date }}
                     </td>
                     <td>
-
+                    {{ $balance_log->amount }}
                     </td>
                 </tr>
+                @endforeach
             </table>
         </div>
     </div>
@@ -109,14 +111,16 @@
                         <th>Сумма</th>
                     </tr>
                 </thead>
+                @foreach($payout_logs as $payout_log)
                 <tr>
                     <td>
-
+                    {{ $payout_log->date }}
                     </td>
                     <td>
-
+                    {{ $payout_log->amount }}
                     </td>
                 </tr>
+                @endforeach
             </table>
         </div>
     </div>

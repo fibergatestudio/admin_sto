@@ -75,13 +75,14 @@
 								Мои cмены
 							</span>
 							</a>
-                                                </li>
-                                                    <!-- Заказы работника -->
-                                                <li class="nav-item">
+						</li>
+								<!-- Заказы работника -->
+						<li class="nav-item">
 							<a class="nav-link" href="{{ url('/employee/orders/index') }}">
+							<i class="icon-color-sampler"></i>
 								Мои заказы
 							</a>
-                                                </li>
+                        </li>
 
 						<li class="nav-item">
 							<a class="nav-link" href="{{ url('employee/finance_history') }}">

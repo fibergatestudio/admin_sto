@@ -282,7 +282,12 @@ class EmployeesAdminController extends Controller
         $employee = Employee::find($employee_id);
 
         //данные о последних 10 операциях
-        $balance = Employee_balance_log::where('employee_id', $employee_id)->orderBy('created_at', 'desc')->get();
+        $balance = Employee_balance_log::where(
+            [
+
+                ['employee_id', $employee_id],
+                ['action', '=', 'deposit']
+            ])->orderBy('created_at', 'desc')->get();
 
         return view('employees_admin.employee_credit_page', ['employee' => $employee, 'balance' => $balance]);
     }
@@ -302,10 +307,8 @@ class EmployeesAdminController extends Controller
         return redirect('/supervisor/employee_finances/credit/{employee_id}', compact('balance'));
 
 
-
-
         // Добавить запись в общие логи
-        $employee_balance = new Employee_balance;
+        $employee_balance = new Employee_balance_log;
         $employee_balance->amount = $amount;
         $employee_balance->action = 'dposit';
         $employee_balance->source = 'auto';
@@ -358,6 +361,15 @@ class EmployeesAdminController extends Controller
            'text' => $text
        ]);
         
+        // Добавить начисление в общие логи
+        $employee_balance_log = new Employee_balance_log;
+        $employee_balance_log->amount = $add_sum;
+        $employee_balance_log->action = 'deposit';
+        $employee_balance_log->reason = 'auto';
+        $employee_balance_log->date = date('Y-m-d');
+        $employee_balance_log->employee_id = $employee_id;
+        $employee_balance_log->save();
+
         /* Возвращаемся на страницу */
 
         return back();
@@ -371,7 +383,20 @@ class EmployeesAdminController extends Controller
 
         $employee = Employee::find($employee_id);
 
-        return view('employees_admin.employee_payout_page', ['employee' => $employee]);
+        /* Получаем выплаты по сотруднику */
+        $employee_payout = Employee_balance_log::where( 
+            [
+
+                ['employee_id', $employee_id],
+                ['action', '=', 'withdrawal'] 
+
+            ])->orderBy('created_at', 'desc')->get();
+
+        return view('employees_admin.employee_payout_page',
+        [
+            'employee' => $employee,
+            'employee_payout' => $employee_payout
+        ]);
     }
 
     public function employee_payout(Request $request){
@@ -402,7 +427,17 @@ class EmployeesAdminController extends Controller
            'parse_mode' => 'HTML',
            'text' => $text
        ]);
+
         
+        // Добавить запись в общие логи
+        $employee_balance_log = new Employee_balance_log;
+        $employee_balance_log->amount = -$add_payout;
+        $employee_balance_log->action = 'withdrawal';
+        $employee_balance_log->reason = 'auto';
+        $employee_balance_log->date = date('Y-m-d');
+        $employee_balance_log->employee_id = $employee_id;
+        $employee_balance_log->save();
+
         /* Возвращаемся на страницу */
 
         return back();

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Auth;
 
+use Telegram\Bot\Laravel\Facades\Telegram;
+
 use App\Supply_order;
 use App\Supply_order_item;
 use App\Supply_order_log;
@@ -76,6 +78,24 @@ class Supply_orders_Admin_Controller extends Controller
             
         }
 
+        /* Отправляем телеграм оповещение о созданном заказе*/
+
+        $text = "У вас новый заказ!\n"
+        . "<b>Название товара: </b>\n"
+        . "$item_name\n"
+        . "<b>Кол-во: </b>\n"
+        . "$item_count\n"
+        . "<b>Срочность: </b>\n"
+        .  "$item_urgency\n"
+        . "<b>Комментарий к заказу: </b>\n"
+        .  $request->order_comment;
+
+        Telegram::sendMessage([
+            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+            'parse_mode' => 'HTML',
+            'text' => $text
+        ]);
+
         /* Вносим в лог запись о том, что заказ создан*/
         // ...
 
@@ -140,7 +160,25 @@ class Supply_orders_Admin_Controller extends Controller
             
             $item->save();
             $i++;
-        }      
+        }   
+        
+         /* Отправляем телеграм оповещение о редактировании заказа*/
+
+         $text = "У вас изменения заказа!\n"
+         . "<b>Название товара: </b>\n"
+         . "$item_name\n"
+         . "<b>Кол-во: </b>\n"
+         . "$item_count\n"
+         . "<b>Срочность: </b>\n"
+         .  "$item_urgency\n"
+         . "<b>Комментарий к заказу: </b>\n"
+         .  $request->order_comment;
+
+         Telegram::sendMessage([
+             'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+             'parse_mode' => 'HTML',
+             'text' => $text
+         ]);
        
         return redirect('/admin/supply_orders/index');
     }
@@ -151,6 +189,19 @@ class Supply_orders_Admin_Controller extends Controller
         $supply_order = Supply_order::find($supply_order_id);
         $supply_order->status = 'archived';
         $supply_order->save();
+
+         
+         /* Отправляем телеграм оповещение о архивировании заказа*/
+
+         $text = "Заказ Номер:$supply_order->id перемещен в архив !\n"
+         . "<b>Комментарий к заказу: </b>\n"
+         .  $supply_order->order_comment;
+         
+         Telegram::sendMessage([
+             'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+             'parse_mode' => 'HTML',
+             'text' => $text
+         ]);
         
         /* Редирект на страницу архива */
         return redirect('/admin/supply_orders/archive');

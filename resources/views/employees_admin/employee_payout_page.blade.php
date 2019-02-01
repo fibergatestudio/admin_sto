@@ -18,6 +18,23 @@
     <hr>
     {{-- История выплат (последние 10) --}}
     <h4>История выплат (последние 10 операций)</h4>
-    <p>Баланс: {{ $employee->balance }}</p> {{-- Для теста --}}
+    <table class="table">
+        <thead>
+            <th>Сумма</th>
+            <th>Дата</th>
+            <th>Тип добавления</th>
+            <th>Причина</th>
+        </thead>
+        <tbody>
+            @foreach($employee_payout as $employee_payout)
+                <tr>
+                    <td>{{ $employee_payout->amount}}</td>
+                    <td>{{ $employee_payout->date}}</td>
+                    <td>{{ $employee_payout->action}}</td>
+                    <td>{{ $employee_payout->reason}}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
 
 @endsection

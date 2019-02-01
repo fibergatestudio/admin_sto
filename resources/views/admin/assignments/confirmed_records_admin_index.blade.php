@@ -54,6 +54,7 @@
             {{ $record->phone }}<br>
             </td>
             <td>
+            {{ $record->confirmed_time }}<br>
             </td>
         </tr>
         @endforeach
