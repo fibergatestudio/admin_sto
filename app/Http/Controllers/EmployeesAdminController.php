@@ -11,9 +11,9 @@ use Illuminate\Support\Facades\Storage;
 use App\User;
 use App\Employee;
 use App\Employee_fine;
-//use App\Employee_balance;
 use App\Employee_balance_log;
 use App\Coffee_token_log;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 class EmployeesAdminController extends Controller
 {
@@ -99,19 +99,21 @@ class EmployeesAdminController extends Controller
         $date_join = $request->date_join;
         $fio = $request->fio;
         $passport = $request->passport;
-        $id_code = $request->id_code;
         $reserve_phone = $request->reserve_phone;
+        $phone = $request->phone;
         $hour_from = $request->hour_from ;
         $hour_to = $request->hour_to;
+        $telegram_id = $request->telegram_id;
 
         $employee = Employee::find($employee_id);
         $employee->date_join = $date_join;
         $employee->fio = $fio;
         $employee->passport =  $passport;
-        $employee->id_code = $id_code;
         $employee->reserve_phone = $reserve_phone;
+        $employee->phone = $phone;
         $employee->hour_from = $hour_from;
         $employee->hour_to = $hour_to;
+        $employee->telegram_id = $telegram_id;
         $employee->save();
 
         if(!empty($request->document)){
@@ -122,6 +124,7 @@ class EmployeesAdminController extends Controller
 
         return back();
     }
+    
     
     /* Общая страница финансов по работнику */
     public function employee_finances($employee_id){
@@ -218,6 +221,86 @@ class EmployeesAdminController extends Controller
         return response()->json(['result'=>'Начисления сотруднику произведены']);
     }
 
+    /* Функция начисления сотруднику */
+    public function add_balance(request $request){
+
+        $employee_id = $request->employee_id;
+        $employee = Employee::find($employee_id);
+        /* Получаем employee id */
+
+        $add_sum = $request->balance;
+        $balance = $employee->balance;
+
+        $new_balance = $balance + $add_sum;
+
+        DB::table('employees')
+            ->where('id', '=', $employee_id)
+            ->update(['balance' => $new_balance]);
+
+
+        /* Оповещения для телеграма */
+        $text = "У вас новое начисление!\n"
+        . "<b>Размер начисления: </b>\n"
+        . "$add_sum\n"
+        . "<b>Новый баланс: </b>\n"
+        . "$new_balance";
+
+       Telegram::sendMessage([
+           'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+           'parse_mode' => 'HTML',
+           'text' => $text
+       ]);
+        
+        /* Возвращаемся на страницу */
+
+        return back();
+    }
+
+    /*
+    ********** Блок выплат(payout) **********
+    */
+    /* Страница выплаты */
+    public function employee_payout_page($employee_id){
+
+        $employee = Employee::find($employee_id);
+
+        return view('employees_admin.employee_payout_page', ['employee' => $employee]);
+    }
+
+    public function employee_payout(Request $request){
+
+        $employee_id = $request->employee_id;
+        $employee = Employee::find($employee_id);
+        /* Получаем employee id */
+
+        $add_payout = $request->payout_balance;
+        $balance = $employee->balance;
+
+        $new_balance = $balance - $add_payout;
+
+        DB::table('employees')
+            ->where('id', '=', $employee_id)
+            ->update(['balance' => $new_balance]);
+
+
+        /* Оповещения для телеграма */
+        $text = "У вас новая выплата!\n"
+        . "<b>Размер выплаты: </b>\n"
+        . "$add_payout\n"
+        . "<b>Остаток(после выплаты): </b>\n"
+        . "$new_balance";
+
+       Telegram::sendMessage([
+           'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+           'parse_mode' => 'HTML',
+           'text' => $text
+       ]);
+        
+        /* Возвращаемся на страницу */
+
+        return back();
+    }
+
     /* История начислений */
     public function index() {
         $employee_balances = Employee::where('employee_balances',1)->orderBy('employee_id','balance')->take(10)->get();
@@ -267,7 +350,21 @@ class EmployeesAdminController extends Controller
         DB::table('employees')
             ->where('id', '=', $fine->employee_id)
             ->update(['balance' => $new_balance]);
+            
+         /* Оповещения для телеграма */
+         $text = "У вас новый штраф!\n"
+         . "<b>Размер штрафа: </b>\n"
+         . "$fine->amount\n"
+         . "<b>Сумма с вычетом штрафа: </b>\n"
+         . "$new_balance";
 
+        Telegram::sendMessage([
+            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+            'parse_mode' => 'HTML',
+            'text' => $text
+        ]);
+
+        
         // Редирект на страницу штрафов сотрудника
         return redirect()->route('employee_fines', ['employee_id' => $fine->employee_id]);
 

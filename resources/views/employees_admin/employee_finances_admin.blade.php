@@ -31,6 +31,13 @@
             Начисления
         </div>
     </a>
+    {{-- Выплата : Кнопка --}}
+    <a href="{{ url('/supervisor/employee_finances/payout/'.$employee->id) }}">
+        <div class="btn btn-warning">
+            Выплата
+        </div>
+    </a>
+
     
     {{-- Штрафы : Кнопка --}}
     <a href="{{ url('/supervisor/employee_fines/'.$employee->id ) }}">
@@ -112,7 +119,7 @@
                         {{ $employee_fines->date }}
                     </td>
                     <td>
-                        {{ $employee_fines->amount }}
+                        -{{ $employee_fines->amount }}
                     </td>
                     <td>
                         {{ $employee_fines->status }}
@@ -140,7 +147,7 @@
                     {{ $token_logs->token_count}}
                     </td>
                     <td>
-                    {{ $token_logs->token_count*5}}
+                    -{{ $token_logs->token_count*5}}
                     </td>
                     <td>
                     {{ $token_logs->date }}

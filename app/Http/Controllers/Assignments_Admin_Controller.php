@@ -18,6 +18,7 @@ use App\Cars_in_service;
 use App\Assignment;
 use App\Sub_assignment;
 use App\Workzone;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 use App\Assignments_income;
 use App\Assignments_expense;
@@ -75,6 +76,10 @@ class Assignments_Admin_Controller extends Controller
         $assignment_description = $request->assignment_description;
         $car_id = $request->car_id;
 
+        /* Информация о клиенте и его машине для телеграма */
+        $client = Client::get_client_by_car_id($car_id);
+        $car = Cars_in_service::find($car_id);
+
         /* Создаём новый наряд и сохраняем его*/
         $new_assignment = new Assignment();
         $new_assignment->responsible_employee_id = $responsible_employee_id;
@@ -83,6 +88,23 @@ class Assignments_Admin_Controller extends Controller
         $new_assignment->date_of_creation = date('Y-m-d');
         $new_assignment->status = 'active';
         $new_assignment->save();
+        
+        /* Оповещения для телеграма */
+        $text = "У вас новый наряд!\n"
+            . "<b>Клиент: </b>\n"
+            . "$client->general_name\n"
+            . "<b>Авто: </b>\n"
+            . "$car->general_name\n"
+            . "<b>Дата: </b>\n"
+            . "$new_assignment->date_of_creation\n"
+            . "<b>Описание: </b>\n"
+            .  $assignment_description;
+ 
+        Telegram::sendMessage([
+            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+            'parse_mode' => 'HTML',
+            'text' => $text
+        ]);
 
 
         /* Возвращаемся на страницу нарядов по авто */
@@ -113,8 +135,10 @@ class Assignments_Admin_Controller extends Controller
             DB::table('sub_assignments')
             ->where('assignment_id', $assignment_id)
             ->join('workzones', 'sub_assignments.workzone_id', '=', 'workzones.id')
+            ->orderBy('order','ASC')
             ->select('sub_assignments.*', 'workzones.general_name')
             ->get();
+
 
         /* Собираем дополнительные данные по зональным нарядам */
         foreach($sub_assignments as $sub_assignment){
@@ -164,6 +188,26 @@ class Assignments_Admin_Controller extends Controller
                 'assignment_work' => $assignment_work           
             ]);
     }
+
+
+    /* Обновления позации элемента таблицы */
+    public function updateOrder(Request $request){
+
+        $sub_assignments = Sub_assignment::all();
+
+        foreach ($sub_assignments as $sub_assignment) {
+            $sub_assignment->timestamps = false; // To disable update_at field updation
+            $id = $sub_assignment->id;
+
+            foreach ($request->order as $order) {
+                if ($order['id'] == $id) {
+                    $sub_assignment->update(['order' => $order['position']]);
+                }
+            }
+        }
+        return response('Update Successfully.', 200);
+    }
+
 
     /* Изменение названия наряда */
     public function change_assignment_name(Request $request){

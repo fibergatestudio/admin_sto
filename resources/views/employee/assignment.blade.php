@@ -8,7 +8,7 @@
 
 @section('content')
 
-<div class="row">
+    <div class="row">
         <div class="col-md-2">
             <p>Статус: {{ $assignment->status }}</p>
         </div>
@@ -21,8 +21,8 @@
         </div>
         <div class="col-md-2">
             <a href="{{ url('/employee/manage_assignment/'.$assignment->id.'/assignment_uncomplete') }}">
-                <button type="button" class="btn btn-warning">
-                    Невыполнить
+                <button onClick="fnFunction(arg)" type="button" class="btn btn-warning">
+                    Не выполнить
                 </button>
             </a>
         </div>
@@ -103,7 +103,7 @@
                                     </select>
                                 </div>
                             </div>
-                            
+
                             {{-- Основание --}}
                             <div class="form-group">
                                 <label>Основание (реквизиты документа или действие)</label>
@@ -115,8 +115,6 @@
                                 <label>Описание</label>
                                 <textarea name="description" class="form-control" required></textarea>
                             </div>
-
-                        
 
                     </div>
                     <div class="modal-footer">
@@ -310,4 +308,5 @@
     </form>
 
     <hr>
+
 @endsection

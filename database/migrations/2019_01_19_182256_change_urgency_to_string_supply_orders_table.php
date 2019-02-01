@@ -11,6 +11,8 @@ class ChangeUrgencyToStringSupplyOrdersTable extends Migration
      *
      * @return void
      */
+
+     /* Проблема, нужна проверка */
     public function up()
     {
         Schema::table('supply_orders', function (Blueprint $table) {
@@ -23,10 +25,11 @@ class ChangeUrgencyToStringSupplyOrdersTable extends Migration
      *
      * @return void
      */
+         /* Проблема, нужна проверка */
     public function down()
     {
         Schema::table('supply_orders', function (Blueprint $table) {
             $table->dropColumn('urgency');
         });
     }
-}
+} 

@@ -12,6 +12,10 @@ use App\Shift;
 use App\Assignments_income;
 use App\Assignments_expense;
 use App\Assignments_completed_works;
+use App\Coffee_token_log;
+use App\Employee;
+
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 class Employee_Dashboard_Controller extends Controller
 {
@@ -19,6 +23,46 @@ class Employee_Dashboard_Controller extends Controller
     public function index(){
         return view('employee.employee_dashboard_index');
     }
+    /***** МОЙ ПРОФИЛЬ *****/
+
+    public function employee_profile(){
+
+        $user = Auth::user();
+        $employee_user_id = $user->id;
+        $employee = DB::table('employees')->where('user_id', $employee_user_id)->first();
+        $employee_id = $employee->id;
+
+        $employee_edit = DB::table('employees')->where('id', $employee_id)->first();
+
+        return view('employee.employee_profile',
+        [
+            'employee_edit' => $employee_edit,
+            'employee' => $employee_id
+        ]);
+
+        // View::share('employee_edit', $employee_edit);
+    }
+    /***** ИСТОРИЯ ФИНАНСОВ *****/ 
+
+       public function finance_history(){
+
+        $user = Auth::user();
+        $employee_user_id = $user->id;
+        $employee = DB::table('employees')->where('user_id', $employee_user_id)->first();
+        $employee_id = $employee->id;
+
+
+        $employee_fines = DB::table('employee_fines')->where('employee_id', '=', $employee_id)->get();
+
+        $token_logs = Coffee_token_log::where('employee_id', $employee_id)->get();
+
+        return view('employee.finance_history',
+        [
+            'employee_fines' => $employee_fines,
+            'token_logs' => $token_logs
+        ]);
+    }
+
 
     /***** НАРЯДЫ *****/
 
@@ -164,7 +208,20 @@ class Employee_Dashboard_Controller extends Controller
         $new_income_entry->description = $request->description; /* Описание для захода */
         $new_income_entry->save();
 
-        
+
+        $text = "У вас новый заход денег!\n"
+        . "<b>Сумма: </b>\n"
+        . "$new_income_entry->amount\n"
+        . "<b>Основание: </b>\n"
+        . " $new_income_entry->basis\n"
+        . "<b>Описание: </b>\n"
+        .  $new_income_entry->description;
+
+        Telegram::sendMessage([
+            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+            'parse_mode' => 'HTML',
+            'text' => $text
+        ]);
 
         /* Возвращаемся обратно на страницу наряда */
         return back();
@@ -181,6 +238,22 @@ class Employee_Dashboard_Controller extends Controller
         $new_expense_entry->save();
 
 
+
+        $text = "У вас новый расход денег!\n"
+        . "<b>Сумма: </b>\n"
+        . "$new_expense_entry->amount\n"
+        . "<b>Основание: </b>\n"
+        . "$new_expense_entry->basis\n"
+        . "<b>Описание: </b>\n"
+        .  $new_expense_entry->description;
+
+        Telegram::sendMessage([
+            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+            'parse_mode' => 'HTML',
+            'text' => $text
+        ]);
+
+
         /* Возвращаемся обратно на страницу наряда */
         return back();
     }
@@ -189,10 +262,22 @@ class Employee_Dashboard_Controller extends Controller
         /* Создаём новое вхождение по выполненым работам и вносим туда информацию */
         $new_works_entry = new Assignments_completed_works();
         $new_works_entry->assignment_id = $request->assignment_id; /* Идентификатор наряда */
-        $new_works_entry->basis = $request->basis; /* Основание для расхода денег */
+        $new_works_entry->basis = $request->basis; /* Основание для работы */
         $new_works_entry->description = $request->description; /* Описание для расхода */
         $new_works_entry->save();
 
+
+        $text = "У вас выполненая работа!\n"
+        . "<b>Основание: </b>\n"
+        . "$new_works_entry->basis\n"
+        . "<b>Описание: </b>\n"
+        .  $new_works_entry->description;
+
+        Telegram::sendMessage([
+            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+            'parse_mode' => 'HTML',
+            'text' => $text
+        ]);
 
         /* Возвращаемся обратно на страницу наряда */
         return back();

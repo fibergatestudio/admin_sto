@@ -66,9 +66,22 @@ Route::get('/home', 'HomeController@index')->name('home');
 /********** АДМИНИСТРАТОР: секция *******/
 /****************************************/
 
+
 /* Общая доска */
 Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('dashboard_admin')->middleware('can:admin_rights');
 
+
+/***** Записи *****/
+
+    /* Страница записей */
+    Route::get('/records', 'RecordsController@records_index')->middleware('can:admin_rights');
+        /* Добавить запись */
+        Route::post('/add_record', 'RecordsController@add_record')->middleware('can:admin_rights');
+        /* Подтвердить запись */
+        Route::post('/complete_record/{record_id}', 'RecordsController@complete_record')->middleware('can:admin_rights');
+
+    /* Страница записей */
+        Route::get('/confirmed_records', 'RecordsController@confirmed_records_index')->middleware('can:admin_rights');
 /***** Работа с клиентами *****/
 
     /* Работа с заявками, зашедшими с формы */
@@ -111,6 +124,12 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
         /* Изменить ставку сотруднику : POST */
         Route::post('/admin/employee_finances/change_standard_shift_wage', 'EmployeesAdminController@change_standard_shift_wage');
 
+    /* Страница выплат по сотруднику */
+    Route::get('/supervisor/employee_finances/payout/{employee_id}', 'EmployeesAdminController@employee_payout_page')->middleware('can:admin_rights');
+
+        /* Применение выплаты */
+        Route::post('/supervisor/employee_finances/payout/{employee_id}/apply_payout', 'EmployeesAdminController@employee_payout')->middleware('can:admin_rights');
+
     /* Страница начислений по сотруднику */
     Route::get('/supervisor/employee_finances/credit/{employee_id}', 'EmployeesAdminController@employee_credit_page')->middleware('can:admin_rights');
 
@@ -119,6 +138,9 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
 
         /* Отображение истории начислений*/
         Route::get('/supervisor/employee_finances/credit', 'EmployeesAdminController@index')->middleware('can:admin_rights');
+
+        /* Применение изменения в балансе (начисление) */
+        Route::post('/supervisor/employee_finances/credit/{employee_id}/add_balance', 'EmployeesAdminController@add_balance')->middleware('can:admin_rights');
 
 /* Страница штрафов сотрудника */
     Route::get('/supervisor/employee_fines/{employee_id}', 'EmployeesAdminController@view_employee_fines')->name('employee_fines')->middleware('can:admin_rights');
@@ -240,6 +262,8 @@ Route::get('/admin/assignments_index', 'Assignments_Admin_Controller@assignments
 
     /* Просмотр наряда : страница */
     Route::get('admin/assignments/view/{assignment_id}', 'Assignments_Admin_Controller@view_assignment');
+    /* Обновление (перестановка) елементов таблицы */
+    Route::post('admin/assignments/view/{assignment_id}', 'Assignments_Admin_Controller@updateOrder');
 
         /* Управление зонального наряда */
         Route::get('admin/assignments/view/{sub_assignment_id}/management', 'Assignments_Admin_Controller@assignment_management');
@@ -358,6 +382,13 @@ Route::get('/admin/supply_orders/archive', 'Supply_orders_Admin_Controller@archi
 /****************************************/
 Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
 
+/**** Профиль ****/
+    /* Мой профиль */
+    Route::get('/employee/employee_profile', 'Employee_Dashboard_Controller@employee_profile');
+
+/**** История Финансов ****/
+    /* Мой профиль */
+    Route::get('/employee/finance_history', 'Employee_Dashboard_Controller@finance_history');
 
 /**** Наряды : работник ****/
     /* Мои наряды */
@@ -404,6 +435,17 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
 
     /* История смен */
     // ...
+
+/****************************************/
+/********** ТЕЛЕГРАМ : секция **********/
+/****************************************/
+
+    /* Телеграм */
+    Route::get('/send-message', 'TelegramBotController@sendMessage');
+    Route::post('/store-message', 'TelegramBotController@storeMessage');
+    Route::get('/send-photo', 'TelegramBotController@sendPhoto');
+    Route::post('/store-photo', 'TelegramBotController@storePhoto');
+    Route::get('/updated-activity', 'TelegramBotController@updatedActivity');
 
 /****************************************/
 /********** СНАБЖЕНЕЦ : секция **********/
