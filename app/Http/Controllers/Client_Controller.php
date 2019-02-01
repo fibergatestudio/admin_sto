@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Car_model_list;
+use Illuminate\Http\Request;
 use App\Assignment;
 use App\Client;
 use App\Employee;
@@ -67,6 +69,7 @@ class Client_Controller extends Controller
                 ->get();
 
 
+        // dd($sub_assignments);
         /* Собираем дополнительные данные по зональным нарядам */
         foreach($sub_assignments as $sub_assignment){
             /* Название рабочей зоны */
@@ -83,10 +86,71 @@ class Client_Controller extends Controller
         $assignment_expense = Assignments_expense::where('assignment_id', $id)->get();
         /* Получаем выполненые работы */
         $assignment_work = Assignments_completed_works::where('assignment_id', $id)->get();
+        /* Получаем все зоны */
+        $all_workzones = Workzone::pluck('general_name');
 
-        return view('master.view_assignment_page')->with(array('assignment' => $assignment,'sub_assignments' => $sub_assignments,'assignment_income' => $assignment_income, 'assignment_expense' => $assignment_expense, 'assignment_work' => $assignment_work ,'empty'=>0));
+        return view('master.view_assignment_page')->with(array('assignment' => $assignment,'sub_assignments' => $sub_assignments,'assignment_income' => $assignment_income, 'assignment_expense' => $assignment_expense, 'assignment_work' => $assignment_work ,'workzones'=>$all_workzones));
 
     }
+
+
+
+    /* Применение изменений редактирования доходной части */
+    public function income_entry(Request $request){
+
+        $id = $request->id;
+        $new_amount =  $request->new_amount;
+        $new_currency = $request->new_currency;
+        $new_basis = $request->new_basis;
+        $new_description = $request->new_description;
+        Assignments_income::where('id',$id)->update(['amount'=>$new_amount,'basis'=>$new_basis,'description'=>$new_description,'currency'=>$new_currency]);
+
+        /* Возвращаемся на страницу */
+        return back();
+    }
+
+
+    /* Применение изменений редактирования расходной части */
+    public function expense_entry(Request $request){
+
+        $id = $request->id;
+        $new_amount =  $request->new_amount;
+        $new_currency = $request->new_currency;
+        $new_basis = $request->new_basis;
+        $new_description = $request->new_description;
+        Assignments_expense::where('id',$id)->update(['amount'=>$new_amount,'basis'=>$new_basis,'description'=>$new_description,'currency'=>$new_currency]);
+
+        /* Возвращаемся на страницу */
+        return back();
+    }
+
+    /* Применение изменений редактирования наряда */
+    public function redact_subassignments(Request $request){
+
+        $id = $request->id;
+        //  dd($id);
+        $new_name = $request->new_name;//Название
+        $new_workzone_name = $request->new_workzone;//название рабочей зоны
+        $workzone_id = Workzone::where('general_name',$new_workzone_name)->pluck('id')[0];
+        Sub_assignment::where('id',$id)->update(['name'=>$new_name,'workzone_id'=>$workzone_id]);
+
+        /* Возвращаемся на страницу */
+        return back();
+    }
+
+
+    /* Применение изменений редактирования расходной части */
+    public function work_entry(Request $request){
+
+        $id = $request->id;
+        $new_basis = $request->new_basis;
+        $new_description = $request->new_description;
+        Assignments_completed_works::where('id',$id)->update(['basis'=>$new_basis,'description'=>$new_description]);
+
+        /* Возвращаемся на страницу */
+        return back();
+    }
+
 
     /* Главная страница активных нарядов клиента */
     public function assignments($id)
