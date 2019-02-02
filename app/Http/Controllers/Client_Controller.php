@@ -46,9 +46,7 @@ class Client_Controller extends Controller
                     'cars_in_service.general_name AS car_name'
                 )
                 ->get();
-
-
-         dd($assignments_data);
+        
         return view('master.assignments')->with(array('assignments' => $assignments_data,'empty'=>0));
     }
 //Просмотр наряда на странице мастера
