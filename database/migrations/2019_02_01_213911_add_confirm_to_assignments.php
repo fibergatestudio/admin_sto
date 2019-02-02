@@ -14,7 +14,7 @@ class AddConfirmToAssignments extends Migration
     public function up()
     {
         Schema::table('assignments', function (Blueprint $table) {
-            $table->string('confirm')->default('true'); //add ne column confirm
+            $table->integer('confirm')->unsigned()->default(1); //add ne column confirm
         });
     }
 
@@ -26,7 +26,7 @@ class AddConfirmToAssignments extends Migration
     public function down()
     {
         Schema::table('assignments', function (Blueprint $table) {
-            $table->dropColumn('order');
+            $table->dropColumn('confirm');
         });
     }
 }
