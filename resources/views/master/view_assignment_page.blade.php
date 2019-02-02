@@ -32,7 +32,7 @@
 
                 <td>
                     {{-- Редактировать модель машны : Кнопка открытия модального окна --}}
-                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#editCarModel{{$sub_assignment->id}}">
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#redact_subassignments{{$sub_assignment->id}}">
                         Редактировать
                     </button><br>
                 </td>
@@ -41,7 +41,7 @@
             <form action="{{ url('/master/redact_subassignments/'.$sub_assignment->id) }}" method="POST">
                 @csrf
 
-                <div class="modal fade" id="editCarModel{{$sub_assignment->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade" id="redact_subassignments{{$sub_assignment->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -123,7 +123,7 @@
 
                 <td>
                     {{-- Редактировать модель машны : Кнопка открытия модального окна --}}
-                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#editCarModelModal{{$income_entry->id}}">
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#income_entry{{$income_entry->id}}">
                         Редактировать
                     </button><br>
                 </td>
@@ -132,7 +132,7 @@
             <form action="{{ url('/master/income_entry/'.$income_entry->id) }}" method="POST">
                 @csrf
 
-                <div class="modal fade" id="editCarModelModal{{$income_entry->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade" id="income_entry{{$income_entry->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -229,7 +229,7 @@
 
                 <td>
                     {{-- Редактировать модель машны : Кнопка открытия модального окна --}}
-                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#editCar{{$expense_entry->id}}">
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#expense_entry{{$expense_entry->id}}">
                         Редактировать
                     </button><br>
                 </td>
@@ -238,7 +238,7 @@
             <form action="{{ url('/master/expense_entry/'.$expense_entry->id) }}" method="POST">
                 @csrf
 
-                <div class="modal fade" id="editCar{{$expense_entry->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade" id="expense_entry{{$expense_entry->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -335,7 +335,7 @@
 
                 <td>
                     {{-- Редактировать модель машны : Кнопка открытия модального окна --}}
-                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#edit{{$work_entry->id}}">
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#work_entry{{$work_entry->id}}">
                         Редактировать
                     </button><br>
                 </td>
@@ -345,7 +345,7 @@
             <form action="{{ url('/master/work_entry/'.$work_entry->id) }}" method="POST">
                 @csrf
 
-                <div class="modal fade" id="edit{{$work_entry->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade" id="work_entry{{$work_entry->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
