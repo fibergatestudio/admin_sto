@@ -28,8 +28,6 @@
                 <td>{{ $sub_assignment->workzone_name }} {{-- Название рабочей зоны --}}</td>
                 <td>{{ $sub_assignment->responsible_employee }} {{-- Название ответственного сотрудника --}}</td>
 
-                {{-- url('admin/assignments/view/'.$assignment->id.'/management') --}}
-
                 <td>
                     {{-- Редактировать модель машны : Кнопка открытия модального окна --}}
                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#redact_subassignments{{$sub_assignment->id}}">
