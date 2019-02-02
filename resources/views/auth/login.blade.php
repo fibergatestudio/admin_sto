@@ -102,6 +102,8 @@
 								Админский аккаунт: admin - admin<br>
 								Аккаунт рабочего: qwerty - qwerty<br>
 								Снабженец: supply - supply
+								Клиент: client - client<br>
+								Мастер: master - master<br>
 							</p>
 						</div>
 					</div>
