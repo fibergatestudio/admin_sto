@@ -38,7 +38,7 @@ class Client_Controller extends Controller
 
         /* Получаем всю нужную информацию по нарядам */
         $assignments_data =
-            Assignment::join('employees', 'assignments.responsible_employee_id', '=', 'employees.id')
+            Assignment::where('confirm','1')->join('employees', 'assignments.responsible_employee_id', '=', 'employees.id')
                 ->join('cars_in_service', 'assignments.car_id', '=', 'cars_in_service.id')
                 ->select(
                     'assignments.*',
@@ -46,7 +46,9 @@ class Client_Controller extends Controller
                     'cars_in_service.general_name AS car_name'
                 )
                 ->get();
-        // dd($assignments_data);
+
+
+         dd($assignments_data);
         return view('master.assignments')->with(array('assignments' => $assignments_data,'empty'=>0));
     }
 //Просмотр наряда на странице мастера
@@ -169,7 +171,7 @@ class Client_Controller extends Controller
         $assignments = $assignments->reject(function($element) {
             return $element->status == 'archived'; //return assignments where status=='active'
         });
-        //dd($assignments);
+        dd($assignments);
         /*  if(!$assignments->isEmpty()) {
                return view('client.assignments')->with(array('assignments' => $assignments));
           }*/
@@ -185,25 +187,9 @@ class Client_Controller extends Controller
             return view('client.assignments')->with(array('empty'=>$empty));
         }
 
-        //  $sub_assignment = Sub_assignment::where('assignment_id', $assignment[0]->id)->get();
-        // dd($assignment);
-        /*   if(!$assignment->isEmpty()) {
-               $responsible_employee = Employee::where('id', $assignment[0]->responsible_employee_id)->get();
-               return view('client.assignments')->with(array('assignments' => $assignment,'responsible_employee' => $responsible_employee[0]));
-
-           }*/
     }
 
-    /* Главная страница зональных нарядов клиента */
-    /*  public function sub_assignments($id)
-      {
-         // $assignment = Assignment::where('car_id', $id)->where('status', 'active')->get();
-          $sub_assignment = Sub_assignment::where('assignment_id', $id)->get();
-         // dd($sub_assignment);
-          $responsible_employee = Employee::where('id', $sub_assignment[0]->responsible_employee_id)->get();
-          $workzone =Workzone::where('id', $sub_assignment[0]->workzone_id)->get();
-          return view('client.sub_assignments')->with(array('sub_assignment' => $sub_assignment[0],'responsible_employee' => $responsible_employee[0]));
-      }*/
+
     /* Главная страница зональных нарядов клиента */
     public function sub_assignments($id)
     {
@@ -214,7 +200,6 @@ class Client_Controller extends Controller
         foreach($sub_assignments as $sub_assignment){
             $sub_assignment->responsible_employee = Employee::find($sub_assignment->responsible_employee_id)->general_name;
         }
-        //  dd($sub_assignments);
 
         return view('client.sub_assignments')->with(array('sub_assignments' => $sub_assignments));
     }
@@ -235,7 +220,6 @@ class Client_Controller extends Controller
         $assignments = $assignments->reject(function($element) {
             return $element->status == 'active'; //return assignments where status=='archived'
         });
-        //  dd($assignments);
 
         if(!$assignments->isEmpty()) {
             $empty = 0;
