@@ -46,7 +46,7 @@ class Client_Controller extends Controller
                     'cars_in_service.general_name AS car_name'
                 )
                 ->get();
-        
+
         return view('master.assignments')->with(array('assignments' => $assignments_data,'empty'=>0));
     }
 //Просмотр наряда на странице мастера
@@ -169,10 +169,6 @@ class Client_Controller extends Controller
         $assignments = $assignments->reject(function($element) {
             return $element->status == 'archived'; //return assignments where status=='active'
         });
-        dd($assignments);
-        /*  if(!$assignments->isEmpty()) {
-               return view('client.assignments')->with(array('assignments' => $assignments));
-          }*/
 
 
         if(!$assignments->isEmpty()) {
