@@ -37,6 +37,8 @@ Route::get('/master', 'Master_Controller@master')->middleware('can:master_rights
 /*Путь к управлению нарядами мастером*/
 Route::get('/master/assignments', 'Master_Controller@master_assignments')->middleware('can:master_rights');
 
+/*Путь к подтвержденным записям*/
+Route::get('/master/confirm', 'Master_Controller@master_confirm')->middleware('can:master_rights');
 
 /*Путь к  наряду на странице мастера*/
 Route::get('/master/assignments/view/{id}', 'Master_Controller@master_view_assignment')->middleware('can:master_rights');
