@@ -29,7 +29,6 @@ class Master_Controller extends Controller
     public function master_confirm()
     {
         $records = Records::where('status','confirmed')->get();
-        //dd($records);
 
         if(!$records->isEmpty()) {
             $empty = 0;
@@ -40,7 +39,7 @@ class Master_Controller extends Controller
             $empty = 1;
             return view('master.confirm_page')->with(array('empty'=>$empty));
         }
-        //return view('master.master');
+
     }
 
 
