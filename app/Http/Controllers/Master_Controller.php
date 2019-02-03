@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Car_model_list;
+use App\Records;
 use Illuminate\Http\Request;
 use App\Assignment;
 use App\Client;
@@ -23,13 +24,34 @@ class Master_Controller extends Controller
     {
         return view('master.master');
     }
+
+    /* Подтвержденные записи */
+    public function master_confirm()
+    {
+        $records = Records::where('status','confirmed')->get();
+        //dd($records);
+
+        if(!$records->isEmpty()) {
+            $empty = 0;
+            return view('master.confirm_page')->with(array('records' => $records,'empty'=>$empty));
+        }
+        else
+        {
+            $empty = 1;
+            return view('master.confirm_page')->with(array('empty'=>$empty));
+        }
+        //return view('master.master');
+    }
+
+
+
 //Просмотр всех нарядов мастером
     public function master_assignments()
     {
 
         /* Получаем всю нужную информацию по нарядам */
         $assignments_data =
-            Assignment::where('confirm','1')->join('employees', 'assignments.responsible_employee_id', '=', 'employees.id')
+            Assignment::join('employees', 'assignments.responsible_employee_id', '=', 'employees.id')
                 ->join('cars_in_service', 'assignments.car_id', '=', 'cars_in_service.id')
                 ->select(
                     'assignments.*',
