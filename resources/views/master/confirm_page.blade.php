@@ -33,6 +33,7 @@
                     <td>{{($record->record_date)}} {{-- Телефон --}}</td>
                     <td>{{($record->phone)}} {{-- Дата записи --}}</td>
                     <td>{{($record->confirmed_time)}} {{-- Время записи --}}</td>
+                    <td></td>
                 </tr>
             @endforeach
         </table>
