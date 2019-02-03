@@ -24,6 +24,15 @@
 		</li>
 
 		<li class="nav-item">
+			<a class="nav-link" href="{{ url('master/confirm') }}">
+				<i class="icon-list"></i>
+				<span>
+								Подтвержденные записи
+							</span>
+			</a>
+		</li>
+
+		<li class="nav-item">
 			<a class="nav-link" href="{{ url('/logout') }}"
 			   onclick="event.preventDefault();
            document.getElementById('logout-form').submit();">
