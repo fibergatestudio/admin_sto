@@ -44,7 +44,10 @@ Route::get('/master/confirm', 'Master_Controller@master_confirm')->middleware('c
 Route::get('/master/assignments/view/{id}', 'Master_Controller@master_view_assignment')->middleware('can:master_rights');
 
 /*Редактирование зонального наряда мастером*/
-Route::post('/master/redact_subassignments/{id}', 'Master_Controller@redact_subassignments')->middleware('can:master_rights');///
+Route::post('/master/redact_subassignments/{id}', 'Master_Controller@redact_subassignments')->middleware('can:master_rights');
+
+/*Управление зональным нарядом мастером*/
+Route::get('/master/redact_subassignments/{id}/management', 'Master_Controller@redact_subassignments_management')->middleware('can:master_rights');///
 
 /*Редактирование доходной части наряда мастером*/
 Route::post('/master/income_entry/{id}', 'Master_Controller@income_entry')->middleware('can:master_rights');///
@@ -55,14 +58,25 @@ Route::post('/master/expense_entry/{id}', 'Master_Controller@expense_entry')->mi
 /*Редактирование списка выполненых работ мастером*/
 Route::post('/master/work_entry/{id}', 'Master_Controller@work_entry')->middleware('can:master_rights');
 
+
+/*Редактирование мастером зональных нарядов*/
+
+/*Редактирование доходной части наряда мастером*/
+Route::post('/master/zonal_income_entry/{id}', 'Master_Controller@zonal_income_entry')->middleware('can:master_rights');///
+
+/*Редактирование расходной части наряда мастером*/
+Route::post('/master/zonal_expense_entry/{id}', 'Master_Controller@zonal_expense_entry')->middleware('can:master_rights');///
+
+/*Редактирование списка выполненых работ мастером*/
+Route::post('/master/zonal_work_entry/{id}', 'Master_Controller@zonal_work_entry')->middleware('can:master_rights');
+/**/
+
+
 /*Путь к профилям рабочих для просмотра мастером*/
 Route::get('/master/employees', 'Master_Controller@master_employees')->middleware('can:master_rights');
 
 /*Путь к профилям рабочих для просмотра финансов сотрудника*/
 Route::get('/master/employee_finances/{id}', 'Master_Controller@employee_finances')->middleware('can:master_rights');
-
-
-
 
 /*Деавторизация*/
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
