@@ -15,6 +15,9 @@ use App\Cars_in_service;
 use App\Assignments_income;
 use App\Assignments_expense;
 use App\Assignments_completed_works;
+use App\Zonal_assignments_income;
+use App\Zonal_assignments_expense;
+use App\Zonal_assignments_completed_works;
 
 class Master_Controller extends Controller
 {
@@ -24,6 +27,75 @@ class Master_Controller extends Controller
     {
         return view('master.master');
     }
+
+    /* Применение изменений редактирования наряда */
+    public function redact_subassignments_management($id){
+
+        $sub_assignment = Sub_assignment::find($id);
+        $assignment = Assignment::find($sub_assignment->assignment_id);
+
+        /* Получаем доходную часть */
+        $zonal_assignment_income = Zonal_assignments_income::where('sub_assignment_id', $id)->get();
+        /* Получаем расходную часть */
+        $zonal_assignment_expense = Zonal_assignments_expense::where('sub_assignment_id', $id)->get();
+        /* Получаем выполненые работы */
+        $zonal_assignment_work = Zonal_assignments_completed_works::where('sub_assignment_id', $id)->get();
+
+        return view('master.assignment_management',
+            [
+                'assignment' =>  $assignment,
+                'sub_assignment' => $sub_assignment,
+                'zonal_assignment_income' => $zonal_assignment_income,
+                'zonal_assignment_expense' => $zonal_assignment_expense,
+                'zonal_assignment_work' => $zonal_assignment_work
+            ]);
+
+    }
+
+
+    /* Применение изменений редактирования доходной части */
+    public function zonal_income_entry(Request $request){
+
+        $id = $request->id;
+        $new_amount =  $request->new_amount;
+        $new_currency = $request->new_currency;
+        $new_basis = $request->new_basis;
+        $new_description = $request->new_description;
+        Zonal_assignments_income::where('id',$id)->update(['zonal_amount'=>$new_amount,'zonal_basis'=>$new_basis,'zonal_description'=>$new_description,'zonal_currency'=>$new_currency]);
+
+        /* Возвращаемся на страницу */
+        return back();
+    }
+
+
+    /* Применение изменений редактирования расходной части */
+    public function zonal_expense_entry(Request $request){
+
+        $id = $request->id;
+        $new_amount =  $request->new_amount;
+        $new_currency = $request->new_currency;
+        $new_basis = $request->new_basis;
+        $new_description = $request->new_description;
+        Zonal_assignments_expense::where('id',$id)->update(['zonal_amount'=>$new_amount,'zonal_basis'=>$new_basis,'zonal_description'=>$new_description,'zonal_currency'=>$new_currency]);
+
+        /* Возвращаемся на страницу */
+        return back();
+    }
+
+
+    /* Применение изменений редактирования расходной части */
+    public function zonal_work_entry(Request $request){
+
+        $id = $request->id;
+        $new_basis = $request->new_basis;
+        $new_description = $request->new_description;
+        Zonal_assignments_completed_works::where('id',$id)->update(['zonal_basis'=>$new_basis,'zonal_description'=>$new_description]);
+
+        /* Возвращаемся на страницу */
+        return back();
+    }
+
+
 
     /* Подтвержденные записи */
     public function master_confirm()
