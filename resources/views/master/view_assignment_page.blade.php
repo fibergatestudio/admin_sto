@@ -18,7 +18,8 @@
             <th>Название</th>
             <th>Рабочая зона</th>
             <th>Ответственный сотрудник </th>
-            <th></th>{{-- Кнопка просмотр --}}
+            <th></th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -33,6 +34,13 @@
                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#redact_subassignments{{$sub_assignment->id}}">
                         Редактировать
                     </button><br>
+                </td>
+                <td>
+                    <a href="{{ url('/master/redact_subassignments/'.$sub_assignment->id.'/management') }}">
+                        <div class="btn btn-primary">
+                            Управление нарядом
+                        </div>
+                    </a>
                 </td>
             </tr>
 
