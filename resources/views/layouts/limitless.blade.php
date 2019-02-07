@@ -27,6 +27,7 @@
 	<script src="{{ url('global_assets/js/plugins/loaders/blockui.min.js') }}"></script>
 	<!-- /core JS files -->
 
+	<script src="{{ url('assets/js/summary_table.js') }}"></script>
 
 	<script src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
 	<script type="text/javascript" src="//code.jquery.com/ui/1.12.1/jquery-ui.js" ></script>

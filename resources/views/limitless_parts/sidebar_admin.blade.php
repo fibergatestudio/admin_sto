@@ -112,6 +112,15 @@
 								</span>
 							</a>
 						</li>
+
+						<li class="nav-item">
+							<a href="{{ url('/admin/statistics_analysis/') }}" class="nav-link">
+								<i class="icon-graph"></i>
+								<span>
+									Статистика и Анализ
+								</span>
+							</a>
+						</li>
 						
 						<li class="nav-item">
 							<a class="nav-link" href="{{ url('/logout') }}"
