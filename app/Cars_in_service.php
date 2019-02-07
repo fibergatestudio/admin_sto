@@ -17,4 +17,11 @@ class Cars_in_service extends Model
         $client_id = $this->owner_client_id;
         return Client::find($client_id);
     }
+
+
+    public function car_model()
+    {
+        return $this->hasOne('App\Car_model_list','general_name','general_name');
+    }
+
 }
