@@ -22,6 +22,9 @@ Auth::routes();
 /*Путь к клиенту*/
 Route::get('/client', 'Client_Controller@client')->middleware('can:client_rights');
 
+/*Путь к профилю клиента*/
+Route::get('/profile', 'Client_Controller@profile')->middleware('can:client_rights');
+
 /*Путь к нарядам клиента*/
 Route::get('/client/assignments/{id}', 'Client_Controller@assignments')->middleware('can:client_rights');
 
