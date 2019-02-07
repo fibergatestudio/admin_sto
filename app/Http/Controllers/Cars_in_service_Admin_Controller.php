@@ -76,6 +76,7 @@ class Cars_in_service_Admin_Controller extends Controller
         $new_car_in_service = new Cars_in_service();
         $new_car_in_service->general_name = $request->car_general_name;
         $new_car_in_service->owner_client_id = $request->client_id;
+        $new_car_in_service->release_year = $request->release_year;
         $new_car_in_service->reg_number = $request->reg_number;
         $new_car_in_service->fuel_type = $request->fuel_type;
         $new_car_in_service->vin_number = $request->vin_number;
