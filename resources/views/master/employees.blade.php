@@ -6,8 +6,14 @@
     <table class="table">
         <thead>
         <tr>
-            <th>Ответственный работник</th>
-            <th>Статус сотрудника</th>
+            <th>Сотрудник</th>
+            <th>Дата принятия</th>
+            <th>ФИО</th>
+            <th>Номер паспорта</th>
+            <th>Телефон</th>
+            <th>Резервный телефон</th>
+            <th>Работает с</th>
+            <th>Работает по</th>
             <th></th>
             <th></th>
         </tr>
@@ -15,11 +21,24 @@
         @foreach ($employees as $employee)
             <tr>
                 <td>{{($employee->general_name)}} {{-- Ответственный работник --}}</td>
-                <td>{{($employee->status)}} {{--  Статус --}}</td>
+                <td>{{($employee->date_join)}} {{--  Статус --}}</td>
+                <td>{{($employee->fio)}} {{--  Статус --}}</td>
+                <td>{{($employee->passport)}} {{--  Статус --}}</td>
+                <td>{{($employee->phone)}} {{--  Статус --}}</td>
+                <td>{{($employee->reserve_phone)}} {{--  Статус --}}</td>
+                <td>{{($employee->hour_from)}} {{--  Статус --}}</td>
+                <td>{{($employee->hour_to)}} {{--  Статус --}}</td>
+                <td>
+                    <a href="{{ url('/master/employee_finances/'.$employee->id) }}">
+                        <div class="btn btn-warning">
+                            Подтвердить запись
+                        </div>
+                    </a>
+                </td>
                 <td>
                     <a href="{{ url('/master/employee_finances/'.$employee->id) }}">
                         <div class="btn btn-primary">
-                            Финансы сотрудника
+                            Финансы
                         </div>
                     </a>
                 </td>
