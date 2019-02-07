@@ -14,20 +14,46 @@ use App\Cars_in_service;
 use App\Assignments_income;
 use App\Assignments_expense;
 use App\Assignments_completed_works;
+use Illuminate\Support\Facades\App;
 
 class Client_Controller extends Controller
 {
     /* Главная страница клиента */
     public function client()
     {
-        $id = Auth::id();
+
+        $cars = Cars_in_service::whereHas('car_model', function ($query) {
+            $id = Auth::id();
+            $owner_id = Client::where('user_id',$id)->pluck('id');
+            if(!$owner_id->isEmpty()) {
+            $query->where('owner_client_id', $owner_id[0]);
+                }
+        })->get();
+
+        return view('client.client')->with(array('cars' => $cars));
+        //dd(Car_model_list::whereIn('general_name',$a)->get());
+       /* $id = Auth::id();
         $owner_id = Client::where('user_id',$id)->pluck('id');
         if(!$owner_id->isEmpty()) {
             $car = Cars_in_service::where('owner_client_id', $owner_id[0])->get();
             return view('client.client')->with(array('cars' => $car));
-        }
+        }*/
     }
 
+    public function balance()
+    {
+        //$profile = ;
+        //return view('client.client')->with(['profile' => $profile]);
+
+    }
+
+    public function profile()
+    {
+        $id = Auth::id();
+        $profile = Client::where('user_id',$id)->first();
+        return view('client.profile')->with(['profile' => $profile]);
+
+    }
 
     /* Главная страница активных нарядов клиента */
     public function assignments($id)
