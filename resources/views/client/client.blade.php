@@ -4,6 +4,7 @@
 @endsection
 @section('content')
     <table class="table">
+        @if(!$cars->isEmpty())
         <thead>
         <tr>
             <th>Марка</th>
@@ -16,15 +17,12 @@
         </tr>
         </thead>
 
-        @if(!$cars->isEmpty())
             @foreach ($cars as $car)
                 <tr>
-
                     <td>{{($car->car_model->brand)}} {{--  Марка --}}</td>
                     <td></td>
                     <td>{{($car->car_model->model)}} {{--  Модель --}}</td>
                     <td></td>
-
                     <td>{{($car->release_year)}} {{-- Год выпуска --}}</td>
 
                     <td>
