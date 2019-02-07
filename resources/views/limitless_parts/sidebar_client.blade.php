@@ -14,7 +14,7 @@
 		</li>
 		<li class="nav-item">
 			<a class="nav-link" href="{{ url('/client') }}">
-				<i class="icon-wrench"></i>
+				<i class="icon-car"></i>
 				<span>
 				Машины клиента
 	      		</span>
