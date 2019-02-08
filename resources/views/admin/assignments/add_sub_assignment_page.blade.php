@@ -14,7 +14,15 @@
         {{-- Название --}}
         <div class="form-group">
             <label>Название</label>
-            <input type="text" name="name" class="form-control" required>
+            <!-- <input type="text" name="name" class="form-control" required> -->
+            <select class="form-control" name="name" required>
+                <option value="Разборка-Сборка">Разборка-Сборка</option>
+                <option value="Электрика">Электрика</option>
+                <option value="Слесарка">Слесарка</option>
+                <option value="Рихтовка">Рихтовка</option>
+                <option value="Покраска">Покраска</option>
+                <option value="Детэйлинг">Детэйлинг</option>
+            </select>
         </div>
 
         {{-- Описание --}}

@@ -41,7 +41,11 @@ class Clients_Admin_Controller extends Controller
         $client = Client::find($client_id);
         $client_cars = Cars_in_service::where('owner_client_id', $client_id)->get();
         
-        return view('admin.clients.view_client', ['client' => $client, 'cars' => $client_cars]);
+        return view('admin.clients.view_client',
+            [
+                'client' => $client, 
+                'cars' => $client_cars
+            ]);
     }
 
 
@@ -101,6 +105,7 @@ class Clients_Admin_Controller extends Controller
         // Информация о примечаниях клиента
         $client_notes = 
             DB::table('clients_notes')
+                ->where('client_id', $client_id)
                 ->get();
     
 

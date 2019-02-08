@@ -40,7 +40,8 @@ class Cars_in_service_Admin_Controller extends Controller
             return view('admin.cars_in_service.add_car_in_service', ['client' => $client]);
         } else {
         /* Если клиент не указан */
-            $clients = Client::all();
+            //$clients = Client::all();
+            $clients = Client::orderByDesc('created_at')->get();
             return view('admin.cars_in_service.add_car_in_service', ['client' => '', 'clients' => $clients]);
         }
     }
