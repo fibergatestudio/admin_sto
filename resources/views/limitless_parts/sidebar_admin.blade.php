@@ -37,7 +37,6 @@
 								<li class="nav-item"><a href="{{ url('records') }}" class="nav-link legitRipple">Все записи</a></li>
 								<li class="nav-item"><a href="{{ url('confirmed_records') }}" class="nav-link legitRipple">Подтвержденные записи</a></li>
 								</ul>
-							</a>
 						</li>
 
 

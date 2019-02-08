@@ -1,102 +1,15 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    Наряд: {{ $assignment->description }}
+    Зональный наряд: {{ $sub_assignment->name }}
+
 @endsection
 
 @section('content')
     {{-- Статическая информация по наряду --}}
-    Клиент: {{ $assignment->client_name }} <br>
-    Авто: {{ $assignment->car_name }}<br>
+    Описание наряда: {{ $sub_assignment->description }}<br>
     <hr>
 
-    {{-- Зональные наряды --}}
-    <h3>Текущие зональные наряды:</h3>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Название</th>
-            <th>Рабочая зона</th>
-            <th>Ответственный сотрудник </th>
-            <th></th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach($sub_assignments as $sub_assignment)
-            <tr>
-                <td>{{ $sub_assignment->name }} {{-- Название наряда --}}</td>
-                <td>{{ $sub_assignment->workzone_name }} {{-- Название рабочей зоны --}}</td>
-                <td>{{ $sub_assignment->responsible_employee }} {{-- Название ответственного сотрудника --}}</td>
-
-                <td>
-                    {{-- Редактировать модель машны : Кнопка открытия модального окна --}}
-                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#redact_subassignments{{$sub_assignment->id}}">
-                        Редактировать
-                    </button><br>
-                </td>
-                <td>
-                    <a href="{{ url('/master/redact_subassignments/'.$sub_assignment->id.'/management') }}">
-                        <div class="btn btn-primary">
-                            Управление нарядом
-                        </div>
-                    </a>
-                </td>
-            </tr>
-
-            <form action="{{ url('/master/redact_subassignments/'.$sub_assignment->id) }}" method="POST">
-                @csrf
-
-                <div class="modal fade" id="redact_subassignments{{$sub_assignment->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Редактировать зональный наряд</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-
-                                <input type="hidden" name="id" value="{{ $sub_assignment->id }}">
-
-                                {{-- Название --}}
-                                <div class="form-group">
-                                    <label>Название</label>
-                                    <input type="text" name="new_name" class="form-control" value="{{ $sub_assignment->name }}" required >
-                                </div>
-
-                                {{-- Рабочая зона --}}
-                                <div class="form-group">
-                                    <label>Рабочая зона</label>
-                                    <select name="new_workzone" class="form-control">
-                                        @foreach ($workzones as $key => $value)
-                                            <option value="{{ $value }}"
-                                                    @if ($value == $sub_assignment->workzone_name )
-                                                    selected="selected"
-                                                    @endif
-                                            >{{ $value }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                                <button type="submit" class="btn btn-success">Сохранить</button>
-                            </div>
-                        </div>{{-- /modal-content --}}
-                    </div>
-                </div>
-
-            </form>
-
-        @endforeach
-        </tbody>
-    </table>
-
-    <hr>
     {{-- Доходная часть --}}
     <h2>Доходная часть</h2>
 
@@ -112,30 +25,30 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($assignment_income as $income_entry)
+        @foreach($zonal_assignment_income as $income_entry)
             <tr>
                 <td>
-                    {{ $income_entry->amount }}<br>
+                    {{ $income_entry->zonal_amount }}<br>
                 </td>
                 <td>
-                    {{ $income_entry->currency }}<br>
+                    {{ $income_entry->zonal_currency }}<br>
                 </td>
                 <td>
-                    {{ $income_entry->basis }}<br>
+                    {{ $income_entry->zonal_basis }}<br>
                 </td>
                 <td>
-                    {{ $income_entry->description }}<br>
+                    {{ $income_entry->zonal_description }}<br>
                 </td>
 
                 <td>
-                    {{-- Редактировать модель машны : Кнопка открытия модального окна --}}
+
                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#income_entry{{$income_entry->id}}">
                         Редактировать
                     </button><br>
                 </td>
             </tr>
 
-            <form action="{{ url('/master/income_entry/'.$income_entry->id) }}" method="POST">
+            <form action="{{ url('/master/zonal_income_entry/'.$income_entry->id) }}" method="POST">
                 @csrf
 
                 <div class="modal fade" id="income_entry{{$income_entry->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -154,7 +67,7 @@
                                 {{-- Сумма --}}
                                 <div class="form-group">
                                     <label>Сумма</label>
-                                    <input type="text" name="new_amount" class="form-control" value="{{ $income_entry->amount }}" required >
+                                    <input type="text" name="new_amount" class="form-control" value="{{ $income_entry->zonal_amount }}" required >
                                 </div>
 
                                 {{-- Валюта --}}
@@ -163,7 +76,7 @@
                                     <select name="new_currency" class="form-control">
                                         @foreach (array('UAH','USD','EUR') as $key => $value)
                                             <option value="{{ $value }}"
-                                                    @if ($value == $income_entry->currency)
+                                                    @if ($value == $income_entry->zonal_currency)
                                                     selected="selected"
                                                     @endif
                                             >{{ $value }}
@@ -174,13 +87,13 @@
                                 {{-- Основание --}}
                                 <div class="form-group">
                                     <label>Основание</label>
-                                    <input type="text" name="new_basis" class="form-control" value="{{ $income_entry->basis  }}" required>
+                                    <input type="text" name="new_basis" class="form-control" value="{{ $income_entry->zonal_basis  }}" required>
                                 </div>
 
                                 {{-- Описание --}}
                                 <div class="form-group">
                                     <label>Описание</label>
-                                    <input type="text" name="new_description" class="form-control" value="{{ $income_entry->description  }}" required>
+                                    <input type="text" name="new_description" class="form-control" value="{{ $income_entry->zonal_description  }}" required>
                                 </div>
 
 
@@ -198,7 +111,6 @@
         @endforeach
         </tbody>
     </table>
-    <!--<p>Сумма заходов: {{ $assignment_income->sum('amount') }}<br></p>-->
 
 
 
@@ -218,19 +130,19 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($assignment_expense as $expense_entry)
+        @foreach($zonal_assignment_expense as $expense_entry)
             <tr>
                 <td>
-                    {{ $expense_entry->amount }}<br>
+                    {{ $expense_entry->zonal_amount }}<br>
                 </td>
                 <td>
-                    {{ $expense_entry->currency }}<br>
+                    {{ $expense_entry->zonal_currency }}<br>
                 </td>
                 <td>
-                    {{ $expense_entry->basis }}<br>
+                    {{ $expense_entry->zonal_basis }}<br>
                 </td>
                 <td>
-                    {{ $expense_entry->description }}<br>
+                    {{ $expense_entry->zonal_description }}<br>
                 </td>
 
                 <td>
@@ -241,7 +153,7 @@
                 </td>
             </tr>
 
-            <form action="{{ url('/master/expense_entry/'.$expense_entry->id) }}" method="POST">
+            <form action="{{ url('/master/zonal_expense_entry/'.$expense_entry->id) }}" method="POST">
                 @csrf
 
                 <div class="modal fade" id="expense_entry{{$expense_entry->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -260,7 +172,7 @@
                                 {{-- Название --}}
                                 <div class="form-group">
                                     <label>Сумма</label>
-                                    <input type="text" name="new_amount" class="form-control" value="{{ $expense_entry->amount }}" required >
+                                    <input type="text" name="new_amount" class="form-control" value="{{ $expense_entry->zonal_amount }}" required >
                                 </div>
 
                                 {{-- Рабочая зона --}}
@@ -269,7 +181,7 @@
                                     <select name="new_currency" class="form-control">
                                         @foreach (array('UAH','USD','EUR') as $key => $value)
                                             <option value="{{ $value }}"
-                                                    @if ($value == $expense_entry->currency )
+                                                    @if ($value == $expense_entry->zonal_currency )
                                                     selected="selected"
                                                     @endif
                                             >{{ $value }}
@@ -281,13 +193,13 @@
                                 {{-- Название --}}
                                 <div class="form-group">
                                     <label>Основание</label>
-                                    <input type="text" name="new_basis" class="form-control" value="{{ $expense_entry->basis }}" required >
+                                    <input type="text" name="new_basis" class="form-control" value="{{ $expense_entry->zonal_basis }}" required >
                                 </div>
 
                                 {{-- Название --}}
                                 <div class="form-group">
                                     <label>Описание</label>
-                                    <input type="text" name="new_description" class="form-control" value="{{ $expense_entry->description }}" required >
+                                    <input type="text" name="new_description" class="form-control" value="{{ $expense_entry->zonal_description }}" required >
                                 </div>
 
                             </div>
@@ -304,7 +216,6 @@
         @endforeach
         </tbody>
     </table>
-    <!--<p>Сумма расходов: {{ $assignment_expense->sum('amount') }}<br></p>-->
 
 
 
@@ -327,13 +238,13 @@
         </tr>
         </thead>
         <tbody>
-        @foreach($assignment_work as $work_entry)
+        @foreach($zonal_assignment_work as $work_entry)
             <tr>
                 <td>
-                    {{ $work_entry->basis }}<br>
+                    {{ $work_entry->zonal_basis }}<br>
                 </td>
                 <td>
-                    {{ $work_entry->description }}<br>
+                    {{ $work_entry->zonal_description }}<br>
                 </td>
                 <td>
                     {{ date('d m Y', $work_entry->created_at->timestamp) }}<br>
@@ -348,7 +259,7 @@
             </tr>
 
 
-            <form action="{{ url('/master/work_entry/'.$work_entry->id) }}" method="POST">
+            <form action="{{ url('/master/zonal_work_entry/'.$work_entry->id) }}" method="POST">
                 @csrf
 
                 <div class="modal fade" id="work_entry{{$work_entry->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -367,13 +278,13 @@
                                 {{-- Название --}}
                                 <div class="form-group">
                                     <label>Название</label>
-                                    <input type="text" name="new_basis" class="form-control" value="{{ $work_entry->basis }}" required >
+                                    <input type="text" name="new_basis" class="form-control" value="{{ $work_entry->zonal_basis }}" required >
                                 </div>
 
                                 {{-- Название --}}
                                 <div class="form-group">
                                     <label>Описание</label>
-                                    <input type="text" name="new_description" class="form-control" value="{{ $work_entry->description }}" required >
+                                    <input type="text" name="new_description" class="form-control" value="{{ $work_entry->zonal_description }}" required >
                                 </div>
 
 

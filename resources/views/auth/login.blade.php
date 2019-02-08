@@ -101,7 +101,9 @@
 								Тестовые аккаунты:<br>
 								Админский аккаунт: admin - admin<br>
 								Аккаунт рабочего: qwerty - qwerty<br>
-								Снабженец: supply - supply
+								Снабженец: supply - supply<br>
+								Клиент: client - client<br>
+								Мастер: master - master<br>
 							</p>
 						</div>
 					</div>

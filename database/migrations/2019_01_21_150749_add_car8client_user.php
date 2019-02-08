@@ -16,8 +16,13 @@ class AddCar8clientUser extends Migration
         $demo_values = [
             [
                 'id' => 8,
-                'general_name' => '8 машина',
-                'owner_client_id' => '8'
+                'general_name' => 'Acura TL',
+                'owner_client_id' => '8',
+                'release_year'=>'2019',
+                'reg_number' => '5434342',
+                'fuel_type'=>'type',
+                'vin_number'=>'12345',
+                'engine_capacity'=>'1',
             ]
         ];
 

@@ -5,6 +5,22 @@
 		<!-- Main -->
 		<li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs">Меню</div> <i class="icon-menu" title="Main"></i></li>
 		<li class="nav-item">
+			<a class="nav-link" href="{{ url('/profile') }}">
+				<i class="icon-profile"></i>
+				<span>
+				Профиль
+	      		</span>
+			</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="{{ url('/client') }}">
+				<i class="icon-car"></i>
+				<span>
+				Машины клиента
+	      		</span>
+			</a>
+		</li>
+		<li class="nav-item">
 			<a class="nav-link" href="{{ url('/logout') }}"
 			   onclick="event.preventDefault();
            document.getElementById('logout-form').submit();">

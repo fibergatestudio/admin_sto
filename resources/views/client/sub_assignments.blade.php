@@ -1,6 +1,11 @@
 @extends('layouts.limitless')
 @section('page_name')
     Зональные наряды клиента
+    <a href="{{ url('/client') }}">
+        <div class="btn btn-danger">
+            Вернуться
+        </div>
+    </a>
 @endsection
 @section('content')
     <table class="table">

@@ -22,6 +22,9 @@ Auth::routes();
 /*Путь к клиенту*/
 Route::get('/client', 'Client_Controller@client')->middleware('can:client_rights');
 
+/*Путь к профилю клиента*/
+Route::get('/profile', 'Client_Controller@profile')->middleware('can:client_rights');
+
 /*Путь к нарядам клиента*/
 Route::get('/client/assignments/{id}', 'Client_Controller@assignments')->middleware('can:client_rights');
 
@@ -32,20 +35,51 @@ Route::get('/client/sub_assignments/{id}', 'Client_Controller@sub_assignments')-
 Route::get('/client/assignments_archive/{id}', 'Client_Controller@assignments_archive')->middleware('can:client_rights');
 
 /*Путь к мастеру*/
-Route::get('/master', 'Client_Controller@master')->middleware('can:master_rights');
+Route::get('/master', 'Master_Controller@master')->middleware('can:master_rights');
 
 /*Путь к управлению нарядами мастером*/
-Route::get('/master/assignments', 'Client_Controller@master_assignments')->middleware('can:master_rights');
+Route::get('/master/assignments', 'Master_Controller@master_assignments')->middleware('can:master_rights');
 
+/*Путь к подтвержденным записям*/
+Route::get('/master/confirm', 'Master_Controller@master_confirm')->middleware('can:master_rights');
 
 /*Путь к  наряду на странице мастера*/
-Route::get('/master/assignments/view/{id}', 'Client_Controller@master_view_assignment')->middleware('can:master_rights');
+Route::get('/master/assignments/view/{id}', 'Master_Controller@master_view_assignment')->middleware('can:master_rights');
+
+/*Редактирование зонального наряда мастером*/
+Route::post('/master/redact_subassignments/{id}', 'Master_Controller@redact_subassignments')->middleware('can:master_rights');
+
+/*Управление зональным нарядом мастером*/
+Route::get('/master/redact_subassignments/{id}/management', 'Master_Controller@redact_subassignments_management')->middleware('can:master_rights');///
+
+/*Редактирование доходной части наряда мастером*/
+Route::post('/master/income_entry/{id}', 'Master_Controller@income_entry')->middleware('can:master_rights');///
+
+/*Редактирование расходной части наряда мастером*/
+Route::post('/master/expense_entry/{id}', 'Master_Controller@expense_entry')->middleware('can:master_rights');///
+
+/*Редактирование списка выполненых работ мастером*/
+Route::post('/master/work_entry/{id}', 'Master_Controller@work_entry')->middleware('can:master_rights');
+
+
+/*Редактирование мастером зональных нарядов*/
+
+/*Редактирование доходной части наряда мастером*/
+Route::post('/master/zonal_income_entry/{id}', 'Master_Controller@zonal_income_entry')->middleware('can:master_rights');///
+
+/*Редактирование расходной части наряда мастером*/
+Route::post('/master/zonal_expense_entry/{id}', 'Master_Controller@zonal_expense_entry')->middleware('can:master_rights');///
+
+/*Редактирование списка выполненых работ мастером*/
+Route::post('/master/zonal_work_entry/{id}', 'Master_Controller@zonal_work_entry')->middleware('can:master_rights');
+/**/
+
 
 /*Путь к профилям рабочих для просмотра мастером*/
-Route::get('/master/employees', 'Client_Controller@master_employees')->middleware('can:master_rights');
+Route::get('/master/employees', 'Master_Controller@master_employees')->middleware('can:master_rights');
 
 /*Путь к профилям рабочих для просмотра финансов сотрудника*/
-Route::get('/master/employee_finances/{id}', 'Client_Controller@employee_finances')->middleware('can:master_rights');
+Route::get('/master/employee_finances/{id}', 'Master_Controller@employee_finances')->middleware('can:master_rights');
 
 /*Деавторизация*/
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');

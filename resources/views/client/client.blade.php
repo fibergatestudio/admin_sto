@@ -3,35 +3,53 @@
     Список машин клиента
 @endsection
 @section('content')
-    <div class="container"  >
+    <table class="table">
         @if(!$cars->isEmpty())
+        <thead>
+        <tr>
+            <th>Марка</th>
+            <th></th>
+            <th>Модель</th>
+            <th></th>
+            <th>Год выпуска</th>
+            <th></th>
+            <th></th>
+        </tr>
+        </thead>
+
             @foreach ($cars as $car)
-                <div class="card" style="margin-bottom: 20px;margin-top: 10px">
-                    <div class="card-body" style="text-align: center">
-                        {{($car->general_name)}}
-                    </div>
-                </div>
+                <tr>
+                    <td>{{($car->car_model->brand)}} {{--  Марка --}}</td>
+                    <td></td>
+                    <td>{{($car->car_model->model)}} {{--  Модель --}}</td>
+                    <td></td>
+                    <td>{{($car->release_year)}} {{-- Год выпуска --}}</td>
 
-                {{-- Наряды клиента : кнопка --}}
-                <a href="{{ url('client/assignments/'.$car->id) }}">
-                    <div class="btn btn-success">
-                        Активные наряды
-                    </div>
-                </a>
-
-                {{-- Архив : переход --}}
-                <a href="{{ url('client/assignments_archive/'.$car->id) }}">
-                    <div class="btn btn-light">
-                        Архивные наряды
-                    </div>
-                </a>
+                    <td>
+                        {{-- Активные наряды клиента : кнопка --}}
+                        <a href="{{ url('client/assignments/'.$car->id) }}">
+                            <div class="btn btn-success">
+                                Активные наряды
+                            </div>
+                        </a>
+                    </td>
+                    <td>
+                        {{--  Архивные наряды : переход --}}
+                        <a href="{{ url('client/assignments_archive/'.$car->id) }}">
+                            <div class="btn btn-light">
+                                Архивные наряды
+                            </div>
+                        </a>
+                    </td>
+                </tr>
             @endforeach
         @else
             <div class="card">
                 <div class="card-body" style="text-align: center">
-                    Машин даного клієнта поки нема
+                    Машин данного клиента пока нет
                 </div>
             </div>
         @endif
-    </div>
+
+    </table>
 @endsection
