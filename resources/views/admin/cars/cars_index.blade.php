@@ -8,7 +8,7 @@
     <div class="col-sm-3">
         {{-- Добавить модель машны : Кнопка открытия модального окна --}}
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addCarModelModal">
-            Добавить модель машнины
+            Добавить модель машины
         </button>
     </div>
 

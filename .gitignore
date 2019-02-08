@@ -11,3 +11,5 @@ npm-debug.log
 yarn-error.log
 .idea/*
 /nbproject/private/
+composer.lock
+.htaccess
