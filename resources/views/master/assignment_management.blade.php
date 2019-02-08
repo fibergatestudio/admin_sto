@@ -74,7 +74,7 @@
                                 <div class="form-group">
                                     <label>Валюта</label>
                                     <select name="new_currency" class="form-control">
-                                        @foreach (array('UAH','USD','EUR') as $key => $value)
+                                        @foreach (array('MDL','USD','EUR') as $key => $value)
                                             <option value="{{ $value }}"
                                                     @if ($value == $income_entry->zonal_currency)
                                                     selected="selected"
@@ -179,7 +179,7 @@
                                 <div class="form-group">
                                     <label>Валюта</label>
                                     <select name="new_currency" class="form-control">
-                                        @foreach (array('UAH','USD','EUR') as $key => $value)
+                                        @foreach (array('MDL','USD','EUR') as $key => $value)
                                             <option value="{{ $value }}"
                                                     @if ($value == $expense_entry->zonal_currency )
                                                     selected="selected"

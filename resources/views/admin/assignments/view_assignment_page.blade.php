@@ -34,7 +34,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-          <button type="button" class="btn btn-primary">Изменить</button>
+          <button type="submit" class="btn btn-primary">Добавить</button>
         </div>
       </div>
     </div>
@@ -95,6 +95,7 @@
           <th>Название</th>
           <th>Рабочая зона</th>
           <th>Ответственный сотрудник </th>
+          <th>Дата </th>
           <th></th>{{-- Кнопка просмотр --}}
         </tr>
       </thead>
@@ -102,6 +103,7 @@
         @foreach($sub_assignments as $sub_assignment)
           <tr class="row1" data-id="{{ $sub_assignment->id }}">
             <td>
+            {{ $sub_assignment->id }}
                 <div style="color:rgb(124,77,255); padding-left: 10px; float: left; font-size: 20px; cursor: pointer;" title="change display order">
                 <i class="fa fa-ellipsis-v"></i>
                 <i class="fa fa-ellipsis-v"></i>
@@ -110,6 +112,7 @@
             <td>{{ $sub_assignment->name }} {{-- Название наряда --}}</td>
             <td>{{ $sub_assignment->workzone_name }} {{-- Название рабочей зоны --}}</td>
             <td>{{ $sub_assignment->responsible_employee }} {{-- Название ответственного сотрудника --}}</td>
+            <td>{{ $sub_assignment->date_of_creation }} {{-- Дата создания --}}</td>
 
             {{-- url('admin/assignments/view/'.$assignment->id.'/management') --}}
             <td>
@@ -311,7 +314,7 @@
                                 <label>Валюта</label>
                                 <!--<input type="number" name="amount" min="0" class="form-control" required>-->
                                 <select name="currency"class="form-control">
-                                    <option value="UAH">UAH</option>
+                                    <option value="MDL">MDL</option>
                                     <option value="USD">USD</option>
                                     <option value="EUR">EUR</option>
                                 </select>
@@ -412,7 +415,7 @@
                                     <label>Валюта</label>
                                     <!--<input type="number" name="amount" min="0" class="form-control" required>-->
                                     <select name="currency"class="form-control">
-                                        <option value="UAH">UAH</option>
+                                        <option value="MDL">MDL</option>
                                         <option value="USD">USD</option>
                                         <option value="EUR">EUR</option>
                                     </select>

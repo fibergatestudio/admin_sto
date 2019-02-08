@@ -236,6 +236,9 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
     /* Добавление рабочей зоны : страница */
     Route::get('admin/workzones/add', 'Workzones_Admin_Controller@add_workzone')->middleware('can:admin_rights');
 
+         /* Добавление рабочей зоны */
+        Route::post('admin/workzones/add/post', 'Workzones_Admin_Controller@add_workzone_post')->middleware('can:admin_rights');
+
        /* Изменение рабочей зоны */
     Route::get('admin/workzones/edit/{workzone_id}', 'Workzones_Admin_Controller@edit_workzone')->middleware('can:admin_rights');
   /* Изменение рабочей зоны */

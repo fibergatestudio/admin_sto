@@ -81,7 +81,7 @@
                                     <label>Валюта</label>
                                     <!--<input type="number" name="amount" min="0" class="form-control" required>-->
                                     <select name="currency"class="form-control">
-                                        <option value="UAH">UAH</option>
+                                        <option value="MDL">MDL</option>
                                         <option value="USD">USD</option>
                                         <option value="EUR">EUR</option>
                                     </select>
@@ -185,7 +185,7 @@
                                     <label>Валюта</label>
                                     <!--<input type="number" name="amount" min="0" class="form-control" required>-->
                                     <select name="currency"class="form-control">
-                                        <option value="UAH">UAH</option>
+                                        <option value="MDL">MDL</option>
                                         <option value="USD">USD</option>
                                         <option value="EUR">EUR</option>
                                     </select>

@@ -493,6 +493,15 @@ class EmployeesAdminController extends Controller
             ->where('id', '=', $fine->employee_id)
             ->update(['balance' => $new_balance]);
 
+
+        $employee_fine = DB::table('employee_fines')
+            ->where('id', '=', $fine->employee_id)
+            ->update(['old_balance' => $new_balance]);
+        
+        //$employee_fine= new Employee_fine;
+        //$employee_fine->old_balance = $employee_balance->balance;
+        // $employee_fine->save();
+
          /* Оповещения для телеграма */
          $text = "У вас новый штраф!\n"
          . "<b>Размер штрафа: </b>\n"

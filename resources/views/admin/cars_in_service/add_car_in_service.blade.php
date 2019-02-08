@@ -95,7 +95,7 @@
                     <div class="form-group col-md-6">
                         {{-- ... --}}
                         <label>Пробег в километрах</label>
-                        <input type="number" name="mileage_km" class="form-control" min="0" value="0" id="mileageKM" step="any">
+                        <input type="number" name="mileage_km" class="form-control" min="0" value="0" id="mileageKM" step="any" required>
                     </div>
 
                     {{-- Модель : подтягивается с базы --}}
@@ -112,7 +112,7 @@
                     {{-- Мили --}}
                     <div class="form-group col-md-6"> 
                         <label>Пробег в милях</label>
-                        <input type="number" name="mileage_miles" class="form-control" min="0" value="0" id="mileageMiles" step="any">
+                        <input type="number" name="mileage_miles" class="form-control" min="0" value="0" id="mileageMiles" step="any" required>
                     </div>
 
                     {{-- Скрипт на автоматический пересчёт - внизу, в секции custom_scripts --}}
@@ -121,7 +121,7 @@
                     {{-- Год выпуска --}}
                     <div class="form-group col-md-6">
                         <label>Год выпуска</label>
-                        <input type="number" min="1900" max="2099" step="1" value="2019" name="release_year" id="releaseyear" class="form-control typeahead">
+                        <input type="number" min="1900" max="2099" step="1" value="2019" name="release_year" id="releaseyear" class="form-control typeahead" required>
                     </div>
                 </div>
 
@@ -129,13 +129,13 @@
                     {{-- Регистрационный номер --}}
                     <div class="form-group col-md-6">
                         <label>Регистрационный номер</label>
-                        <input type="text" name="reg_number" id="regnumber" class="form-control typeahead">
+                        <input type="text" name="reg_number" id="regnumber" class="form-control typeahead" required>
                     </div>
 
                     {{-- Тип топлива --}}
                     <div class="form-group col-md-6">
                         <label>Тип топлива</label>
-                        <input type="text" name="fuel_type" id="fueltype" class="form-control typeahead">
+                        <input type="text" name="fuel_type" id="fueltype" class="form-control typeahead" required>
                     </div>
                 </div>
 
@@ -143,13 +143,13 @@
                     {{-- VIN --}}
                     <div class="form-group col-md-6">
                         <label>VIN</label>
-                        <input type="text" name="vin_number" id="vinnumber" class="form-control typeahead">
+                        <input type="text" name="vin_number" id="vinnumber" class="form-control typeahead" required>
                     </div>
 
                     {{-- Обьем мотора --}}
                     <div class="form-group col-md-6">
                         <label>Объем мотора</label>
-                        <input type="text" name="engine_capacity" id="enginecapacity" class="form-control typeahead">
+                        <input type="text" name="engine_capacity" id="enginecapacity" class="form-control typeahead" required>
                     </div>
                 </div>
                 

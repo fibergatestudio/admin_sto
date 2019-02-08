@@ -17,6 +17,7 @@
                     <tr>
                         <th>Дата</th>
                         <th>Сумма</th>
+                        <th>Остаток</th>
                         <th>Статус</th>
                         <th>Основание</th>
                     </tr>
@@ -28,6 +29,9 @@
                     </td>
                     <td>
                         -{{ $employee_fines->amount }}
+                    </td>
+                    <td>
+                        {{ $employee_fines->old_balance }}
                     </td>
                     <td>
                         {{ $employee_fines->status }}

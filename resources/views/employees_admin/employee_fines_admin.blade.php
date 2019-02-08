@@ -21,7 +21,7 @@
                     </a>
                     <br>                  
                     {{-- Отменить штраф --}}
-                    <a href="{{ url('/supervisor/employee_fines/apply_fine/'.$fine->id) }}">
+                    <a onclick="return confirm('Подтверждение отмены')" href="{{ url('/supervisor/employee_fines/apply_fine/'.$fine->id) }}">
                         <div class="btn btn-primary" style="margin-top: 10px">
                             Отменить
                         </div>

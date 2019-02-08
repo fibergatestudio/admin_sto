@@ -71,19 +71,17 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                            
-                            {{-- ID сотрудника --}}
-                            <input type="hidden" name="employee_id" value="{{ $employee->id }}">
-                            
-                            {{-- Вывод данных по текущей ставке --}}
-                            <b>Текущая ставка:</b> {{ $employee->standard_shift_wage }}
+                        {{-- ID сотрудника --}}
+                        <input type="hidden" name="employee_id" value="{{ $employee->id }}">
+                        
+                        {{-- Вывод данных по текущей ставке --}}
+                        <b>Текущая ставка:</b> {{ $employee->standard_shift_wage }}
 
-                            {{-- Новая ставка --}}
-                            <div class="form-group">
-                                <label>Новая ставка</label>
-                                <input class="form-control" name="new_wage">
-                            </div>
-
+                        {{-- Новая ставка --}}
+                        <div class="form-group">
+                            <label>Новая ставка</label>
+                            <input class="form-control" name="new_wage">
+                        </div>
                     </div>
                     <div class="modal-footer">
 
@@ -91,7 +89,7 @@
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Выйти</button>
                         
                         {{-- Кнопка "сохранить" --}}
-                        <button type="button" class="btn btn-primary">Сохранить</button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
                         
                     </div>
                 </form>
@@ -109,6 +107,7 @@
                     <tr>
                         <th>Дата</th>
                         <th>Сумма</th>
+                        <th>Остаток</th>
                         <th>Статус</th>
                         <th>Основание</th>
                     </tr>
@@ -120,6 +119,9 @@
                     </td>
                     <td>
                         -{{ $employee_fines->amount }}
+                    </td>
+                    <td>
+                        {{ $employee_fines->old_balance }}
                     </td>
                     <td>
                         {{ $employee_fines->status }}
