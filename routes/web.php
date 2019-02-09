@@ -48,6 +48,8 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
         Route::post('/approve_appointment', 'ClientAppointmentsController@approve_appointment')->middleware('can:admin_rights');
 
 
+
+
 /***** Работа с сотрудниками *****/
 
     /* Отобразить список сотрудников и переход к другим разделам */
@@ -115,6 +117,15 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
     
     // Удаление документов сотрудника POST
     Route::post('/documents_delete_post/', 'EmployeesAdminController@documents_delete_post')->middleware('can:admin_rights');
+
+    // Управление доступом
+    Route::get('/admin/all_users', 'EmployeesAdminController@all_users')->middleware('can:admin_rights');
+
+    Route::get('admin/change_access_rights/{employee_id}', 'EmployeesAdminController@change_access_rights')->middleware('can:admin_rights');
+
+    Route::post('admin/change_access_rights_post/', 'EmployeesAdminController@change_access_rights_post')->middleware('can:admin_rights');
+
+
     
 /****** Рабочие зоны: Администратор ******/
 
@@ -155,6 +166,9 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
         /* Удалить примечание */
         Route::get('admin/clients/delete_client_note/{note_id}', 'Clients_Admin_Controller@delete_note');
     /**/    
+
+        /* Живой поиск клиентов*/
+        Route::get('/clients/search', 'Clients_Admin_Controller@search')->name('clients_search')->middleware('can:admin_rights');
     
 
 

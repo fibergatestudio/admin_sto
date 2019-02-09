@@ -314,4 +314,31 @@ class EmployeesAdminController extends Controller
 
         return view('employees_admin.employee_archive', ['archived_employees' => $archived_employees]);
     }
+
+
+    /*
+    ********** Изменение прав доступа **********
+    */
+
+    /* Отобразить всех сотрудников */
+    public function all_users(){
+        $all_users = User::whereNotIn('role', ['client'])->get();
+
+        return view('employees_admin.admin_all_users', ['all_users' => $all_users]);
+    }
+
+    public function change_access_rights($employee_id){
+        $user = User::find($employee_id);
+
+
+        return view('employees_admin.change_access_rights', ['user' => $user]);
+    }
+
+    public function change_access_rights_post(Request $request){
+        $user = User::find($request->user_id);
+        $user->role = $request->rights;
+        $user->save();
+
+        return redirect('/admin/all_users');
+    }
 }

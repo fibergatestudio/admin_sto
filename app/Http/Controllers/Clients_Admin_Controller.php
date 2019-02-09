@@ -71,6 +71,58 @@ class Clients_Admin_Controller extends Controller
         Client_notes::find($note_id)->delete();
         // И вернуться на страницу назад
         return back();
-    }    
-    /**/
+    } 
+
+
+    /* Живой поиск клиента*/
+    public function search(Request $request){
+     
+        if($request->ajax()){
+            $output = '';
+            $query = $request->get('query');
+            if($query != ''){
+                $clients = DB::table('clients')
+                    ->where('general_name', 'like', '%'.$query.'%')
+                    ->orWhere('fio', 'like', '%'.$query.'%')
+                    ->orWhere('organization', 'like', '%'.$query.'%')
+                    ->orWhere('phone', 'like', '%'.$query.'%')
+                    ->orWhere('balance', 'like', '%'.$query.'%')
+                    ->orWhere('discount', 'like', '%'.$query.'%')
+                    ->orderBy('id', 'desc')
+                    ->get();
+         
+            }else{
+                $clients = DB::table('clients')
+                    ->orderBy('id', 'desc')
+                    ->get();
+            }
+            $total_row = $clients->count();
+            if($total_row > 0){
+                foreach($clients as $client){
+                    $output .= '
+                    <tr>
+                     <td><a href="view_client/'.$client->id.'">'.$client->general_name.'</a></td>
+                     <td>'.$client->fio.'</td>
+                     <td>'.$client->organization.'</td>
+                     <td>'.$client->phone.'</td>
+                     <td>'.$client->balance.'</td>
+                     <td>'.$client->discount.'</td>
+                    </tr>
+                    ';
+                }
+            }else{
+               $output = '
+               <tr>
+                <td align="center" colspan="5">Клиент не найден</td>
+               </tr>
+               ';
+            }
+            $data = array(
+            'table_data'  => $output,
+            'total_data'  => $total_row
+            );
+
+            echo json_encode($data);
+        }
+    }
 }

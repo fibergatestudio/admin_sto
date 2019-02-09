@@ -93,6 +93,14 @@
 							</a>
 						</li>
 
+						<li class="nav-item">
+							<a href="{{ url('/admin/all_users') }}" class="nav-link">
+								<i class="icon-book3"></i>
+								<span>
+									Управление доступом
+								</span>
+							</a>
+						</li>
 						
 						<li class="nav-item">
 							<a class="nav-link" href="{{ url('/logout') }}"
