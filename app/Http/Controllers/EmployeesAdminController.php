@@ -101,6 +101,7 @@ class EmployeesAdminController extends Controller
 
         $date_join = $request->date_join;
         $fio = $request->fio;
+        $birthday = $request->birthday;
         $passport = $request->passport;
         $reserve_phone = $request->reserve_phone;
         $phone = $request->phone;
@@ -111,6 +112,7 @@ class EmployeesAdminController extends Controller
         $employee = Employee::find($employee_id);
         $employee->date_join = $date_join;
         $employee->fio = $fio;
+        $employee->birthday = $birthday;
         $employee->passport =  $passport;
         $employee->reserve_phone = $reserve_phone;
         $employee->phone = $phone;
@@ -494,9 +496,9 @@ class EmployeesAdminController extends Controller
             ->update(['balance' => $new_balance]);
 
 
-        $employee_fine = DB::table('employee_fines')
-            ->where('id', '=', $fine->employee_id)
-            ->update(['old_balance' => $new_balance]);
+        // $employee_fine = DB::table('employee_fines')
+        //     ->where('id', '=', $fine->employee_id)
+        //     ->update(['old_balance' => $new_balance]);
         
         //$employee_fine= new Employee_fine;
         //$employee_fine->old_balance = $employee_balance->balance;
@@ -535,11 +537,20 @@ class EmployeesAdminController extends Controller
     /* Добавить штраф вручную */
 
     public function add_fine_manually(Request $request){
+
+        /* Найти айди рабочего */
+        $employee_balance = DB::table('employees')
+        ->where('id', '=', $request->employee_id)
+        ->first();
+
+        $emp_balance = $employee_balance->balance;
+
         /* Добавление штрафа в режиме "ожидает применения" */
         $new_fine = new Employee_fine;
         $new_fine->employee_id = $request->employee_id;
         $new_fine->amount = $request->fine_amount;
         $new_fine->reason = $request->fine_reason;
+        $new_fine->old_balance = $emp_balance; // Добавления остатка
         $new_fine->status = 'pending';
         $new_fine->date = date('Y-m-d');
         $new_fine->save();
@@ -578,11 +589,20 @@ class EmployeesAdminController extends Controller
         ->where('id', '=', $employee_id)
         ->update(['balance' => $new_employee_balance]);
 
+
+        /* Найти айди рабочего */
+        $employee_balance = DB::table('employees')
+        ->where('id', '=', $request->employee_id)
+        ->first();
+
+        $emp_balance = $employee_balance->balance;
+
         // Добавить жетоны в историю
         $employee_coffee_log_entry = new Coffee_token_log;
         $employee_coffee_log_entry->token_count = $token_count;
         $employee_coffee_log_entry->date = date('Y-m-d');
         $employee_coffee_log_entry->employee_id = $employee_id;
+        $employee_coffee_log_entry->old_balance = $emp_balance;
         $employee_coffee_log_entry->save();
 
         // Добавить запись в общие логи
@@ -611,5 +631,21 @@ class EmployeesAdminController extends Controller
         $archived_employees = Employee::where('status', 'archived')->get();
 
         return view('employees_admin.employee_archive', ['archived_employees' => $archived_employees]);
+    }
+
+    public function admin_shifts_index(){
+
+        $shifts = DB::table('shifts')
+        ->join('employees', 'shifts.employee_id', '=', 'employees.id')
+        ->select(
+            'shifts.*',
+            'employees.general_name AS shift_emp_name'
+        )
+        ->get();
+
+        return view('admin.shifts.admin_shifts_index',
+        [
+            'shifts' => $shifts
+        ]);
     }
 }

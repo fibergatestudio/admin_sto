@@ -220,6 +220,20 @@ class Employee_Dashboard_Controller extends Controller
         return back();
 
     }
+
+    /* Пометить наряд "архив" */
+    public function assignment_archive($assignment_id){
+
+        $uncomplete = 'archive';
+
+        $uncomplete_assignment = Assignment::find($assignment_id);
+        $uncomplete_assignment->status = $uncomplete;
+        $uncomplete_assignment->save();
+
+        /* Возвращаемся обратно на страницу нарядов */
+        return back();
+
+    }
     
 
     /* Добавить заход денег : POST */
@@ -310,7 +324,30 @@ class Employee_Dashboard_Controller extends Controller
 
     /* Архив нарядов сотрудника */
     public function my_assignments_archive(){
-        // ...
+
+        $user = Auth::user();
+        $employee_user_id = $user->id;
+        $employee = DB::table('employees')->where('user_id', $employee_user_id)->first();
+        $employee_id = $employee->id;
+
+        // Получить employee_id
+        
+
+        /* Получаем информацию о архивных(готовых) нарядах */
+        $assignments_archive =
+            DB::table('assignments')
+                ->where(
+                    [
+                        ['responsible_employee_id', '=', $employee_id],
+                        ['status', '=', 'archive']
+                    ]
+                )
+                ->get();
+        
+        return view('employee.assignments_archive',
+        [
+            'assignments_archive' => $assignments_archive
+        ]);
     }
 
     /**** Смены ****/
@@ -352,6 +389,23 @@ class Employee_Dashboard_Controller extends Controller
 
         // ... Проверка на право закрыть
         // ... Проверка на статус смены (открыта ли?)
+
+        // Добавление денег во время закрытия смены
+
+        $user = Auth::user();
+        $employee_user_id = $user->id;
+        $employee = DB::table('employees')->where('user_id', $employee_user_id)->first();
+        $employee_id = $employee->id;
+
+        $shift_wage = $employee->standard_shift_wage;
+
+        $employee_balance = $employee->balance;
+
+        $apply_shift = $employee_balance + $shift_wage;
+
+        DB::table('employees')
+            ->where('id', '=', $employee_id)
+            ->update(['balance' => $apply_shift]);
 
         // Закрываем смену
         $shift = Shift::find($shift_id);

@@ -51,6 +51,16 @@
 							</a>
 						</li>
 
+						<li class="nav-item">
+							<a href="{{ url('/admin/shifts') }}" class="nav-link {{ request()->is('/admin/shifts/') ? 'active' : ''}}">
+
+								<i class="icon-profile"></i>
+								<span>
+									Смены Сотрудников
+								</span>
+							</a>
+						</li>
+
                         <li class="nav-item">
 							<a href="{{ url('admin/workzones/index') }}" class="nav-link">
 								<i class="icon-grid5"></i>

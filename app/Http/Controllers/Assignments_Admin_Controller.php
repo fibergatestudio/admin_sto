@@ -251,6 +251,9 @@ class Assignments_Admin_Controller extends Controller
         $sub_assignment_description = $request->description; // Описание зонального наряда
         $workzone_id = $request->workzone; // ID рабочей зоны
         $responsible_employee_id = $request->responsible_employee; // ID ответственного лица (employee.id)
+
+        $start_time = $request->start_time;
+        $end_time = $request->end_time;
         
         /* Создание нового зонального наряда */
         $sub_assignment = new Sub_assignment();
@@ -260,6 +263,8 @@ class Assignments_Admin_Controller extends Controller
         $sub_assignment->workzone_id = $workzone_id;
         $sub_assignment->responsible_employee_id = $responsible_employee_id;
         $sub_assignment->date_of_creation = date('Y-m-d');
+        $sub_assignment->start_time = $start_time;
+        $sub_assignment->end_time = $end_time;
         $sub_assignment->save();
 
         /* Возвращаемся на страницу */

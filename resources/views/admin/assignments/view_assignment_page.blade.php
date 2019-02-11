@@ -48,7 +48,7 @@
 
 <!-- Модальное окно принятия аванса -->
 <div class="modal fade" id="prepaidModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <form action="{{ url('/admin/assignments/change_name') }}" method="POST">
+  <form action="{{ url('/admin/manage_assignment/add_income_entry') }}" method="POST">
     @csrf
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -60,18 +60,42 @@
         </div>
         <div class="modal-body">
           
-          {{-- ID наряда --}}
-          <input type="hidden" name="assignment_id" value="{{ $assignment->id }}">
-          
-          {{-- Новое название --}}
-          <div class="form-group">
-            <label>Тест</label>
-          </div>
+        {{-- ID наряда --}}
+        <input type="hidden" name="assignment_id" value="{{ $assignment->id }}">
+        
+        <div class="form-row">
+        {{-- Сумма --}}
+        <div class="form-group col-md-6">
+            <label>Сумма Аванса</label>
+            <input type="number" name="amount" min="0" class="form-control" required>
+        </div>
+        {{-- Валюта --}}
+        <div class="form-group col-md-6">
+            <label>Валюта</label>
+            <!--<input type="number" name="amount" min="0" class="form-control" required>-->
+            <select name="currency"class="form-control">
+                <option value="MDL">MDL</option>
+                <option value="USD">USD</option>
+                <option value="EUR">EUR</option>
+            </select>
+        </div>
+        </div>
+
+        {{-- Основание --}}
+        <div class="form-group">
+            <label>Основание (реквизиты документа или действие)</label>
+            <input type="text" name="basis" class="form-control" required>
+        </div>
+
+        {{-- Описание - не обязательно --}}
+        <div class="form-group">
+            <input type="hidden" name="description" class="form-control" value="Принятие Аванса">
+        </div>
 
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-          <button type="button" class="btn btn-primary">Принять</button>
+          <button type="submit" class="btn btn-primary">Принять</button>
         </div>
       </div>
     </div>
@@ -92,10 +116,13 @@
       <thead>
         <tr>
           <th>#</th>
+          <th>Номер</th>
           <th>Название</th>
           <th>Рабочая зона</th>
           <th>Ответственный сотрудник </th>
-          <th>Дата </th>
+          <th>Дата</th>
+          <th>Время начал работ</th>
+          <th>Время окончания работ</th>
           <th></th>{{-- Кнопка просмотр --}}
         </tr>
       </thead>
@@ -103,16 +130,18 @@
         @foreach($sub_assignments as $sub_assignment)
           <tr class="row1" data-id="{{ $sub_assignment->id }}">
             <td>
-            {{ $sub_assignment->id }}
                 <div style="color:rgb(124,77,255); padding-left: 10px; float: left; font-size: 20px; cursor: pointer;" title="change display order">
-                <i class="fa fa-ellipsis-v"></i>
-                <i class="fa fa-ellipsis-v"></i>
+                <i class="icon-menu-open"></i>
+                <i class=""></i>
                 </div>
             </td>
+            <td>{{ $sub_assignment->id }}</td>
             <td>{{ $sub_assignment->name }} {{-- Название наряда --}}</td>
             <td>{{ $sub_assignment->workzone_name }} {{-- Название рабочей зоны --}}</td>
             <td>{{ $sub_assignment->responsible_employee }} {{-- Название ответственного сотрудника --}}</td>
             <td>{{ $sub_assignment->date_of_creation }} {{-- Дата создания --}}</td>
+            <td>{{ $sub_assignment->start_time }} {{-- Время начала работ --}}</td>
+            <td>{{ $sub_assignment->end_time }} {{-- Время окончания работ --}}</td>
 
             {{-- url('admin/assignments/view/'.$assignment->id.'/management') --}}
             <td>

@@ -228,6 +228,11 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
     /* - Удаление примечания к сотруднику - */
     Route::get('/admin/employee/delete_employee_note/{note_id}', 'EmployeesAdminController@delete_employee_note')->middleware('can:admin_rights');
 
+/**** Все смены : Админ ****/
+
+    /* Страница смены (сегодня) */
+    Route::get('/admin/shifts', 'EmployeesAdminController@admin_shifts_index');
+
 /****** Рабочие зоны: Администратор ******/
 
     /* Просмотр рабочих зон */
@@ -494,8 +499,11 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
             /* Наряд невыполнен : POST */
             Route::get('/employee/manage_assignment/{assignment_id}/assignment_uncomplete', 'Employee_Dashboard_Controller@assignment_uncomplete');
 
+             /* Наряд архив : POST */
+             Route::get('/employee/manage_assignment/{assignment_id}/assignment_archive', 'Employee_Dashboard_Controller@assignment_archive');
+
     /* Архив моих нарядов */
-    Route::get('/employee/my_assignments_archive', 'Employee_Dashboard_Controller@my_assignment_archive');
+    Route::get('/employee/my_assignments_archive', 'Employee_Dashboard_Controller@my_assignments_archive');
 
     /* Выполненые наряды */
     Route::get('/employee/my_completed_assignments', 'Employee_Dashboard_Controller@my_complete_assignments');

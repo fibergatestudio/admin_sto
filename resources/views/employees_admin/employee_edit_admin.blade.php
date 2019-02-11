@@ -11,6 +11,7 @@
                 <th>Сотрудник</th>
                 <th>Дата принятия</th>
                 <th>ФИО</th>
+                <th>День Рождения</th>
                 <th>Номер Паспорта</th>
                 <th>Баланс</th>
                 <th>Телефон</th>
@@ -30,6 +31,9 @@
             </td>
             <td>
                 {{ $employee_edit->fio }}
+            </td>
+            <td>
+                {{ $employee_edit->birthday }} {{-- День рождения --}}
             </td>
             <td>
                 {{ $employee_edit->passport }}
@@ -74,14 +78,19 @@
                 <div class="form-row">
 
                     {{-- Дата принятия на работу --}}
-                    <div class="form-group col-md-6" >
+                    <div class="form-group col-md-5" >
                         <label>Дата принятия на работу</label>
                         <input type="date" name="date_join"  value="{{ $employee_edit->date_join }}" min="2000-01-01" max="2019-12-31" class="form-control">
                     </div>
 
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-5">
                         <label>ФИО</label>
                         <input type="text" name="fio" id="carBrand" value="{{ $employee_edit->fio }}" class="form-control typeahead">
+                    </div>
+
+                    <div class="form-group col-md-2">
+                        <label>День Рождения</label>
+                        <input type="date" name="birthday" id="carBrand" value="{{ $employee_edit->birthday }}" class="form-control typeahead">
                     </div>
 
                 </div>

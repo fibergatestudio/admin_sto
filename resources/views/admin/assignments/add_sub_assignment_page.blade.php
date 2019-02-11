@@ -1,7 +1,7 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    Добавление зонального наряла
+    Добавление зонального наряда
 @endsection
 
 @section('content')
@@ -10,6 +10,22 @@
 
         {{-- ID родительского наряда --}}
         <input type="hidden" name="assignment_id" value="{{ $assignment->id }}">
+
+        <div class="row">
+        
+            <div class="col-md-6">
+                <label>Время начала работ</label>
+                <input type="datetime-local" name="start_time" class="form-control">
+            </div>
+
+            <div class="col-md-6">
+                <label>Время окончания работ</label>
+                <input type="datetime-local" name="end_time" class="form-control">
+            </div>
+        
+        </div>
+
+        <br>
 
         {{-- Название --}}
         <div class="form-group">

@@ -8,7 +8,12 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    Страница нарядов
+    Страница нарядов 
+    <a href="{{ url('admin/add_client') }}">
+        <div class="btn btn-success">
+            Добавить наряд
+        </div>
+    </a>
 @endsection
 
 @section('content')
@@ -16,6 +21,7 @@
     <table class="table">
         <thead>
             <tr>
+            <th scope="col">№</th>
             <th scope="col">Дата создания</th>
             <th scope="col">Название</th>
             <th scope="col">Ответственный сотрудник</th>
@@ -25,6 +31,8 @@
         </thead>
         @foreach($assignments as $assignment)
             <tr>
+                {{-- Номер Наряда --}}
+                <td>{{ $assignment->id }}</td>
                 {{-- Дата --}}
                 <td>{{ beautify_date($assignment->date_of_creation) }}</td>
                 

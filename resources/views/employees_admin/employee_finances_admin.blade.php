@@ -140,6 +140,7 @@
                     <tr>
                         <th>Кол-во жетонов</th>
                         <th>Сумма</th>
+                        <th>Остаток</th>
                         <th>Дата</th>
                     </tr>
                 </thead>
@@ -150,6 +151,9 @@
                     </td>
                     <td>
                     -{{ $token_logs->token_count*5}}
+                    </td>
+                    <td>
+                    {{ $token_logs->old_balance }}
                     </td>
                     <td>
                     {{ $token_logs->date }}

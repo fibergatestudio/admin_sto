@@ -26,6 +26,13 @@
                 </button>
             </a>
         </div>
+        <div class="col-md-2">
+            <a href="{{ url('/employee/manage_assignment/'.$assignment->id.'/assignment_archive') }}">
+                <button onClick="fnFunction(arg)" type="button" class="btn btn-primary">
+                    В архив (тест)
+                </button>
+            </a>
+        </div>
     </div>
 
     {{-- Доходная часть --}}
@@ -64,9 +71,9 @@
     <!--<p>Сумма заходов: {{ $assignment_income->sum('amount') }}<br></p>-->
 
     {{-- Добавить заход денег : Кнопка открытия модального окна --}}
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addIncomeModal">
+    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addIncomeModal">
         Добавить заход денег
-    </button>
+    </button> -->
 
     {{-- Добавить заход денег : Форма и модальное окно --}}
     <form action="{{ url('/employee/manage_assignment/add_income_entry') }}" method="POST">
@@ -162,10 +169,10 @@
     </table>
     <!--<p>Сумма расходов: {{ $assignment_expense->sum('amount') }}<br></p>-->
 
-    {{-- Добавить расход денег : Кнопка открытия модального окна --}}
+    <!-- {{-- Добавить расход денег : Кнопка открытия модального окна --}}
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addExpenseModal">
         Добавить расход денег
-    </button>
+    </button> -->
 
     {{-- Добавить расход денег : Форма и модальное окно --}}
     <form action="{{ url('/employee/manage_assignment/add_expense_entry') }}" method="POST">
