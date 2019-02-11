@@ -28,8 +28,15 @@
                 <td>{{($employee->reserve_phone)}} {{--  Статус --}}</td>
                 <td>{{($employee->hour_from)}} {{--  Статус --}}</td>
                 <td>{{($employee->hour_to)}} {{--  Статус --}}</td>
+
+                    @if($employee->status == 'confirmed')
+                    <td>
+                        <b class="badge bg-success" type="text">{{ $record->status }}</b><br>
+                    </td>
+                    @endif
+
                 <td>
-                    <a href="{{ url('/master/employee_finances/'.$employee->id) }}">
+                    <a href="{{ url('/master/confirm_employee/'.$employee->id) }}">
                         <div class="btn btn-warning">
                             Подтвердить запись
                         </div>
