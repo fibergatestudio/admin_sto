@@ -54,7 +54,7 @@ class PublicFrontController extends Controller
         $car_name = $car->general_name;
 
         $create_appointment_log_entry->text = 'Создание записи на приём машины -' .$car_name. 'клиента - ' .$client_name. 'автор записи - ' .$authoir_name. 'дата - ' .date('Y-m-d');  //текст лога о создании записи на приём машины(название) клиента(имя), автором(имя), дата(date)
-
+        $create_appointment_log_entry->save();
 
         // !! TODO: сделать защиту от спама
 
