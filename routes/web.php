@@ -131,6 +131,8 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
         Route::post('/approve_appointment', 'ClientAppointmentsController@approve_appointment')->middleware('can:admin_rights');
 
 
+
+
 /***** Работа с сотрудниками *****/
 
     /* Отобразить список сотрудников и переход к другим разделам */
@@ -238,6 +240,12 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
     /* Страница смены (сегодня) */
     Route::get('/admin/shifts', 'EmployeesAdminController@admin_shifts_index');
 
+    // Управление доступом
+    Route::get('/admin/all_users', 'EmployeesAdminController@all_users')->middleware('can:admin_rights');
+
+    Route::get('admin/change_access_rights/{employee_id}', 'EmployeesAdminController@change_access_rights')->middleware('can:admin_rights');
+
+    Route::post('admin/change_access_rights_post/', 'EmployeesAdminController@change_access_rights_post')->middleware('can:admin_rights');
 /****** Рабочие зоны: Администратор ******/
 
     /* Просмотр рабочих зон */
@@ -291,6 +299,8 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
         /* Удалить примечание */
         Route::get('admin/client/delete_client_note/{note_id}', 'Clients_Admin_Controller@delete_client_note');
     /**/
+    /* Живой поиск клиентов*/
+    Route::get('/clients/search', 'Clients_Admin_Controller@search')->name('clients_search')->middleware('can:admin_rights');
 
 
 
@@ -454,7 +464,7 @@ Route::get('/admin/supply_orders/archive', 'Supply_orders_Admin_Controller@archi
     /* Удалить заказ (доступно только в архиве) */
     Route::get('/admin/supply_orders/archive/delete/{order_id}', 'Supply_orders_Admin_Controller@delete_archived_order');
 
-   /****** Статистика и Анализ : Администратор ******/ 
+   /****** Статистика и Анализ : Администратор ******/
 
    /* Главная страница */
    Route::get('/admin/statistics_analysis/', 'StatisticsAnalysisAdminController@index');
