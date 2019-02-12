@@ -421,6 +421,8 @@ class Employee_Dashboard_Controller extends Controller
         $shift = Shift::find($shift_id);
         $shift->closed_at = date('H:i:s');
         $shift->status = 'closed';
+        $shift->payment_amount = $shift_wage;
+        $shift->payment_status = 'payed';
         $shift->save();
 
         // И возвращаемся на страницу смен

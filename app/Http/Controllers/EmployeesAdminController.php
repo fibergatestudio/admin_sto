@@ -633,9 +633,6 @@ class EmployeesAdminController extends Controller
         return view('employees_admin.employee_archive', ['archived_employees' => $archived_employees]);
     }
 
-<<<<<<< HEAD
-
-
     /*
     ********** Изменение прав доступа **********
     */
