@@ -21,7 +21,7 @@
                     </a>
                     <br>                  
                     {{-- Отменить штраф --}}
-                    <a onclick="return confirm('Подтверждение отмены')" href="{{ url('/supervisor/employee_fines/apply_fine/'.$fine->id) }}">
+                    <a onclick="return do_check();" href="{{ url('/supervisor/employee_fines/apply_fine/'.$fine->id) }}">
                         <div class="btn btn-primary" style="margin-top: 10px">
                             Отменить
                         </div>
@@ -82,4 +82,16 @@
         </div>{{-- / MODAL DIALOG --}}
     </div>
 
+<script>
+function do_check()
+{
+    var return_value=prompt("Введите пароль для отмены Пароль(123)");
+    if(return_value==="123")
+        return true;
+    else
+        alert("Неверный пароль!");
+        return false;
+
+}
+</script>
 @endsection

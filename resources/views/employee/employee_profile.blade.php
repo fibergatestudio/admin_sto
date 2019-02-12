@@ -9,7 +9,7 @@
 <div class="content py-5  bg-light">
     <div class="container">
         <div class="row">
-                <div class="col-md-8 offset-md-2">
+            <div class="col-md-8 offset-md-2">
                 <span class="anchor" id="formUserEdit"></span>
                 <div class="card card-outline-secondary">
                     <div class="card-header">

@@ -29,7 +29,16 @@ class Clients_Admin_Controller extends Controller
     /* Добавить клиента: обработка POST запроса */
     public function add_client_post(Request $request){
         $new_client = new Client();
-        $new_client->general_name = $request->general_name;
+
+        $name = $request->name;
+        $surname = $request->surname;
+        $fio = $name.' '.$surname;
+
+        $new_client->general_name = $name;
+        //Новые поля в добавлении клиента
+        $new_client->fio = $fio;
+        $new_client->organization = $request->organization;
+        $new_client->phone = $request->phone;
 
         $new_client->save();
         // Если клиент был добавлен успешно, то предлагаем добавить машину клиента

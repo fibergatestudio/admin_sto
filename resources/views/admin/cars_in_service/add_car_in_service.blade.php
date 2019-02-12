@@ -15,10 +15,98 @@
             {{-- ID клиента --}}
             <input type="hidden" name="client_id" value="{{ $client->id }}">
 
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label>Название</label>
                 <input class="form-control" type="text" name="car_general_name">
-            </div>
+            </div> -->
+
+            {{-- Прикрепить документ --}}
+                <div class="form-group">
+                    <label>Прикрепить документ</label>
+                    <input type="file" name="document">
+                </div>
+
+                <div class="form-row">
+
+                    {{-- Название машины --}}
+                    <div class="form-group col-md-6" >
+                        <label>Название машины</label>
+                        <input type="text" name="car_general_name" class="form-control" required>
+                    </div>
+
+                    {{-- Модель и марка --}}
+                    {{-- Марка : от неё будут подтягивать подсказки . Используется Typeahead --}}
+                    <div class="form-group col-md-6">
+                        <label>Марка машины</label>
+                        <input type="text" name="car_brand" id="carBrand" class="form-control typeahead" required>
+                    </div>
+
+                </div>
+
+                <div class="form-row">                    
+
+                    {{-- Пробег --}}
+                    {{-- Километры --}}
+                    <div class="form-group col-md-6">
+                        {{-- ... --}}
+                        <label>Пробег в километрах</label>
+                        <input type="number" name="mileage_km" class="form-control" min="0" value="0" id="mileageKM" step="any" required>
+                    </div>
+
+                    {{-- Модель : подтягивается с базы --}}
+                    {{-- ... --}}
+                    <div class="form-group col-md-6">
+                        <label>Модель машины</label>
+                        <select id="carModel" name="car_model" class="form-control" required>
+                        </select>
+                    </div>
+
+                </div>
+                
+                <div class="form-row">  
+                    {{-- Мили --}}
+                    <div class="form-group col-md-6"> 
+                        <label>Пробег в милях</label>
+                        <input type="number" name="mileage_miles" class="form-control" min="0" value="0" id="mileageMiles" step="any" required>
+                    </div>
+
+                    {{-- Скрипт на автоматический пересчёт - внизу, в секции custom_scripts --}}
+
+                    {{-- Новые поля --}}
+                    {{-- Год выпуска --}}
+                    <div class="form-group col-md-6">
+                        <label>Год выпуска</label>
+                        <input type="number" min="1900" max="2099" step="1" value="2019" name="release_year" id="releaseyear" class="form-control typeahead" required>
+                    </div>
+                </div>
+
+                <div class="form-row">  
+                    {{-- Регистрационный номер --}}
+                    <div class="form-group col-md-6">
+                        <label>Регистрационный номер</label>
+                        <input type="text" name="reg_number" id="regnumber" class="form-control typeahead" required>
+                    </div>
+
+                    {{-- Тип топлива --}}
+                    <div class="form-group col-md-6">
+                        <label>Тип топлива</label>
+                        <input type="text" name="fuel_type" id="fueltype" class="form-control typeahead" required>
+                    </div>
+                </div>
+
+                <div class="form-row">  
+                    {{-- VIN --}}
+                    <div class="form-group col-md-6">
+                        <label>VIN</label>
+                        <input type="text" name="vin_number" id="vinnumber" class="form-control typeahead" required>
+                    </div>
+
+                    {{-- Обьем мотора --}}
+                    <div class="form-group col-md-6">
+                        <label>Объем мотора</label>
+                        <input type="text" name="engine_capacity" id="enginecapacity" class="form-control typeahead" required>
+                    </div>
+                </div>
             
             <button type="submit" class="btn btn-primary">
                 Сохранить

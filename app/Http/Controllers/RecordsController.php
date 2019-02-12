@@ -14,12 +14,155 @@ class RecordsController extends Controller
 
         $records = Records::all();
 
+        /* Время */
+        // $time = '7:30';
+        // for ($i = 0; $i <= 24; $i++)
+        // {
+        //     $next = strtotime('+30mins', strtotime($time)); // +30мин
+        //     $time = date('G:i', $next); 
+        //     echo "<option name=\"confirmed_time\" value=\"$time\">$time</option>";
+        // }
+
+        /* Перебираем все записи */
+        foreach($records as $record){
+            /* Выбираем из них unconfirmed*/
+            if($record->status == 'unconfirmed'){
+                
+                /* Этот массив будет содержать все возможные опции для дропдауна */
+                $time_for_record_array = [];
+
+                /* Перебираем все возможные времена с шагом в полчаса */
+                
+                // Настройки для скрипта
+                $starting_time = '09:00';
+                $ending_time = '20:00';
+                            
+                $current_time = $starting_time;
+                // брейкпойнт потом убрать из скрипта - это заглушка от бесконечного лупа
+                $breakpoint = 0;
+                while($this->check_time($current_time, $ending_time) && $breakpoint < 50){
+                    // Проверяем доступность времени
+                    $wanted_date = $record->record_date; // Дату берём из базы
+                    if($this->check_time_availability($current_time, $wanted_date)){
+                        $time_for_record_array[] = $current_time;
+                    }
+                    
+                    // Увеличиваем время с шагом на полчаса
+                    $current_time = $this->increase_time($current_time);
+                    
+                    $breakpoint += 1;
+                }
+                
+                
+                $record->available_time = $time_for_record_array;
+                
+            } // end if stats == unconfirmed
+
+            
+            
+        } // end foreach record
+
+
         return view('admin.assignments.records_admin_index', 
         [
             'records' => $records
         ]);
+    
+    } // end function records_index
+
+    /* Вспомогательная функция для records_index, которая сравнивает время*/
+    /* Функция принимает время в формате 24ч, строки с нулями перед часом или минутами - 09:00 09:30 12:00 12:30 17:00 17:30 и т.д.*/
+    /* И возвращает true, если время не закончилось*/
+    private function check_time($current_time, $ending_time){
+        // Получаем текущие часы и минуты
+        $current_time_data = explode(':', $current_time);
+        $current_hours = intval($current_time_data[0]);
+        $current_minutes = intval($current_time_data[1]);
+
+        // Получаем часы и минуты окончания дня
+        $ending_time_data = explode(':', $ending_time);
+        $ending_hours = intval($ending_time_data[0]);
+        $ending_minutes = intval($ending_time_data[1]);
+        
+        // Сравниваем время
+        if($current_hours < $ending_hours){
+            // Если ещё не конец дня, то возвращаем true
+            return true;
+        } else {
+            // Если день закончился, возвращаем false
+            return false;
+        }
     }
 
+    /* Вспомогательная функция для records_index, которая увеличивает время с шагом в полчаса */
+    private function increase_time($current_time){
+        // Получаем текущие часы и минуты
+        $current_time_data = explode(':', $current_time);
+        $current_hours = intval($current_time_data[0]);
+        $current_minutes = intval($current_time_data[1]);
+
+        // Если минуты 00, то добавляем полчаса
+        if($current_minutes == 0){
+            $current_minutes = 30;
+        } else if ($current_minutes == 30){
+            // Если минуты == 30
+            // То обнуляем минуты и увеличиваем час на 1
+            $current_hours += 1;
+            $current_minutes = 0;
+        }
+
+        // Форматируем время
+        $current_hour_string = '';
+        $current_minutes_string = '';
+        
+        // Если часы меньше 10, например 9, то записываем время как "09"
+        if($current_hours < 10){
+            $current_hour_string = '0'.$current_hours;
+        } else {
+            $current_hour_string = $current_hours;
+        }
+
+        // Если минуты == 0, то записываем их как '00'
+        
+        if($current_minutes == 0){
+            $current_minutes_string = '00';
+        } else {
+            $current_minutes_string = '30';
+        }
+
+        // Объединяем время и возвращаем его
+        $current_time = $current_hour_string.':'.$current_minutes_string;
+        return $current_time;
+
+    }
+
+    /* Вспомогательная функция для records_index, которая проверяет доступность времени на дату и время */
+    private function check_time_availability($wanted_time, $wanted_date){
+        // Форматируем время
+        $wanted_time_data = explode(':', $wanted_time);
+        $wanted_hour = intval($wanted_time_data[0]);
+        $wanted_minutes = $wanted_time_data[1];
+        $wanted_time_formatted = $wanted_hour.':'.$wanted_minutes;
+        
+
+        // Запрашиваем в базе, есть ли уже запись на эту дату + это время; если есть count будет = 1, если нет count = 0
+        $count_checker = 
+            DB::table('records')
+                ->where([
+                    ['record_date', '=', $wanted_date], // Проверка даты
+                    ['confirmed_time', '=', $wanted_time_formatted]  // Проверка времени
+                ])
+                ->count();
+        
+        if($count_checker == 0){
+            return true;
+        } else {
+            return false;
+        }
+        
+
+    }
+    
 
     /* Добавление данных записи в базу */
     public function add_record(Request $request){

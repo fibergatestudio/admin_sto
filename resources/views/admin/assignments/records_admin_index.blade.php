@@ -58,15 +58,10 @@
                 <form action="{{ url('/complete_record/'.$record->id) }}" method="POST">
                 @csrf
                     <select class="dropdown" style='width:60px;' name="confirmed_time" onchange='return timeSchedvalue(this.value)'>
-                    <?php
-                        $time = '7:30';
-                        for ($i = 0; $i <= 24; $i++)
-                        {
-                            $next = strtotime('+30mins', strtotime($time)); // +30мин
-                            $time = date('G:i', $next); 
-                            echo "<option name=\"confirmed_time\" value=\"$time\">$time</option>";
-                        }
-                    ?>
+                        @foreach($record->available_time as $time_option)
+                            <option value="{{ $time_option }}">{{ $time_option }}</option>
+                        @endforeach
+                    <select></select>
                     <input type="hidden" name="record_id" value="{{ $record->id }}">
                     <input type="submit" value="Подтвердить" class="btn btn-primary"/>
                 </form>
@@ -130,7 +125,7 @@
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label form-control-label">Дата записи</label>
                                 <div class="col-lg-9">
-                                    <input class="form-control" name="record_date" type="date">
+                                    <input class="form-control" name="record_date" type="date"  value="2019-02-12" min="2019-01-01" max="2019-12-31">
                                 </div>
                                 
                             </div>
