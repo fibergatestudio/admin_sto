@@ -362,7 +362,7 @@ class EmployeesAdminController extends Controller
            'parse_mode' => 'HTML',
            'text' => $text
        ]);
-        
+
         // Добавить начисление в общие логи
         $employee_balance_log = new Employee_balance_log;
         $employee_balance_log->amount = $add_sum;
@@ -386,11 +386,11 @@ class EmployeesAdminController extends Controller
         $employee = Employee::find($employee_id);
 
         /* Получаем выплаты по сотруднику */
-        $employee_payout = Employee_balance_log::where( 
+        $employee_payout = Employee_balance_log::where(
             [
 
                 ['employee_id', $employee_id],
-                ['action', '=', 'withdrawal'] 
+                ['action', '=', 'withdrawal']
 
             ])->orderBy('created_at', 'desc')->get();
 
@@ -430,7 +430,7 @@ class EmployeesAdminController extends Controller
            'text' => $text
        ]);
 
-        
+
         // Добавить запись в общие логи
         $employee_balance_log = new Employee_balance_log;
         $employee_balance_log->amount = -$add_payout;
@@ -499,7 +499,7 @@ class EmployeesAdminController extends Controller
         // $employee_fine = DB::table('employee_fines')
         //     ->where('id', '=', $fine->employee_id)
         //     ->update(['old_balance' => $new_balance]);
-        
+
         //$employee_fine= new Employee_fine;
         //$employee_fine->old_balance = $employee_balance->balance;
         // $employee_fine->save();
@@ -631,6 +631,35 @@ class EmployeesAdminController extends Controller
         $archived_employees = Employee::where('status', 'archived')->get();
 
         return view('employees_admin.employee_archive', ['archived_employees' => $archived_employees]);
+    }
+
+<<<<<<< HEAD
+
+
+    /*
+    ********** Изменение прав доступа **********
+    */
+
+    /* Отобразить всех сотрудников */
+    public function all_users(){
+        $all_users = User::whereNotIn('role', ['client'])->get();
+
+        return view('employees_admin.admin_all_users', ['all_users' => $all_users]);
+    }
+
+    public function change_access_rights($employee_id){
+        $user = User::find($employee_id);
+
+
+        return view('employees_admin.change_access_rights', ['user' => $user]);
+    }
+
+    public function change_access_rights_post(Request $request){
+        $user = User::find($request->user_id);
+        $user->role = $request->rights;
+        $user->save();
+
+        return redirect('/admin/all_users');
     }
 
     public function admin_shifts_index(){
