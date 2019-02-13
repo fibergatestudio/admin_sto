@@ -162,6 +162,39 @@ class Supply_orders_Admin_Controller extends Controller
             $i++;
         }   
         
+        // $inputcheck = $request->'item'+id.id;
+
+        for($i = 1 ; $i <= $request->new_entries_count; $i++ ){
+            $item_check = 'new_item'.$i;
+
+            if(!empty($request->$item_check)){
+
+                /* Вносим доп предметы из заказа в базу */
+                $counter = intval($request->new_entries_count);
+                for($i = 1; $i <= $counter; $i++){
+                // Получает данные из POST запроса
+                $new_item_input_name = 'new_item'.$i;
+                $new_item_count_name = 'new_count'.$i;
+                $new_item_urgency_name = 'new_urgency'.$i;
+                $new_item_name = $request->$new_item_input_name;
+                $new_item_count = $request->$new_item_count_name;
+                $new_item_urgency = $request->$new_item_urgency_name;
+
+                // Внести в базу
+                $new_order_item = new Supply_order_item();
+                $new_order_item->supply_order_id = $edit_order->id;
+                $new_order_item->item = $new_item_name;
+                $new_order_item->number = $new_item_count;
+                $new_order_item->urgency = $new_item_urgency;
+
+                $new_order_item->save();
+
+                }
+            } else {
+                //Ничего не делаем
+            }
+        }
+
          /* Отправляем телеграм оповещение о редактировании заказа*/
 
          $text = "У вас изменения заказа!\n"

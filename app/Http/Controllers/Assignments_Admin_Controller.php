@@ -38,6 +38,7 @@ class Assignments_Admin_Controller extends Controller
             DB::table('assignments')
                 ->join('employees', 'assignments.responsible_employee_id', '=', 'employees.id')
                 ->join('cars_in_service', 'assignments.car_id', '=', 'cars_in_service.id')
+                ->orderBy('order','ASC')
                 ->select(
                         'assignments.*',
                         'employees.general_name AS employee_name',
@@ -202,6 +203,24 @@ class Assignments_Admin_Controller extends Controller
             foreach ($request->order as $order) {
                 if ($order['id'] == $id) {
                     $sub_assignment->update(['order' => $order['position']]);
+                }
+            }
+        }
+        return response('Update Successfully.', 200);
+    }
+
+    /* Обновления позации элемента таблицы */
+    public function updateMainOrder(Request $request){
+
+        $assignments = Assignment::all();
+
+        foreach ($assignments as $assignment) {
+            $assignment->timestamps = false; // To disable update_at field updation
+            $id = $assignment->id;
+
+            foreach ($request->order as $order) {
+                if ($order['id'] == $id) {
+                    $assignment->update(['order' => $order['position']]);
                 }
             }
         }

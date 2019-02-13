@@ -10,6 +10,10 @@ use App\Client;
 class Assignment extends Model
 {
     protected $table = "assignments";
+
+    protected $fillable = [
+        'id', 'title','order', 'status',
+    ];
     /* Получить имя клиента */
     public function get_client_name(){
         /* Получаем данные по машине */

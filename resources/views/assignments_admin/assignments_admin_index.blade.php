@@ -18,9 +18,10 @@
 
 @section('content')
 
-    <table class="table">
+    <table id="table" class="table">
         <thead>
             <tr>
+            <th>#</th>
             <th scope="col">№</th>
             <th scope="col">Дата создания</th>
             <th scope="col">Название</th>
@@ -29,8 +30,15 @@
             <th scope="col"></th>
             </tr>
         </thead>
+        <tbody id="tablecontents">
         @foreach($assignments as $assignment)
-            <tr>
+            <tr class="row1" data-id="{{ $assignment->id }}">
+                <td>
+                    <div style="color:rgb(124,77,255); padding-left: 10px; float: left; font-size: 20px; cursor: pointer;" title="change display order">
+                    <i class="icon-menu-open"></i>
+                    <i class=""></i>
+                    </div>
+                </td>
                 {{-- Номер Наряда --}}
                 <td>{{ $assignment->id }}</td>
                 {{-- Дата --}}
@@ -55,8 +63,56 @@
                 </td>
             </tr>
         @endforeach
+        </tbody>
     </table>
     <hr>
     
     * Добавление наряда будет осуществляться из карточки машины (вкладка "Клиенты" или "Машины в сервисе")
+
+
+<!-- Скрипты для таблиц -->
+<script type="text/javascript">
+ $(function () {
+   $("#table").DataTable();
+
+   $( "#tablecontents" ).sortable({
+     items: "tr",
+     cursor: 'move',
+     opacity: 0.6,
+     update: function() {
+         sendOrderToServer();
+     }
+   });
+
+   function sendOrderToServer() {
+
+     var order = [];
+     $('tr.row1').each(function(index,element) {
+       order.push({
+         id: $(this).attr('data-id'),
+         position: index+1
+       });
+     });
+
+     $.ajax({
+       type: "POST", 
+       dataType: "json", 
+       url: "{{ url('/admin/assignments_index') }}",
+       data: {
+         order:order,
+         _token: '{{csrf_token()}}'
+       },
+       success: function(response) {
+           if (response.status == "success") {
+             console.log(response);
+           } else {
+             console.log(response);
+           }
+       }
+     });
+
+   }
+ });
+
+</script>
 @endsection

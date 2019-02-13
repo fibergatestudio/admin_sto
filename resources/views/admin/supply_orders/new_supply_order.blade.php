@@ -11,18 +11,6 @@
         {{-- Счётчик количества вхождений --}}
         <input type="hidden" id="counter" name="entries_count" value="1">
 
-        {{-- Срочность 
-        
-        <div class="form-group">
-            <label>Срочность заказа: </label>
-            <select name="urgency">
-                <option value="1">1</option>
-                <option value="1">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-            </select>
-        </div>--}}
-
         {{-- Строки под элементы заказа на Vue.JS --}}
         <div id="app1">
             <label class="col-md-4" style="display: inline-block" for="item_name">Название</label>
@@ -60,7 +48,7 @@
 
 
     <script>
-        var currentCounter = 1;
+        var currentCounter = 3;
 
         var app1 = new Vue({
             el: '#app1',

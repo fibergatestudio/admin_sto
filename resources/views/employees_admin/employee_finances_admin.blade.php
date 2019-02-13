@@ -101,6 +101,65 @@
 
     <div class="form-row">
         <div class="form-group col-md-6">
+            <b>Последние начисления:</b>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Дата</th>
+                        <th>Сумма</th>
+                        <th>Остаток</th>
+                    </tr>
+                </thead>
+                @foreach($balance_logs as $balance_logs )
+                <tr>
+                    <td>
+                    {{ $balance_logs->date }}
+                    </td>
+                    <td>
+                    {{ $balance_logs->amount }}
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+      
+                    </td>
+                </tr>
+                @endforeach
+            </table>
+        </div>
+        <div class="form-group col-md-6">
+            <b>Последние выплаты:</b>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Дата</th>
+                        <th>Сумма</th>
+                        <th>Остаток</th>
+                    </tr>
+                </thead>
+
+                <tr>
+                    <td>
+                    {{ $balance_logs->date }}
+                    </td>
+                    <td>
+                    {{ $balance_logs->amount }}
+                    </td>
+                    <td>
+
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
             <b>Последние штрафы:</b>
             <table class="table">
                 <thead>

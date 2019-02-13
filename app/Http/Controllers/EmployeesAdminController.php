@@ -139,11 +139,29 @@ class EmployeesAdminController extends Controller
 
         $token_logs = Coffee_token_log::where('employee_id', $employee_id)->get();
 
+        /* Получаем Начислеения */
+        $balance_logs = Employee_balance_log::where(
+            [
+                ['employee_id', $employee_id],
+                ['action', '=', 'deposit']
+            ])->orderBy('created_at', 'desc')->get();
+
+        /* Получаем Выплаты */
+        $payout_logs = Employee_balance_log::where( 
+            [
+
+                ['employee_id', $employee_id],
+                ['action', '=', 'withdrawal'] 
+
+            ])->orderBy('created_at', 'desc')->get();
+
         return view('employees_admin.employee_finances_admin',
         [
              'employee' => $employee,
              'employee_fines' => $employee_fines,
-             'token_logs' => $token_logs
+             'token_logs' => $token_logs,
+             'balance_logs' => $balance_logs,
+             'payout_logs' => $payout_logs
 
         ]);
 

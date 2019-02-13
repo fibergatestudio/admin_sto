@@ -345,6 +345,8 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
 
 /****** Наряды: Администратор ******/
 Route::get('/admin/assignments_index', 'Assignments_Admin_Controller@assignments_index')->middleware('can:admin_rights');
+/* Обновление (перестановка) елементов таблицы */
+Route::post('/admin/assignments_index', 'Assignments_Admin_Controller@updateMainOrder')->middleware('can:admin_rights');
 
     /* Добавление наряда на изначально выбранную машину : Страница */
     Route::get('/admin/assignments/add/{car_id}', 'Assignments_Admin_Controller@add_assignment_page')->middleware('can:admin_rights');
