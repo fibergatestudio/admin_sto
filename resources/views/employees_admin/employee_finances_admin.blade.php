@@ -138,13 +138,13 @@
                         <th>Остаток</th>
                     </tr>
                 </thead>
-
+                @foreach ($payout_logs as $payout_log )
                 <tr>
                     <td>
-                    {{ $balance_logs->date }}
+                    {{ $payout_log->date }}
                     </td>
                     <td>
-                    {{ $balance_logs->amount }}
+                    {{ $payout_log->amount }}
                     </td>
                     <td>
 
@@ -153,7 +153,7 @@
 
                     </td>
                 </tr>
-
+                @endforeach
             </table>
         </div>
     </div>

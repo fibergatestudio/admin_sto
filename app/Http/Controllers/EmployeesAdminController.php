@@ -151,7 +151,8 @@ class EmployeesAdminController extends Controller
             [
 
                 ['employee_id', $employee_id],
-                ['action', '=', 'withdrawal'] 
+                ['action', '=', 'withdrawal'],
+                ['reason', '=', 'auto']
 
             ])->orderBy('created_at', 'desc')->get();
 
@@ -408,7 +409,8 @@ class EmployeesAdminController extends Controller
             [
 
                 ['employee_id', $employee_id],
-                ['action', '=', 'withdrawal']
+                ['action', '=', 'withdrawal'],
+                ['reason', '=', 'auto']
 
             ])->orderBy('created_at', 'desc')->get();
 

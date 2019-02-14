@@ -17,6 +17,8 @@ function beautify_date($mysql_date){
             <th scope="col">Название</th>
             <th scope="col">Ответственный сотрудник</th>
             <th scope="col">Авто</th>
+            <th scope="col">Статус</th>
+            <th scope="col"></th>
             <th scope="col"></th>
         </tr>
         </thead>
@@ -34,9 +36,29 @@ function beautify_date($mysql_date){
                 {{-- Машина --}}
                 <td>{{ $assignment->car_name }}</td>
 
+                {{-- Статус --}}
+                <td>
+                @if ($assignment->status == 'active')
+                Невыполнен
+                @else
+                Выполнен<br>Требует подтверждения
+                @endif
+                </td>
+
                 {{-- Кнопка подробнее --}}
                 <td>
-                    <a href="{{ url('/master/assignments/view/'.$assignment->id) }}">
+                    @if ($assignment->status == 'active')
+
+                    @else
+                    <a href="#">
+                        <div class="btn btn-success">
+                            Подтвердить
+                        </div>
+                    </a>
+                    @endif
+                </td>
+                <td>
+                <a href="{{ url('/master/assignments/view/'.$assignment->id) }}">
                         <div class="btn btn-secondary">
                             Подробнее
                         </div>
