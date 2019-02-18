@@ -11,7 +11,7 @@
     <div class="row">
         <div class="col-md-2">
             <p>Статус: {{ $assignment->status }}</p>
-            <p>Утвердил: Не Утвержден</p>
+            <p>Утвердил: не утвержден</p>
         </div>
         <div class="col-md-2">
             <a href="{{ url('/employee/manage_assignment/'.$assignment->id.'/assignment_complete') }}">
