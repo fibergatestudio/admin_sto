@@ -138,11 +138,11 @@ class Clients_Admin_Controller extends Controller
             if($query != ''){
                 $clients = DB::table('clients')
                     ->where('general_name', 'like', '%'.$query.'%')
-                    ->orWhere('fio', 'like', '%'.$query.'%')
+                   /* ->orWhere('fio', 'like', '%'.$query.'%')
                     ->orWhere('organization', 'like', '%'.$query.'%')
                     ->orWhere('phone', 'like', '%'.$query.'%')
                     ->orWhere('balance', 'like', '%'.$query.'%')
-                    ->orWhere('discount', 'like', '%'.$query.'%')
+                    ->orWhere('discount', 'like', '%'.$query.'%') */
                     ->orderBy('id', 'desc')
                     ->get();
 
@@ -157,11 +157,7 @@ class Clients_Admin_Controller extends Controller
                     $output .= '
                     <tr>
                      <td><a href="view_client/'.$client->id.'">'.$client->general_name.'</a></td>
-                     <td>'.$client->fio.'</td>
-                     <td>'.$client->organization.'</td>
-                     <td>'.$client->phone.'</td>
-                     <td>'.$client->balance.'</td>
-                     <td>'.$client->discount.'</td>
+                     
                     </tr>
                     ';
                 }
