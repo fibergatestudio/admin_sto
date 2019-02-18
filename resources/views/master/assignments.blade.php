@@ -20,6 +20,7 @@ function beautify_date($mysql_date){
             <th scope="col">Статус</th>
             <th scope="col"></th>
             <th scope="col"></th>
+            <th scope="col"></th>
         </tr>
         </thead>
         @foreach($assignments as $assignment)
@@ -46,6 +47,7 @@ function beautify_date($mysql_date){
                 </td>
 
                 {{-- Кнопка подробнее --}}
+
                 <td>
                     @if ($assignment->status == 'active')
 
