@@ -18,6 +18,15 @@ use App\Cars_in_service;
 use App\Assignment;
 use App\Sub_assignment;
 use App\Workzone;
+use Telegram\Bot\Laravel\Facades\Telegram;
+
+use App\Assignments_income;
+use App\Assignments_expense;
+use App\Assignments_completed_works;
+
+use App\Zonal_assignments_income;
+use App\Zonal_assignments_expense;
+use App\Zonal_assignments_completed_works;
 
 class Assignments_Admin_Controller extends Controller
 {
@@ -29,6 +38,7 @@ class Assignments_Admin_Controller extends Controller
             DB::table('assignments')
                 ->join('employees', 'assignments.responsible_employee_id', '=', 'employees.id')
                 ->join('cars_in_service', 'assignments.car_id', '=', 'cars_in_service.id')
+                ->orderBy('order','ASC')
                 ->select(
                         'assignments.*',
                         'employees.general_name AS employee_name',
@@ -67,6 +77,10 @@ class Assignments_Admin_Controller extends Controller
         $assignment_description = $request->assignment_description;
         $car_id = $request->car_id;
 
+        /* Информация о клиенте и его машине для телеграма */
+        $client = Client::get_client_by_car_id($car_id);
+        $car = Cars_in_service::find($car_id);
+
         /* Создаём новый наряд и сохраняем его*/
         $new_assignment = new Assignment();
         $new_assignment->responsible_employee_id = $responsible_employee_id;
@@ -75,6 +89,23 @@ class Assignments_Admin_Controller extends Controller
         $new_assignment->date_of_creation = date('Y-m-d');
         $new_assignment->status = 'active';
         $new_assignment->save();
+        
+        /* Оповещения для телеграма */
+        $text = "У вас новый наряд!\n"
+            . "<b>Клиент: </b>\n"
+            . "$client->general_name\n"
+            . "<b>Авто: </b>\n"
+            . "$car->general_name\n"
+            . "<b>Дата: </b>\n"
+            . "$new_assignment->date_of_creation\n"
+            . "<b>Описание: </b>\n"
+            .  $assignment_description;
+ 
+        Telegram::sendMessage([
+            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+            'parse_mode' => 'HTML',
+            'text' => $text
+        ]);
 
         /* - Добавление в логи создание наряда -*/
         $create_new_assigment_log = new Assignments_logs();
@@ -103,13 +134,129 @@ class Assignments_Admin_Controller extends Controller
         /* Получаем информацию по наряду */
         $assignment = Assignment::find($assignment_id);
 
-        //echo asset('storage/file.txt');
-        //Storage::get('/app/2/owl.jpg');
+        /* Получаем дополнительную информацию по нарядам */
+        /* Имя клиента */
+        $assignment->client_name = $assignment->get_client_name();
+        /* Авто */
+        $assignment->car_name = $assignment->get_car_name();
 
-        //echo "<img src='".Storage::url('/app/2/owl.jpg')."'>";
+                /* Доход/расход/работы */
+                /* Получаем доходную часть */
+                $assignment_income = Assignments_income::where('assignment_id', $assignment_id)->get();
+                /* Получаем расходную часть */
+                $assignment_expense = Assignments_expense::where('assignment_id', $assignment_id)->get();
+                /* Получаем выполненые работы */
+                $assignment_work = Assignments_completed_works::where('assignment_id', $assignment_id)->get();
+
+        /* Получаем список зональных нарядов */
+        $sub_assignments = 
+            DB::table('sub_assignments')
+            ->where('assignment_id', $assignment_id)
+            ->join('workzones', 'sub_assignments.workzone_id', '=', 'workzones.id')
+            ->orderBy('order','ASC')
+            ->select('sub_assignments.*', 'workzones.general_name')
+            ->get();
+
+
+        /* Собираем дополнительные данные по зональным нарядам */
+        foreach($sub_assignments as $sub_assignment){
+            /* Название рабочей зоны */
+            $sub_assignment->workzone_name = Workzone::find($sub_assignment->workzone_id)->general_name;
+            
+            /* Имя ответственного работника */
+            $sub_assignment->responsible_employee = Employee::find($sub_assignment->responsible_employee_id)->general_name;
+        }
+
+        /* Получаем список картинок по наряду */
+        $images = [];
+        foreach(Storage::files('public/'.$assignment_id) as $file){
+             $images[] = $file;
+        }
+
+        /* Получаем список картинок по наряду */
+        $accepted_images = [];
+        foreach(Storage::files('public/'.$assignment_id.'/accepted') as $file){
+             $accepted_images[] = $file;
+        }
+
+        /* Получаем список картинок по наряду */
+        $repair_images = [];
+        foreach(Storage::files('public/'.$assignment_id.'/repair') as $file){
+             $repair_images[] = $file;
+        }
+        
+        /* Получаем список картинок по наряду */
+        $finished_images = [];
+        foreach(Storage::files('public/'.$assignment_id.'/finished') as $file){
+             $finished_images[] = $file;
+        }
+
 
         /* Возвращаем представление */
-        return view('admin.assignments.view_assignment_page', ['assignment' => $assignment]);
+        return view('admin.assignments.view_assignment_page',
+            [
+                'assignment' => $assignment,
+                'sub_assignments' => $sub_assignments,
+                'image_urls'=> $images,
+                'accepted_image_urls'=> $accepted_images,
+                'repair_image_urls'=> $repair_images,
+                'finished_image_urls'=> $finished_images,
+                'assignment_income' => $assignment_income, 
+                'assignment_expense' => $assignment_expense, 
+                'assignment_work' => $assignment_work           
+            ]);
+    }
+
+
+    /* Обновления позации элемента таблицы */
+    public function updateOrder(Request $request){
+
+        $sub_assignments = Sub_assignment::all();
+
+        foreach ($sub_assignments as $sub_assignment) {
+            $sub_assignment->timestamps = false; // To disable update_at field updation
+            $id = $sub_assignment->id;
+
+            foreach ($request->order as $order) {
+                if ($order['id'] == $id) {
+                    $sub_assignment->update(['order' => $order['position']]);
+                }
+            }
+        }
+        return response('Update Successfully.', 200);
+    }
+
+    /* Обновления позации элемента таблицы */
+    public function updateMainOrder(Request $request){
+
+        $assignments = Assignment::all();
+
+        foreach ($assignments as $assignment) {
+            $assignment->timestamps = false; // To disable update_at field updation
+            $id = $assignment->id;
+
+            foreach ($request->order as $order) {
+                if ($order['id'] == $id) {
+                    $assignment->update(['order' => $order['position']]);
+                }
+            }
+        }
+        return response('Update Successfully.', 200);
+    }
+
+
+    /* Изменение названия наряда */
+    public function change_assignment_name(Request $request){
+        /* Меняем название наряда */
+        $assignment_id = $request->assignment_id;
+        $new_name = $request->new_name;
+
+        $assignment = Assignment::find($assignment_id);
+        $assignment->description = $new_name;
+        $assignment->save();
+        
+        /* Возвращаемся на страницу наряда */
+        return back();
     }
 
     /* Добавление зонального наряда : страница */
@@ -136,9 +283,25 @@ class Assignments_Admin_Controller extends Controller
         
         /* Получаем данные из запроса */
         $main_assignment_id = $request->assignment_id; // ID "родительского" наряда
+        $sub_assignment_name = $request->name; // Название зонального наряда
+        $sub_assignment_description = $request->description; // Описание зонального наряда
+        $workzone_id = $request->workzone; // ID рабочей зоны
+        $responsible_employee_id = $request->responsible_employee; // ID ответственного лица (employee.id)
 
-        /* Сохранение зонального наряда */
-        // ...
+        $start_time = $request->start_time;
+        $end_time = $request->end_time;
+        
+        /* Создание нового зонального наряда */
+        $sub_assignment = new Sub_assignment();
+        $sub_assignment->assignment_id = $main_assignment_id;
+        $sub_assignment->name = $sub_assignment_name;
+        $sub_assignment->description = $sub_assignment_description;
+        $sub_assignment->workzone_id = $workzone_id;
+        $sub_assignment->responsible_employee_id = $responsible_employee_id;
+        $sub_assignment->date_of_creation = date('Y-m-d');
+        $sub_assignment->start_time = $start_time;
+        $sub_assignment->end_time = $end_time;
+        $sub_assignment->save();
 
         /* Возвращаемся на страницу */
         return redirect('/admin/assignments/view/'.$main_assignment_id);
@@ -160,7 +323,6 @@ class Assignments_Admin_Controller extends Controller
         $assignment_id = $request->assignment_id;
 
         /* Сохраняем фото */
-        //print_r(Input::all()); - дебаг
         $request->test->store('public/'.$assignment_id);
 
         $create_photo_to_assignment_log = new Photos_to_assigments_logs();
@@ -176,6 +338,202 @@ class Assignments_Admin_Controller extends Controller
         
         /* Возвращаемся на страницу авто */
         return redirect('admin/assignments/view/'.$assignment_id);
+    }
+
+    /* Добавление фотографий принятой машины к наряду : Обработка запроса */
+    public function add_accepted_photo_to_assignment_post(Request $request){
+        /* Получаем данные из запроса */
+        /* ID наряда, к которому добавляем фото */
+        $assignment_id = $request->assignment_id;
+
+        /* Сохраняем фото */
+        $request->accepted_photo->store('public/'.$assignment_id.'/accepted');
+        
+        /* Возвращаемся на страницу авто */
+        return redirect('admin/assignments/view/'.$assignment_id);
+    }
+
+    /* Добавление фотографий процесса ремонта к наряду : Обработка запроса */
+    public function add_repair_photo_to_assignment_post(Request $request){
+        /* Получаем данные из запроса */
+        /* ID наряда, к которому добавляем фото */
+        $assignment_id = $request->assignment_id;
+
+        /* Сохраняем фото */
+        $request->repair_photo->store('public/'.$assignment_id.'/repair');
+        
+        /* Возвращаемся на страницу авто */
+        return redirect('admin/assignments/view/'.$assignment_id);
+    }
+
+    /* Добавление фотографий готовой машины к наряду : Обработка запроса */
+    public function add_finished_photo_to_assignment_post(Request $request){
+        /* Получаем данные из запроса */
+        /* ID наряда, к которому добавляем фото */
+        $assignment_id = $request->assignment_id;
+
+        /* Сохраняем фото */
+        $request->finished_photo->store('public/'.$assignment_id.'/finished');
+        
+        /* Возвращаемся на страницу авто */
+        return redirect('admin/assignments/view/'.$assignment_id);
+    }
+
+    /* Удаление фотографий : страница */
+    public function delete_photos_page($assignment_id){
+        /* Получить список фотографий по наряду */
+        $images = [];
+        foreach(Storage::files('public/'.$assignment_id) as $file){
+             $images[] = $file;
+        }
+
+        /* Получаем список фото принятых машин по наряду */
+        $accepted_images = [];
+        foreach(Storage::files('public/'.$assignment_id.'/accepted') as $file){
+                $accepted_images[] = $file;
+        }
+
+        /* Получаем список фото процесса ремонта по наряду */
+        $repair_images = [];
+        foreach(Storage::files('public/'.$assignment_id.'/repair') as $file){
+                $repair_images[] = $file;
+        }
+        
+        /* Получаем список фото выдачи готовых машин по наряду */
+        $finished_images = [];
+        foreach(Storage::files('public/'.$assignment_id.'/finished') as $file){
+                $finished_images[] = $file;
+        }
+        
+        /* Вывести страницу */
+        return view('admin.assignments.delete_photos_from_assignment_page', 
+        [
+            'images' => $images,
+            'accepted_image_urls'=> $accepted_images,
+            'repair_image_urls'=> $repair_images,
+            'finished_image_urls'=> $finished_images,
+            'assignment_id' => $assignment_id
+            ]);
+    }
+
+    /* Удаление фотографий : POST */
+    public function delete_photos_post(Request $request){
+        /* Удалить фото */
+        Storage::delete($request->path_to_file);
+        
+        /* Вернуться на страницу удаления фотографий */
+        return redirect('admin/assignments/'.$request->assignment_id.'/delete_photos_page');
+    }
+
+    public function assignment_management($sub_assignment_id){
+
+        $sub_assignment = Sub_assignment::find($sub_assignment_id); 
+        $assignment = Assignment::find($sub_assignment->assignment_id); 
+        
+        // .. Собираем информацию по наряду
+        
+        /* Получаем доходную часть */
+        $zonal_assignment_income = Zonal_assignments_income::where('sub_assignment_id', $sub_assignment_id)->get();
+        /* Получаем расходную часть */
+        $zonal_assignment_expense = Zonal_assignments_expense::where('sub_assignment_id', $sub_assignment_id)->get();
+        /* Получаем выполненые работы */
+        $zonal_assignment_work = Zonal_assignments_completed_works::where('sub_assignment_id', $sub_assignment_id)->get();
+    
+        return view('admin.assignments.assignment_management',
+        [
+            'assignment' =>  $assignment,
+            'sub_assignment' => $sub_assignment,
+            'zonal_assignment_income' => $zonal_assignment_income, 
+            'zonal_assignment_expense' => $zonal_assignment_expense, 
+            'zonal_assignment_work' => $zonal_assignment_work
+        ]);
+    }
+
+        /* Добавить заход денег : POST */
+        public function add_income_post(Request $request){
+            /* Создаём новое вхождение по заходу денег и вносим туда информацию */
+            $new_income_entry = new Assignments_income();
+            $new_income_entry->assignment_id = $request->assignment_id; /* Идентификатор наряда */
+            $new_income_entry->amount = $request->amount; /* Сумма захода */
+            $new_income_entry->currency = $request->currency; /* Валюта захода */
+            $new_income_entry->basis = $request->basis; /* Основание для захода денег */
+            $new_income_entry->description = $request->description; /* Описание для захода */
+            $new_income_entry->save();
+    
+            
+    
+            /* Возвращаемся обратно на страницу наряда */
+            return back();
+        }
+        /* Добавить расход денег : POST */
+        public function add_expense_post(Request $request){
+            /* Создаём новое вхождение по расходу денег и вносим туда информацию */
+            $new_expense_entry = new Assignments_expense();
+            $new_expense_entry->assignment_id = $request->assignment_id; /* Идентификатор наряда */
+            $new_expense_entry->amount = $request->amount; /* Сумма расхода */
+            $new_expense_entry->currency = $request->currency; /* Валюта расхода */
+            $new_expense_entry->basis = $request->basis; /* Основание для расхода денег */
+            $new_expense_entry->description = $request->description; /* Описание для расхода */
+            $new_expense_entry->save();
+    
+    
+            /* Возвращаемся обратно на страницу наряда */
+            return back();
+        }
+        /* Добавить выполненые работы : POST */
+        public function add_works_post(Request $request){
+            /* Создаём новое вхождение по выполненым работам и вносим туда информацию */
+            $new_works_entry = new Assignments_completed_works();
+            $new_works_entry->assignment_id = $request->assignment_id; /* Идентификатор наряда */
+            $new_works_entry->basis = $request->basis; /* Основание для расхода денег */
+            $new_works_entry->description = $request->description; /* Описание для расхода */
+            $new_works_entry->save();
+    
+    
+            /* Возвращаемся обратно на страницу наряда */
+            return back();
+        }
+    /* Добавить зональный заход денег : POST */
+    public function add_zonal_assignment_income(Request $request){
+        /* Создаём новое вхождение по заходу денег и вносим туда информацию */
+        $new_zonal_income_entry = new Zonal_assignments_income();
+        $new_zonal_income_entry->sub_assignment_id = $request->sub_assignment_id; /* Идентификатор наряда  */ // окау, я до этого пробовал подобное, ща
+        $new_zonal_income_entry->zonal_amount = $request->zonal_amount; /* Сумма захода */
+        $new_zonal_income_entry->zonal_currency = $request->currency; /* Валюта захода */
+        $new_zonal_income_entry->zonal_basis = $request->zonal_basis; /* Основание для захода денег */
+        $new_zonal_income_entry->zonal_description = $request->zonal_description; /* Описание для захода */
+        $new_zonal_income_entry->save();
+
+        /* Возвращаемся обратно на страницу наряда */
+        return back();
+    }
+    /* Добавить зональный расход денег : POST */
+    public function add_zonal_assignment_expense(Request $request){
+        /* Создаём новое вхождение по расходу денег и вносим туда информацию */
+        $new_zonal_expense_entry = new Zonal_assignments_expense();
+        $new_zonal_expense_entry->sub_assignment_id = $request->sub_assignment_id; /* Идентификатор наряда */
+        $new_zonal_expense_entry->zonal_amount = $request->zonal_amount; /* Сумма расхода */
+        $new_zonal_expense_entry->zonal_currency = $request->currency; /* Валюта расхода */
+        $new_zonal_expense_entry->zonal_basis = $request->zonal_basis; /* Основание для расхода денег */
+        $new_zonal_expense_entry->zonal_description = $request->zonal_description; /* Описание для расхода */
+        $new_zonal_expense_entry->save();
+
+
+        /* Возвращаемся обратно на страницу наряда */
+        return back();
+    }
+    /* Добавить зональные выполненые работы : POST */
+    public function add_zonal_assignment_works(Request $request){
+        /* Создаём новое вхождение по выполненым работам и вносим туда информацию */
+        $new_zonal_works_entry = new Zonal_assignments_completed_works();
+        $new_zonal_works_entry->sub_assignment_id = $request->sub_assignment_id; /* Идентификатор наряда */
+        $new_zonal_works_entry->zonal_basis = $request->zonal_basis; /* Основание для расхода денег */
+        $new_zonal_works_entry->zonal_description = $request->zonal_description; /* Описание для расхода */
+        $new_zonal_works_entry->save();
+
+
+        /* Возвращаемся обратно на страницу наряда */
+        return back();
     }
 
 }

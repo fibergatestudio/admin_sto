@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Schema;
 
 use Illuminate\Support\Facades\Gate;
 
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Auth;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -16,7 +19,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
         // Фикс ошибки с длиной ключа для MariaDB
+
         Schema::defaultStringLength(191);
     }
 
@@ -30,3 +35,4 @@ class AppServiceProvider extends ServiceProvider
         //
     }
 }
+

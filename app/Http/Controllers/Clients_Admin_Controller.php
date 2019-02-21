@@ -14,7 +14,7 @@ use App\Clients_notes;
 
 class Clients_Admin_Controller extends Controller
 {
-    
+
     /* Перечень клиентов */
     public function clients_index(){
         $clients = Client::all();
@@ -29,7 +29,16 @@ class Clients_Admin_Controller extends Controller
     /* Добавить клиента: обработка POST запроса */
     public function add_client_post(Request $request){
         $new_client = new Client();
-        $new_client->general_name = $request->general_name;
+
+        $name = $request->name;
+        $surname = $request->surname;
+        $fio = $name.' '.$surname;
+
+        $new_client->general_name = $name;
+        //Новые поля в добавлении клиента
+        $new_client->fio = $fio;
+        $new_client->organization = $request->organization;
+        $new_client->phone = $request->phone;
 
         $new_client->save();
 
@@ -51,13 +60,17 @@ class Clients_Admin_Controller extends Controller
         // Если клиент был добавлен успешно, то предлагаем добавить машину клиента
         return view('admin.clients.add_client_success_page', ['client' => $new_client]);
     }
-    
+
     /* Просмотр клиента : страница */
     public function view_client($client_id){
         $client = Client::find($client_id);
         $client_cars = Cars_in_service::where('owner_client_id', $client_id)->get();
-        
-        return view('admin.clients.view_client', ['client' => $client, 'cars' => $client_cars]);
+
+        return view('admin.clients.view_client',
+            [
+                'client' => $client,
+                'cars' => $client_cars
+            ]);
     }
 
 
@@ -65,7 +78,7 @@ class Clients_Admin_Controller extends Controller
     /* Добавление примечания к клиенту : страница */
     public function add_note_to_client_page($client_id){
         $client = Client::find($client_id);
-        return view('admin.clients.add_note_to_client', ['client' => $client]);  
+        return view('admin.clients.add_note_to_client', ['client' => $client]);
     }
 
     /* Добавление примечания к клиенту : POST */
@@ -101,7 +114,7 @@ class Clients_Admin_Controller extends Controller
     public function edit_client_note($note_id){
         $client_note = Clients_notes::find($note_id);
         return view('admin.clients.edit_client_note', compact(['note_id', 'client_note']));
-    }  
+    }
 
     /* - Редактирование примечания о клиенте : POST - */
     public function edit_client_note_post(Request $request){
@@ -126,7 +139,7 @@ class Clients_Admin_Controller extends Controller
         return redirect('admin/view_client/' .$client_note_entry->client_id);
     }
 
-    
+
     /* Удаление примечания к клиенту */
     public function delete_client_note($note_id){
         // Удалить примечание
@@ -151,6 +164,10 @@ class Clients_Admin_Controller extends Controller
         return back();
     }    
     
+
+
+    /**/
+
     /* Страница клиента : просмотр  */
     public function single_client_view($client_id){
         $client = Client::find($client_id);
@@ -159,10 +176,11 @@ class Clients_Admin_Controller extends Controller
         $client_cars = Cars_in_service::where('owner_client_id', $client_id)->get();
 
         // Информация о примечаниях клиента
-        $client_notes = 
+        $client_notes =
             DB::table('clients_notes')
+                ->where('client_id', $client_id)
                 ->get();
-    
+
 
          //Получаем имя автора
         foreach($client_notes as $client_note){
@@ -174,5 +192,52 @@ class Clients_Admin_Controller extends Controller
             'cars' => $client_cars,
             'client_notes' => $client_notes
         ]);
-    }   
+    }
+    /* Живой поиск клиента*/
+    public function search(Request $request){
+
+        if($request->ajax()){
+            $output = '';
+            $query = $request->get('query');
+            if($query != ''){
+                $clients = DB::table('clients')
+                    ->where('general_name', 'like', '%'.$query.'%')
+                   /* ->orWhere('fio', 'like', '%'.$query.'%')
+                    ->orWhere('organization', 'like', '%'.$query.'%')
+                    ->orWhere('phone', 'like', '%'.$query.'%')
+                    ->orWhere('balance', 'like', '%'.$query.'%')
+                    ->orWhere('discount', 'like', '%'.$query.'%') */
+                    ->orderBy('id', 'desc')
+                    ->get();
+
+            }else{
+                $clients = DB::table('clients')
+                    ->orderBy('id', 'desc')
+                    ->get();
+            }
+            $total_row = $clients->count();
+            if($total_row > 0){
+                foreach($clients as $client){
+                    $output .= '
+                    <tr>
+                     <td><a href="view_client/'.$client->id.'">'.$client->general_name.'</a></td>
+                     
+                    </tr>
+                    ';
+                }
+            }else{
+               $output = '
+               <tr>
+                <td align="center" colspan="5">Клиент не найден</td>
+               </tr>
+               ';
+            }
+            $data = array(
+            'table_data'  => $output,
+            'total_data'  => $total_row
+            );
+
+            echo json_encode($data);
+        }
+    }
 }

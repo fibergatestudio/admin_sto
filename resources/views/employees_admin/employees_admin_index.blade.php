@@ -21,6 +21,14 @@
                 </td>
 
                 <td>
+                    <a href="{{ url('/supervisor/manage_employee_status/'.$employee->id.'/employee_edit') }}">
+                        <div class="btn btn-success">
+                            Редактировать сотрудника
+                        </div>
+                    </a>
+                </td>
+                {{-- Кнопка редактирования сотрудника --}}
+                <td>
                     <a href="{{ url('/supervisor/manage_employee_status/'.$employee->id) }}">
                         <div class="btn btn-secondary">
                             Статус сотрудника
@@ -28,14 +36,13 @@
                     </a>
                 </td>
 
-                 <td>
-                    <a href="{{ url('/admin/employee/'.$employee->id) }}">
-                        <div class="btn btn-secondary">
-                            Примечания
-                        </div>
-                    </a>
-                </td>
+                <td>
 
+                        <a class="btn btn-secondary" href="{{ url('/add_documents/'.$employee->id) }}">Добавить документы</a>
+
+                        <a class="btn btn-secondary" href="{{ url('/documents/'.$employee->id) }}">Посмотреть документы</a>
+
+                </td>
             </tr>
         @endforeach
     </table>
@@ -51,5 +58,8 @@
             Архив сотрудников
         </div>
     </a>
+
+
+
 
 @endsection

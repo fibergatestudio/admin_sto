@@ -6,12 +6,15 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 use App\User;
 use App\Client;
 use App\Cars_in_service;
 use App\Cars_notes;
 use App\Assignment;
+use App\Car_model_list;
 
 class Cars_in_service_Admin_Controller extends Controller
 {
@@ -37,19 +40,48 @@ class Cars_in_service_Admin_Controller extends Controller
             return view('admin.cars_in_service.add_car_in_service', ['client' => $client]);
         } else {
         /* Если клиент не указан */
-            $clients = Client::all();
+            //$clients = Client::all();
+            $clients = Client::orderByDesc('created_at')->get();
             return view('admin.cars_in_service.add_car_in_service', ['client' => '', 'clients' => $clients]);
         }
-        
+    }
 
+    /* API для брендов машин */
+    /* Возвращает список всех брендов авто */
+    public function api_brands(){
+        $brands = Car_model_list::select('brand')->distinct()->get();
+        $brands_array = [];
+        foreach($brands as $brand){
+            $brands_array[] = $brand->brand;
+        }
+        print_r(json_encode($brands_array));
+    }
+
+    /* API для моделей машин (возвращают список по бренду) */
+    public function api_models($brand){
+        /* Получить список моделей */
+        $models = Car_model_list::select('model')->where('brand', $brand)->distinct()->get();
+        $model_array = [];
+        foreach($models as $model){
+            $model_array[] = $model->model;
+        }
+
+        /* Вывести в JSON формате */
+        print_r(json_encode($model_array));
     }
 
     /* Добавление машины : POST */
     public function add_car_post(Request $request){
         /* Добавить машину в БД */
+
         $new_car_in_service = new Cars_in_service();
         $new_car_in_service->general_name = $request->car_general_name;
         $new_car_in_service->owner_client_id = $request->client_id;
+        $new_car_in_service->release_year = $request->release_year;
+        $new_car_in_service->reg_number = $request->reg_number;
+        $new_car_in_service->fuel_type = $request->fuel_type;
+        $new_car_in_service->vin_number = $request->vin_number;
+        $new_car_in_service->engine_capacity = $request->engine_capacity;
         $new_car_in_service->save();
 
 
@@ -70,6 +102,12 @@ class Cars_in_service_Admin_Controller extends Controller
 
         $create_car_in_service_entry->text = 'Создана машина - '.$car_name. 'клиента - '.$client_name. 'автор - '.$author_name. 'дата - ' .date('Y-m-d');   //текст лога о создании машины(название) клиента(имя) от автора(имя) от даты(date) 
         $create_car_in_service_entry->save();
+
+        //$request->document->store('public1'); //Заливка файла 
+
+        if(!empty($request->document)){
+            $request->document->store('public1');
+        }
 
         /* И перенаправить на страницу клиента */
         return redirect()->route('admin_view_client', ['client_id' => $request->client_id]);

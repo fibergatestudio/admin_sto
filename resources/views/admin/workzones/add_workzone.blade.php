@@ -7,7 +7,7 @@
 
 @section('content')
     <h2>Добавление нового рабочего поста</h2>
-    <form action="{{ url('admin/workzones/add') }}" method="POST">
+    <form action="{{ url('admin/workzones/add/post') }}" method="POST">
         @csrf
         <div class="form-group">
             <label>Название*</label>
