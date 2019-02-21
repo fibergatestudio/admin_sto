@@ -142,8 +142,8 @@ class EmployeesAdminController extends Controller
 
         /* - Добавление в логи создания заметки по сотруднику - */
         $create_employee_note_log = new Employees_notes_logs();
-        $create_employee_note_log->employee_id = $employee_id;  //id сотрудника 
-        $create_employee_note_log->author_id = $author_id;  //id автора заметки
+        $create_employee_note_log_entry->employee_id = $employee_id;  //id сотрудника 
+        $create_employee_note_log_entry->author_id = $author_id;  //id автора заметки
 
         /* - Имя сотрудника - */
         $employee = Employees_logs::find($employee_id);
@@ -152,8 +152,8 @@ class EmployeesAdminController extends Controller
         $author = Users::find($author_id); 
         $author_name = $author->general_name; 
 
-        $create_employee_note_log->text = 'Создана заметка по сотруднику - ' .$employee_name. 'автор - '.$author_name. 'дата - '.date('Y-m-d'); //текст о создании заметки по клиенту(имя) и автор(имя), дата(date)
-        $create_employee_note_log->save();
+        $create_employee_note_log_entry->text = 'Создана заметка по сотруднику - ' .$employee_name. 'автор - '.$author_name. 'дата - '.date('Y-m-d'); //текст о создании заметки по клиенту(имя) и автор(имя), дата(date)
+        $create_employee_note_log_entry->save();
 
 
 
