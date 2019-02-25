@@ -346,6 +346,20 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
 /****** Наряды: Администратор ******/
 Route::get('/admin/assignments_index', 'Assignments_Admin_Controller@assignments_index')->middleware('can:admin_rights');
 
+/****** Страница общей рентабельности: Администратор ******/
+Route::get('/admin/profitability_index', 'Assignments_Admin_Controller@profitability_index')->middleware('can:admin_rights');
+
+/****** Курс валют: Администратор ******/
+Route::post('/admin/profitability_index', 'Assignments_Admin_Controller@add_exchange_rates')->middleware('can:admin_rights');
+
+/****** Ежемесячная рентабельность с учетом расходов: Администратор ******/
+Route::get('/admin/profitability_index/month', 'Assignments_Admin_Controller@profitability_month_index')->middleware('can:admin_rights');
+
+Route::get('/admin/profitability_index/month/{date}', 'Assignments_Admin_Controller@profitability_month_show')->middleware('can:admin_rights');
+
+/****** Ежемесячная рентабельность с учетом расходов - добавление: Администратор ******/
+Route::post('/admin/profitability_index/month', 'Assignments_Admin_Controller@profitability_month')->middleware('can:admin_rights');
+
     /* Добавление наряда на изначально выбранную машину : Страница */
     Route::get('/admin/assignments/add/{car_id}', 'Assignments_Admin_Controller@add_assignment_page')->middleware('can:admin_rights');
 
@@ -464,10 +478,19 @@ Route::get('/admin/supply_orders/archive', 'Supply_orders_Admin_Controller@archi
     /* Удалить заказ (доступно только в архиве) */
     Route::get('/admin/supply_orders/archive/delete/{order_id}', 'Supply_orders_Admin_Controller@delete_archived_order');
 
+   
    /****** Статистика и Анализ : Администратор ******/
 
    /* Главная страница */
    Route::get('/admin/statistics_analysis/', 'StatisticsAnalysisAdminController@index');
+
+   
+   /****** Получение информации о приходе-уходе сотрудников из системы СКУД SIGUR ******/
+
+   /* Страница получения POST запроса */
+    Route::get('/delivery-passages', 'DeliveryPassagesController@index');
+
+    Route::post('/delivery-passages', 'DeliveryPassagesController@processing_query')->name('processing_query');
 
 
 /********** Допустимые названия авто : Администратор **********/
