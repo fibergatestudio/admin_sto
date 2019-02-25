@@ -9,6 +9,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<title>СТО - Административная панель</title>
 
 	<!-- Global stylesheets -->
@@ -26,13 +27,21 @@
 	<script src="{{ url('global_assets/js/main/bootstrap.bundle.min.js') }}"></script>
 	<script src="{{ url('global_assets/js/plugins/loaders/blockui.min.js') }}"></script>
 	<!-- /core JS files -->
-
+	
+	<!-- Statistics analysis JS files -->
+	<script type="text/javascript">		
+		var strHref = document.location.href;
+		//если мы не находимся на странице statistics_analysis
+		if(!(strHref.indexOf('statistics_analysis') + 1)){ 
+			var dataTableJson = [];
+		}
+	</script>
 	<script src="{{ url('assets/js/summary_table.js') }}"></script>
+	<!-- /statistics analysis JS files -->
 
 	<script src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
 	<script type="text/javascript" src="//code.jquery.com/ui/1.12.1/jquery-ui.js" ></script>
 	<script type="text/javascript" src="//cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script>
-
 
 
 	<!-- Theme JS files -->
@@ -43,7 +52,7 @@
 	<script src="{{ url('global_assets/js/plugins/ui/moment/moment.min.js') }}"></script>
 	<script src="{{ url('global_assets/js/plugins/pickers/daterangepicker.js') }}"></script>
 	<script src="{{ url('assets/js/app.js') }}"></script>
-	<script src="{{ url('global_assets/js/demo_pages/dashboard.js') }}"></script>
+	<script src="{{ url('global_assets/js/demo_pages/dashboard.js') }}"></script>	
 	<!-- /theme JS files -->
 
 

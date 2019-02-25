@@ -28,6 +28,8 @@ use App\Zonal_assignments_income;
 use App\Zonal_assignments_expense;
 use App\Zonal_assignments_completed_works;
 
+use App\Month_profitability;
+
 class Assignments_Admin_Controller extends Controller
 {
     
@@ -174,6 +176,30 @@ class Assignments_Admin_Controller extends Controller
              $finished_images[] = $file;
         }
 
+        // .. Собираем информацию по зональным нарядам
+
+        $sub_assignment_id = [];
+
+        /* Получаем массив id зональных нарядов */
+        $sub_assignment_ids = DB::table('sub_assignments')->where('assignment_id', $assignment_id)->pluck('id');
+        foreach ($sub_assignment_ids as $value) {
+            $sub_assignment_id[] = $value;
+        }
+        //echo '<pre>'.print_r($sub_assignment_id,true).'</pre>';
+        /* Получаем доходную часть */
+        $zonal_assignment_income = Zonal_assignments_income::whereIn('sub_assignment_id', $sub_assignment_id)->get();
+        /* Получаем расходную часть */
+        $zonal_assignment_expense = Zonal_assignments_expense::whereIn('sub_assignment_id', $sub_assignment_id)->get();
+        /* Получаем курс валют */
+        $usd = DB::table('exchange_rates')->select('usd')->get();
+        foreach ($usd as $value) {
+            $usd = $value->usd;
+        }
+        $eur = DB::table('exchange_rates')->select('eur')->get();
+        foreach ($eur as $value) {
+            $eur = $value->eur;
+        }
+
 
         /* Возвращаем представление */
         return view('admin.assignments.view_assignment_page',
@@ -185,8 +211,12 @@ class Assignments_Admin_Controller extends Controller
                 'repair_image_urls'=> $repair_images,
                 'finished_image_urls'=> $finished_images,
                 'assignment_income' => $assignment_income, 
-                'assignment_expense' => $assignment_expense, 
-                'assignment_work' => $assignment_work           
+                'assignment_expense' => $assignment_expense,
+                'zonal_assignment_income' => $zonal_assignment_income, 
+                'zonal_assignment_expense' => $zonal_assignment_expense, 
+                'assignment_work' => $assignment_work,
+                'usd' => $usd,
+                'eur' => $eur,           
             ]);
     }
 
@@ -469,7 +499,7 @@ class Assignments_Admin_Controller extends Controller
     public function add_zonal_assignment_income(Request $request){
         /* Создаём новое вхождение по заходу денег и вносим туда информацию */
         $new_zonal_income_entry = new Zonal_assignments_income();
-        $new_zonal_income_entry->sub_assignment_id = $request->sub_assignment_id; /* Идентификатор наряда  */ // окау, я до этого пробовал подобное, ща
+        $new_zonal_income_entry->sub_assignment_id = $request->sub_assignment_id; /* Идентификатор зонального наряда  */
         $new_zonal_income_entry->zonal_amount = $request->zonal_amount; /* Сумма захода */
         $new_zonal_income_entry->zonal_currency = $request->currency; /* Валюта захода */
         $new_zonal_income_entry->zonal_basis = $request->zonal_basis; /* Основание для захода денег */
@@ -483,7 +513,7 @@ class Assignments_Admin_Controller extends Controller
     public function add_zonal_assignment_expense(Request $request){
         /* Создаём новое вхождение по расходу денег и вносим туда информацию */
         $new_zonal_expense_entry = new Zonal_assignments_expense();
-        $new_zonal_expense_entry->sub_assignment_id = $request->sub_assignment_id; /* Идентификатор наряда */
+        $new_zonal_expense_entry->sub_assignment_id = $request->sub_assignment_id; /* Идентификатор зонального наряда */
         $new_zonal_expense_entry->zonal_amount = $request->zonal_amount; /* Сумма расхода */
         $new_zonal_expense_entry->zonal_currency = $request->currency; /* Валюта расхода */
         $new_zonal_expense_entry->zonal_basis = $request->zonal_basis; /* Основание для расхода денег */
@@ -507,5 +537,226 @@ class Assignments_Admin_Controller extends Controller
         /* Возвращаемся обратно на страницу наряда */
         return back();
     }
+
+    /* Отображения общей рентабельности */
+    public function profitability_index(){
+        /* Получаем всю нужную информацию по нарядам */        
+        /* Получаем зональную доходную часть */
+        $zonal_assignment_income = Zonal_assignments_income::all();
+        /* Получаем зональную расходную часть */
+        $zonal_assignment_expense = Zonal_assignments_expense::all();
+        /* Получаем доходную часть */
+        $assignment_income = Assignments_income::all();
+        /* Получаем расходную часть */
+        $assignment_expense = Assignments_expense::all();
+        /* Получаем курс валют */
+        $usd = DB::table('exchange_rates')->select('usd')->get();
+        foreach ($usd as $value) {
+            $usd = $value->usd;
+        }
+        $eur = DB::table('exchange_rates')->select('eur')->get();
+        foreach ($eur as $value) {
+            $eur = $value->eur;
+        }
+        /* Получаем ежемесячные расходы */
+        $profitability_months = Month_profitability::all();
+
+        return view('assignments_admin.profitability_admin_index',
+        [
+            'zonal_assignment_income' => $zonal_assignment_income,
+            'zonal_assignment_expense' => $zonal_assignment_expense,
+            'assignment_income' => $assignment_income,
+            'assignment_expense' => $assignment_expense,
+            'usd' => $usd,
+            'eur' => $eur,
+            'profitability_months' => $profitability_months,
+        ]);
+    }
+
+    /* Курс валют */
+    public function add_exchange_rates(Request $request){
+        /* Устанавливаем курс валют */        
+        if (DB::table('exchange_rates')->select('usd')->get()->count() > 0) {
+                DB::table('exchange_rates')
+                ->update(['usd' => $request->usd_currency, 'eur' => $request->eur_currency]);
+            }
+            else{
+                DB::table('exchange_rates')
+                ->insert(['usd' => $request->usd_currency, 'eur' => $request->eur_currency]);
+            }
+
+            return back();
+    }
+
+    /* Отображение месячной рентабельности*/
+    public function profitability_month_index(){
+        /* Получаем всю нужную информацию по нарядам */        
+        /* Получаем зональную доходную часть */
+        $zonal_assignment_income = Zonal_assignments_income::all();
+        /* Получаем зональную расходную часть */
+        $zonal_assignment_expense = Zonal_assignments_expense::all();
+        /* Получаем доходную часть */
+        $assignment_income = Assignments_income::all();
+        /* Получаем расходную часть */
+        $assignment_expense = Assignments_expense::all();
+        /* Получаем курс валют */
+        $usd = DB::table('exchange_rates')->select('usd')->get();
+        foreach ($usd as $value) {
+            $usd = $value->usd;
+        }
+        $eur = DB::table('exchange_rates')->select('eur')->get();
+        foreach ($eur as $value) {
+            $eur = $value->eur;
+        }
+        /* Получаем последнюю запись в таблице расходов */
+        $month_profitability = Month_profitability::latest()->first();
+
+        $rental_price = $month_profitability->rental_price;
+        $electricity = $month_profitability->electricity;
+        $water_supply = $month_profitability->water_supply;
+        $date = $month_profitability->date;
+
+        return view('assignments_admin.profitability_month_index',
+        [
+            'zonal_assignment_income' => $zonal_assignment_income,
+            'zonal_assignment_expense' => $zonal_assignment_expense,
+            'assignment_income' => $assignment_income,
+            'assignment_expense' => $assignment_expense,
+            'usd' => $usd,
+            'eur' => $eur,
+            'rental_price' => $rental_price,
+            'electricity' => $electricity,
+            'water_supply' => $water_supply,
+            'date' => $date,
+        ]);
+    }
+
+    /* Отображение месячной рентабельности с заданной датой*/
+    public function profitability_month_show($our_date){
+        /* Получаем всю нужную информацию по нарядам */        
+        /* Получаем зональную доходную часть */
+        $zonal_assignment_income = Zonal_assignments_income::all();
+        /* Получаем зональную расходную часть */
+        $zonal_assignment_expense = Zonal_assignments_expense::all();
+        /* Получаем доходную часть */
+        $assignment_income = Assignments_income::all();
+        /* Получаем расходную часть */
+        $assignment_expense = Assignments_expense::all();
+        /* Получаем курс валют */
+        $usd = DB::table('exchange_rates')->select('usd')->get();
+        foreach ($usd as $value) {
+            $usd = $value->usd;
+        }
+        $eur = DB::table('exchange_rates')->select('eur')->get();
+        foreach ($eur as $value) {
+            $eur = $value->eur;
+        }
+
+        /* Получаем ежемесячные расходы */
+        $profitability_months = Month_profitability::all();
+        /* Получаем заданную запись в таблице расходов */
+        foreach($profitability_months as $value) {
+            if (substr($our_date,0,-3) === substr($value->date,0,-3)) {
+                $month_profitability = Month_profitability::find($value->id);
+                
+                $rental_price = $month_profitability->rental_price;
+                $electricity = $month_profitability->electricity;
+                $water_supply = $month_profitability->water_supply;
+                $date = $month_profitability->date;
+                break;
+            }
+        }
+
+        return view('assignments_admin.profitability_month_index',
+        [
+            'zonal_assignment_income' => $zonal_assignment_income,
+            'zonal_assignment_expense' => $zonal_assignment_expense,
+            'assignment_income' => $assignment_income,
+            'assignment_expense' => $assignment_expense,
+            'usd' => $usd,
+            'eur' => $eur,
+            'rental_price' => $rental_price,
+            'electricity' => $electricity,
+            'water_supply' => $water_supply,
+            'date' => $date,
+        ]);
+    }       
+
+    /* Отображение месячной рентабельности со свежими данными*/
+    public function profitability_month(Request $request){
+        /* Получаем всю нужную информацию по нарядам */        
+        /* Получаем зональную доходную часть */
+        $zonal_assignment_income = Zonal_assignments_income::all();
+        /* Получаем зональную расходную часть */
+        $zonal_assignment_expense = Zonal_assignments_expense::all();
+        /* Получаем доходную часть */
+        $assignment_income = Assignments_income::all();
+        /* Получаем расходную часть */
+        $assignment_expense = Assignments_expense::all();
+        /* Получаем курс валют */
+        $usd = DB::table('exchange_rates')->select('usd')->get();
+        foreach ($usd as $value) {
+            $usd = $value->usd;
+        }
+        $eur = DB::table('exchange_rates')->select('eur')->get();
+        foreach ($eur as $value) {
+            $eur = $value->eur;
+        }
+        /* Получаем ежемесячные расходы */
+        $profitability_months = Month_profitability::all();
+        /* Проверяем наличие данных */
+        $item = true;
+        foreach($profitability_months as $value) {
+            /* если есть данные в этом месяце, то обновляем */
+            if (substr($request->date,0,-3) === substr($value->date,0,-3)) {
+                $item = false;
+                $month_profitability = Month_profitability::find($value->id);
+                if (isset($request->rental_price)) {
+                    $month_profitability->rental_price = $request->rental_price;
+                }
+                if (isset($request->electricity)) {
+                    $month_profitability->electricity = $request->electricity;
+                }
+                if (isset($request->water_supply)) {
+                    $month_profitability->water_supply = $request->water_supply;
+                }
+                $month_profitability->save();
+                
+                $rental_price = $month_profitability->rental_price;
+                $electricity = $month_profitability->electricity;
+                $water_supply = $month_profitability->water_supply;
+                $date = $month_profitability->date;
+                break;
+            }
+        }
+        /* если нет, то добавляем */
+        if ($item) {
+            $new_month_profitability = new Month_profitability();
+            $new_month_profitability->rental_price = $request->rental_price;
+            $new_month_profitability->electricity = $request->electricity;
+            $new_month_profitability->water_supply = $request->water_supply;
+            $new_month_profitability->date = $request->date;
+            $new_month_profitability->save();
+
+            $rental_price = $request->rental_price;
+            $electricity = $request->electricity;
+            $water_supply = $request->water_supply;
+            $date = $request->date;
+        }
+
+        return view('assignments_admin.profitability_month_index',
+        [
+            'zonal_assignment_income' => $zonal_assignment_income,
+            'zonal_assignment_expense' => $zonal_assignment_expense,
+            'assignment_income' => $assignment_income,
+            'assignment_expense' => $assignment_expense,
+            'usd' => $usd,
+            'eur' => $eur,
+            'rental_price' => $rental_price,
+            'electricity' => $electricity,
+            'water_supply' => $water_supply,
+            'date' => $date,
+        ]);
+    }    
 
 }
