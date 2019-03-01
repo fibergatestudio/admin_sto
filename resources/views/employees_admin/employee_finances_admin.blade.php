@@ -119,7 +119,7 @@
                     {{ $balance_logs->amount }}
                     </td>
                     <td>
-
+                    {{ $balance_logs->old_balance }}
                     </td>
                     <td>
       
@@ -147,7 +147,7 @@
                     {{ $payout_log->amount }}
                     </td>
                     <td>
-
+                    {{ $payout_log->old_balance }}
                     </td>
                     <td>
 

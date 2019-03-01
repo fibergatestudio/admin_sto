@@ -40,11 +40,15 @@ class Assignments_Admin_Controller extends Controller
             DB::table('assignments')
                 ->join('employees', 'assignments.responsible_employee_id', '=', 'employees.id')
                 ->join('cars_in_service', 'assignments.car_id', '=', 'cars_in_service.id')
+                ->join('clients', 'assignments.car_id', '=', 'clients.id')
                 ->orderBy('order','ASC')
                 ->select(
                         'assignments.*',
                         'employees.general_name AS employee_name',
-                        'cars_in_service.general_name AS car_name'
+                        'cars_in_service.general_name AS car_name',
+                        'cars_in_service.vin_number AS vin_number',
+                        'clients.phone AS clients_phone',
+                        'clients.fio AS clients_fio'
                     )
                 ->get();
 

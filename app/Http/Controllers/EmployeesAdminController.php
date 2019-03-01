@@ -152,7 +152,7 @@ class EmployeesAdminController extends Controller
 
                 ['employee_id', $employee_id],
                 ['action', '=', 'withdrawal'],
-                ['reason', '=', 'auto']
+                ['reason', '=', 'Выплата']
 
             ])->orderBy('created_at', 'desc')->get();
 
@@ -165,8 +165,6 @@ class EmployeesAdminController extends Controller
              'payout_logs' => $payout_logs
 
         ]);
-
-        return view('employees_admin.employee_finances_admin', ['employee' => $employee]);
     }
 
     /* - Добавления примечания к сотруднику: страница - */
@@ -386,9 +384,10 @@ class EmployeesAdminController extends Controller
         $employee_balance_log = new Employee_balance_log;
         $employee_balance_log->amount = $add_sum;
         $employee_balance_log->action = 'deposit';
-        $employee_balance_log->reason = 'auto';
+        $employee_balance_log->reason = 'Начисление';
         $employee_balance_log->date = date('Y-m-d');
         $employee_balance_log->employee_id = $employee_id;
+        $employee_balance_log->old_balance = $balance;
         $employee_balance_log->save();
 
         /* Возвращаемся на страницу */
@@ -410,7 +409,7 @@ class EmployeesAdminController extends Controller
 
                 ['employee_id', $employee_id],
                 ['action', '=', 'withdrawal'],
-                ['reason', '=', 'auto']
+                ['reason', '=', 'Выплата']
 
             ])->orderBy('created_at', 'desc')->get();
 
@@ -431,6 +430,8 @@ class EmployeesAdminController extends Controller
         $balance = $employee->balance;
 
         $new_balance = $balance - $add_payout;
+
+        //$old_balance = $balance;
 
         DB::table('employees')
             ->where('id', '=', $employee_id)
@@ -455,9 +456,10 @@ class EmployeesAdminController extends Controller
         $employee_balance_log = new Employee_balance_log;
         $employee_balance_log->amount = -$add_payout;
         $employee_balance_log->action = 'withdrawal';
-        $employee_balance_log->reason = 'auto';
+        $employee_balance_log->reason = 'Выплата';
         $employee_balance_log->date = date('Y-m-d');
         $employee_balance_log->employee_id = $employee_id;
+        $employee_balance_log->old_balance = $balance;
         $employee_balance_log->save();
 
         /* Возвращаемся на страницу */
