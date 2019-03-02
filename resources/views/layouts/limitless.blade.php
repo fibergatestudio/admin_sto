@@ -114,19 +114,26 @@
 							@if(App\Employee::get_employee_by_user_id(Auth::user()->id) != $employee )
 								{{$employee->general_name}},								
 							@endif
-							{{-- @php 
-								$text = "Имениниики сегодня:\n"
-					        	. $employee->general_name;				        
 
-						        Telegram\Bot\Laravel\Facades\Telegram::sendMessage([
-						            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
-						            'parse_mode' => 'HTML',
-						            'text' => $text
-						        ]);	
-						    @endphp --}}														
+							{{-- Отрпавка в телеграм --}}
+							
+								@php
+									$text = "Имениниики сегодня:\n"
+						        	. $employee->general_name;				        
+
+							        Telegram\Bot\Laravel\Facades\Telegram::sendMessage([
+							            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+							            'parse_mode' => 'HTML',
+							            'text' => $text
+							        ]);	
+							        
+							   	@endphp
+						    													
 						@endif					
 					@endforeach
+
 				</li>
+				
 				<li>
 					<span>Именинники завтра: </span>	
 					@foreach(App\Employee::getBirthday() as $employee)	
@@ -134,16 +141,20 @@
 							@if(App\Employee::get_employee_by_user_id(Auth::user()->id) != $employee )
 								{{$employee->general_name}},
 							@endif
-							{{-- @php 
-								$text = "Имениниики завтра:\n"
-					        	. $employee->general_name;				        
+							{{-- Отрпавка в телеграм --}}
+							
+								@php
+									$text = "Имениниики завтра:\n"
+						        	. $employee->general_name;				        
 
-						        Telegram\Bot\Laravel\Facades\Telegram::sendMessage([
-						            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
-						            'parse_mode' => 'HTML',
-						            'text' => $text
-						        ]);	
-						    @endphp --}}	
+							        Telegram\Bot\Laravel\Facades\Telegram::sendMessage([
+							            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+							            'parse_mode' => 'HTML',
+							            'text' => $text
+							        ]);	
+							       
+							   	@endphp
+						    
 						@endif					
 					@endforeach
 				</li>
