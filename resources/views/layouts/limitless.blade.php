@@ -113,7 +113,17 @@
 						@if(date("m-d") == date("m-d", strtotime(date("$employee->birthday"))))
 							@if(App\Employee::get_employee_by_user_id(Auth::user()->id) != $employee )
 								{{$employee->general_name}},								
-							@endif														
+							@endif
+							{{-- @php 
+								$text = "Имениниики сегодня:\n"
+					        	. $employee->general_name;				        
+
+						        Telegram\Bot\Laravel\Facades\Telegram::sendMessage([
+						            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+						            'parse_mode' => 'HTML',
+						            'text' => $text
+						        ]);	
+						    @endphp --}}														
 						@endif					
 					@endforeach
 				</li>
@@ -124,6 +134,16 @@
 							@if(App\Employee::get_employee_by_user_id(Auth::user()->id) != $employee )
 								{{$employee->general_name}},
 							@endif
+							{{-- @php 
+								$text = "Имениниики завтра:\n"
+					        	. $employee->general_name;				        
+
+						        Telegram\Bot\Laravel\Facades\Telegram::sendMessage([
+						            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+						            'parse_mode' => 'HTML',
+						            'text' => $text
+						        ]);	
+						    @endphp --}}	
 						@endif					
 					@endforeach
 				</li>
