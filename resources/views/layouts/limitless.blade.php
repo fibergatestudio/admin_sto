@@ -103,9 +103,32 @@
 					</div>
 				</li>
 			</ul>
+			
 
-
-
+			<!-- Вывод genral_name работников у кого сегодня и завтра день рождения, видят все кроме работников у которых сегодня и завтра ДР-->
+			<ul>
+				<li>
+					<span>Имениниики сегодня: </span>
+					@foreach(App\Employee::getBirthday() as $employee)						
+						@if(date("m-d") == date("m-d", strtotime(date("$employee->birthday"))))
+							@if(App\Employee::get_employee_by_user_id(Auth::user()->id) != $employee )
+								{{$employee->general_name}},								
+							@endif												
+						@endif					
+					@endforeach
+				</li>
+				<li>
+					<span>Именинники завтра: </span>	
+					@foreach(App\Employee::getBirthday() as $employee)	
+						@if(date("m-d", mktime(0, 0, 0, date("m"), date("d")+1,   date("Y"))) == date("m-d", strtotime(date("$employee->birthday"))))
+							@if(App\Employee::get_employee_by_user_id(Auth::user()->id) != $employee )
+								{{$employee->general_name}},
+							@endif
+						@endif					
+					@endforeach
+				</li>
+			</ul>	
+			
 		</div>
 	</div>
 	<!-- /main navbar -->

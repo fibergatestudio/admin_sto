@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+
 class Employee extends Model
 {
     protected $table = "employees";
@@ -27,4 +28,8 @@ class Employee extends Model
     //    return $this->hasOne('Employee_balance'); // связь с моделью Employee_balance (начисление баланса сотруднику)
     //}
 
+    public static function getBirthday(){
+        $employees = Employee::all();
+        return $employees;
+    }
 }
