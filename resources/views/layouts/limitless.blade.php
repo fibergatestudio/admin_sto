@@ -113,7 +113,7 @@
 						@if(date("m-d") == date("m-d", strtotime(date("$employee->birthday"))))
 							@if(App\Employee::get_employee_by_user_id(Auth::user()->id) != $employee )
 								{{$employee->general_name}},								
-							@endif												
+							@endif														
 						@endif					
 					@endforeach
 				</li>
