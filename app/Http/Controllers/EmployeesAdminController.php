@@ -57,6 +57,29 @@ class EmployeesAdminController extends Controller
         $new_employee->balance = 0;
         $new_employee->save();
 
+        /* Добавить ему нулевой баланс */
+        $new_employee_id = $new_employee->id;
+        $new_employee_balance = new Employee_balance();
+        $new_employee_balance->balance = 0;
+        $new_employee_balance->employee_id = $new_employee_id;
+        $new_employee_balance->save();
+
+        /* - Добавление в логи создание сотрудника - */
+        $create_employee_log = new Employees_logs();
+        $create_employee_log_entry->employee_id = $employee_id; //id сотрудника
+        $create_employee_log_entry->author_id = $author_id;  //id автора заметки
+
+        /* - Имя сотрудника - */
+        $employee = Employees_logs::find($employee_id);
+        $employee_name = $employee->general_name;
+        /* - Имя автора - */
+        $author = Users::find($author_id);
+        $author_name = $author->general_name;
+
+        $create_employee_log_entry->text = 'Создан новый сотрудник - ' .$employee_name. 'автор - '.$author_name. 'дата - ' .date('Y-m-d');  //текст о создании сотрудника(имя) и автор(имя), дата(date)
+        $create_employee_log_entry->save();
+
+
         /* Вернуться ко списку сотрудников */
         return redirect()->route('view_employees');
     }
@@ -76,7 +99,22 @@ class EmployeesAdminController extends Controller
         $employee->status = 'archived';
         $employee->save();
 
-        /* Вернуться к списку сотрудников */
+        /* - Добавление в логи о переводе сотрудника в архив - */
+        $archive_employee_log = new Employees_logs();
+        $archive_employee_log_entry->employee_id = $employee_id;  //id сотрудника
+        $archive_employee_log_entry->author_id = $author_id;  //id автора
+
+        /* - Имя сотрудника - */
+        $employee = Employees_logs::find($employee_id);
+        $employee_name = $employee->general_name;
+        /* - Имя автора - */
+        $author = Users::find($author_id);
+        $author_name = $author->general_name;
+
+        $archive_employee_log_entry->text = 'Перевод в архив сотрудника - ' .$employee_name. 'автор - '.$author_name. 'дата - '.date('Y-m-d');  //текст лога архивации сотрудника (имя) и автор(имя), дата(date)
+        $archive_employee_log_entry->save();
+
+        /* Вернуться ко списку сотрудников */
         return redirect()->route('view_employees');
     }
 
@@ -147,7 +185,7 @@ class EmployeesAdminController extends Controller
             ])->orderBy('created_at', 'desc')->get();
 
         /* Получаем Выплаты */
-        $payout_logs = Employee_balance_log::where( 
+        $payout_logs = Employee_balance_log::where(
             [
 
                 ['employee_id', $employee_id],
@@ -184,6 +222,23 @@ class EmployeesAdminController extends Controller
         $new_employee_note_entry->type = 'note';
         $new_employee_note_entry->save();
 
+        /* - Добавление в логи создания заметки по сотруднику - */
+        $create_employee_note_log = new Employees_notes_logs();
+        $create_employee_note_log_entry->employee_id = $employee_id;  //id сотрудника
+        $create_employee_note_log_entry->author_id = $author_id;  //id автора заметки
+
+        /* - Имя сотрудника - */
+        $employee = Employees_logs::find($employee_id);
+        $employee_name = $employee->general_name;
+        /* - Имя автора - */
+        $author = Users::find($author_id);
+        $author_name = $author->general_name;
+
+        $create_employee_note_log_entry->text = 'Создана заметка по сотруднику - ' .$employee_name. 'автор - '.$author_name. 'дата - '.date('Y-m-d'); //текст о создании заметки по клиенту(имя) и автор(имя), дата(date)
+        $create_employee_note_log_entry->save();
+
+
+
         //Возврат на страницу сотрудника
         return redirect ('/admin/employee/' .$employee->id);
     }
@@ -208,12 +263,43 @@ class EmployeesAdminController extends Controller
         $employee_note_entry->text = $request->text;
         $employee_note_entry->save();
 
+        /* - Добавление в логи редактирование заметки по сотруднику - */
+        $edit_employee_note_log = new Employees_notes_logs();
+        $edit_employee_note_log_entry->employee_id = $employee_id;  //id сотрудника
+        $edit_employee_note_log_entry->author_id = $author_id;  //id автора
+
+        /* - Имя сотрудника - */
+        $employee = Employees_logs::find($employee_id);
+        $employee_name = $employee->general_name;
+        /* - Имя автора - */
+        $author = Users::find($author_id);
+        $author_name = $author->general_name;
+
+         $edit_employee_note_log_entry->text = 'Редактирование заметки о сотруднике - ' .$employee_name. 'автор - '.$author_id. 'дата - '.date('Y-m-d');  //текст лога о редактировании заметки по клиенту(имя) и автор(имя), дата(date)
+         $edit_employee_note_log_entry->save();
+
         return redirect('/admin/employee/' .$employee_note_entry->employee_id);
     }
 
     /* - Удление примечания к сотруднику - */
     public function delete_employee_note($note_id){
         Employees_notes::find($note_id)->delete();
+
+        /* - Добавление в логи удаление заметки о клиенте - */
+        $delete_employee_note_log = new Employees_notes_logs();
+        $delete_employee_note_log_entry->employee_id = $employee_id;  //id сотрудника
+        $delete_employee_note_log_entry->author_id = $author_id;  //id автора
+
+        /* - Имя сотрудника - */
+        $employee = Employees_logs::find($employee_id);
+        $employee_name = $employee->general_name;
+        /* - Имя автора - */
+        $author = Users::find($author_id);
+        $author_name = $author->general_name;
+
+        $delete_employee_note_log_entry->text = 'Удаление заметки о сотруднике - ' .$employee_name. 'автор - '.$author_name. 'дата - '.date('Y-m-d');  //текст лога удаления заметки по сотруднику(имя) автор(имя), дата(date)
+        $delete_employee_note_log_entry->save();
+
         return back();
     }
 
@@ -221,6 +307,22 @@ class EmployeesAdminController extends Controller
     public function change_standard_shift_wage(Request $request){
         // Задаём новую ставку
         Employee::find($request->employee_id)->set_new_wage($request->new_wage);
+
+        /* - Добавление в логи изменение ставки по сотруднику - */
+        $change_employee_shift_wage_log = new Employees_logs();
+        $change_employee_shift_wage_log_entry->employee_id = $employee_id;  //id сотрудника
+        $change_employee_shift_wage_log_entry->author_id = $author_id;  //id автора
+
+        /* - Имя сотрудника - */
+        $employee = Employees_logs::find($employee_id);
+        $employee_name = $employee->general_name;
+        /* - Имя автора - */
+        $author = Users::find($author_id);
+        $author_name = $author->general_name;
+
+        $change_employee_shift_wage_log_entry->text = 'Изменение ставки сотрудника - ' .$employee_name. 'автор - ' .$author_name. 'дата - ' .date('Y-m-d');  //текст лога о изменении ставки сотрудника(имя) и автор(имя), дата(date)
+
+        $change_employee_shift_wage_log_entry->save();
 
         // Возвращаемся на предыдущую страницу
         return back();
@@ -513,8 +615,8 @@ class EmployeesAdminController extends Controller
 
         $new_balance = $employee_balance->balance - $fine->amount;
 
-        DB::table('employees')
-            ->where('id', '=', $fine->employee_id)
+        DB::table('employee_balances')
+            ->where('employee_id', '=', $fine->employee_id)
             ->update(['balance' => $new_balance]);
 
 
@@ -576,6 +678,23 @@ class EmployeesAdminController extends Controller
         $new_fine->status = 'pending';
         $new_fine->date = date('Y-m-d');
         $new_fine->save();
+
+        /* - Добавляем в логи применение штрафа сотруднику - */
+        $fine_to_employee_log = new Employees_logs();
+        $fine_to_employee_log_entry->employee_id = $employee_id;  //id сотрудника
+        $fine_to_employee_log_entry->author_id = $author_id;  //id автора
+
+        /* - Имя сотрудника - */
+        $employee = Employees_logs::find($employee_id);
+        $employee_name = $employee->general_name;
+        /* - Имя автора - */
+        $author = Users::find($author_id);
+        $author_name = $author->general_name;
+
+        $fine_to_employee_log_entry->text = 'Штраф сотруднику - ' .$employee_name. 'был добавлен в ручную -' . $author_name .'дата - ' .date('Y-m-d');  //текст лога о добавлении штрафа сотруднику(имя) автором(имя), дата(date)
+
+        $fine_to_employee_log_entry->save();
+
 
         /* Редирект на страницу штрафов */
         return redirect()->route('employee_fines', ['employee_id' => $request->employee_id]);
