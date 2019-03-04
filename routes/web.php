@@ -44,8 +44,8 @@ Route::get('/master/assignments', 'Master_Controller@master_assignments')->middl
 Route::get('/master/confirm', 'Master_Controller@master_confirm')->middleware('can:master_rights');
 
 
-/*Подтверждение записи в профиле рабочих*/
-Route::get('/master/confirm_employee/{id}', 'Master_Controller@confirm_employee')->middleware('can:master_rights');
+/*Подтверждение записи в нарядах*/
+Route::get('/master/confirm/{id}', 'Master_Controller@confirm')->middleware('can:master_rights');
 
 
 /*Путь к  наряду на странице мастера*/

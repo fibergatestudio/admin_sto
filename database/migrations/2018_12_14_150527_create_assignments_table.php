@@ -27,6 +27,7 @@ class CreateAssignmentsTable extends Migration
 			$table->date('date_of_creation');
 			$table->date('date_of_completion')->nullable();
 			$table->string('status');
+            $table->string('confirmed');
             $table->timestamps();
         });
 
@@ -39,7 +40,9 @@ class CreateAssignmentsTable extends Migration
                 'workzone_id' => 1,
                 'description' => 'Описание тестового наряда',
                 'date_of_creation' => '2018-12-17',
-                'status' => 'active'
+                'status' => 'active',
+                'confirmed' => 'unconfirmed',
+
             ]
         ];
 
