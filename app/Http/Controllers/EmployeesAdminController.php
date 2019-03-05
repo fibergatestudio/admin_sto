@@ -107,6 +107,8 @@ class EmployeesAdminController extends Controller
         $phone = $request->phone;
         $hour_from = $request->hour_from ;
         $hour_to = $request->hour_to;
+        $fixed_charge = $request->fixed_charge;
+        $pay_per_shift = $request->pay_per_shift;
         $telegram_id = $request->telegram_id;
 
         $employee = Employee::find($employee_id);
@@ -118,6 +120,8 @@ class EmployeesAdminController extends Controller
         $employee->phone = $phone;
         $employee->hour_from = $hour_from;
         $employee->hour_to = $hour_to;
+        $employee->fixed_charge = $fixed_charge;
+        $employee->pay_per_shift = $pay_per_shift;
         $employee->telegram_id = $telegram_id;
         $employee->save();
 
