@@ -491,6 +491,8 @@ Route::get('/admin/logs/', 'Logs_Admin_Controller@index');
     Route::get('/admin/logs/clients', 'Logs_Admin_Controller@clients_logs');
     /* - Логи по машинам в сервисе - */
     Route::get('/admin/logs/cars', 'Logs_Admin_Controller@cars_in_service_logs');
+    /* - Логи по обороту денег - */
+    Route::get('/admin/logs/finances', 'Logs_Admin_Controller@finances_logs');
 
 
 /****************************************/

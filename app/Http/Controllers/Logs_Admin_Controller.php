@@ -65,13 +65,13 @@ class Logs_Admin_Controller extends Controller
         return view('admin.logs.cars_in_service_logs.cars_in_service_logs', compact('cars_in_service_logs', 'cars_in_service_notes_logs'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    /* - Логи по финансам */
+    public function finances_logs()
+    {
+        $employees_finances_logs = Employee_balance_logs::all();
+    }
+     
+    
     public function update(Request $request, $id)
     {
         //

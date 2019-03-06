@@ -32,7 +32,7 @@
             </tr>
         @endforeach
     </table>
-
+    <hr>
     <h2>Логи по заметкам сотрудников</h2>
         <table class="table">
         <tr>
@@ -59,4 +59,5 @@
             </tr>
         @endforeach
     </table>
+    <hr>
 @endsection
