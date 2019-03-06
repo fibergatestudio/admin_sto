@@ -482,6 +482,17 @@ Route::get('/admin/supply_orders/archive', 'Supply_orders_Admin_Controller@archi
 
 // ... Редактировать авто
 
+
+/****** Logs : Администратор ******/
+Route::get('/admin/logs/', 'Logs_Admin_Controller@index');
+    /* - Логи по сотрудникам - */
+    Route::get('/admin/logs/employees', 'Logs_Admin_Controller@employees_logs');
+    /* - Логи по клиентам - */
+    Route::get('/admin/logs/clients', 'Logs_Admin_Controller@clients_logs');
+    /* - Логи по машинам в сервисе - */
+    Route::get('/admin/logs/cars', 'Logs_Admin_Controller@cars_in_service_logs');
+
+
 /****************************************/
 /********** РАБОТНИК : секция **********/
 /****************************************/

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCatsNotesLogsTable extends Migration
+class CreateEmployeesNotesLogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateCatsNotesLogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('cats_notes_logs', function (Blueprint $table) {
+        Schema::create('employees_notes_logs', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('note_id');
-            $table->foreign('note_id')->references('id')->on('cars_notes'); 
-            $table->unsignedInteger('car_id'); // foreign
-            $table->foreign('car_id')->references('id')->on('cars_in_service');
+            $table->unsignedInteger('note_id');  
+            $table->foreign('note_id')->references('id')->on('employees_notes'); 
+            $table->unsignedInteger('employee_id');
+            $table->foreign('employee_id')->references('id')->on('employees');
             $table->unsignedInteger('author_id');
             $table->foreign('author_id')->references('id')->on('users');
             $table->string('text');
@@ -34,6 +34,6 @@ class CreateCatsNotesLogsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cats_notes_logs');
+        Schema::dropIfExists('employees_notes_logs');
     }
 }

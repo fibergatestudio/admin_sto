@@ -22,7 +22,7 @@ class CreateWorkzoneLogsTable extends Migration
             $table->unsignedInteger('employee_id');
             $table->foreign('employee_id')->references('id')->on('employees');
             $table->string('text');
-            $table->strind('type');
+            $table->string('type');
             $table->timestamps();
         });
     }

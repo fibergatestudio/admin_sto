@@ -330,7 +330,7 @@ class EmployeesAdminController extends Controller
         // Возвращаемся на предыдущую страницу
         return back();
     }
-    /* - Страница добавления примечания к сотруднику */
+    /* - Страница добавления примечания к сотруднику - */
     public function single_employee_notes($employee_id){
         $employee = Employee::find($employee_id);
 
