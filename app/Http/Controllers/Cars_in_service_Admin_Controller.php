@@ -103,6 +103,12 @@ class Cars_in_service_Admin_Controller extends Controller
         $create_car_in_service_entry->text = 'Создана машина - '.$car_name. 'клиента - '.$client_name. 'автор - '.$author_name. 'дата - ' .date('Y-m-d');   //текст лога о создании машины(название) клиента(имя) от автора(имя) от даты(date)
         $create_car_in_service_entry->save();
 
+        //$request->document->store('public1'); //Заливка файла
+
+        if(!empty($request->document)){
+            $request->document->store('public1');
+        }
+
         /* И перенаправить на страницу клиента */
         return redirect()->route('admin_view_client', ['client_id' => $request->client_id]);
     }

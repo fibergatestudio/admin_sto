@@ -53,14 +53,7 @@ class Workzones_Admin_Controller extends Controller
 
      /* Редактирование информации о рабочем посте*/
     public function edit_workzone($workzone_id){
-        $workzones = Workzone::find($workzone_id);
-        $name=$workzones->general_name;
-        $description=$workzones->description;
-        return view('admin.workzones.edit_workzone',[
-            'workzones_id'=>$workzone_id,
-            'names'=>$name,
-            'descriptions'=>$description,
-        ]);
+
         // ...
 
 
@@ -74,6 +67,17 @@ class Workzones_Admin_Controller extends Controller
 
         $edit_workzone_log_entry->text = 'Отредактирована информация о рабочей зоне -' .$workzone_id. ' автор - ' .$author_name. 'дата - ' .date('Y-m-d');
         $edit_workzone_log_entry->save();
+
+        $workzones = Workzone::find($workzone_id);
+        $name=$workzones->general_name;
+        $description=$workzones->description;
+        return view('admin.workzones.edit_workzone',[
+            'workzones_id'=>$workzone_id,
+            'names'=>$name,
+            'descriptions'=>$description,
+        ]);
+
+
     }
     public function edit_workzone_id(Request $request){
      /* Меняем название наряда */

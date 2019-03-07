@@ -235,6 +235,22 @@ class Supply_orders_Admin_Controller extends Controller
         $supply_order->status = 'archived';
         $supply_order->save();
 
+        /* - Вносим в логи архивирование заказа - */
+        $new_supply_order_arhive_log = new Supply_order_logs();
+        $new_supply_order_arhive_log_entry->order_id = $order_id;
+        $new_supply_order_arhive_log_entry->author_id = $author_id;
+
+        /* - Имя автора - */
+        $author = Users::find($responcible_supply_officier_id);
+        $author_name = $author->general_name;
+
+        /* - Номер заказа - */
+        $order = Supply_orders::find($supply_order_id);
+        $order_number = $order->id;
+
+        $new_supply_order_arhive_log_entry->text = 'Заказ номер - ' .$order_number. 'переведён в архив автором - ' .$author_name. 'дата - ' .date('Y-m-d'); //текст лога о переводе заказа(№) в архив автором(имя) дата(date)
+        $new_supply_order_arhive_log_entry->save();
+
 
          /* Отправляем телеграм оповещение о архивировании заказа*/
 
@@ -248,21 +264,6 @@ class Supply_orders_Admin_Controller extends Controller
              'text' => $text
          ]);
 
-         /* - Вносим в логи архивирование заказа - */
-         $new_supply_order_arhive_log = new Supply_order_logs();
-         $new_supply_order_arhive_log_entry->order_id = $order_id;
-         $new_supply_order_arhive_log_entry->author_id = $author_id;
-
-         /* - Имя автора - */
-         $author = Users::find($responcible_supply_officier_id);
-         $author_name = $author->general_name;
-
-         /* - Номер заказа - */
-         $order = Supply_orders::find($supply_order_id);
-         $order_number = $order->id;
-
-         $new_supply_order_arhive_log_entry->text = 'Заказ номер - ' .$order_number. 'переведён в архив автором - ' .$author_name. 'дата - ' .date('Y-m-d'); //текст лога о переводе заказа(№) в архив автором(имя) дата(date)
-         $new_supply_order_arhive_log_entry->save();
 
         /* Редирект на страницу архива */
         return redirect('/admin/supply_orders/archive');

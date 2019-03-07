@@ -117,6 +117,9 @@ class Assignments_Admin_Controller extends Controller
         $create_new_assigment_log = new Assignments_logs();
         $create_new_assigment_log_entry->assignment_id = $assignment_id;  //Id наряда
         $create_new_assigment_log_entry->car_id = $car_id;
+        $create_new_assigment_log_entry->$responsible_employee_id = $responsible_employee_id;
+        $create_new_assigment_log_entry->$author_id = $author_id;
+        $create_new_assigment_log_entry->$workzone_id = $workzone_id;
 
         /* - Название машины - */
         $car = Cars_in_service::find($car_id);
@@ -127,12 +130,17 @@ class Assignments_Admin_Controller extends Controller
         /* - Имя автора - */
         $author = Users::find($author_id);
         $author_name = $author->general_name;
+        /* - Название рабочей зоны - */
+        $workzone = Workzones::find($workzone_id);
+        $workzone_name = $workzone->general_name;
 
-        $create_new_assigment_log_entry->text = 'Создан новый наряд  - ' .$assigment_id. 'по машине - ' .$car_name. 'автором - ' .$author_name. 'ответственный сотрудник - ' .$responsible_employee_name. 'дата - ' .date('Y-m-d'); // текст лога о создании нового наряда(номер наряда) по машине (название) автором(имя) с ответвенным сотрудником(имя), дата(date)
+        $create_new_assigment_log_entry->text = 'Создан новый наряд  - ' .$assigment_id. 'по машине - ' .$car_name. 'автором - ' .$author_name. 'ответственный сотрудник - ' .$responsible_employee_name. 'рабочая зона - ' .$workzone_name. 'дата - ' .date('Y-m-d'); // текст лога о создании нового наряда(номер наряда) по машине (название) автором(имя) с ответвенным сотрудником(имя), дата(date)
         $create_new_assigment_log_entry->save();
- 
+        
         /* Возвращаемся на страницу нарядов по авто */
         return redirect('admin/cars_in_service/view/'.$car_id);
+
+        
     }
 
     /* Просмотр наряда : страница */
@@ -260,7 +268,7 @@ class Assignments_Admin_Controller extends Controller
         return response('Update Successfully.', 200);
     }
 
-    /* Обновления позации элемента таблицы */
+    /* Обновления позиции элемента таблицы */
     public function updateMainOrder(Request $request){
 
         $assignments = Assignment::all();
@@ -337,8 +345,34 @@ class Assignments_Admin_Controller extends Controller
         $sub_assignment->end_time = $end_time;
         $sub_assignment->save();
 
+        /* - Добавление в логи создание зонального наряда -*/
+        $create_new_sub_assignment_log = new Sub_assignments_logs();
+        $create_new_sub_assignment_log_entry->sub_assignment_id = $sub_assigment_id;
+        $create_new_sub_assignment_log_entry->car_id = $car_id;
+        $create_new_sub_assignment_log_entry->author_id = $author_id;
+        $create_new_sub_assignment_log_entry->responsible_employee_id = $responsible_employee_id;
+        $create_new_sub_assignment_log_entry->workzone_id = $workzone_id;
+
+        /* - Название машины - */
+        $car = Cars_in_service::find($car_id);
+        $car_name = $car->general_name;
+        /* - Имя ответственного сотрудника - */
+        $responsible_employee = Employees::find($employee_id);
+        $responsible_employee_name = $responsible_employee->general_name;
+        /* - Имя автора - */
+        $author = Users::find($author_id);
+        $author_name = $author->general_name;
+        /* - Название рабочей зоны - */
+        $workzone = Workzones::find($workzone_id);
+        $workzone_name = $workzone->general_name;
+
+        $create_new_sub_assignment_log_entry->text = 'Создан новый зональный наряд  - ' .$sub_assignment_id. 'по машине - ' .$car_name. 'автором - ' .$author_name. 'ответственный сотрудник - ' .$responsible_employee_name. 'рабочая зона - ' .$workzone_name. 'дата - ' .date('Y-m-d'); // текст лога о создании нового зонального наряда(номер наряда) по машине (название) автором(имя) с ответвенным сотрудником(имя) на рабочей зоне(название), дата(date)
+        $create_new_sub_assignment_log_entry->save();
+
         /* Возвращаемся на страницу */
         return redirect('/admin/assignments/view/'.$main_assignment_id);
+
+        
     }
 
     /* Добавление фотографий к наряду : Страница */
@@ -359,6 +393,10 @@ class Assignments_Admin_Controller extends Controller
         /* Сохраняем фото */
         $request->test->store('public/'.$assignment_id);
 
+        /* Возвращаемся на страницу авто */
+        return redirect('admin/assignments/view/'.$assignment_id);
+
+    /* - Добавление в логи, добавление фото к наряду - */    
         $create_photo_to_assignment_log = new Photos_to_assigments_logs();
         $create_photo_to_assignment_log->assigment_id = $assigment_id;
         $create_photo_to_assignment_log->author_id = $author_id;
@@ -370,8 +408,7 @@ class Assignments_Admin_Controller extends Controller
         $create_photo_to_assignment_log->text = 'Добавлено фото к наряду - ' .$assignment_id. 'автором - ' .$author_id. 'дата - ' .date('Y-m-d');  // текст добавления лога о добавлении фото к наряду(номер наряда) автором(имя), дата(date)
         $create_photo_to_assignment_log->save();
         
-        /* Возвращаемся на страницу авто */
-        return redirect('admin/assignments/view/'.$assignment_id);
+        
     }
 
     /* Добавление фотографий принятой машины к наряду : Обработка запроса */
@@ -385,6 +422,10 @@ class Assignments_Admin_Controller extends Controller
         
         /* Возвращаемся на страницу авто */
         return redirect('admin/assignments/view/'.$assignment_id);
+
+        /* - Добавление в логи, добавление фотографий принятой машины к наряду - */
+        $create_accepted_photo_to_assignment_log = Photos_to_assigments_logs();
+
     }
 
     /* Добавление фотографий процесса ремонта к наряду : Обработка запроса */
@@ -457,6 +498,9 @@ class Assignments_Admin_Controller extends Controller
         
         /* Вернуться на страницу удаления фотографий */
         return redirect('admin/assignments/'.$request->assignment_id.'/delete_photos_page');
+
+        /* - Добавление в логи удаление фото - */
+
     }
 
     public function assignment_management($sub_assignment_id){
