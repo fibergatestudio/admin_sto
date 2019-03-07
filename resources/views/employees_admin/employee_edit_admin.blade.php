@@ -139,7 +139,7 @@
 
                     <div class="form-group col-md-6">
                         <label>Фиксированная плата</label>
-                        <input type="checkbox" name="fixed_charge" value="fixed" @if(isset($employee_edit->fixed_charge)) checked @endif class="form-control typeahead">
+                        <input type="checkbox" name="fixed_charge" value="fixed" @if($employee_edit->fixed_charge == 'fixed') checked @endif class="form-control typeahead">
                     </div>
 
                     <div class="form-group col-md-6">
