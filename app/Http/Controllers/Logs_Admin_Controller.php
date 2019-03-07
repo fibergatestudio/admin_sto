@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Employee;
 use App\Employees_logs;
 use App\Employees_notes_logs;
+use App\Employees_balance_logs;
 use App\Client;
 use App\Clients_logs;
 use App\Clients_notes_logs;
@@ -68,7 +69,25 @@ class Logs_Admin_Controller extends Controller
     /* - Логи по финансам */
     public function finances_logs()
     {
-        $employees_finances_logs = Employee_balance_logs::all();
+        $employees_finances_logs = Employees_balance_logs::all();
+
+        $employee = Employees_logs::find($employee_id);
+        $employee_name = $employee->general_name;
+
+        $action = Employee_balance_logs::find($id);
+        $action_choose = $action->action;
+
+        if($action_choose == 'deposit')
+        {
+
+            $text = 'Сотрудник - '. $employee_name . 'получил начисление - '. $amount . 'на основании - '. $reason;  
+        }
+        else
+        {
+
+            $text = 'С cотрудника - '. $employee_name . 'списано - '. $amount . 'на основании - '. $reason;
+        }
+        return view ('admin.logs.fiances_logs.finances_logs', compact('$employees_finances_logs', '$text'));
     }
      
     
