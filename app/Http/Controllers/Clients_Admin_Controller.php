@@ -11,6 +11,7 @@ use App\User;
 use App\Client;
 use App\Cars_in_service;
 use App\Clients_notes;
+use App\Clients_logs;
 
 class Clients_Admin_Controller extends Controller
 {
