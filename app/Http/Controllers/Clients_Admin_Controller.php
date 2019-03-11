@@ -104,7 +104,7 @@ class Clients_Admin_Controller extends Controller
         $author = Users::find($author_id);
         $author_name = $author->general_name;
 
-        $create_client_note_log_entry->text = 'Добавлено примечание к клиенту - '.$client_name. 'автор - '.$author_id. 'дата - '.date('Y-m-d');  //текст лога о добавлении заметки клинету(имя) и автором(имя), дата создания(date)
+        $create_client_note_log_entry->text = 'Добавлено примечание к клиенту - '.$client_name. 'автор - '.$author_name. 'дата - '.date('Y-m-d');  //текст лога о добавлении заметки клинету(имя) и автором(имя), дата создания(date)
         $create_client_note_log_entry->save();
 
         // И вернуться на страницу клиента
