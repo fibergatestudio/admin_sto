@@ -91,6 +91,7 @@
                     <tr>
                         <th>Дата</th>
                         <th>Сумма</th>
+                        <th>Остаток</th>
                     </tr>
                 </thead>
                 @foreach($balance_logs as $balance_log)
@@ -100,6 +101,9 @@
                     </td>
                     <td>
                     {{ $balance_log->amount }}
+                    </td>
+                    <td>
+                    {{ $balance_log->old_balance }}
                     </td>
                 </tr>
                 @endforeach
@@ -117,15 +121,19 @@
                     <tr>
                         <th>Дата</th>
                         <th>Сумма</th>
+                        <th>Остаток</th>
                     </tr>
                 </thead>
                 @foreach($payout_logs as $payout_log)
                 <tr>
                     <td>
-                    {{ $payout_log->date }}
+                        {{ $payout_log->date }}
                     </td>
                     <td>
-                    {{ $payout_log->amount }}
+                        {{ $payout_log->amount }}
+                    </td>
+                    <td>
+                        {{ $payout_log->old_balance }}
                     </td>
                 </tr>
                 @endforeach

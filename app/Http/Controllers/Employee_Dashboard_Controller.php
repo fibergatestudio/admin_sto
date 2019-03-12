@@ -76,7 +76,7 @@ class Employee_Dashboard_Controller extends Controller
 
                 ['employee_id', $employee_id],
                 ['action', '=', 'withdrawal'],
-                ['reason', '=', 'auto']
+                ['reason', '=', 'Выплата']
 
             ])->orderBy('created_at', 'desc')->get();
 

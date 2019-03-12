@@ -51,7 +51,7 @@ class Clients_Admin_Controller extends Controller
         $client = Clients::find($client_id);
         $client_name = $client->general_name;
         /* - Имя автора - */
-        $author = Users::find($author_id); 
+        $author = Users::find($author_id);
         $author_name = $author->general_name;
 
         $create_client_log_entry->text = 'Создание клиента - '.$client_name. 'автор - '.$author_name. 'дата - ' .date('Y-m-d');  //текст лога о создании клиента(имя), автором(имя), дата(date)
@@ -100,11 +100,13 @@ class Clients_Admin_Controller extends Controller
         $client = Clients::find($client_id);
         $client_name = $client->general_name;
         /* - Имя автора - */
-        $author = Users::find($author_id); 
+        $author = Users::find($author_id);
         $author_name = $author->general_name;
+
 
         $create_client_note_log_entry->text = 'Добавлено примечание к клиенту - '.$client_name. 'автор - '.$author_name. 'дата - '.date('Y-m-d');  //текст лога о добавлении заметки клинету(имя) и автором(имя), дата создания(date)
         $create_client_note_log_entry->save();  
+
 
         // И вернуться на страницу клиента
         return redirect('admin/view_client/'.$client->id);
@@ -131,10 +133,10 @@ class Clients_Admin_Controller extends Controller
         $client = Clients::find($client_id);
         $client_name = $client->general_name;
         /* - Имя автора - */
-        $author = Users::find($author_id); 
+        $author = Users::find($author_id);
         $author_name = $author->general_name;
 
-        $edit_client_note_log_entry->text = 'Редактирование заметки по клиенту - '.$client_name.'автор - '.$author_name. 'дата - '.date('Y-m-d');  //текст лога о редактировании заметки по клиенту(имя) автором(имя), дата редактирования (date)       
+        $edit_client_note_log_entry->text = 'Редактирование заметки по клиенту - '.$client_name.'автор - '.$author_name. 'дата - '.date('Y-m-d');  //текст лога о редактировании заметки по клиенту(имя) автором(имя), дата редактирования (date)
 
         return redirect('admin/view_client/' .$client_note_entry->client_id);
     }
@@ -154,7 +156,7 @@ class Clients_Admin_Controller extends Controller
         $client = Clients::find($client_id);
         $client_name = $client->general_name;
         /* - Имя автора - */
-        $author = Users::find($author_id); 
+        $author = Users::find($author_id);
         $author_name = $author->general_name;
 
         $delete_client_note_log->text = 'Удалена заметка по клиенту - ' .$client_name. 'автор - '.$author_name. 'дата - '.date('Y-m-d');  //текст лога о удалении заметки по клиенту(имя) атором(имя), дата удаления (date)
@@ -162,12 +164,8 @@ class Clients_Admin_Controller extends Controller
 
         // И вернуться на страницу назад
         return back();
-    }    
-    
-
-
+    }
     /**/
-
     /* Страница клиента : просмотр  */
     public function single_client_view($client_id){
         $client = Client::find($client_id);
@@ -221,7 +219,7 @@ class Clients_Admin_Controller extends Controller
                     $output .= '
                     <tr>
                      <td><a href="view_client/'.$client->id.'">'.$client->general_name.'</a></td>
-                     
+
                     </tr>
                     ';
                 }

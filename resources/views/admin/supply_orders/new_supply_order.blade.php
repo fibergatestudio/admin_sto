@@ -48,7 +48,7 @@
 
 
     <script>
-        var currentCounter = 3;
+        var currentCounter = 1;
 
         var app1 = new Vue({
             el: '#app1',

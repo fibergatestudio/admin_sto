@@ -555,6 +555,121 @@
     </form>
 
     <hr>
+
+    {{-- Расчет рентабельности --}}
+    <h2>Расчет рентабельности</h2>
+    
+    {{-- Вывод списока расходов и доходов --}}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Сумма</th>
+                <th>Основание</th>
+                <th>Валюта</th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php $sum = 0;?>
+        @foreach($assignment_income as $income_entry)
+        <?php
+        if ($income_entry->currency === 'USD') {
+            $sum += round(($income_entry->amount)/$usd);
+        }
+        else if ($income_entry->currency === 'EUR') {
+            $sum += round(($income_entry->amount)/$eur);
+        }
+        else {
+            $sum += $income_entry->amount;
+        } 
+        ?>
+        <tr>
+            <td>
+            {{ $income_entry->amount }}<br>
+            </td>
+            <td>
+            {{ $income_entry->basis }}<br>
+            </td>
+            <td>
+            {{ $income_entry->currency }}<br>
+            </td>
+        </tr>
+        @endforeach
+        @foreach($zonal_assignment_income as $income_entry)
+        <?php
+        if ($income_entry->zonal_currency === 'USD') {
+            $sum += round(($income_entry->zonal_amount)/$usd);
+        }
+        else if ($income_entry->zonal_currency === 'EUR') {
+            $sum += round(($income_entry->zonal_amount)/$eur);
+        } 
+        else {
+            $sum += $income_entry->zonal_amount;
+        } 
+        ?>
+        <tr>
+            <td>
+            {{ $income_entry->zonal_amount }}<br>
+            </td>
+            <td>
+            {{ $income_entry->zonal_basis }}<br>
+            </td>
+            <td>
+            {{ $income_entry->zonal_currency }}<br>
+            </td>
+        </tr>
+        @endforeach
+        @foreach($assignment_expense as $expense_entry)
+        <?php
+        if ($expense_entry->currency === 'USD') {
+            $sum -= round(($expense_entry->amount)/$usd);
+        }
+        else if ($expense_entry->currency === 'EUR') {
+            $sum -= round(($expense_entry->amount)/$eur);
+        } 
+        else {
+            $sum -= $expense_entry->amount;
+        } 
+        ?>
+        <tr>
+            <td>- 
+            {{ $expense_entry->amount }}<br>
+            </td>
+            <td>
+            {{ $expense_entry->basis }}<br>
+            </td>
+            <td>
+            {{ $expense_entry->currency }}<br>
+            </td>
+        </tr>
+        @endforeach
+        @foreach($zonal_assignment_expense as $expense_entry)
+        <?php
+        if ($expense_entry->zonal_currency === 'USD') {
+            $sum -= round(($expense_entry->zonal_amount)/$usd);
+        }
+        else if ($expense_entry->zonal_currency === 'EUR') {
+            $sum -= round(($expense_entry->zonal_amount)/$eur);
+        }  
+        else {
+            $sum -= $expense_entry->zonal_amount;
+        } 
+        ?>
+        <tr>
+            <td>- 
+            {{ $expense_entry->zonal_amount }}<br>
+            </td>
+            <td>
+            {{ $expense_entry->zonal_basis }}<br>
+            </td>
+            <td>
+            {{ $expense_entry->zonal_currency }}<br>
+            </td>
+        </tr>
+        @endforeach
+        </tbody>
+    </table>
+    <h4 id="total">Итого: {{ $sum }} лей</h4>
+
 @endsection
 
 
@@ -716,4 +831,5 @@ $(document)
     e.preventDefault(); // prevent the default action (scroll / move caret)
   });
 </script>
+
 @endsection

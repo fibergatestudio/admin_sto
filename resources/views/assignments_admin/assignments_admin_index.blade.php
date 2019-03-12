@@ -27,6 +27,9 @@
             <th scope="col">Название</th>
             <th scope="col">Ответственный сотрудник</th>
             <th scope="col">Авто</th>
+            <th scope="col">VIN</th>
+            <th scope="col">Телефон</th>
+            <th scope="col">ФИО</th>
             <th scope="col"></th>
             </tr>
         </thead>
@@ -52,6 +55,15 @@
                 
                 {{-- Машина --}}
                 <td>{{ $assignment->car_name }}</td>
+
+                {{-- VIN --}}
+                <td>{{ $assignment->vin_number }}</td>
+
+                {{-- Телефон --}}
+                <td>{{ $assignment->clients_phone }}</td>
+
+                {{-- ФИО --}}
+                <td>{{ $assignment->clients_fio }}</td>
 
                 {{-- Кнопка подробнее --}}
                 <td>

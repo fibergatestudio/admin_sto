@@ -134,6 +134,24 @@
 						</li>
 
 						<li class="nav-item">
+							<a href="{{ url('/admin/profitability_index/') }}" class="nav-link">
+								<i class="icon-calendar3"></i>
+								<span>
+									Расчет рентабельности и курс валют
+								</span>
+							</a>
+						</li>
+
+						<li class="nav-item">
+							<a href="{{ url('/delivery-passages') }}" class="nav-link">
+								<i class="icon-man-woman"></i>
+								<span>
+									Проходы через систему контроля
+								</span>
+							</a>
+						</li>
+
+						<li class="nav-item">
 							<a href="{{ url('/admin/all_users') }}" class="nav-link">
 								<i class="icon-book3"></i>
 								<span>

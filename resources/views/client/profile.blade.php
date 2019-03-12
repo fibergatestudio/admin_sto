@@ -6,8 +6,7 @@
     <table class="table">
         <thead>
         <tr>
-            <th>Имя</th>
-            <th></th>
+
             <th>ФИО</th>
             <th></th>
             <th>Организация</th>
@@ -21,17 +20,15 @@
         </thead>
 
                 <tr>
-                    <td>{{($profile->general_name)}} {{--  Статус --}}</td>
+                    <td>{{($profile->fio)}} {{--  ФИО --}}</td>
                     <td></td>
-                    <td>{{($profile->fio)}} {{--  Статус --}}</td>
+                    <td>{{($profile->organization)}} {{-- ОРГАНИЗАЦИЯ --}}</td>
                     <td></td>
-                    <td>{{($profile->organization)}} {{-- Ответственный работник --}}</td>
+                    <td>{{($profile->phone)}} {{-- ТЕЛЕФОН --}}</td>
                     <td></td>
-                    <td>{{($profile->phone)}} {{-- Ответственный работник --}}</td>
+                    <td>{{($profile->balance)}} {{-- БАЛАНС --}}</td>
                     <td></td>
-                    <td>{{($profile->balance)}} {{-- Ответственный работник --}}</td>
-                    <td></td>
-                    <td>{{($profile->discount)}} {{-- Ответственный работник --}}</td>
+                    <td>{{($profile->discount)}} {{-- СКИДКА --}}</td>
 
                 </tr>
 
