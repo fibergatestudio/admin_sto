@@ -235,6 +235,17 @@ class Master_Controller extends Controller
         return back();
     }
 
+    /* Подтверждение работы */
+    public function confirm_work(Request $request){
+
+        $id = $request->id;
+        $status = 'confirmed';
+        Assignments_completed_works::where('id',$id)->update(['status'=>$status]);
+        
+        /* Возвращаемся на страницу */
+        return back();
+    }
+
 
     public function master_employees()
     {

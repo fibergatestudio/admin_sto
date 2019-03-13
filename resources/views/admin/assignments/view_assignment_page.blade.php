@@ -285,6 +285,11 @@
                 <th>Валюта</th>
                 <th>Основание</th>
                 <th>Описание</th>
+                <th>Номер наряда(текущий)</th>
+                <th>Машина</th>
+                <th>Год</th>
+                <th>Гос.Номер</th>
+                <th>Фамилия Клиента</th>
                 <th></th>{{-- Кнопки управления --}}
             </tr>
         </thead>
@@ -302,6 +307,21 @@
             </td>
             <td>
             {{ $income_entry->description }}<br>
+            </td>
+            <td>
+            {{ $income_entry->assignment_id }}<br>
+            </td>
+            <td>
+            {{ $income_entry->assignment_car_name }}<br>
+            </td>
+            <td>
+            {{ $income_entry->assignment_release_year}}<br>
+            </td>
+            <td>
+            {{ $income_entry->assignment_reg_number }}<br>
+            </td>
+            <td>
+            {{ $income_entry->assignment_client_name }}<br>
             </td>
         </tr>
         @endforeach

@@ -227,6 +227,6 @@
 	<!-- /page content -->
 
 
-	@yield('custom_scripts')
 </body>
+@yield('custom_scripts')
 </html>

@@ -66,6 +66,9 @@ Route::post('/master/expense_entry/{id}', 'Master_Controller@expense_entry')->mi
 /*Редактирование списка выполненых работ мастером*/
 Route::post('/master/work_entry/{id}', 'Master_Controller@work_entry')->middleware('can:master_rights');
 
+/*Подтверждение работы мастером*/
+Route::post('/master/confirm_work/{id}', 'Master_Controller@confirm_work')->middleware('can:master_rights');
+
 
 /*Редактирование мастером зональных нарядов*/
 

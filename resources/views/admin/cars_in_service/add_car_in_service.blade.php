@@ -8,7 +8,7 @@
     {{-- Если клиент задан изначально--}}
     @if(!empty($client))
         <h2>Добавить машину клиента: {{ $client->general_name }}</h2>
-
+<div id="markmodel">
         {{-- Форма добавления машины для клиента --}}
         <form action="{{ url('admin/cars_in_service/add') }}" method="POST">
             @csrf
@@ -25,20 +25,20 @@
                     <label>Прикрепить документ</label>
                     <input type="file" name="document">
                 </div>
-
                 <div class="form-row">
 
                     {{-- Название машины --}}
                     <div class="form-group col-md-6" >
                         <label>Название машины</label>
-                        <input type="text" name="car_general_name" class="form-control" required>
+                        <input type="text" name="car_general_name" class="form-control" :value="mark+' '+model" disabled>
+                        <input type="hidden" name="car_general_name" :value="mark+' '+model">
                     </div>
 
                     {{-- Модель и марка --}}
                     {{-- Марка : от неё будут подтягивать подсказки . Используется Typeahead --}}
                     <div class="form-group col-md-6">
                         <label>Марка машины</label>
-                        <input type="text" name="car_brand" id="carBrand" class="form-control typeahead" required>
+                        <input v-model.lazy="mark" name="car_brand" id="carBrand" class="form-control typeahead" required>
                     </div>
 
                 </div>
@@ -57,10 +57,9 @@
                     {{-- ... --}}
                     <div class="form-group col-md-6">
                         <label>Модель машины</label>
-                        <select id="carModel" name="car_model" class="form-control" required>
+                        <select v-model.lazy="model" id="carModel" name="car_model" class="form-control" required>
                         </select>
                     </div>
-
                 </div>
                 
                 <div class="form-row">  
@@ -119,15 +118,25 @@
                 Вернуться
             </div>
         </a>
-    
+
+        <script>
+            new Vue({
+                el: '#markmodel',
+                data: {
+                    mark: '',
+                    model: ''
+                }
+            
+            });
+        </script>
+        
     @else
         {{-- Если клиент НЕ задан --}}
         {{-- и если база клиентов не пустая--}}
         @if(!empty($clients))
-
+<div id="test">
         {{-- Форма добавления машины с выбором клиента --}}
         <h2>Форма добавления авто</h2>
-
         <form action="{{ url('admin/cars_in_service/add') }}" method="POST" enctype="multipart/form-data">
             @csrf
             
@@ -158,20 +167,19 @@
                     <label>Прикрепить документ</label>
                     <input type="file" name="document">
                 </div>
-
                 <div class="form-row">
-
                     {{-- Название машины --}}
                     <div class="form-group col-md-6" >
                         <label>Название машины</label>
-                        <input type="text" name="car_general_name" class="form-control" required>
+                        <input type="text" class="form-control" :value="mark2+' '+model2" disabled></input>
+                        <input type="hidden" name="car_general_name" :value="mark2+' '+model2">
                     </div>
 
                     {{-- Модель и марка --}}
                     {{-- Марка : от неё будут подтягивать подсказки . Используется Typeahead --}}
                     <div class="form-group col-md-6">
                         <label>Марка машины</label>
-                        <input type="text" name="car_brand" id="carBrand" class="form-control typeahead" required>
+                        <input v-model.lazy="mark2" type="text" name="car_brand" id="carBrand" class="form-control typeahead" required>
                     </div>
 
                 </div>
@@ -190,10 +198,9 @@
                     {{-- ... --}}
                     <div class="form-group col-md-6">
                         <label>Модель машины</label>
-                        <select id="carModel" name="car_model" class="form-control" required>
+                        <select v-model.lazy="model2" id="carModel" name="car_model" class="form-control" required>
                         </select>
                     </div>
-
                 </div>
                 
                 <div class="form-row">  
@@ -247,9 +254,22 @@
                 <button type="submit" class="btn btn-success">
                     Добавить авто
                 </button>
+
                 
             </form>
 
+            <script>
+               var test = new Vue({
+                    el: '#test',
+                    data: {
+                        mark2: '',
+                        model2: ''
+                    }
+                
+                });
+            </script>
+    </div>
+</div>
         @else
         {{-- Если клиентов нет --}}
             <p>На данный момент в базе нет клиентов. Пожалуйста, добавьте сначала нового клиента. Это можно сделать, нажав на вот эту кнопку:</p>
@@ -263,11 +283,12 @@
 
     @endif
     
-
     
 @endsection
 
 @section('custom_scripts')
+
+{{-- Модель + марка --}}
 
 {{-- Скрипт автоматического пересчёта пробега километры-мили --}}
 <script>

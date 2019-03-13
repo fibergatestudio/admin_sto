@@ -94,6 +94,9 @@ class Assignments_Admin_Controller extends Controller
         $new_assignment->car_id = $car_id;
         $new_assignment->date_of_creation = date('Y-m-d');
         $new_assignment->status = 'active';
+        /* TEST confirmed */
+        $new_assignment->confirmed = 'unconfirmed';
+        /* end TEST confirmed */
         $new_assignment->save();
         
         /* Оповещения для телеграма */
@@ -131,7 +134,22 @@ class Assignments_Admin_Controller extends Controller
 
                 /* Доход/расход/работы */
                 /* Получаем доходную часть */
-                $assignment_income = Assignments_income::where('assignment_id', $assignment_id)->get();
+                // $assignment_income = Assignments_income::where('assignment_id', $assignment_id)->get();
+                $assignment_income = Assignments_income::where('assignment_id', $assignment_id)
+                ->join('assignments', 'assignments_income.assignment_id', '=', 'assignments.id')
+                ->join('cars_in_service', 'assignments.id', '=', 'cars_in_service.id')
+                ->join('clients', 'cars_in_service.owner_client_id', '=', 'clients.id')
+                ->orderBy('order','ASC')
+                ->select(
+                        'assignments_income.*',
+                        'assignments.id AS assignment_id',
+                        'assignments.car_id AS assignment_car_id',
+                        'cars_in_service.general_name AS assignment_car_name',
+                        'cars_in_service.release_year AS assignment_release_year',
+                        'cars_in_service.reg_number AS assignment_reg_number',
+                        'clients.general_name AS assignment_client_name'
+                    )
+                ->get();
                 /* Получаем расходную часть */
                 $assignment_expense = Assignments_expense::where('assignment_id', $assignment_id)->get();
                 /* Получаем выполненые работы */

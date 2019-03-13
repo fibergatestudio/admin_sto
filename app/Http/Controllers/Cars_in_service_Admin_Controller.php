@@ -75,6 +75,12 @@ class Cars_in_service_Admin_Controller extends Controller
         /* Добавить машину в БД */
 
         $new_car_in_service = new Cars_in_service();
+
+        /* explode */
+        // $damp = explode(" ", $request->car_general_name);
+
+        // $new_car_in_service->general_name = $damp[1];
+
         $new_car_in_service->general_name = $request->car_general_name;
         $new_car_in_service->owner_client_id = $request->client_id;
         $new_car_in_service->release_year = $request->release_year;
