@@ -603,6 +603,11 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
     Route::post('/store-photo', 'TelegramBotController@storePhoto');
     Route::get('/updated-activity', 'TelegramBotController@updatedActivity');
 
+    /* Настройка уведеомлений */
+    Route::get('/admin/notification','EmployeesAdminController@tg_notification_index');
+    /* Применить новые настройки уведомлений */
+    Route::post('/notification/change_rules','EmployeesAdminController@tg_notification_update');
+
 /****************************************/
 /********** СНАБЖЕНЕЦ : секция **********/
 /****************************************/

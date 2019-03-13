@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
 
 use App\User;
 use App\Employee;
@@ -16,6 +17,8 @@ use App\Employee_balance_log;
 use App\Coffee_token_log;
 use Telegram\Bot\Laravel\Facades\Telegram;
 use App\Employees_notes;
+use App\User_options;
+
 
 
 class EmployeesAdminController extends Controller
@@ -695,5 +698,69 @@ class EmployeesAdminController extends Controller
         [
             'shifts' => $shifts
         ]);
+    }
+    /*
+    ********** Настройка уведеомлений **********
+    */
+    public function tg_notification_index(){
+
+        $user_id = Auth::user()->id;
+
+        $user_options = DB::table('user_options')->where('user_id', '=', $user_id)->first();
+
+        return view('admin.notification.tg_notification',
+        [
+            'user_options' => $user_options
+        ]);
+    }
+
+    public function tg_notification_update(Request $request){
+
+        //$update_options = new User_options();
+        $user_id = Auth::user()->id;
+
+        $tg_assignment_notification = $request->tg_assignment_notification;
+        $tg_income_notification = $request->tg_income_notification;
+        $tg_expense_notification = $request->tg_expense_notification;
+
+        if(empty($tg_assignment_notification)){
+
+            $assignment_notification = 0;
+
+        } else {
+
+            $assignment_notification = 1;
+
+        }
+        if(empty($tg_income_notification)){
+
+            $income_notification = 0;
+
+        } else {
+
+            $income_notification = 1;
+
+        }
+        if(empty($tg_expense_notification)){
+
+            $expense_notification = 0;
+
+        } else {
+
+            $expense_notification = 1;
+
+        }
+
+        DB::table('user_options')
+        ->where('user_id', '=', $user_id)
+        ->update([
+            'tg_assignment_notification' => $assignment_notification,
+            'tg_income_notification' => $income_notification,
+            'tg_expense_notification' => $expense_notification
+        ]);
+
+        //$update_options->save();
+        //dd($request->all());
+        return back();
     }
 }

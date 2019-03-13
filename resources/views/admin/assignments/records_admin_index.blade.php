@@ -78,7 +78,7 @@
 {{-- Форма добавления записи --}}
 <form action="{{ url('/add_record') }}" method="POST">
     @csrf
-    <div class="content py-5  bg-light">
+<div class="content py-5  bg-light">
     <div class="container">
         <div class="row">
                 <div class="col-md-8 offset-md-2">
