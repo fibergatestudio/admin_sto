@@ -37,7 +37,7 @@
                     <input type="radio" name="rights" value="employee" @if($user->role == 'employee') checked @endif>
                 </td>  
                 <td>
-                    <input type="radio" name="rights" value="supply_order" @if($user->role == 'supply_order') checked @endif>
+                    <input type="radio" name="rights" value="supply_order" @if($user->role == 'supply_officer') checked @endif>
                 </td>           
             </tr>
         </tbody>        

@@ -261,4 +261,12 @@ class Master_Controller extends Controller
     }
 
 
+    /* Применение изменений редактирования расходной части */
+    public function confirm($id){
+        Assignment::where('id',$id)->update(['confirmed'=>'confirmed']);
+        /* Возвращаемся на страницу */
+        return back();
+    }
+
+
 }
