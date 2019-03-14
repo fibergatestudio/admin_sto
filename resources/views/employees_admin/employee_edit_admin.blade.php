@@ -1,7 +1,7 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    Редактирование сотрудника: {{ $employee_edit->general_name }}
+    Редактирование сотрудника: {{ $employee->general_name }}
 @endsection
 
 @section('content')
@@ -24,37 +24,37 @@
         </thead>
         <tr>
             <td>
-                {{ $employee_edit->general_name }}
+                {{ $employee->general_name }}
             </td>
             <td>
-                {{ $employee_edit->date_join }}
+                {{ $employee->date_join }}
             </td>
             <td>
-                {{ $employee_edit->fio }}
+                {{ $employee->fio }}
             </td>
             <td>
-                {{ $employee_edit->birthday }} {{-- День рождения --}}
+                {{ $employee->birthday }} {{-- День рождения --}}
             </td>
             <td>
-                {{ $employee_edit->passport }}
+                {{ $employee->passport }}
             </td>
             <td>
-                {{ $employee_edit->balance }}
+                {{ $employee->balance }}
             </td>
             <td>
-                {{ $employee_edit->phone }}
+                {{ $employee->phone }}
             </td>
             <td>
-                {{ $employee_edit->reserve_phone }}
+                {{ $employee->reserve_phone }}
             </td>
             <td>
-                {{ $employee_edit->hour_from }}
+                {{ $employee->hour_from }}
             </td>
             <td>
-                {{ $employee_edit->hour_to }}
+                {{ $employee->hour_to }}
             </td>
             <td>
-                {{ $employee_edit->telegram_id }}
+                {{ $employee->telegram_id }}
             </td>
         </tr>
     </table>
@@ -78,19 +78,19 @@
                 <div class="form-row">
 
                     {{-- Дата принятия на работу --}}
-                    <div class="form-group col-md-5" >
+                   <!-- <div class="form-group col-md-5" >
                         <label>Дата принятия на работу</label>
-                        <input type="date" name="date_join"  value="{{ $employee_edit->date_join }}" min="2000-01-01" max="2019-12-31" class="form-control">
-                    </div>
+                        <input type="date" name="date_join"  value="{{ $employee->date_join }}" min="2000-01-01" max="2019-12-31" class="form-control">
+                    </div> -->
 
-                    <div class="form-group col-md-5">
+                    <div class="form-group col-md-6">
                         <label>ФИО</label>
-                        <input type="text" name="fio" id="carBrand" value="{{ $employee_edit->fio }}" class="form-control typeahead">
+                        <input type="text" name="fio" value="{{ $employee->fio }}" class="form-control typeahead">
                     </div>
 
                     <div class="form-group col-md-2">
                         <label>День Рождения</label>
-                        <input type="date" name="birthday" id="carBrand" value="{{ $employee_edit->birthday }}" class="form-control typeahead">
+                        <input type="date" name="birthday" value="{{ $employee->birthday }}" class="form-control typeahead">
                     </div>
 
                 </div>
@@ -99,12 +99,12 @@
 
                     <div class="form-group col-md-6">
                         <label>Серия и номер паспорта</label>
-                        <input type="text" name="passport" value="{{ $employee_edit->passport }}" class="form-control">
+                        <input type="text" name="passport" value="{{ $employee->passport }}" class="form-control">
                     </div>
 
                     <div class="form-group col-md-6">
                         <label>Телефон</label>
-                        <input type="text" name="phone" value="{{ $employee_edit->phone }}" class="form-control">
+                        <input type="text" name="phone" value="{{ $employee->phone }}" class="form-control">
                     </div>
 
                 </div>
@@ -113,12 +113,12 @@
 
                     <div class="form-group col-md-6">
                         <label>Баланс</label>
-                        <input type="number" name="balance" value="{{ $employee_edit->balance }}" class="form-control typeahead">
+                        <input type="number" name="balance" value="{{ $employee->balance }}" class="form-control typeahead">
                     </div>
 
                     <div class="form-group col-md-6">
                         <label>Резервный телефон</label>
-                        <input type="tel"  name="reserve_phone" value="{{ $employee_edit->reserve_phone }}" class="form-control typeahead">
+                        <input type="tel"  name="reserve_phone" value="{{ $employee->reserve_phone }}" class="form-control typeahead">
                     </div>
                 </div>
 
@@ -126,12 +126,12 @@
 
                     <div class="form-group col-md-6">
                         <label>С какого часа</label>
-                        <input type="time" name="hour_from" value="{{ $employee_edit->hour_from }}" class="form-control typeahead">
+                        <input type="time" name="hour_from" value="{{ $employee->hour_from }}" class="form-control typeahead">
                     </div>
 
                     <div class="form-group col-md-6">
                         <label>По какой час</label>
-                        <input type="time" name="hour_to" value="{{ $employee_edit->hour_to}}" class="form-control typeahead">
+                        <input type="time" name="hour_to" value="{{ $employee->hour_to}}" class="form-control typeahead">
                     </div>
                 </div>
 
@@ -139,12 +139,12 @@
 
                     <div class="form-group col-md-6">
                         <label>Фиксированная плата</label>
-                        <input type="checkbox" name="fixed_charge" value="fixed" @if($employee_edit->fixed_charge == 'fixed') checked @endif class="form-control typeahead">
+                        <input type="checkbox" name="fixed_charge" value="fixed" @if($employee->fixed_charge == 'fixed') checked @endif class="form-control typeahead">
                     </div>
 
                     <div class="form-group col-md-6">
                         <label>Размер платы за смену</label>
-                        <input type="number" name="pay_per_shift" value="{{ $employee_edit->pay_per_shift}}" class="form-control typeahead">
+                        <input type="number" name="pay_per_shift" value="{{ $employee->pay_per_shift}}" class="form-control typeahead">
                     </div>
                 </div>
 
@@ -152,7 +152,7 @@
 
                     <div class="form-group col-md-6">
                         <label>Телеграм ID</label>
-                        <input type="number" name="telegram_id" value="{{ $employee_edit->telegram_id }}" class="form-control typeahead">
+                        <input type="number" name="telegram_id" value="{{ $employee->telegram_id }}" class="form-control typeahead">
                     </div>
 
                     <div class="form-group col-md-6">
@@ -170,6 +170,8 @@
                 </button>
                 
             </form>
+            <hr>
+            <a href="{{ url('view_employees') }}" class="btn btn-primary">Вернуться</a>
 
 {{-- Как узнать Телеграм ID : Форма и модальное окно --}}
     <form method="POST">

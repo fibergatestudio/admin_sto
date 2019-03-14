@@ -51,37 +51,29 @@ class EmployeesAdminController extends Controller
         /* Создать нового сотрудника */
         $new_employee = new Employee();
         $new_employee->general_name = $request->name.' '.$request->surname;
+        $new_employee->fio = $request->name.' '.$request->surname.' '.$request->fathers_name;
         $new_employee->status = 'active';
+        $new_employee->date_join = $request->date_join;
          /* Добавляем в таблицу работников ID соответствующего юзера */
         $new_employee->user_id = $new_user_id;
         $new_employee->balance = 0;
-        $new_employee->save();
+        $new_employee->save();  
+        
+        
+        $employee = DB::table('employees')                                
+                                ->orderBy('id', 'desc')
+                                ->first();
+        
+        
 
-        /* Добавить ему нулевой баланс */
-        $new_employee_id = $new_employee->id;
-        $new_employee_balance = new Employee_balance();
-        $new_employee_balance->balance = 0;
-        $new_employee_balance->employee_id = $new_employee_id;
-        $new_employee_balance->save();
-
-        /* - Добавление в логи создание сотрудника - */
-        $create_employee_log = new Employees_logs();
-        $create_employee_log_entry->employee_id = $employee_id; //id сотрудника
-        $create_employee_log_entry->author_id = $author_id;  //id автора заметки
-
-        /* - Имя сотрудника - */
-        $employee = Employees_logs::find($employee_id);
-        $employee_name = $employee->general_name;
-        /* - Имя автора - */
-        $author = Users::find($author_id);
-        $author_name = $author->general_name;
-
-        $create_employee_log_entry->text = 'Создан новый сотрудник - ' .$employee_name. 'автор - '.$author_name. 'дата - ' .date('Y-m-d');  //текст о создании сотрудника(имя) и автор(имя), дата(date)
-        $create_employee_log_entry->save();
-
-
-        /* Вернуться ко списку сотрудников */
-        return redirect()->route('view_employees');
+        /* Вернуться ко списку сотрудников 
+        return redirect()->route('view_employees');*/
+        
+        /* Переход на страницу редактирования работника (согласно замечаниям)*/
+        return view('employees_admin.employee_edit_admin',
+        [
+            'employee' => $employee,   
+        ]);
     }
 
     /* Страница статусов сотрудника */
@@ -123,24 +115,25 @@ class EmployeesAdminController extends Controller
         //$employee = Employee::find($employee_id)->first();
         $employee = Employee::find($employee_id);
 
-        $employee_edit = DB::table('employees')->where('id', $employee_id)->first();
+        //$employee_edit = DB::table('employees')->where('id', $employee_id)->first();
 
         return view('employees_admin.employee_edit_admin',
         [
-            'employee_edit' => $employee_edit,
+            //'employee_edit' => $employee_edit,
             'employee' => $employee
 
         ]);
     }
 
-    public function apply_employee_edit(request $request){
+    public function apply_employee_edit(Request $request){
 
         $employee_id = $request->id;
 
-        $date_join = $request->date_join;
+        
         $fio = $request->fio;
         $birthday = $request->birthday;
         $passport = $request->passport;
+        $balance = $request->balance; //не было добавления баланса
         $reserve_phone = $request->reserve_phone;
         $phone = $request->phone;
         $hour_from = $request->hour_from ;
@@ -150,10 +143,11 @@ class EmployeesAdminController extends Controller
         $telegram_id = $request->telegram_id;
 
         $employee = Employee::find($employee_id);
-        $employee->date_join = $date_join;
+        
         $employee->fio = $fio;
         $employee->birthday = $birthday;
         $employee->passport =  $passport;
+        $employee->balance = $balance; //не было добавления баланса
         $employee->reserve_phone = $reserve_phone;
         $employee->phone = $phone;
         $employee->hour_from = $hour_from;
@@ -166,10 +160,10 @@ class EmployeesAdminController extends Controller
         if(!empty($request->document)){
             $request->scan_doc>store('public/doc_scan/'.$employee_id);
         }
-
+        
         /* Возвращаемся на страницу */
 
-        return back();
+        return redirect()->route('employee_edit', $employee_id);
     }
 
 

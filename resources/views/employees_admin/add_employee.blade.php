@@ -20,6 +20,14 @@
             <label>Имя</label>
             <input type="text" class="form-control" name="name" required>
         </div>
+        
+        {{-- Отчество --}}
+        <div class="form-group">
+            <label>Отчество</label>
+            <input type="text" class="form-control" name="fathers_name">
+        </div>
+        
+        <input type="hidden" name="date_join" value="{{ date("d.m.Y") }}">
 
         {{-- Логин --}}
         <div class="form-group">

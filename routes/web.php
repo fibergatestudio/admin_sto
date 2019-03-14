@@ -151,7 +151,7 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
         Route::post('/archive_employee', 'EmployeesAdminController@archive_employee')->middleware('can:admin_rights');
 
         /* Редактирование сотрудника */
-        Route::get('/supervisor/manage_employee_status/{employee_id}/employee_edit', 'EmployeesAdminController@employee_edit');
+        Route::get('/supervisor/manage_employee_status/{employee_id}/employee_edit', 'EmployeesAdminController@employee_edit')->name('employee_edit');
 
             /* Применить изменения сотрудника */
             Route::post('/supervisor/manage_employee_status/{employee_id}/employee_edit/apply_employee_edit', 'EmployeesAdminController@apply_employee_edit');
