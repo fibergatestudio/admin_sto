@@ -66,17 +66,19 @@ class EmployeesAdminController extends Controller
 
         /* - Добавление в логи создание сотрудника - */
         $create_employee_log = new Employees_logs();
-        $create_employee_log_entry->employee_id = $employee_id; //id сотрудника
-        $create_employee_log_entry->author_id = $author_id;  //id автора заметки
+        $create_employee_log_entry->employee_id = $new_employee->id; //id сотрудника
+        $create_employee_log_entry->author_id =  Auth::user()->id;  //id автора заметки
 
         /* - Имя сотрудника - */
-        $employee = Employees_logs::find($employee_id);
+        $employee_id = $create_employee_log_entry->employee_id;
+        $employee = Employees::find($employee_id);
         $employee_name = $employee->general_name;
         /* - Имя автора - */
+        $author_id = $create_employee_log_entry->author_id;
         $author = Users::find($author_id);
         $author_name = $author->general_name;
 
-        $create_employee_log_entry->text = 'Создан новый сотрудник - ' .$employee_name. 'автор - '.$author_name. 'дата - ' .date('Y-m-d');  //текст о создании сотрудника(имя) и автор(имя), дата(date)
+        $create_employee_log_entry->text = 'Создан новый сотрудник - ' .$name. 'автор - '.$author_name;  //текст о создании сотрудника(имя) и автор(имя)
         $create_employee_log_entry->save();
 
 
@@ -101,17 +103,19 @@ class EmployeesAdminController extends Controller
 
         /* - Добавление в логи о переводе сотрудника в архив - */
         $archive_employee_log = new Employees_logs();
-        $archive_employee_log_entry->employee_id = $employee_id;  //id сотрудника
-        $archive_employee_log_entry->author_id = $author_id;  //id автора
+        $archive_employee_log_entry->employee_id = $request->employee_id;  //id сотрудника
+        $archive_employee_log_entry->author_id = Auth::user()->id;  //id автора
 
         /* - Имя сотрудника - */
-        $employee = Employees_logs::find($employee_id);
+        $employee_id = $archive_employee_log_entry->employee_id;
+        $employee = Employees::find($employee_id);
         $employee_name = $employee->general_name;
         /* - Имя автора - */
+        $author_id = $archive_employee_log_entry->author_id;
         $author = Users::find($author_id);
         $author_name = $author->general_name;
 
-        $archive_employee_log_entry->text = 'Перевод в архив сотрудника - ' .$employee_name. 'автор - '.$author_name. 'дата - '.date('Y-m-d');  //текст лога архивации сотрудника (имя) и автор(имя), дата(date)
+        $archive_employee_log_entry->text = 'Перевод в архив сотрудника - ' .$name. 'автор - '.$author_name;  //текст лога архивации сотрудника (имя) и автор(имя)
         $archive_employee_log_entry->save();
 
         /* Вернуться ко списку сотрудников */
@@ -228,17 +232,17 @@ class EmployeesAdminController extends Controller
 
         /* - Добавление в логи создания заметки по сотруднику - */
         $create_employee_note_log = new Employees_notes_logs();
-        $create_employee_note_log_entry->employee_id = $employee_id;  //id сотрудника
-        $create_employee_note_log_entry->author_id = $author_id;  //id автора заметки
+        $create_employee_note_log_entry->employee_id = $request->employee_id;  //id сотрудника
+        $create_employee_note_log_entry->author_id = Auth::user()->id;  //id автора заметки
 
         /* - Имя сотрудника - */
-        $employee = Employees_logs::find($employee_id);
-        $employee_name = $employee->general_name;
+        $name = $request->name;
         /* - Имя автора - */
+        $author_id = $create_employee_note_log_entry->author_id;
         $author = Users::find($author_id);
         $author_name = $author->general_name;
 
-        $create_employee_note_log_entry->text = 'Создана заметка по сотруднику - ' .$employee_name. 'автор - '.$author_name. 'дата - '.date('Y-m-d'); //текст о создании заметки по клиенту(имя) и автор(имя), дата(date)
+        $create_employee_note_log_entry->text = 'Создана заметка по сотруднику - ' .$name. 'автор - '.$author_name; //текст о создании заметки по клиенту(имя) и автор(имя)
         $create_employee_note_log_entry->save();
 
 
@@ -269,17 +273,21 @@ class EmployeesAdminController extends Controller
 
         /* - Добавление в логи редактирование заметки по сотруднику - */
         $edit_employee_note_log = new Employees_notes_logs();
-        $edit_employee_note_log_entry->employee_id = $employee_id;  //id сотрудника
-        $edit_employee_note_log_entry->author_id = $author_id;  //id автора
+
+        $edit_employee_note_log_entry->employee_id = Employee::find($request->employee_id);  //id сотрудника
+
+        $edit_employee_note_log_entry->author_id = Auth::user()->id;  //id автора
 
         /* - Имя сотрудника - */
-        $employee = Employees_logs::find($employee_id);
+        $employee_id = $edit_employee_note_log_entry->employee_id;
+        $employee = Employee::find($employee_id);
         $employee_name = $employee->general_name;
         /* - Имя автора - */
+        $author_id = $edit_employee_note_log_entry->author_id;
         $author = Users::find($author_id);
         $author_name = $author->general_name;
 
-         $edit_employee_note_log_entry->text = 'Редактирование заметки о сотруднике - ' .$employee_name. 'автор - '.$author_id. 'дата - '.date('Y-m-d');  //текст лога о редактировании заметки по клиенту(имя) и автор(имя), дата(date)
+         $edit_employee_note_log_entry->text = 'Редактирование заметки о сотруднике - ' .$employee_name. 'автор - '.$author_name;  //текст лога о редактировании заметки по клиенту(имя) и автор(имя)
          $edit_employee_note_log_entry->save();
 
         return redirect('/admin/employee/' .$employee_note_entry->employee_id);
@@ -291,17 +299,21 @@ class EmployeesAdminController extends Controller
 
         /* - Добавление в логи удаление заметки о клиенте - */
         $delete_employee_note_log = new Employees_notes_logs();
-        $delete_employee_note_log_entry->employee_id = $employee_id;  //id сотрудника
-        $delete_employee_note_log_entry->author_id = $author_id;  //id автора
+
+        $delete_employee_note_log_entry->employee_id = Employee::find($request->employee_id);  //id сотрудника
+
+        $delete_employee_note_log_entry->author_id = Auth::user()->id;  //id автора
 
         /* - Имя сотрудника - */
-        $employee = Employees_logs::find($employee_id);
+        $employee_id = $delete_employee_note_log_entry->employee_id;
+        $employee = Employee::find($employee_id);
         $employee_name = $employee->general_name;
         /* - Имя автора - */
+        $author_id = $delete_employee_note_log_entry->author_id;
         $author = Users::find($author_id);
         $author_name = $author->general_name;
 
-        $delete_employee_note_log_entry->text = 'Удаление заметки о сотруднике - ' .$employee_name. 'автор - '.$author_name. 'дата - '.date('Y-m-d');  //текст лога удаления заметки по сотруднику(имя) автор(имя), дата(date)
+        $delete_employee_note_log_entry->text = 'Удаление заметки о сотруднике - ' .$employee_name. 'автор - '.$author_name;  //текст лога удаления заметки по сотруднику(имя) автор(имя)
         $delete_employee_note_log_entry->save();
 
         return back();
@@ -314,17 +326,19 @@ class EmployeesAdminController extends Controller
 
         /* - Добавление в логи изменение ставки по сотруднику - */
         $change_employee_shift_wage_log = new Employees_logs();
-        $change_employee_shift_wage_log_entry->employee_id = $employee_id;  //id сотрудника
-        $change_employee_shift_wage_log_entry->author_id = $author_id;  //id автора
+        $change_employee_shift_wage_log_entry->employee_id = $request->employee_id;  //id сотрудника
+        $change_employee_shift_wage_log_entry->author_id = Auth::user()->id;  //id автора
 
         /* - Имя сотрудника - */
-        $employee = Employees_logs::find($employee_id);
+        $employee_id = $change_employee_shift_wage_log_entry->employee_id;
+        $employee = Employee::find($employee_id);
         $employee_name = $employee->general_name;
         /* - Имя автора - */
+        $author_id = $change_employee_shift_wage_log_entry->author_id;
         $author = Users::find($author_id);
         $author_name = $author->general_name;
 
-        $change_employee_shift_wage_log_entry->text = 'Изменение ставки сотрудника - ' .$employee_name. 'автор - ' .$author_name. 'дата - ' .date('Y-m-d');  //текст лога о изменении ставки сотрудника(имя) и автор(имя), дата(date)
+        $change_employee_shift_wage_log_entry->text = 'Изменение ставки сотрудника - ' .$employee_name. 'автор - ' .$author_name;  //текст лога о изменении ставки сотрудника(имя) и автор(имя)
 
         $change_employee_shift_wage_log_entry->save();
 
@@ -691,17 +705,19 @@ class EmployeesAdminController extends Controller
 
         /* - Добавляем в логи применение штрафа сотруднику - */
         $fine_to_employee_log = new Employees_logs();
-        $fine_to_employee_log_entry->employee_id = $employee_id;  //id сотрудника
-        $fine_to_employee_log_entry->author_id = $author_id;  //id автора
+        $fine_to_employee_log_entry->employee_id = $request->employee_id;  //id сотрудника
+        $fine_to_employee_log_entry->author_id =  Auth::user()->id;  //id автора
 
         /* - Имя сотрудника - */
-        $employee = Employees_logs::find($employee_id);
+        $employee_id = $change_employee_shift_wage_log_entry->employee_id;
+        $employee = Employee::find($employee_id);
         $employee_name = $employee->general_name;
         /* - Имя автора - */
+        $author_id = $change_employee_shift_wage_log_entry->author_id;
         $author = Users::find($author_id);
         $author_name = $author->general_name;
 
-        $fine_to_employee_log_entry->text = 'Штраф сотруднику - ' .$employee_name. 'был добавлен в ручную -' . $author_name .'дата - ' .date('Y-m-d');  //текст лога о добавлении штрафа сотруднику(имя) автором(имя), дата(date)
+        $fine_to_employee_log_entry->text = 'Штраф сотруднику - ' .$employee_name. 'был добавлен в ручную -' . $author_name;  //текст лога о добавлении штрафа сотруднику(имя) автором(имя)
 
         $fine_to_employee_log_entry->save();
 

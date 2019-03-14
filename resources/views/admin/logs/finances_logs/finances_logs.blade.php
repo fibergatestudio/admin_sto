@@ -12,12 +12,12 @@
             <td><b>Дата</b></td>
             <td><b>Текст лога</b></td>
         </tr>
-        @foreach($finances_logs as $finances_log)
+        @foreach($employee_finances_log_entry as $employee_finances_logs_entry)
             <tr>
                 {{-- Дата --}}
                 <td>
                     <p>
-                        {{ date('j. n. Y H:i', strtotime($finances_log->created_at)) }}
+                        {{ date('j. n. Y H:i', strtotime($employee_finances_logs_entry->created_at)) }}
                     </p>
                 
                 </td>
@@ -25,7 +25,7 @@
                 {{-- Текст лога --}}
                 <td>
                     <a>
-                        {{ $finances_log->text }}
+                        {{ $text }}    //???
                     </a>    
                 </td>
                 

@@ -69,25 +69,33 @@ class Logs_Admin_Controller extends Controller
     /* - Логи по финансам */
     public function finances_logs()
     {
-        $employees_finances_logs = Employees_balance_logs::all();
+        $employees_finances_logs = Employee_balance_logs::all();
 
-        $employee = Employees_logs::find($employee_id);
-        $employee_name = $employee->general_name;
-
-        $action = Employee_balance_logs::find($id);
-        $action_choose = $action->action;
-
-        if($action_choose == 'deposit')
+        foreach ($employees_finances_logs as $employee_finances_log_entry) 
         {
 
-            $text = 'Сотрудник - '. $employee_name . 'получил начисление - '. $amount . 'на основании - '. $reason;  
-        }
-        else
-        {
+            $employee_id = $employee_finances_log_entry->employee_id;
+            $employee_name = Employee::find($employee_id)->general_name;
 
-            $text = 'С cотрудника - '. $employee_name . 'списано - '. $amount . 'на основании - '. $reason;
+            $action_choose = $employee_finances_log_entry->action;
+
+            if($action_choose == 'deposit')
+            {
+
+                $text = 'Сотрудник - '. $employee_name . 'получил начисление - '. $employee_finances_logs->amount . 'на основании - '. $employee_finances_logs->reason;  
+            }
+            else
+            {
+
+                $text = 'С cотрудника - '. $employee_name . 'списано - '. $employee_finances_logs->amount . 'на основании - '. $employee_finances_logs->reason;
+            }
+
+            $employee_finances_log_entry->text = $text;
+
         }
-        return view ('admin.logs.fiances_logs.finances_logs', compact('$employees_finances_logs', '$text'));
+
+        return view ('admin.logs.fiances_logs.finances_logs', compact('$employee_finances_log_entry', '$text'));
+        
     }
      
     

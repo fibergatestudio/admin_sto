@@ -87,20 +87,24 @@ class Cars_in_service_Admin_Controller extends Controller
 
         /* - Добавдение создания машины в логи - */
         $create_car_in_service_log = new Cars_logs();
-        $create_car_in_service_log_entry->car_id = $car_id;  //id машины
-        $create_car_in_service_log_entry->author_id = $author_id;  //id автора
+        $create_car_in_service_log_entry->car_id = $request->car_id;  //id машины
+        $create_car_in_service_log_entry->client_id = $request->client_id;  //id клиента
+        $create_car_in_service_log_entry->author_id = Auth::user()->id;  //id автора
 
         /* - Название машины - */
-        $car = Cars_in_service::find($car_id);
+        $car_id = $create_car_in_service_log_entry->car_id
+        $car = Cars_in_service::find($car_id);  
         $car_name = $car->general_name;
         /* - Имя клиента - */
-        $client = Clients::find($client_id);
+        $client_id = $create_car_in_service_log_entry->client_id;
+        $client = Clients::find($client_id);  
         $client_name = $client->general_name;
         /* - Имя автора - */
+        $author_id = $create_car_in_service_log_entry->author_id;
         $author = Users::find($author_id);
         $author_name = $author->general_name;
 
-        $create_car_in_service_entry->text = 'Создана машина - '.$car_name. 'клиента - '.$client_name. 'автор - '.$author_name. 'дата - ' .date('Y-m-d');   //текст лога о создании машины(название) клиента(имя) от автора(имя) от даты(date)
+        $create_car_in_service_entry->text = 'Создана машина - '.$car_name. 'клиента - '.$client_name. 'автор - '.$author_name;   //текст лога о создании машины(название) клиента(имя) от автора(имя)
         $create_car_in_service_entry->save();
 
         //$request->document->store('public1'); //Заливка файла
@@ -164,20 +168,24 @@ class Cars_in_service_Admin_Controller extends Controller
 
         /* Добавление в логи создание примечания по машине - */
         $create_car_in_service_note_log = new Cars_in_service_notes_logs();
-        $create_car_in_service_note_log_entry->car_id = $car_id;
-        $create_car_in_service_note_log_entry->author_id = $author_id;
+        $create_car_in_service_note_log_entry->car_id = $request->car_id;  //id машины
+        $create_car_in_service_note_log_entry->client_id = $request->client_id;  //id клиента
+        $create_car_in_service_note_log_entry->author_id = Auth::user()->id;  //id автора
 
         /* - Название машины - */
-        $car = Cars_in_service::find($car_id);
+        $car_id = $create_car_in_service_log_entry->car_id
+        $car = Cars_in_service::find($car_id);  
         $car_name = $car->general_name;
         /* - Имя клиента - */
-        $client = Clients::find($client_id);
+        $client_id = $create_car_in_service_log_entry->client_id;
+        $client = Clients::find($client_id);  
         $client_name = $client->general_name;
         /* - Имя автора - */
+        $author_id = $create_car_in_service_note_log_entry->author_id;
         $author = Users::find($author_id);
         $author_name = $author->general_name;
 
-        $create_car_in_service_note_log_entry->text = 'Создание заметки по машине'.$car_name. 'клиента - '.$client_name. 'автор - '.$author_name. 'дата - '.data('Y-m-d');   //текст лога о созданиинии заметки по машине(название) клиента(имя) от автора(имя) от даты(date)
+        $create_car_in_service_note_log_entry->text = 'Создание заметки по машине'.$car_name. 'клиента - '.$client_name. 'автор - '.$author_name;   //текст лога о созданиинии заметки по машине(название) клиента(имя) от автора(имя)
         $create_car_in_service_note_log_entry->save();
 
 
@@ -205,21 +213,24 @@ class Cars_in_service_Admin_Controller extends Controller
 
         /* - Добавление в логи создание заметки по машине - */
         $edit_car_note_log = new Cars_notes_logs();
-        $edit_car_note_log_entry->car_id = $car_id;
-        $edit_car_note_log_entry->client_id = $client_id;
-        $edit_car_note_log_entry->author_id = $author_id;
+        $edit_car_note_log_entry->car_id = $request->car_id;
+        $edit_car_note_log_entry->client_id = $request->client_id;
+        $edit_car_note_log_entry->author_id = Auth::user()->id;
 
         /* - Название машины - */
-        $car = Cars_in_service::find($car_id);
+        $car_id = $create_car_in_service_log_entry->car_id
+        $car = Cars_in_service::find($car_id);  
         $car_name = $car->general_name;
         /* - Имя клиента - */
-        $client = Clients::find($client_id);
+        $client_id = $create_car_in_service_log_entry->client_id;
+        $client = Clients::find($client_id);  
         $client_name = $client->general_name;
         /* - Имя автора - */
+        $author_id = $edit_car_note_log_entry->author_id;
         $author = Users::find($author_id);
         $author_name = $author->general_name;
 
-        $edit_car_note_log_entry->text = 'Редактирование заметки по машине - '.$car_name. 'клиента - '.$client_name. 'автор - '.$author_name. 'дата - '.data('Y-m-d');  //текст лога о редактировании заметки по машине(название) клиента(имя) от автора(имя) от даты(date)
+        $edit_car_note_log_entry->text = 'Редактирование заметки по машине - '.$car_name. 'клиента - '.$client_name. 'автор - '.$author_name;  //текст лога о редактировании заметки по машине(название) клиента(имя) от автора(имя)
         $edit_car_note_log_entry->save();
 
         return redirect('admin/cars_in_service/view/' .$car_note_entry->car_id);
@@ -232,9 +243,9 @@ class Cars_in_service_Admin_Controller extends Controller
 
         /* - Добавление в логи удаление замтеки по машине - */
         $delete_car_note_log = new Cars_notes_logs();
-        $delete_car_note_log->car_id = $car_id;
-        $delete_car_note_log->client_id = $client_id;
-        $delete_car_note_log->author_id = $author_id;
+        $delete_car_note_log->car_id = $request->car_id;  // тут же получается $request должен идти из поля формы во вьюхе, а по сути там просто ж кнопка
+        $delete_car_note_log->client_id = $request->client_id;
+        $delete_car_note_log->author_id = Auth::user()->id;
 
         /* - Название машины - */
         $car = Cars_in_service::find($car_id);
@@ -243,10 +254,11 @@ class Cars_in_service_Admin_Controller extends Controller
         $client = Clients::find($client_id);
         $client_name = $client->general_name;
         /* - Имя автора - */
+        $author_id = $delete_car_note_log->author_id;
         $author = Users::find($author_id);
         $author_name = $author->general_name;
 
-        $delete_car_note_log->text = 'Удаление заметки по машине -'.$car_name.'клиента - '.$client_name.'автор - '.$author_name. 'дата - ' .date('Y-m-d');  //текст лога о удалении заметки по машине(название) клиента(имя) от автора(имя) от даты(date)
+        $delete_car_note_log->text = 'Удаление заметки по машине -'.$car_name.'клиента - '.$client_name.'автор - '.$author_name;  //текст лога о удалении заметки по машине(название) клиента(имя) от автора(имя)
         $delete_car_note_log->save();
 
         // И вернуться на страницу машины
