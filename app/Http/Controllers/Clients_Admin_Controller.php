@@ -11,6 +11,8 @@ use App\User;
 use App\Client;
 use App\Cars_in_service;
 use App\Clients_notes;
+use App\Clients_logs;
+use App\Clients_notes_logs;
 
 
 class Clients_Admin_Controller extends Controller
@@ -29,6 +31,10 @@ class Clients_Admin_Controller extends Controller
 
     /* Добавить клиента: обработка POST запроса */
     public function add_client_post(Request $request){
+
+        //$user_id = Auth::user()->id;
+        //dd($user_id);
+
         $new_client = new Client();
 
         $name = $request->name;
@@ -44,21 +50,23 @@ class Clients_Admin_Controller extends Controller
         $new_client->save();
 
         /* - Добавление в логи создание нового клиента -*/
-        $create_client_log = new Clients_logs();
+        $create_client_log_entry = new Clients_logs();
         $create_client_log_entry->client_id = $new_client->id;
         $create_client_log_entry->author_id = Auth::user()->id;
 
 
         /* - Имя клиента  -*/
         $client_id = $create_client_log_entry->client_id;
-        $client = Clients::find($client_id);
+        $client = Client::find($client_id);
         $client_name = $client->general_name;
         /* - Имя автора - */
         $author_id = $create_client_log_entry->author_id;
-        $author = Users::find($author_id);
+        $author = User::find($author_id);
         $author_name = $author->general_name;
 
         $create_client_log_entry->text = 'Создание клиента - '.$client_name. 'автор - '.$author_name;  //текст лога о создании клиента(имя), автором(имя)
+        /* Тип? Тест */
+        $create_client_log_entry->type = '';
         $create_client_log_entry->save();
 
         // Если клиент был добавлен успешно, то предлагаем добавить машину клиента
@@ -96,22 +104,25 @@ class Clients_Admin_Controller extends Controller
         $new_client_note_entry->type = 'note';
         $new_client_note_entry->save();
 
-        $create_client_note_log = new Clients_notes_logs();
-        $create_client_note_log_entry->client_id = $request->client_id;  //id клиента
+        $create_client_note_log_entry = new Clients_notes_logs();
+        $create_client_note_log_entry->client_id = $client->id;  //id клиента
         $create_client_note_log_entry->author_id = Auth::user()->id;  //id автора
+        $create_client_note_log_entry->note_id = $new_client_note_entry->id;
 
         /* - Имя клиента -*/
         $client_id = $create_client_note_log_entry->client_id;
-        $client = Clients::find($client_id);
+        $client = Client::find($client_id);
         $client_name = $client->general_name;
 
         /* - Имя автора - */
         $author_id = $create_client_note_log_entry->author_id;
-        $author = Users::find($author_id);
+        $author = User::find($author_id);
         $author_name = $author->general_name;
 
 
         $create_client_note_log_entry->text = 'Добавлено примечание к клиенту - '.$client_name. 'автор - '.$author_name;  //текст лога о добавлении заметки клинету(имя) и автором(имя)
+        /* Тип? Тест */
+        $create_client_note_log_entry->type = '';
         $create_client_note_log_entry->save();
 
 
@@ -131,21 +142,25 @@ class Clients_Admin_Controller extends Controller
         $client_note_entry->text = $request->text;
         $client_note_entry->save();
 
+        
         /* - Добавление в логи редактирования примечания о сотруднике - */
-        $edit_client_note_log = new Clients_notes_logs();
-        $edit_client_note_log_entry->client_id = Clients_notes::find($note_id)->client_id;
+        $edit_client_note_log_entry = new Clients_notes_logs();
+        $edit_client_note_log_entry->client_id = Clients_notes::find($request->note_id)->client_id;
         $edit_client_note_log_entry->author_id = Auth::user()->id;
+        $edit_client_note_log_entry->note_id = $request->note_id;
 
         /* - Имя клиента - */
         $client_id = $edit_client_note_log_entry->client_id;
-        $client = Clients::find($client_id);
+        $client = Client::find($client_id);
         $client_name = $client->general_name;
         /* - Имя автора - */
         $author_id = $edit_client_note_log_entry->author_id;
-        $author = Users::find($author_id);
+        $author = User::find($author_id);
         $author_name = $author->general_name;
 
         $edit_client_note_log_entry->text = 'Редактирование заметки по клиенту - '.$client_name.'автор - '.$author_name;  //текст лога о редактировании заметки по клиенту(имя) автором(имя)
+        $edit_client_note_log_entry->type = '';
+        $edit_client_note_log_entry->save();
 
         return redirect('admin/view_client/' .$client_note_entry->client_id);
     }

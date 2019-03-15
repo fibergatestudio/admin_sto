@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 use App\Workzone;
+use App\Workzone_logs;
+use App\User;
+
 
 class Workzones_Admin_Controller extends Controller
 {
@@ -30,20 +34,20 @@ class Workzones_Admin_Controller extends Controller
 
 
         /* - Добавление в логи создание рабочего поста - */
-        $create_workzone_log = new Workzone_logs();
-        $create_workzone_log_entry->workzone_id = $workzone_id;
-        $create_workzone_log_entry->author_id = $author_id;
-        $create_workzone_log_entry->employee_id = $employee_id;
+        $create_workzone_log_entry = new Workzone_logs();
+        $create_workzone_log_entry->workzone_id = $new_workzone->id;
+        $create_workzone_log_entry->author_id = Auth::user()->id;  //id автора
+        /* employee_id test*/
+        $create_workzone_log_entry->employee_id = Auth::user()->id;  //id автора
 
         /* - Имя автора - */
-        $author = Users::find($author_id);
+        $author_id =  $create_workzone_log_entry->author_id;
+        $author = User::find($author_id);
         $author_name = $author->general_name;
 
-        /* - Имя сотрудника - */
-        $employee = Employees_logs::find($employee_id);
-        $employee_name = $employee->general_name;
-
-        $create_workzone_log_entry->text = 'Создана рабочая зона - ' .$workzone_id. ' автор создания - ' .$author_name. ' ответственный сотрудник - ' .$employee_name. ' дата - ' .date('Y-m-d');  //
+        $create_workzone_log_entry->text = 'Создана рабочая зона - ' .$new_workzone->id. ' автор создания - ' .$author_name. ' дата - ' .date('Y-m-d');  //
+        /* Тип? Тест */
+        $create_workzone_log_entry->type = '';
         $create_workzone_log_entry->save();
 
 
