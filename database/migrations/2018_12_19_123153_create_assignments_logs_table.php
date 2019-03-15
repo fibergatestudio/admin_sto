@@ -17,10 +17,6 @@ class CreateAssignmentsLogsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('assignment_id'); // foreign
             $table->foreign('assignment_id')->references('id')->on('assignments');
-            $table->unsignedInteger('responsible_employee_id'); // foreign
-            $table->foreign('responsible_employee_id')->references('id')->on('employees');
-            $table->unsignedInteger('car_id'); // foreign
-            $table->foreign('car_id')->references('id')->on('cars_in_service');
             $table->unsignedInteger('author'); //foreign
             $table->foreign('author')->references('id')->on('users');
             $table->string('text');

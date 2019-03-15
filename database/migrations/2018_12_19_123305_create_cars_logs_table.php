@@ -23,12 +23,6 @@ class CreateCarsLogsTable extends Migration
             $table->string('type');
             $table->timestamps();
         });
-
-        $demo_values = [
-            ['id' => 1, 'car_id' => 1, 'author_id' => 1, 'text' => 'Тестовая запись лога по тестовой машине в сервисе', 'type' => 'тип']
-        ];
-
-        DB::table('cars_logs')->insert($demo_values);
     }
 
     /**

@@ -97,19 +97,7 @@ class Supply_orders_Admin_Controller extends Controller
         ]);
 
         /* Вносим в лог запись о том, что заказ создан*/
-        $new_order_log = new Supply_order_logs();
-        $new_order_log_entry->supply_order_id = $supply_order_id;
-        $new_order_log_entry->author_id = $author_id;
-
-        /* - Имя автора - */
-        $author = Users::find($responcible_supply_officier_id);
-        $author_name = $author->general_name;
-        /* - Номер заказа - */
-        $order = Supply_orders::find($supply_order_id);
-        $order_number = $order->id;
-
-        $new_order_log_entry->log_entry_content = 'Создан заказ № '.$order_number.'сотрудником - '.$author_name. ' дата - ' .date('Y-m-d');  // текст лога о создании заказа(№) автор(имя) дата(date)
-        $new_order_log_entry->save();
+        // ...
 
         // ... Сделать редирект на страницу индекс с заказами
         return redirect('/admin/supply_orders/index');
@@ -235,22 +223,6 @@ class Supply_orders_Admin_Controller extends Controller
         $supply_order->status = 'archived';
         $supply_order->save();
 
-        /* - Вносим в логи архивирование заказа - */
-        $new_supply_order_arhive_log = new Supply_order_logs();
-        $new_supply_order_arhive_log_entry->order_id = $order_id;
-        $new_supply_order_arhive_log_entry->author_id = $author_id;
-
-        /* - Имя автора - */
-        $author = Users::find($responcible_supply_officier_id);
-        $author_name = $author->general_name;
-
-        /* - Номер заказа - */
-        $order = Supply_orders::find($supply_order_id);
-        $order_number = $order->id;
-
-        $new_supply_order_arhive_log_entry->text = 'Заказ номер - ' .$order_number. 'переведён в архив автором - ' .$author_name. 'дата - ' .date('Y-m-d'); //текст лога о переводе заказа(№) в архив автором(имя) дата(date)
-        $new_supply_order_arhive_log_entry->save();
-
          
          /* Отправляем телеграм оповещение о архивировании заказа*/
 
@@ -263,7 +235,6 @@ class Supply_orders_Admin_Controller extends Controller
              'parse_mode' => 'HTML',
              'text' => $text
          ]);
-
         
         /* Редирект на страницу архива */
         return redirect('/admin/supply_orders/archive');
@@ -298,22 +269,6 @@ class Supply_orders_Admin_Controller extends Controller
 
         // Удалить логи
         Supply_order_log::where('supply_order_id', $order_id)->delete();
-
-        /* - Добавление в логи удаление заказа из архива - */
-        $delete_supply_order_arhive_log = new Supply_order_logs();
-        $delete_supply_order_arhive_log_entry->order_id = $order_id;
-        $delete_supply_order_arhive_log_entry->author_id = $author_id;
-
-        /* - Имя автора - */
-        $author = Users::find($responcible_supply_officier_id);
-        $author_name = $author->general_name;
-
-        /* - Номер заказа - */
-        $order = Supply_orders::find($supply_order_id);
-        $order_number = $order->id;
-
-        $delete_supply_order_arhive_log_entry->text = 'Удалён заказ номер - ' .$order_number. 'автором - ' .$authors_name. 'дата - ' .date('Y-m-d');  // текст лога про удаление из архива заказа(номер) автором(имя), дата (date)
-        $delete_supply_order_arhive_log_entry->save();
 
         // Удалить заказ
         Supply_order::find($order_id)->delete();

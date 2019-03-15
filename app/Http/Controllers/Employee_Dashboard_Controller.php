@@ -379,20 +379,6 @@ class Employee_Dashboard_Controller extends Controller
         $new_shift = new Shift();
         $new_shift->new_shift($employee_user_id);
 
-        /* - Добавление в логи создание новой смены - */
-        $create_new_shift_log = new Shifts_logs();
-        $create_new_shift_log_entry->shift_id = $shift_id;
-        $create_new_shift_log_entry->employee_id =  $employee_id;
-        $create_new_shift_log_entry->opened_at = $opened_at;  // открытие смены
-        $create_new_shift_log_entry->closed_at = $closed_at;  // закрыие смены
-
-        /* - Имя сотрудника - */
-        $employee = Employees::find($employee_id);
-        $employee_name = $employee->general_name;
-
-        $create_new_shift_log_entry->text = 'Открыта смена - '.$shift_id. 'сотрудника - ' .$employee_name. 'во - ' .$opened_at. 'время закрытия этой смены - ' .$closed_at. 'дата - ' .date('Y-m-d');
-        $create_new_shift_log_entry->save();
-
         // Вернуться на страницу управления сменами
         return back();
 

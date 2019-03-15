@@ -285,7 +285,6 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
 
 
     /*Добавить примечание о клиенте : страница*/
-
     Route::get('/admin/clients/add_note_to_client/{client_id}', 'Clients_Admin_Controller@add_note_to_client_page');
 
         /* Добавить примечание к клиенту : POST */
@@ -507,19 +506,6 @@ Route::get('/admin/supply_orders/archive', 'Supply_orders_Admin_Controller@archi
 // ... Удалить авто
 
 // ... Редактировать авто
-
-
-/****** Logs : Администратор ******/
-Route::get('/admin/logs/', 'Logs_Admin_Controller@index');
-    /* - Логи по сотрудникам - */
-    Route::get('/admin/logs/employees', 'Logs_Admin_Controller@employees_logs');
-    /* - Логи по клиентам - */
-    Route::get('/admin/logs/clients', 'Logs_Admin_Controller@clients_logs');
-    /* - Логи по машинам в сервисе - */
-    Route::get('/admin/logs/cars', 'Logs_Admin_Controller@cars_in_service_logs');
-    /* - Логи по обороту денег - */
-    Route::get('/admin/logs/finances', 'Logs_Admin_Controller@finances_logs');
-
 
 /****************************************/
 /********** РАБОТНИК : секция **********/

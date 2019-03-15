@@ -23,12 +23,6 @@ class CreateClientsLogsTable extends Migration
             $table->string('type');
             $table->timestamps();
         });
-    
-        $demo_values = [
-            ['id' => 1, 'client_id' => 1, 'author_id' => 1, 'text' => 'Тестовая запись лога по тестовому клиенту', 'type' => 'тип']
-        ];
-
-        DB::table('clients_logs')->insert($demo_values);
     }
 
     /**

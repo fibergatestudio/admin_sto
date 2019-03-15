@@ -28,46 +28,12 @@ class Workzones_Admin_Controller extends Controller
         $new_workzone->description = $request->description;
         $new_workzone->save();
 
-
-        /* - Добавление в логи создание рабочего поста - */
-        $create_workzone_log = new Workzone_logs();
-        $create_workzone_log_entry->workzone_id = $workzone_id;
-        $create_workzone_log_entry->author_id = $author_id;
-        $create_workzone_log_entry->employee_id = $employee_id;
-        
-        /* - Имя автора - */
-        $author = Users::find($author_id); 
-        $author_name = $author->general_name; 
-
-        /* - Имя сотрудника - */
-        $employee = Employees_logs::find($employee_id);
-        $employee_name = $employee->general_name;
-
-        $create_workzone_log_entry->text = 'Создана рабочая зона - ' .$workzone_id. ' автор создания - ' .$author_name. ' ответственный сотрудник - ' .$employee_name. ' дата - ' .date('Y-m-d');  //
-        $create_workzone_log_entry->save();
-
-
         /* Возвращаемся к списку всех рабочих постов */
         return redirect('admin/workzones/index');
     }
 
      /* Редактирование информации о рабочем посте*/
     public function edit_workzone($workzone_id){
-
-        // ...
-
-
-        $edit_workzone_log = new Workzone_logs();
-        $edit_workzone_log_entry->workzone_id = $workzone_id;
-        $edit_workzone_log_entry->author_id = $author_id;
-
-        /* - Имя автора - */
-        $author = Users::find($author_id); 
-        $author_name = $author->general_name;
-
-        $edit_workzone_log_entry->text = 'Отредактирована информация о рабочей зоне -' .$workzone_id. ' автор - ' .$author_name. 'дата - ' .date('Y-m-d');
-        $edit_workzone_log_entry->save();
-
         $workzones = Workzone::find($workzone_id);
         $name=$workzones->general_name;
         $description=$workzones->description;
@@ -76,7 +42,6 @@ class Workzones_Admin_Controller extends Controller
             'names'=>$name, 
             'descriptions'=>$description,
         ]);
-
 
     }
     public function edit_workzone_id(Request $request){

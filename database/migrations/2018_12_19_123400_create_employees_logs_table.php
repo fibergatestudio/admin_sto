@@ -23,12 +23,6 @@ class CreateEmployeesLogsTable extends Migration
             $table->string('type');
             $table->timestamps();
         });
-
-        $demo_values = [
-            ['id' => 1, 'employee_id' => 1, 'author_id' => 1, 'text' => 'Тестовая запись лога по тестовому сотруднику', 'type' => 'тип']
-        ];
-
-        DB::table('employees_logs')->insert($demo_values);
     }
 
     /**
