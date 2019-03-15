@@ -22,7 +22,7 @@
                 
                 </td>
                 
-                {{-- Текст лога --}}
+                {{- - Текст лога - -}}
                 <td>
                     <a>
                         {{ $employee_finances_log_entry->text }}    
