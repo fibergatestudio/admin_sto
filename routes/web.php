@@ -483,13 +483,13 @@ Route::get('/admin/supply_orders/archive', 'Supply_orders_Admin_Controller@archi
     /* Удалить заказ (доступно только в архиве) */
     Route::get('/admin/supply_orders/archive/delete/{order_id}', 'Supply_orders_Admin_Controller@delete_archived_order');
 
-   
+
    /****** Статистика и Анализ : Администратор ******/
 
    /* Главная страница */
    Route::get('/admin/statistics_analysis/', 'StatisticsAnalysisAdminController@index');
 
-   
+
    /****** Получение информации о приходе-уходе сотрудников из системы СКУД SIGUR ******/
 
    /* Страница получения POST запроса */

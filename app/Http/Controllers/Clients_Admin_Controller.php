@@ -12,6 +12,7 @@ use App\Client;
 use App\Cars_in_service;
 use App\Clients_notes;
 
+
 class Clients_Admin_Controller extends Controller
 {
 
@@ -41,6 +42,25 @@ class Clients_Admin_Controller extends Controller
         $new_client->phone = $request->phone;
 
         $new_client->save();
+
+        /* - Добавление в логи создание нового клиента -*/
+        $create_client_log = new Clients_logs();
+        $create_client_log_entry->client_id = $new_client->id;
+        $create_client_log_entry->author_id = Auth::user()->id;
+
+
+        /* - Имя клиента  -*/
+        $client_id = $create_client_log_entry->client_id;
+        $client = Clients::find($client_id);
+        $client_name = $client->general_name;
+        /* - Имя автора - */
+        $author_id = $create_client_log_entry->author_id;
+        $author = Users::find($author_id);
+        $author_name = $author->general_name;
+
+        $create_client_log_entry->text = 'Создание клиента - '.$client_name. 'автор - '.$author_name;  //текст лога о создании клиента(имя), автором(имя)
+        $create_client_log_entry->save();
+
         // Если клиент был добавлен успешно, то предлагаем добавить машину клиента
         return view('admin.clients.add_client_success_page', ['client' => $new_client]);
     }
@@ -76,6 +96,25 @@ class Clients_Admin_Controller extends Controller
         $new_client_note_entry->type = 'note';
         $new_client_note_entry->save();
 
+        $create_client_note_log = new Clients_notes_logs();
+        $create_client_note_log_entry->client_id = $request->client_id;  //id клиента
+        $create_client_note_log_entry->author_id = Auth::user()->id;  //id автора
+
+        /* - Имя клиента -*/
+        $client_id = $create_client_note_log_entry->client_id;
+        $client = Clients::find($client_id);
+        $client_name = $client->general_name;
+
+        /* - Имя автора - */
+        $author_id = $create_client_note_log_entry->author_id;
+        $author = Users::find($author_id);
+        $author_name = $author->general_name;
+
+
+        $create_client_note_log_entry->text = 'Добавлено примечание к клиенту - '.$client_name. 'автор - '.$author_name;  //текст лога о добавлении заметки клинету(имя) и автором(имя)
+        $create_client_note_log_entry->save();
+
+
         // И вернуться на страницу клиента
         return redirect('admin/view_client/'.$client->id);
     }
@@ -92,6 +131,22 @@ class Clients_Admin_Controller extends Controller
         $client_note_entry->text = $request->text;
         $client_note_entry->save();
 
+        /* - Добавление в логи редактирования примечания о сотруднике - */
+        $edit_client_note_log = new Clients_notes_logs();
+        $edit_client_note_log_entry->client_id = Clients_notes::find($note_id)->client_id;
+        $edit_client_note_log_entry->author_id = Auth::user()->id;
+
+        /* - Имя клиента - */
+        $client_id = $edit_client_note_log_entry->client_id;
+        $client = Clients::find($client_id);
+        $client_name = $client->general_name;
+        /* - Имя автора - */
+        $author_id = $edit_client_note_log_entry->author_id;
+        $author = Users::find($author_id);
+        $author_name = $author->general_name;
+
+        $edit_client_note_log_entry->text = 'Редактирование заметки по клиенту - '.$client_name.'автор - '.$author_name;  //текст лога о редактировании заметки по клиенту(имя) автором(имя)
+
         return redirect('admin/view_client/' .$client_note_entry->client_id);
     }
 
@@ -100,6 +155,25 @@ class Clients_Admin_Controller extends Controller
     public function delete_client_note($note_id){
         // Удалить примечание
         Clients_notes::find($note_id)->delete();
+
+        /* - Добавление в логи удаление клиента - */
+
+        $delete_client_note_log = new Clients_notes_logs();
+        $delete_client_note_log->client_id = Clients_notes::find($note_id)->client_id;
+        $delete_client_note_log->author_id = Auth::user()->id;
+
+        /* - Имя клиента - */
+        $client_id = $delete_client_note_log->client_id;
+        $client = Clients::find($client_id);
+        $client_name = $client->general_name;
+        /* - Имя автора - */
+        $author_id = $delete_client_note_log->author_id;
+        $author = Users::find($author_id);
+        $author_name = $author->general_name;
+
+        $delete_client_note_log->text = 'Удалена заметка по клиенту - ' .$client_name. 'автор - '.$author_name;  //текст лога о удалении заметки по клиенту(имя) атором(имя)
+        $delete_client_note_log->save();
+
         // И вернуться на страницу назад
         return back();
     }
@@ -157,7 +231,7 @@ class Clients_Admin_Controller extends Controller
                     $output .= '
                     <tr>
                      <td><a href="view_client/'.$client->id.'">'.$client->general_name.'</a></td>
-                     
+
                     </tr>
                     ';
                 }
