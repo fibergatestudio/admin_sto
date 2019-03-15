@@ -15,12 +15,12 @@
         
             <div class="col-md-6">
                 <label>Время начала работ</label>
-                <input type="datetime-local" name="start_time" class="form-control">
+                <input type="datetime-local" name="start_time" class="form-control" required>
             </div>
 
             <div class="col-md-6">
                 <label>Время окончания работ</label>
-                <input type="datetime-local" name="end_time" class="form-control">
+                <input type="datetime-local" name="end_time" class="form-control" required>
             </div>
         
         </div>

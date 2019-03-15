@@ -119,12 +119,10 @@ class Clients_Admin_Controller extends Controller
         $author = User::find($author_id);
         $author_name = $author->general_name;
 
-
-        $create_client_note_log_entry->text = 'Добавлено примечание к клиенту - '.$client_name. 'автор - '.$author_name;  //текст лога о добавлении заметки клинету(имя) и автором(имя)
+        $create_client_note_log_entry->text = 'Добавлено примечание к клиенту - '.$client_name. 'автор - '.$author_name. 'дата - '.date('Y-m-d');  //текст лога о добавлении заметки клинету(имя) и автором(имя), дата создания(date)
         /* Тип? Тест */
         $create_client_note_log_entry->type = '';
         $create_client_note_log_entry->save();
-
 
         // И вернуться на страницу клиента
         return redirect('admin/view_client/'.$client->id);
@@ -142,7 +140,7 @@ class Clients_Admin_Controller extends Controller
         $client_note_entry->text = $request->text;
         $client_note_entry->save();
 
-        
+
         /* - Добавление в логи редактирования примечания о сотруднике - */
         $edit_client_note_log_entry = new Clients_notes_logs();
         $edit_client_note_log_entry->client_id = Clients_notes::find($request->note_id)->client_id;
