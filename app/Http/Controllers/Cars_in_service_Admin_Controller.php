@@ -18,6 +18,9 @@ use App\Car_model_list;
 use App\Cars_logs;
 use App\Cars_notes_logs;
 
+//TEST NOTE DELETE
+use App\Deleted_notes;
+
 class Cars_in_service_Admin_Controller extends Controller
 {
 
@@ -258,14 +261,11 @@ class Cars_in_service_Admin_Controller extends Controller
     /* Удаление примечания к машине */
     public function delete_note($note_id){
 
-        // Удалить примечание
-        Cars_notes::find($note_id)->delete();
-
         $note_info = Cars_notes::find($note_id);
 
         /* - Добавление в логи удаление замтеки по машине - */
-        $delete_car_note_log = new Cars_notes_logs();
-        $delete_car_note_log->car_id = $note_info->car_id; 
+        $delete_car_note_log = new Deleted_notes();
+        //$delete_car_note_log->car_id = $note_info->car_id; 
         $delete_car_note_log->author_id = Auth::user()->id;
         $delete_car_note_log->note_id = $note_info->id;
 
@@ -286,6 +286,9 @@ class Cars_in_service_Admin_Controller extends Controller
         /* Тип? Тест */
         $delete_car_note_log->type = '';
         $delete_car_note_log->save();
+
+        // Удалить примечание
+        Cars_notes::find($note_id)->delete();
 
         // И вернуться на страницу машины
         return back();

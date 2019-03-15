@@ -16,9 +16,9 @@ class CreateClientsNotesTable extends Migration
         Schema::create('clients_notes', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('client_id'); // foreign
-            $table->foreign('client_id')->references('id')->on('clients');
+            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
             $table->unsignedInteger('author_id'); // foregin
-            $table->foreign('author_id')->references('id')->on('users');
+            $table->foreign('author_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('text');
             $table->string('type')->nullable();
             $table->timestamps();

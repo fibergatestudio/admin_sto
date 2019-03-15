@@ -21,7 +21,7 @@ use App\User_options;
 use App\Employees_logs;
 use App\Employee_balance;
 use App\Employees_notes_logs;
-
+use App\Deleted_notes;
 
 class EmployeesAdminController extends Controller
 {
@@ -322,26 +322,32 @@ class EmployeesAdminController extends Controller
 
     /* - Удление примечания к сотруднику - */
     public function delete_employee_note($note_id){
-        Employees_notes::find($note_id)->delete();
+
+        $note_info = Employees_notes::find($note_id);
+        //dd($note_info->id);
 
         /* - Добавление в логи удаление заметки о клиенте - */
-        $delete_employee_note_log = new Employees_notes_logs();
+        $delete_employee_note_log_entry = new Deleted_notes();
 
-        $delete_employee_note_log_entry->employee_id = Employee::find($request->employee_id);  //id сотрудника
-
+        //$delete_employee_note_log_entry->employee_id = Employee::find($note_info->id);  //id сотрудника
         $delete_employee_note_log_entry->author_id = Auth::user()->id;  //id автора
+        $delete_employee_note_log_entry->note_id = $note_id;
 
         /* - Имя сотрудника - */
-        $employee_id = $delete_employee_note_log_entry->employee_id;
+        $employee_id = $note_info->id;
         $employee = Employee::find($employee_id);
         $employee_name = $employee->general_name;
         /* - Имя автора - */
         $author_id = $delete_employee_note_log_entry->author_id;
-        $author = Users::find($author_id);
+        $author = User::find($author_id);
         $author_name = $author->general_name;
 
         $delete_employee_note_log_entry->text = 'Удаление заметки о сотруднике - ' .$employee_name. 'автор - '.$author_name;  //текст лога удаления заметки по сотруднику(имя) автор(имя)
+        /* Тип? Тест */
+        $delete_employee_note_log_entry->type = '';
         $delete_employee_note_log_entry->save();
+
+        Employees_notes::find($note_id)->delete();
 
         return back();
     }

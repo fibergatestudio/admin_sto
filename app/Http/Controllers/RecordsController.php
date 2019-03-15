@@ -199,6 +199,16 @@ class RecordsController extends Controller
         return back();
     }
 
+    public function delete_record(Request $request){
+
+        $record_id = $request->record_id;
+
+        Records::find($record_id)->delete();
+
+        /* Возвращаемся обратно на страницу записей */
+        return back();
+    }
+
     public function confirmed_records_index(){
 
         $records = Records::all();

@@ -13,6 +13,7 @@ use App\Cars_in_service;
 use App\Clients_notes;
 use App\Clients_logs;
 use App\Clients_notes_logs;
+use App\Deleted_notes;
 
 
 class Clients_Admin_Controller extends Controller
@@ -166,26 +167,31 @@ class Clients_Admin_Controller extends Controller
 
     /* Удаление примечания к клиенту */
     public function delete_client_note($note_id){
-        // Удалить примечание
-        Clients_notes::find($note_id)->delete();
 
+        $note_info = Clients_notes::find($note_id);
         /* - Добавление в логи удаление клиента - */
 
-        $delete_client_note_log = new Clients_notes_logs();
-        $delete_client_note_log->client_id = Clients_notes::find($note_id)->client_id;
+        $delete_client_note_log = new Deleted_notes();
+        //$delete_client_note_log->client_id = Clients_notes::find($note_id)->client_id;
         $delete_client_note_log->author_id = Auth::user()->id;
+        $delete_client_note_log->note_id = $note_id;
 
         /* - Имя клиента - */
-        $client_id = $delete_client_note_log->client_id;
-        $client = Clients::find($client_id);
+        $client_id = $note_info->id;
+        $client = Client::find($client_id);
         $client_name = $client->general_name;
         /* - Имя автора - */
         $author_id = $delete_client_note_log->author_id;
-        $author = Users::find($author_id);
+        $author = User::find($author_id);
         $author_name = $author->general_name;
 
         $delete_client_note_log->text = 'Удалена заметка по клиенту - ' .$client_name. 'автор - '.$author_name;  //текст лога о удалении заметки по клиенту(имя) атором(имя)
+        /* Тип? Тест */
+        $delete_client_note_log->type = '';
         $delete_client_note_log->save();
+
+        // Удалить примечание
+        Clients_notes::find($note_id)->delete();
 
         // И вернуться на страницу назад
         return back();

@@ -20,6 +20,7 @@
                 <th>Телефон</th>
                 <th>Время записи</th>
                 <th></th>{{-- Кнопки управления --}}
+                <th></th>{{-- Кнопки удаления --}}
             </tr>
         </thead>
         <tbody>
@@ -55,19 +56,30 @@
             </td>
             <td>
                 @if($record->status == 'unconfirmed')
-                <form action="{{ url('/complete_record/'.$record->id) }}" method="POST">
-                @csrf
-                    <select class="dropdown" style='width:60px;' name="confirmed_time" onchange='return timeSchedvalue(this.value)'>
-                        @foreach($record->available_time as $time_option)
-                            <option value="{{ $time_option }}">{{ $time_option }}</option>
-                        @endforeach
-                    <select></select>
-                    <input type="hidden" name="record_id" value="{{ $record->id }}">
-                    <input type="submit" value="Подтвердить" class="btn btn-primary"/>
-                </form>
-                @else
-                    {{ $record->confirmed_time }}
-                @endif
+                <div class="row">
+                    <div class="col-md-6">
+                        <form action="{{ url('/complete_record/'.$record->id) }}" method="POST">
+                        @csrf
+                            <select style="width:auto;" class="dropdown form-control" style='width:60px;' name="confirmed_time" onchange='return timeSchedvalue(this.value)'>
+                                @foreach($record->available_time as $time_option)
+                                    <option value="{{ $time_option }}">{{ $time_option }}</option>
+                                @endforeach
+                            <select></select>
+                            <input type="hidden" name="record_id" value="{{ $record->id }}">
+                            <input type="submit" value="Подтвердить" class="btn btn-primary"/>
+                        </form>
+                    </div>
+                    <div class="col-md-6">
+                        <form action="{{ url('/delete_record/'.$record->id) }}" method="POST">
+                        @csrf
+                            <input type="hidden" name="record_id" value="{{ $record->id }}">
+                            <input type="submit" value="Удалить" class="btn btn-warning"/>
+                        </form>
+                        @else
+                            {{ $record->confirmed_time }}
+                        @endif
+                    </div>
+                </div>
             </td>
         </tr>
         @endforeach

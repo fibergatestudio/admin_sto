@@ -121,6 +121,8 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
         Route::post('/add_record', 'RecordsController@add_record')->middleware('can:admin_rights');
         /* Подтвердить запись */
         Route::post('/complete_record/{record_id}', 'RecordsController@complete_record')->middleware('can:admin_rights');
+        /* Удалить запись */
+        Route::post('/delete_record/{record_id}', 'RecordsController@delete_record')->middleware('can:admin_rights');
 
     /* Страница записей */
         Route::get('/confirmed_records', 'RecordsController@confirmed_records_index')->middleware('can:admin_rights');

@@ -16,11 +16,11 @@ class CreateClientsNotesLogsTable extends Migration
         Schema::create('clients_notes_logs', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('note_id');
-            $table->foreign('note_id')->references('id')->on('clients_notes');
+            $table->foreign('note_id')->references('id')->on('clients_notes')->onDelete('cascade');
             $table->unsignedInteger('client_id');
-            $table->foreign('client_id')->references('id')->on('clients');
+            $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
             $table->unsignedInteger('author_id');
-            $table->foreign('author_id')->references('id')->on('users');
+            $table->foreign('author_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('text');
             $table->string('type');
             $table->timestamps();
