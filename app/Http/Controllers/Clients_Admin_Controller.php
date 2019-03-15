@@ -49,7 +49,7 @@ class Clients_Admin_Controller extends Controller
         $create_client_log_entry->author_id = Auth::user()->id;
 
 
-        /* - Имя клиента  -*/
+        /* - Имя клиента -*/
         $client_id = $create_client_log_entry->client_id;
         $client = Clients::find($client_id);
         $client_name = $client->general_name;

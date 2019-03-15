@@ -64,7 +64,7 @@ class EmployeesAdminController extends Controller
         $new_employee_balance->employee_id = $new_employee_id;
         $new_employee_balance->save();
 
-        /* - Добавление в логи создание сотрудника  - */
+        /* - Добавление в логи создание сотрудника - */
         $create_employee_log = new Employees_logs();
         $create_employee_log_entry->employee_id = $new_employee->id; //id сотрудника
         $create_employee_log_entry->author_id =  Auth::user()->id;  //id автора заметки
