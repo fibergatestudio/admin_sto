@@ -10,7 +10,7 @@
     <div>
         <div class="row">
 
-            <form class="border border-light p-5" action="{{ url('/notification/change_rules') }}" method="POST">
+            <form class="border border-light p-5" action="{{ url('/admin/notification/change_rules') }}" method="POST">
             @csrf
             <p class="h4 mb-4">Какие уведомления присылать</p>
 

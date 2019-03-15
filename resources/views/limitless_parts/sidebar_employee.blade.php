@@ -93,6 +93,16 @@
 							</a>
       					</li>
 
+						
+						  <li class="nav-item">
+							<a href="{{ url('/employee/notification') }}" class="nav-link">
+								<i class="icon-circle"></i>
+								<span>
+									Настройка уведомлений
+								</span>
+							</a>
+						</li>
+
 						<li class="nav-item">
 							<a class="nav-link" href="{{ url('/logout') }}"
                                 onclick="event.preventDefault();

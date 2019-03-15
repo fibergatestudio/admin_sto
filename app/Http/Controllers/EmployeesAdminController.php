@@ -702,19 +702,19 @@ class EmployeesAdminController extends Controller
     /*
     ********** Настройка уведеомлений **********
     */
-    public function tg_notification_index(){
+    public function admin_tg_notification_index(){
 
         $user_id = Auth::user()->id;
 
         $user_options = DB::table('user_options')->where('user_id', '=', $user_id)->first();
 
-        return view('admin.notification.tg_notification',
+        return view('admin.notification.admin_tg_notification',
         [
             'user_options' => $user_options
         ]);
     }
 
-    public function tg_notification_update(Request $request){
+    public function admin_tg_notification_update(Request $request){
 
         //$update_options = new User_options();
         $user_id = Auth::user()->id;
@@ -763,4 +763,22 @@ class EmployeesAdminController extends Controller
         //dd($request->all());
         return back();
     }
+
+    public function employee_tg_notification_index(){
+
+        $employee_id = Auth::user()->id;
+
+        $employee_options = DB::table('user_options')->where('user_id', '=', $employee_id)->first();
+
+        return view('admin.notification.employee_tg_notification',
+        [
+            'employee_options' => $employee_options
+        ]);
+    }
+
+    public function employee_tg_notification_update(Request $request){
+
+        return back();
+    }
+
 }
