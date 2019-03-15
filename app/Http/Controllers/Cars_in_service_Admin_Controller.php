@@ -257,27 +257,34 @@ class Cars_in_service_Admin_Controller extends Controller
 
     /* Удаление примечания к машине */
     public function delete_note($note_id){
+
         // Удалить примечание
         Cars_notes::find($note_id)->delete();
 
+        $note_info = Cars_notes::find($note_id);
+
         /* - Добавление в логи удаление замтеки по машине - */
         $delete_car_note_log = new Cars_notes_logs();
-        $delete_car_note_log->car_id = $request->car_id;  // тут же получается $request должен идти из поля формы во вьюхе, а по сути там просто ж кнопка
-        $delete_car_note_log->client_id = $request->client_id;
+        $delete_car_note_log->car_id = $note_info->car_id; 
         $delete_car_note_log->author_id = Auth::user()->id;
+        $delete_car_note_log->note_id = $note_info->id;
 
         /* - Название машины - */
+        $car_id = $note_info->car_id;
         $car = Cars_in_service::find($car_id);
         $car_name = $car->general_name;
         /* - Имя клиента - */
-        $client = Clients::find($client_id);
+        $client_id = $car->owner_client_id;
+        $client = Client::find($client_id);
         $client_name = $client->general_name;
         /* - Имя автора - */
         $author_id = $delete_car_note_log->author_id;
-        $author = Users::find($author_id);
+        $author = User::find($author_id);
         $author_name = $author->general_name;
 
         $delete_car_note_log->text = 'Удаление заметки по машине -'.$car_name.'клиента - '.$client_name.'автор - '.$author_name;  //текст лога о удалении заметки по машине(название) клиента(имя) от автора(имя)
+        /* Тип? Тест */
+        $delete_car_note_log->type = '';
         $delete_car_note_log->save();
 
         // И вернуться на страницу машины
