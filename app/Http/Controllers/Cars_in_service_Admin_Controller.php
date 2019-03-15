@@ -91,7 +91,7 @@ class Cars_in_service_Admin_Controller extends Controller
         $create_car_in_service_log_entry->client_id = $request->client_id;  //id клиента
         $create_car_in_service_log_entry->author_id = Auth::user()->id;  //id автора
 
-        /* - Название машины - */
+        /* - Название машины  - */
         $car_id = $create_car_in_service_log_entry->car_id
         $car = Cars_in_service::find($car_id);  
         $car_name = $car->general_name;

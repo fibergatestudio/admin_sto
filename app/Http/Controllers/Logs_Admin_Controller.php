@@ -94,7 +94,7 @@ class Logs_Admin_Controller extends Controller
 
         }
 
-        return view ('admin.logs.fiances_logs.finances_logs', compact('$employee_finances_log_entry', '$text'));
+        return view ('admin.logs.fiances_logs.finances_logs', compact('$employee_finances_log_entry', '$employee_finances_log_entry->text'));
         
     }
      
