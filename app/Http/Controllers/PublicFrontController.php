@@ -37,6 +37,25 @@ class PublicFrontController extends Controller
         $new_client_request->client_car_model = $car_model;
         $new_client_request->save();
 
+        /* - добавление в логи создание записи на приём - */
+        $create_appointment_log = new Appointment_log();
+        $create_appointment_log_entry->client_id = $client_id;
+        $create_appointment_log_entry->author_id = $author_id;
+        $create_appointment_log_entry->car_id = $car_id;
+
+        /* - Имя клиента - */
+        $client = Clients::find($client_id);
+        $client_name = $client->general_name;
+        /* - Имя автора - */
+        $author = Users::find($author_id); 
+        $author_name = $author->general_name;
+        /* - Название машины - */
+        $car = Cars_in_service::find($car_id);
+        $car_name = $car->general_name;
+
+        $create_appointment_log_entry->text = 'Создание записи на приём машины -' .$car_name. 'клиента - ' .$client_name. 'автор записи - ' .$authoir_name. 'дата - ' .date('Y-m-d');  //текст лога о создании записи на приём машины(название) клиента(имя), автором(имя), дата(date)
+        $create_appointment_log_entry->save();
+
         // !! TODO: сделать защиту от спама
 
         // Отображаем страницу "успех"

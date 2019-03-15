@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateClientsLogsTable extends Migration
+class CreateClientsNotesLogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,22 +13,18 @@ class CreateClientsLogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('clients_logs', function (Blueprint $table) {
+        Schema::create('clients_notes_logs', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('client_id'); // foreign
+            $table->unsignedInteger('note_id');
+            $table->foreign('note_id')->references('id')->on('clients_notes');
+            $table->unsignedInteger('client_id');
             $table->foreign('client_id')->references('id')->on('clients');
-            $table->unsignedInteger('author_id'); // foreign
+            $table->unsignedInteger('author_id');
             $table->foreign('author_id')->references('id')->on('users');
             $table->string('text');
             $table->string('type');
             $table->timestamps();
         });
-    
-        $demo_values = [
-            ['id' => 1, 'client_id' => 1, 'author_id' => 1, 'text' => 'Тестовая запись лога по тестовому клиенту', 'type' => 'тип']
-        ];
-
-        DB::table('clients_logs')->insert($demo_values);
     }
 
     /**
@@ -38,6 +34,6 @@ class CreateClientsLogsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('clients_logs');
+        Schema::dropIfExists('clients_notes_logs');
     }
 }

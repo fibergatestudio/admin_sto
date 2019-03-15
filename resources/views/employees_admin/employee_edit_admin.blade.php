@@ -138,6 +138,19 @@
                 <div class="form-row">  
 
                     <div class="form-group col-md-6">
+                        <label>Фиксированная плата</label>
+                        <input type="checkbox" name="fixed_charge" value="fixed" @if(isset($employee_edit->fixed_charge)) checked @endif class="form-control typeahead">
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label>Размер платы за смену</label>
+                        <input type="number" name="pay_per_shift" value="{{ $employee_edit->pay_per_shift}}" class="form-control typeahead">
+                    </div>
+                </div>
+
+                <div class="form-row">  
+
+                    <div class="form-group col-md-6">
                         <label>Телеграм ID</label>
                         <input type="number" name="telegram_id" value="{{ $employee_edit->telegram_id }}" class="form-control typeahead">
                     </div>

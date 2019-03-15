@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCarsLogsTable extends Migration
+class CreateAppointmentsLogs extends Migration
 {
     /**
      * Run the migrations.
@@ -13,22 +13,20 @@ class CreateCarsLogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('cars_logs', function (Blueprint $table) {
+        Schema::create('appointments_logs', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('car_id'); // foreign
+            $table->unsignedInteger('appointment_id');
+            $table->foreign('appointment_id')->references('id')->on('client_requests');
+            $table->unsignedInteger('car_id');
             $table->foreign('car_id')->references('id')->on('cars_in_service');
-            $table->unsignedInteger('author_id'); // foreign
+            $table->unsignedInteger('client_id');
+            $table->foreign('client_id')->references('id')->on('clients');
+            $table->unsignedInteger('author_id');
             $table->foreign('author_id')->references('id')->on('users');
             $table->string('text');
             $table->string('type');
             $table->timestamps();
         });
-
-        $demo_values = [
-            ['id' => 1, 'car_id' => 1, 'author_id' => 1, 'text' => 'Тестовая запись лога по тестовой машине в сервисе', 'type' => 'тип']
-        ];
-
-        DB::table('cars_logs')->insert($demo_values);
     }
 
     /**
@@ -38,6 +36,6 @@ class CreateCarsLogsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cars_logs');
+        Schema::dropIfExists('appointments_logs');
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEmployeesLogsTable extends Migration
+class CreateEmployeesNotesLogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,22 +13,18 @@ class CreateEmployeesLogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('employees_logs', function (Blueprint $table) {
+        Schema::create('employees_notes_logs', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('employee_id'); // foreign
+            $table->unsignedInteger('note_id');  
+            $table->foreign('note_id')->references('id')->on('employees_notes'); 
+            $table->unsignedInteger('employee_id');
             $table->foreign('employee_id')->references('id')->on('employees');
-            $table->unsignedInteger('author_id'); // foreign
+            $table->unsignedInteger('author_id');
             $table->foreign('author_id')->references('id')->on('users');
             $table->string('text');
             $table->string('type');
             $table->timestamps();
         });
-
-        $demo_values = [
-            ['id' => 1, 'employee_id' => 1, 'author_id' => 1, 'text' => 'Тестовая запись лога по тестовому сотруднику', 'type' => 'тип']
-        ];
-
-        DB::table('employees_logs')->insert($demo_values);
     }
 
     /**
@@ -38,6 +34,6 @@ class CreateEmployeesLogsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('employees_logs');
+        Schema::dropIfExists('employees_notes_logs');
     }
 }
