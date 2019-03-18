@@ -98,9 +98,13 @@ class Assignments_Admin_Controller extends Controller
         $new_assignment->confirmed = 'unconfirmed';
         /* end TEST confirmed */
         $new_assignment->save();
-        
-        /* Оповещения для телеграма */
-        $text = "У вас новый наряд!\n"
+
+
+
+        if($tg_assignment_norification == 1){
+
+            /* Оповещения для телеграма */
+            $text = "У вас новый наряд!\n"
             . "<b>Клиент: </b>\n"
             . "$client->general_name\n"
             . "<b>Авто: </b>\n"
@@ -109,13 +113,17 @@ class Assignments_Admin_Controller extends Controller
             . "$new_assignment->date_of_creation\n"
             . "<b>Описание: </b>\n"
             .  $assignment_description;
- 
-        Telegram::sendMessage([
+
+            Telegram::sendMessage([
             'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
             'parse_mode' => 'HTML',
             'text' => $text
-        ]);
+            ]);
 
+        } else {
+            
+        }
+        
 
         /* Возвращаемся на страницу нарядов по авто */
         return redirect('admin/cars_in_service/view/'.$car_id);

@@ -177,7 +177,7 @@ class Clients_Admin_Controller extends Controller
         $delete_client_note_log->note_id = $note_id;
 
         /* - Имя клиента - */
-        $client_id = $note_info->id;
+        $client_id = $note_info->client_id;
         $client = Client::find($client_id);
         $client_name = $client->general_name;
         /* - Имя автора - */

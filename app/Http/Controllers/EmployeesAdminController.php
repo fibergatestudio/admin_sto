@@ -954,6 +954,99 @@ class EmployeesAdminController extends Controller
 
     public function employee_tg_notification_update(Request $request){
 
+        $user_id = Auth::user()->id;
+
+        $emptg_assignment_notification = $request->emptg_assignment_notification;
+        $emptg_income_notification = $request->emptg_income_notification;
+        $emptg_expense_notification = $request->emptg_expense_notification;
+
+        //$emptg_fine_notification = $request->emptg_fine_notification;
+        //dd($emptg_assignment_notification = $request->emptg_assignment_notification);
+        $emptg_fine_notification = $request->emptg_fine_notification;
+        $emptg_bonus_notification = $request->emptg_bonus_notification;
+        $emptg_supply_order_notification = $request->emptg_supply_order_notification;
+        $emptg_client_master_notification = $request->emptg_client_master_notification;
+
+        if(empty($emptg_assignment_notification)){
+
+            $assignment_notification = 0;
+
+        } else {
+
+            $assignment_notification = 1;
+
+        }
+        if(empty($emptg_income_notification)){
+
+            $income_notification = 0;
+
+        } else {
+
+            $income_notification = 1;
+
+        }
+        if(empty($emptg_expense_notification)){
+
+            $expense_notification = 0;
+
+        } else {
+
+            $expense_notification = 1;
+
+        }
+        if(empty($emptg_fine_notification)){
+
+            $fine_notification = 0;
+
+        } else {
+
+            $fine_notification = 1;
+
+        }
+        if(empty($emptg_bonus_notification)){
+
+            $bonus_notification = 0;
+
+        } else {
+
+            $bonus_notification = 1;
+
+        }
+        if(empty($emptg_supply_order_notification)){
+
+            $supply_order_notification = 0;
+
+        } else {
+
+            $supply_order_notification = 1;
+
+        }
+        if(empty($emptg_client_master_notification)){
+
+            $client_master_notification = 0;
+
+        } else {
+
+            $client_master_notification = 1;
+
+        }
+
+
+
+        DB::table('user_options')
+        ->where('user_id', '=', $user_id)
+        ->update([
+            'tg_assignment_notification' => $assignment_notification,
+            'tg_income_notification' => $income_notification,
+            'tg_expense_notification' => $expense_notification,
+            'tg_fine_notification' => $fine_notification,
+            'tg_bonus_notification' => $bonus_notification,
+            'tg_supply_order_notification' => $supply_order_notification,
+            'tg_client_master_notification' => $client_master_notification
+
+        ]);
+
+
         return back();
     }
 
