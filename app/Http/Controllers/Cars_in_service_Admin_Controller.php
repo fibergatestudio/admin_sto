@@ -118,7 +118,7 @@ class Cars_in_service_Admin_Controller extends Controller
         $author = User::find($author_id);
         $author_name = $author->general_name;
 
-        $create_car_in_service_log_entry->text = 'Создана машина - '.$car_name. 'клиента - '.$client_name. 'автор - '.$author_name;   //текст лога о создании машины(название) клиента(имя) от автора(имя)
+        $create_car_in_service_log_entry->text = 'Создана машина - '.$car_name. ' | клиента - '.$client_name. ' | автор - '.$author_name;   //текст лога о создании машины(название) клиента(имя) от автора(имя)
         /* Тип? Тест */
         $create_car_in_service_log_entry->type = '';
         $create_car_in_service_log_entry->save();
@@ -202,7 +202,7 @@ class Cars_in_service_Admin_Controller extends Controller
         $author = User::find($author_id);
         $author_name = $author->general_name;
 
-        $create_car_note_log_entry->text = 'Создание заметки по машине'.$car_name. 'клиента - '.$client_name. 'автор - '.$author_name;   //текст лога о созданиинии заметки по машине(название) клиента(имя) от автора(имя)
+        $create_car_note_log_entry->text = 'Создание заметки по машине'.$car_name. ' | клиента - '.$client_name. ' | автор - '.$author_name;   //текст лога о созданиинии заметки по машине(название) клиента(имя) от автора(имя)
         /* Тип? Тест */
         $create_car_note_log_entry->type = '';
         $create_car_note_log_entry->save();
@@ -250,7 +250,7 @@ class Cars_in_service_Admin_Controller extends Controller
         $author = User::find($author_id);
         $author_name = $author->general_name;
 
-        $edit_car_note_log_entry->text = 'Редактирование заметки по машине - '.$car_name. 'клиента - '.$client_name. 'автор - '.$author_name;  //текст лога о редактировании заметки по машине(название) клиента(имя) от автора(имя)
+        $edit_car_note_log_entry->text = 'Редактирование заметки по машине - '.$car_name. ' | клиента - '.$client_name. ' | автор - '.$author_name;  //текст лога о редактировании заметки по машине(название) клиента(имя) от автора(имя)
         /* Тип? Тест */
         $edit_car_note_log_entry->type = '';
         $edit_car_note_log_entry->save();
@@ -282,7 +282,7 @@ class Cars_in_service_Admin_Controller extends Controller
         $author = User::find($author_id);
         $author_name = $author->general_name;
 
-        $delete_car_note_log->text = 'Удаление заметки по машине -'.$car_name.'клиента - '.$client_name.'автор - '.$author_name;  //текст лога о удалении заметки по машине(название) клиента(имя) от автора(имя)
+        $delete_car_note_log->text = 'Удаление заметки по машине -'.$car_name.' | клиента - '.$client_name.' | автор - '.$author_name;  //текст лога о удалении заметки по машине(название) клиента(имя) от автора(имя)
         /* Тип? Тест */
         $delete_car_note_log->type = '';
         $delete_car_note_log->save();

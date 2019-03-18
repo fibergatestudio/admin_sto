@@ -14,6 +14,8 @@ use App\Clients_notes;
 use App\Clients_logs;
 use App\Clients_notes_logs;
 use App\Deleted_notes;
+use App\Cars_in_service_logs;
+
 
 
 class Clients_Admin_Controller extends Controller
@@ -65,7 +67,7 @@ class Clients_Admin_Controller extends Controller
         $author = User::find($author_id);
         $author_name = $author->general_name;
 
-        $create_client_log_entry->text = 'Создание клиента - '.$client_name. 'автор - '.$author_name;  //текст лога о создании клиента(имя), автором(имя)
+        $create_client_log_entry->text = 'Создание клиента - '.$client_name. ' | автор - '.$author_name;  //текст лога о создании клиента(имя), автором(имя)
         /* Тип? Тест */
         $create_client_log_entry->type = '';
         $create_client_log_entry->save();
@@ -120,7 +122,7 @@ class Clients_Admin_Controller extends Controller
         $author = User::find($author_id);
         $author_name = $author->general_name;
 
-        $create_client_note_log_entry->text = 'Добавлено примечание к клиенту - '.$client_name. 'автор - '.$author_name. 'дата - '.date('Y-m-d');  //текст лога о добавлении заметки клинету(имя) и автором(имя), дата создания(date)
+        $create_client_note_log_entry->text = 'Добавлено примечание к клиенту - '.$client_name. ' | автор - '.$author_name;  //текст лога о добавлении заметки клинету(имя) и автором(имя)
         /* Тип? Тест */
         $create_client_note_log_entry->type = '';
         $create_client_note_log_entry->save();
@@ -157,7 +159,7 @@ class Clients_Admin_Controller extends Controller
         $author = User::find($author_id);
         $author_name = $author->general_name;
 
-        $edit_client_note_log_entry->text = 'Редактирование заметки по клиенту - '.$client_name.'автор - '.$author_name;  //текст лога о редактировании заметки по клиенту(имя) автором(имя)
+        $edit_client_note_log_entry->text = 'Редактирование заметки по клиенту - '.$client_name.' | автор - '.$author_name;  //текст лога о редактировании заметки по клиенту(имя) автором(имя)
         $edit_client_note_log_entry->type = '';
         $edit_client_note_log_entry->save();
 
@@ -185,7 +187,7 @@ class Clients_Admin_Controller extends Controller
         $author = User::find($author_id);
         $author_name = $author->general_name;
 
-        $delete_client_note_log->text = 'Удалена заметка по клиенту - ' .$client_name. 'автор - '.$author_name;  //текст лога о удалении заметки по клиенту(имя) атором(имя)
+        $delete_client_note_log->text = 'Удалена заметка по клиенту - ' .$client_name. ' | автор - '.$author_name;  //текст лога о удалении заметки по клиенту(имя) атором(имя)
         /* Тип? Тест */
         $delete_client_note_log->type = '';
         $delete_client_note_log->save();

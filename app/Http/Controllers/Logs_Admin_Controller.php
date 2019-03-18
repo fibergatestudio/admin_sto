@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Employee;
 use App\Employees_logs;
 use App\Employees_notes_logs;
-use App\Employees_balance_logs;
+use App\Employee_balance_logs;
 use App\Client;
 use App\Clients_logs;
 use App\Clients_notes_logs;
@@ -27,11 +27,12 @@ class Logs_Admin_Controller extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
-     */
+     
     public function index()
     {
         return view('admin.logs.logs');
-    }
+    } 
+    */
 
     /* - Логи по сотрудникам - */
     public function employees_logs()
@@ -94,7 +95,7 @@ class Logs_Admin_Controller extends Controller
 
         }
 
-        return view ('admin.logs.fiances_logs.finances_logs', compact('$employee_finances_log_entry', '$employee_finances_log_entry->text'));
+        return view ('admin.logs.finances_logs.finances_logs', compact('$employees_finances_logs'));
         
     }
      
