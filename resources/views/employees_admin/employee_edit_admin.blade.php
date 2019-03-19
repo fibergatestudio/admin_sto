@@ -152,7 +152,7 @@
 
                     <div class="form-group col-md-6">
                         <label>Телеграм ID</label>
-                        <input type="number" name="telegram_id" value="{{ $employee->telegram_id }}" class="form-control typeahead">
+                        <input type="text" name="telegram_id" value="{{ $employee->telegram_id }}" class="form-control typeahead">
                     </div>
 
                     <div class="form-group col-md-6">
