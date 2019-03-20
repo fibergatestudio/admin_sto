@@ -21,6 +21,9 @@
 	<link href="{{ url('assets/css/components.min.css') }}" rel="stylesheet" type="text/css">
 	<link href="{{ url('assets/css/colors.min.css') }}" rel="stylesheet" type="text/css">
 	<!-- /global stylesheets -->
+	<!-- Color picker -->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/css/bootstrap-colorpicker.min.css" rel="stylesheet">
+	<!-- /color picker -->
 
 	<!-- Core JS files -->
 	<script src="{{ url('global_assets/js/main/jquery.min.js') }}"></script>

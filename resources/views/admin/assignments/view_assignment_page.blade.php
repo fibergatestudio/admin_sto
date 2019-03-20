@@ -183,9 +183,7 @@
             <p>Принятая машина:</p>
             @foreach($accepted_image_urls as $image_url)
                 <div class="col-lg-2 col-md-3 col-xs-6 thumb">
-                    <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title=""
-                    data-image="{{ Storage::url($image_url) }}"
-                    data-target="#image-gallery">
+                    <a href="{{ Storage::url($image_url) }}" target="_blank">
                         <img class="img-thumbnail"
                             src="{{ Storage::url($image_url) }}"
                             alt="Another alt text">

@@ -248,20 +248,29 @@ class Employee_Dashboard_Controller extends Controller
         $new_income_entry->description = $request->description; /* Описание для захода */
         $new_income_entry->save();
 
+        /* Проверка оповещенияй (включено ли) */
+        $user_id = Auth::user()->id;
+        $notification_check = DB::table('user_options')->where('id','=', $user_id)->first();
 
-        $text = "У вас новый заход денег!\n"
-        . "<b>Сумма: </b>\n"
-        . "$new_income_entry->amount\n"
-        . "<b>Основание: </b>\n"
-        . " $new_income_entry->basis\n"
-        . "<b>Описание: </b>\n"
-        .  $new_income_entry->description;
+        if($notification_check->tg_income_notification == 1){
 
-        Telegram::sendMessage([
-            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
-            'parse_mode' => 'HTML',
-            'text' => $text
-        ]);
+            $text = "У вас новый заход денег!\n"
+            . "<b>Сумма: </b>\n"
+            . "$new_income_entry->amount\n"
+            . "<b>Основание: </b>\n"
+            . " $new_income_entry->basis\n"
+            . "<b>Описание: </b>\n"
+            .  $new_income_entry->description;
+
+            Telegram::sendMessage([
+                'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+                'parse_mode' => 'HTML',
+                'text' => $text
+            ]);
+
+        } else {
+
+        }
 
         /* Возвращаемся обратно на страницу наряда */
         return back();
@@ -277,7 +286,11 @@ class Employee_Dashboard_Controller extends Controller
         $new_expense_entry->description = $request->description; /* Описание для расхода */
         $new_expense_entry->save();
 
+        /* Проверка оповещенияй (включено ли) */
+        $user_id = Auth::user()->id;
+        $notification_check = DB::table('user_options')->where('id','=', $user_id)->first();
 
+        if($notification_check->tg_expense_notification == 1){
 
         $text = "У вас новый расход денег!\n"
         . "<b>Сумма: </b>\n"
@@ -292,6 +305,11 @@ class Employee_Dashboard_Controller extends Controller
             'parse_mode' => 'HTML',
             'text' => $text
         ]);
+
+        } else {
+
+
+        }
 
 
         /* Возвращаемся обратно на страницу наряда */

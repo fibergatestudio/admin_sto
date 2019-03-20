@@ -14,6 +14,32 @@
     
     {{-- Баланс сотрудника --}}
     <b>Баланс сотрудника:</b> {{ $employee->balance }}<br>
+    
+    <hr>
+    {{-- Наряды сотрудника --}}
+    <b>Тест вывода заходов по нарядам сотрудника:</b><br>    
+    <table class="table">
+                <thead>
+                    <tr>
+                        <th>Номер наряда</th>
+                        <th>Сумма</th>
+                        <th>Валюта</th>
+                    </tr>
+                </thead>
+                @foreach ($test as $test)
+                <tr>
+                    <td>
+                        {{$test->id}}
+                    </td>
+                    <td>
+                        {{$test->as_inc}}
+                    </td>
+                    <td>
+                        {{$test->as_cur}}
+                    </td>
+                </tr>
+                @endforeach
+            </table>
 
     <hr>
     {{-- Ставка сотрудника за смену --}}
@@ -105,6 +131,7 @@
             <table class="table">
                 <thead>
                     <tr>
+                        <th>Номер наряда</th>
                         <th>Дата</th>
                         <th>Сумма</th>
                         <th>Остаток</th>
@@ -112,6 +139,9 @@
                 </thead>
                 @foreach($balance_logs as $balance_logs )
                 <tr>
+                    <td>
+                        #
+                    </td>
                     <td>
                     {{ $balance_logs->date }}
                     </td>
@@ -133,6 +163,7 @@
             <table class="table">
                 <thead>
                     <tr>
+                        <th>Номер наряда</th>
                         <th>Дата</th>
                         <th>Сумма</th>
                         <th>Остаток</th>
@@ -140,6 +171,9 @@
                 </thead>
                 @foreach ($payout_logs as $payout_log )
                 <tr>
+                    <td>
+                        #
+                    </td>
                     <td>
                     {{ $payout_log->date }}
                     </td>

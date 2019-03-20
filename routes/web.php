@@ -609,11 +609,15 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
     Route::get('/admin/notification','EmployeesAdminController@admin_tg_notification_index');
     /* Применить новые настройки уведомлений Администратора */
     Route::post('/admin/notification/change_rules','EmployeesAdminController@admin_tg_notification_update');
+    /* Создать файл настроек (если нету) */
+    Route::get('/admin/notification/create_settings','EmployeesAdminController@admin_tg_create_settings');
 
     /* Страница настройки уведеомлений Рабочий */
     Route::get('/employee/notification','EmployeesAdminController@employee_tg_notification_index');
     /* Применить новые настройки уведомлений Рабочий */
     Route::post('/employee/notification/change_rules','EmployeesAdminController@employee_tg_notification_update');
+    /* Создать файл настроек (если нету) */
+    Route::get('/employee/notification/create_settings','EmployeesAdminController@employee_tg_create_settings');
 
 /****************************************/
 /********** СНАБЖЕНЕЦ : секция **********/

@@ -9,28 +9,80 @@
 
 @section('page_name')
     Страница нарядов 
-    <a href="{{ url('admin/add_client') }}">
+    <!-- <a href="{{ url('admin/add_client') }}">
         <div class="btn btn-success">
             Добавить наряд
         </div>
-    </a>
+    </a> -->
+
+
+  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addAssignment">
+  Добавить наряд
+  </button>
+        <div style="margin:0;"class="modal fade modal-dialog" id="addAssignment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Добавление наряда</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <a href="{{ url('admin/add_client') }}">
+                            <div class="btn btn-large btn-primary">
+                                Новый клиент
+                            </div>
+                        </a>
+                      </div>
+                      <div class="col-lg-6">
+                        <a href="{{ url('admin/cars_in_service/add') }}">
+                            <div class="btn btn-large btn-info">
+                                Существующий
+                            </div>
+                        </a>
+                      </div>
+                    </div>
+                        
+                    </div>
+                </div>{{-- /modal-content --}}
+            </div>{{-- /modal-dialog --}}
+        </div>{{-- /modal fade --}}
+
+
+
 @endsection
 
 @section('content')
 
     <table id="table" class="table">
         <thead>
+            <!-- <tr>
+              <th>#</th>
+              <th scope="col">№</th>
+              <th scope="col">Дата создания</th>
+              <th scope="col">Название</th>
+              <th scope="col">Ответственный сотрудник</th>
+              <th scope="col">Авто</th>
+              <th scope="col">VIN</th>
+              <th scope="col">Телефон</th>
+              <th scope="col">ФИО</th>
+              <th scope="col"></th>
+            </tr> -->
             <tr>
-            <th>#</th>
-            <th scope="col">№</th>
-            <th scope="col">Дата создания</th>
-            <th scope="col">Название</th>
-            <th scope="col">Ответственный сотрудник</th>
-            <th scope="col">Авто</th>
-            <th scope="col">VIN</th>
-            <th scope="col">Телефон</th>
-            <th scope="col">ФИО</th>
-            <th scope="col"></th>
+              <th>#</th>
+              <th scope="col">№</th>
+              <th scope="col">Дата</th>
+              <th scope="col">Модель\Марка</th>
+              <th scope="col">Год</th>
+              <th scope="col">Рег номер</th>
+              <th scope="col">VIN</th>
+              <th scope="col">Цвет</th>
+              <th scope="col">Рабочие зоны</th>
+              <th scope="col"></th>
             </tr>
         </thead>
         <tbody id="tablecontents">
@@ -44,26 +96,27 @@
                 </td>
                 {{-- Номер Наряда --}}
                 <td>{{ $assignment->id }}</td>
+
                 {{-- Дата --}}
                 <td>{{ beautify_date($assignment->date_of_creation) }}</td>
                 
-                {{-- Название наряда --}}
-                <td>{{ $assignment->description }}</td>
-
-                {{-- Ответственный сотрудник --}}
-                <td>{{ $assignment->employee_name }}</td>
-                
-                {{-- Машина --}}
+                {{-- Название машины --}}
                 <td>{{ $assignment->car_name }}</td>
+
+                {{-- Год --}}
+                <td>{{ $assignment->release_year }}</td>
+                
+                {{-- Рег номер --}}
+                <td>{{ $assignment->reg_number }}</td>
 
                 {{-- VIN --}}
                 <td>{{ $assignment->vin_number }}</td>
 
-                {{-- Телефон --}}
-                <td>{{ $assignment->clients_phone }}</td>
+                {{-- Цвет --}}
+                <td>Color</td>
 
-                {{-- ФИО --}}
-                <td>{{ $assignment->clients_fio }}</td>
+                {{-- Рабочии зоны --}}
+                <td>Workzone</td>
 
                 {{-- Кнопка подробнее --}}
                 <td>

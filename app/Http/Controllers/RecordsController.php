@@ -174,7 +174,8 @@ class RecordsController extends Controller
         $new_record->car_brand = $request->car_brand;
         $new_record->car_model = $request->car_model;
         $new_record->car_number = $request->car_number;
-        $new_record->record_date = $request->record_date ;
+        $new_record->record_date = $request->record_date;
+        $new_record->record_time = $request->record_time; //Желаемое время
         $new_record->phone = $request->phone;
         $new_record->save();
 

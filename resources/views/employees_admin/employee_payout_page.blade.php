@@ -2,6 +2,13 @@
 
 @section('page_name')
 Страница выплат по сотруднику: {{ $employee->name }}
+
+{{-- Вернуться : Кнопка --}}
+    <a href="{{ URL::previous() }}">
+        <div class="btn btn-danger">
+            Вернуться
+        </div>
+    </a>
 @endsection
 
 @section('content')
@@ -16,21 +23,26 @@
         
     </form>
     <hr>
+    <div class="row">
+        <h4>Текущий баланс:&nbsp;</h4>
+        <b style="font-size: 16px;" class="btn btn-success"> {{ $employee->balance}}</b>
+    </div>
+    <hr>
     {{-- История выплат (последние 10) --}}
     <h4>История выплат (последние 10 операций)</h4>
     <table class="table">
         <thead>
             <th>Сумма</th>
+            <th>Остаток</th>
             <th>Дата</th>
-            <th>Тип добавления</th>
             <th>Причина</th>
         </thead>
         <tbody>
             @foreach($employee_payout as $employee_payout)
                 <tr>
                     <td>{{ $employee_payout->amount}}</td>
+                    <td>{{ $employee_payout->old_balance}}</td>
                     <td>{{ $employee_payout->date}}</td>
-                    <td>{{ $employee_payout->action}}</td>
                     <td>{{ $employee_payout->reason}}</td>
                 </tr>
             @endforeach

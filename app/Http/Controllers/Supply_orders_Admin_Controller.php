@@ -195,6 +195,12 @@ class Supply_orders_Admin_Controller extends Controller
             }
         }
 
+        /* Проверка оповещенияй (включено ли) */
+        $user_id = Auth::user()->id;
+        $notification_check = DB::table('user_options')->where('id','=', $user_id)->first();
+
+        if($notification_check->tg_supply_order_notification == 1){
+
          /* Отправляем телеграм оповещение о редактировании заказа*/
 
          $text = "У вас изменения заказа!\n"
@@ -212,6 +218,10 @@ class Supply_orders_Admin_Controller extends Controller
              'parse_mode' => 'HTML',
              'text' => $text
          ]);
+        } else {
+
+
+        }
 
         return redirect('/admin/supply_orders/index');
     }

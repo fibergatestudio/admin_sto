@@ -7,6 +7,13 @@
 
 @section('content')
 
+
+@if ($exist == '0')
+
+<p>Файлы настроек на созданы, нажмите "создать"</p>
+<a href="{{ url('/admin/notification/create_settings') }}"><button class="btn btn-success">Создать</button></a>
+
+@elseif ($exist == '1')
     <div>
         <div class="row">
 
@@ -57,5 +64,6 @@
             
         </div>
     </div>
+@endif
 
 @endsection

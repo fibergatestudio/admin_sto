@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 use App\Employee;
 use App\Client;
@@ -47,6 +48,8 @@ class Assignments_Admin_Controller extends Controller
                         'employees.general_name AS employee_name',
                         'cars_in_service.general_name AS car_name',
                         'cars_in_service.vin_number AS vin_number',
+                        'cars_in_service.release_year AS release_year',
+                        'cars_in_service.reg_number AS reg_number',
                         'clients.phone AS clients_phone',
                         'clients.fio AS clients_fio'
                     )
@@ -99,9 +102,11 @@ class Assignments_Admin_Controller extends Controller
         /* end TEST confirmed */
         $new_assignment->save();
 
+        /* Проверка оповещенияй (включено ли) */
+        $user_id = Auth::user()->id;
+        $notification_check = DB::table('user_options')->where('id','=', $user_id)->first();
 
-
-        if($tg_assignment_norification == 1){
+        if($notification_check->tg_assignment_notification == 1){
 
             /* Оповещения для телеграма */
             $text = "У вас новый наряд!\n"
@@ -121,7 +126,7 @@ class Assignments_Admin_Controller extends Controller
             ]);
 
         } else {
-            
+
         }
         
 

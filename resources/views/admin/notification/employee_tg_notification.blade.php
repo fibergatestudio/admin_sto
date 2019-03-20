@@ -7,7 +7,13 @@
 
 @section('content')
 
-    <div>
+@if ($exist == '0')
+
+<p>Файлы настроек на созданы, нажмите "создать"</p>
+<a href="{{ url('/employee/notification/create_settings') }}"><button class="btn btn-success">Создать</button></a>
+
+@elseif ($exist == '1')
+<div>
         <div class="row">
 
             <form class="border border-light p-5" action="{{ url('/employee/notification/change_rules') }}" method="POST">
@@ -97,5 +103,7 @@
             
         </div>
     </div>
+@endif
+
 
 @endsection

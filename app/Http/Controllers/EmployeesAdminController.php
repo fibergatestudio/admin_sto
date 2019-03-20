@@ -209,7 +209,7 @@ class EmployeesAdminController extends Controller
         $balance_logs = Employee_balance_log::where(
             [
                 ['employee_id', $employee_id],
-                ['action', '=', 'deposit']
+                ['action', '=', 'Ручное начисление']
             ])->orderBy('created_at', 'desc')->get();
 
         /* Получаем Выплаты */
@@ -217,10 +217,40 @@ class EmployeesAdminController extends Controller
             [
 
                 ['employee_id', $employee_id],
-                ['action', '=', 'withdrawal'],
+                ['action', '=', 'Ручная выплата'],
                 ['reason', '=', 'Выплата']
 
             ])->orderBy('created_at', 'desc')->get();
+
+        /* Получаем заходы по нарядам (с номером наряда) */
+
+        // $order_number = DB::table('employee_balance_logs')
+        // ->join('assignments', 'employee_balance_logs.employee_id', '=', 'assignments.responsible_employee_id')
+        // //->join('assignments_income', 'assignments.responsible_employee_id', '=', 'assignments_income.assignment_id' )
+        // ->orderBy('order','ASC')
+        // ->select(
+        //         'employee_balance_logs.*',
+        //         'assignments.id AS assignments_id',
+        //         //'assignments_income.amount AS assignments_amount'
+        //     )
+        // ->get();
+
+        /* Избавляемся от дублей */
+        //$test = $order_number->unique('assignments_id');
+
+        $assign = DB::table('assignments')
+        ->where('responsible_employee_id', '=', $employee_id)
+        ->join('assignments_income', 'assignments.id', '=', 'assignments_income.assignment_id')
+        ->select(
+            'assignments.*',
+            'assignments_income.amount AS as_inc',
+            'assignments_income.currency AS as_cur'
+            )
+        ->get();
+
+        //$assign_inc = 
+
+        //dd($test);
 
         return view('employees_admin.employee_finances_admin',
         [
@@ -228,7 +258,8 @@ class EmployeesAdminController extends Controller
              'employee_fines' => $employee_fines,
              'token_logs' => $token_logs,
              'balance_logs' => $balance_logs,
-             'payout_logs' => $payout_logs
+             'payout_logs' => $payout_logs,
+             'test' => $assign
 
         ]);
     }
@@ -459,7 +490,7 @@ class EmployeesAdminController extends Controller
             [
 
                 ['employee_id', $employee_id],
-                ['action', '=', 'deposit']
+                ['action', '=', 'Ручное начисление']
             ])->orderBy('created_at', 'desc')->get();
 
         return view('employees_admin.employee_credit_page', ['employee' => $employee, 'balance' => $balance]);
@@ -521,24 +552,34 @@ class EmployeesAdminController extends Controller
             ->update(['balance' => $new_balance]);
 
 
-        /* Оповещения для телеграма */
-        $text = "У вас новое начисление!\n"
-        . "<b>Размер начисления: </b>\n"
-        . "$add_sum\n"
-        . "<b>Новый баланс: </b>\n"
-        . "$new_balance";
+        /* Проверка оповещенияй (включено ли) */
+        $user_id = Auth::user()->id;
+        $notification_check = DB::table('user_options')->where('id','=', $user_id)->first();
 
-       Telegram::sendMessage([
-           'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
-           'parse_mode' => 'HTML',
-           'text' => $text
-       ]);
+        if($notification_check->tg_income_notification == 1){
+
+            /* Оповещения для телеграма */
+            $text = "У вас новое начисление!\n"
+            . "<b>Размер начисления: </b>\n"
+            . "$add_sum\n"
+            . "<b>Новый баланс: </b>\n"
+            . "$new_balance";
+
+            Telegram::sendMessage([
+                'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+                'parse_mode' => 'HTML',
+                'text' => $text
+            ]);
+        
+        } else {
+
+        }
 
         // Добавить начисление в общие логи
         $employee_balance_log = new Employee_balance_log;
         $employee_balance_log->amount = $add_sum;
-        $employee_balance_log->action = 'deposit';
-        $employee_balance_log->reason = 'Начисление';
+        $employee_balance_log->action = 'Ручное начисление';
+        $employee_balance_log->reason = $request->reason;
         $employee_balance_log->date = date('Y-m-d');
         $employee_balance_log->employee_id = $employee_id;
         $employee_balance_log->old_balance = $balance;
@@ -562,7 +603,7 @@ class EmployeesAdminController extends Controller
             [
 
                 ['employee_id', $employee_id],
-                ['action', '=', 'withdrawal'],
+                ['action', '=', 'Ручная выплата'],
                 ['reason', '=', 'Выплата']
 
             ])->orderBy('created_at', 'desc')->get();
@@ -609,7 +650,7 @@ class EmployeesAdminController extends Controller
         // Добавить запись в общие логи
         $employee_balance_log = new Employee_balance_log;
         $employee_balance_log->amount = -$add_payout;
-        $employee_balance_log->action = 'withdrawal';
+        $employee_balance_log->action = 'Ручная Выплата';
         $employee_balance_log->reason = 'Выплата';
         $employee_balance_log->date = date('Y-m-d');
         $employee_balance_log->employee_id = $employee_id;
@@ -685,18 +726,28 @@ class EmployeesAdminController extends Controller
         //$employee_fine->old_balance = $employee_balance->balance;
         // $employee_fine->save();
 
-         /* Оповещения для телеграма */
-         $text = "У вас новый штраф!\n"
-         . "<b>Размер штрафа: </b>\n"
-         . "$fine->amount\n"
-         . "<b>Сумма с вычетом штрафа: </b>\n"
-         . "$new_balance";
+        /* Проверка оповещенияй (включено ли) */
+        $user_id = Auth::user()->id;
+        $notification_check = DB::table('user_options')->where('id','=', $user_id)->first();
 
-        Telegram::sendMessage([
-            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
-            'parse_mode' => 'HTML',
-            'text' => $text
-        ]);
+        if($notification_check->tg_fine_notification == 1){
+
+            /* Оповещения для телеграма */
+            $text = "У вас новый штраф!\n"
+            . "<b>Размер штрафа: </b>\n"
+            . "$fine->amount\n"
+            . "<b>Сумма с вычетом штрафа: </b>\n"
+            . "$new_balance";
+
+            Telegram::sendMessage([
+                'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+                'parse_mode' => 'HTML',
+                'text' => $text
+            ]);
+
+        } else {
+
+        }
 
 
         // Редирект на страницу штрафов сотрудника
@@ -884,9 +935,12 @@ class EmployeesAdminController extends Controller
 
         $user_options = DB::table('user_options')->where('user_id', '=', $user_id)->first();
 
+        $exist = DB::table('user_options')->where('user_id', '=', $user_id)->exists();
+
         return view('admin.notification.admin_tg_notification',
         [
-            'user_options' => $user_options
+            'user_options' => $user_options,
+            'exist' => $exist
         ]);
     }
 
@@ -940,17 +994,37 @@ class EmployeesAdminController extends Controller
         return back();
     }
 
+    public function admin_tg_create_settings(){
+
+        $id = Auth::user()->id;
+        $role = Auth::user()->role;
+
+        $settings = new User_settings();
+        $settings->user_id = $id;
+        $settings->role = $role;
+
+        //dd($exist);
+
+        return back();
+    }
+
     public function employee_tg_notification_index(){
 
         $employee_id = Auth::user()->id;
 
         $employee_options = DB::table('user_options')->where('user_id', '=', $employee_id)->first();
 
+        $exist = DB::table('user_options')->where('user_id', '=', $employee_id)->exists();
+
+        //dd($exist);
+
         return view('admin.notification.employee_tg_notification',
         [
-            'employee_options' => $employee_options
+            'employee_options' => $employee_options,
+            'exist' => $exist
         ]);
     }
+
 
     public function employee_tg_notification_update(Request $request){
 
@@ -1046,6 +1120,21 @@ class EmployeesAdminController extends Controller
 
         ]);
 
+
+        return back();
+    }
+
+    public function employee_tg_create_settings(){
+
+        $id = Auth::user()->id;
+        $role = Auth::user()->role;
+
+        $settings = new User_options();
+        $settings->user_id = $id;
+        $settings->user_role = $role;
+        $settings->save();
+
+        //dd($exist);
 
         return back();
     }

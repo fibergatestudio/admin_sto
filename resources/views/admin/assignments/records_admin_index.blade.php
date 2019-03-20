@@ -18,9 +18,10 @@
                 <th>Номер машины</th>
                 <th>Дата записи</th>
                 <th>Телефон</th>
-                <th>Время записи</th>
+                <th>Желаемое время</th>
+                <th>Подтвержденное время</th>
                 <th></th>{{-- Кнопки управления --}}
-                <th></th>{{-- Кнопки удаления --}}
+                <th></th>{{-- Кнопка удалить --}}
             </tr>
         </thead>
         <tbody>
@@ -55,37 +56,43 @@
             {{ $record->phone }}<br>
             </td>
             <td>
+            {{ $record->record_time }}<br>
+            </td>
+            <td>
                 @if($record->status == 'unconfirmed')
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-9">
                         <form action="{{ url('/complete_record/'.$record->id) }}" method="POST">
                         @csrf
-                            <select style="width:auto;" class="dropdown form-control" style='width:60px;' name="confirmed_time" onchange='return timeSchedvalue(this.value)'>
-                                @foreach($record->available_time as $time_option)
-                                    <option value="{{ $time_option }}">{{ $time_option }}</option>
-                                @endforeach
-                            <select></select>
-                            <input type="hidden" name="record_id" value="{{ $record->id }}">
-                            <input type="submit" value="Подтвердить" class="btn btn-primary"/>
+                            <div style="display: flex;">
+                                <select style="width:auto;" class="dropdown form-control" style='width:60px;' name="confirmed_time" onchange='return timeSchedvalue(this.value)'>
+                                    @foreach($record->available_time as $time_option)
+                                        <option value="{{ $time_option }}">{{ $time_option }}</option>
+                                    @endforeach
+                                </select>
+                                <input type="hidden" name="record_id" value="{{ $record->id }}">
+                                <input type="submit" value="Подтвердить" class="btn btn-primary"/>
+                            </div>
                         </form>
                     </div>
-                    <div class="col-md-6">
+                        @else
+                            {{ $record->confirmed_time }}
+                        @endif
+                </div>
+            </td>
+            <td>
+                <div class="col-md-3">
                         <form action="{{ url('/delete_record/'.$record->id) }}" method="POST">
                         @csrf
                             <input type="hidden" name="record_id" value="{{ $record->id }}">
                             <input type="submit" value="Удалить" class="btn btn-warning"/>
                         </form>
-                        @else
-                            {{ $record->confirmed_time }}
-                        @endif
-                    </div>
                 </div>
             </td>
         </tr>
         @endforeach
-        </tbody>
-    </table>
-</select> 
+    </tbody>
+</table>
 
 {{-- Форма добавления записи --}}
 <form action="{{ url('/add_record') }}" method="POST">
@@ -119,13 +126,14 @@
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label form-control-label">Марка Авто</label>
                                 <div class="col-lg-9">
-                                    <input class="form-control" name="car_brand" type="text">
+                                    <input id="carBrand"  class="form-control typeahead" name="car_brand" type="text">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label form-control-label">Модель Авто</label>
                                 <div class="col-lg-9">
-                                    <input class="form-control" name="car_model" type="text">
+                                    <select id="carModel" class="form-control" name="car_model" type="text">
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -136,10 +144,13 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label form-control-label">Дата записи</label>
-                                <div class="col-lg-9">
+                                <div class="col-lg-5">
                                     <input class="form-control" name="record_date" type="date"  value="2019-02-12" min="2019-01-01" max="2019-12-31">
                                 </div>
-                                
+                                <label class="col-lg-1 col-form-label form-control-label">Время</label>
+                                <div class="col-lg-3" style="display: flex;">
+                                    <input class="form-control" name="record_time" type="time" required>
+                                </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label form-control-label">Телефон</label>
@@ -158,4 +169,97 @@
     </div>
 </div>
 
+@endsection
+
+@section('custom_scripts')
+
+{{-- Модель + марка --}}
+
+{{-- Скрипт автоматического пересчёта пробега километры-мили --}}
+<script>
+
+{{-- Подтягиваем список моделей по бренду --}}
+
+    {{-- При изменении значения бренда --}}
+    $("#carBrand").change(function(){
+        {{-- Получаем название бренда и подтягиваем по API список моделей --}}
+        var brandName = $("#carBrand").val();
+        console.log(brandName);
+        var urlToFetch = "{{ url('admin/cars_in_service/api_models/') }}"+"/"+brandName;
+        console.log(urlToFetch)
+        $.get(urlToFetch, function(data){
+            {{-- При успехе --}}
+            console.log('success');
+            //console.log(data);
+            {{-- Очищаем select --}}
+            $("#carModel").empty();
+            {{-- Подставляем новые модели--}}
+            var modelsArray = JSON.parse(data);
+            console.log(modelsArray);
+            for(var modelIteration in modelsArray){
+                console.log(modelsArray[modelIteration]);
+                $("#carModel").append('<option value="'+modelsArray[modelIteration]+'">'+modelsArray[modelIteration]+'</option>');
+            }
+        }
+        
+        );{{-- /.get --}}
+    
+    }); {{-- /carBrand.change--}}
+
+{{-- Конец работы с моделями--}}
+
+{{-- Typeahead --}}
+
+console.log('ok');
+var substringMatcher = function(strs) {
+  return function findMatches(q, cb) {
+    var matches, substringRegex;
+
+    // an array that will be populated with substring matches
+    matches = [];
+
+    // regex used to determine if a string contains the substring `q`
+    substrRegex = new RegExp(q, 'i');
+
+    // iterate through the pool of strings and for any string that
+    // contains the substring `q`, add it to the `matches` array
+    $.each(strs, function(i, str) {
+      if (substrRegex.test(str)) {
+        matches.push(str);
+      }
+    });
+
+    cb(matches);
+  };
+};
+
+$.get( "{{ url ('admin/cars_in_service/api_brands') }} ", function(data) {
+  
+  var states = JSON.parse(data);
+  console.log(states);
+
+  $('.typeahead').typeahead({
+  hint: true,
+  highlight: true,
+  minLength: 1
+},
+{
+  name: 'states',
+  source: substringMatcher(states)
+});
+
+})
+  .done(function() {
+    //alert( "second success" );
+  })
+  .fail(function() {
+    alert( "error" );
+  })
+  .always(function() {
+    //alert( "finished" );
+  });
+
+
+
+</script>
 @endsection
