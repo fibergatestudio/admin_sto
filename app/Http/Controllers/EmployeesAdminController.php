@@ -128,7 +128,7 @@ class EmployeesAdminController extends Controller
     public function apply_employee_edit(Request $request){
 
         $employee_id = $request->id;
-
+        
         
         $fio = $request->fio;
         $birthday = $request->birthday;
@@ -141,6 +141,7 @@ class EmployeesAdminController extends Controller
         $fixed_charge = $request->fixed_charge;
         $pay_per_shift = $request->pay_per_shift;
         $telegram_id = $request->telegram_id;
+        $birthday_m_d = substr($birthday, 5);
 
         $employee = Employee::find($employee_id);
         
@@ -155,6 +156,7 @@ class EmployeesAdminController extends Controller
         $employee->fixed_charge = $fixed_charge;
         $employee->pay_per_shift = $pay_per_shift;
         $employee->telegram_id = $telegram_id;
+        $employee->birthday_m_d = $birthday_m_d;
         $employee->save();
 
         if(!empty($request->document)){

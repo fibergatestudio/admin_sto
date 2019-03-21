@@ -28,8 +28,17 @@ class Employee extends Model
     //    return $this->hasOne('Employee_balance'); // связь с моделью Employee_balance (начисление баланса сотруднику)
     //}
 
-    public static function getBirthday(){
-        $employees = Employee::all();
+    // Работники у которых сегодня ДР
+    public static function getBirthdayToday(){
+        $date = date("m-d");
+        $employees = Employee::where('birthday_m_d', $date)->get();
+        return $employees;
+    }
+    
+    // Работники у которых завтра ДР
+    public static function getBirthdayTomorrow(){
+        $date = date("m-d", mktime(0, 0, 0, date("m"), date("d")+1,   date("Y")));
+        $employees = Employee::where('birthday_m_d', $date)->get();
         return $employees;
     }
 }

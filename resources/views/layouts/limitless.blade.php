@@ -117,54 +117,15 @@
 			<!-- Вывод genral_name работников у кого сегодня и завтра день рождения, видят все кроме работников у которых сегодня и завтра ДР-->
 			<ul>
 				<li>
-					<span>Имениниики сегодня: </span>
-					@foreach(App\Employee::getBirthday() as $employee)						
-						@if(date("m-d") == date("m-d", strtotime(date("$employee->birthday"))))
-							@if(App\Employee::get_employee_by_user_id(Auth::user()->id) != $employee )
-								{{$employee->general_name}},								
-							@endif
-
-							{{-- Отрпавка в телеграм --}}
-							
-								@php
-									$text = "Имениниики сегодня:\n"
-						        	. $employee->general_name;				        
-
-							        Telegram\Bot\Laravel\Facades\Telegram::sendMessage([
-							            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
-							            'parse_mode' => 'HTML',
-							            'text' => $text
-							        ]);	
-							        
-							   	@endphp
-						    													
-						@endif					
+					<span>Именинники сегодня: </span>
+					@foreach(App\Employee::getBirthdayToday() as $employee)						
+                                            {{$employee->fio}},										
 					@endforeach
-
-				</li>
-				
+				</li>				
 				<li>
 					<span>Именинники завтра: </span>	
-					@foreach(App\Employee::getBirthday() as $employee)	
-						@if(date("m-d", mktime(0, 0, 0, date("m"), date("d")+1,   date("Y"))) == date("m-d", strtotime(date("$employee->birthday"))))
-							@if(App\Employee::get_employee_by_user_id(Auth::user()->id) != $employee )
-								{{$employee->general_name}},
-							@endif
-							{{-- Отрпавка в телеграм --}}
-							
-								@php
-									$text = "Имениниики завтра:\n"
-						        	. $employee->general_name;				        
-
-							        Telegram\Bot\Laravel\Facades\Telegram::sendMessage([
-							            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
-							            'parse_mode' => 'HTML',
-							            'text' => $text
-							        ]);	
-							       
-							   	@endphp
-						    
-						@endif					
+					@foreach(App\Employee::getBirthdayTomorrow() as $employee)	
+						{{$employee->fio}},
 					@endforeach
 				</li>
 			</ul>	
