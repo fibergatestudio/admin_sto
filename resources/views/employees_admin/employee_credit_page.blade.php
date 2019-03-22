@@ -17,12 +17,18 @@
     <form action="{{ url('/supervisor/employee_finances/credit/'.$employee->id.'/add_balance') }}" method="POST">
         @csrf
         <input type="hidden" name="employee_id" value="{{ $employee->id }}">
+        @if($errors->any())
+            <div class="alert alert-danger">
+                <a href="#" class="close" data-dismiss="alert">&times;</a>
+                <strong>Ошибка! </strong>{{$errors->first()}}
+            </div>
+        @endif
             <div class="row">
                 <div class="col-lg-1">
                     <label>Сумма</label>
                 </div>
                 <div class="col-lg-2">
-                    <input type="number" name="balance" min="1">
+                    <input class="form-control" type="number" name="balance" min="1" required>
                 </div>
             </div>
             <div class="row">
@@ -30,7 +36,15 @@
                     <label>Причина</label>
                 </div>
                 <div class="col-lg-2">
-                    <input type="text" name="reason">
+                    <input class="form-control" type="text" name="reason">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-1">
+                    <label>Пароль</label>
+                </div>
+                <div class="col-lg-2">
+                    <input class="form-control" type="password" name="password" required>
                 </div>
             </div>
 

@@ -22,6 +22,8 @@ use App\Employees_logs;
 use App\Employee_balance;
 use App\Employees_notes_logs;
 use App\Deleted_notes;
+use \Crypt;
+use Redirect;
 
 class EmployeesAdminController extends Controller
 {
@@ -492,6 +494,9 @@ class EmployeesAdminController extends Controller
     public function employee_credit_page($employee_id){
         $employee = Employee::find($employee_id);
 
+        // $user_password = Auth::user()->password;
+        // $password = Crypt::decrypt($user_password);
+
         //данные о последних 10 операциях
         $balance = Employee_balance_log::where(
             [
@@ -500,7 +505,7 @@ class EmployeesAdminController extends Controller
                 ['action', '=', 'Ручное начисление']
             ])->orderBy('created_at', 'desc')->get();
 
-        return view('employees_admin.employee_credit_page', ['employee' => $employee, 'balance' => $balance]);
+        return view('employees_admin.employee_credit_page', ['employee' => $employee, 'balance' => $balance ]);
     }
 
     public function add_employee_payment_manualy(Request $request){
@@ -545,58 +550,70 @@ class EmployeesAdminController extends Controller
     /* Функция начисления сотруднику */
     public function add_balance(request $request){
 
-        $employee_id = $request->employee_id;
-        $employee = Employee::find($employee_id);
-        /* Получаем employee id */
+        $hashedPassword = Auth::user()->password;
+        $enteredPassord = $request->password;
 
-        $add_sum = $request->balance;
-        $balance = $employee->balance;
+        if (Hash::check($enteredPassord, $hashedPassword)) {
 
-        $new_balance = $balance + $add_sum;
+            $employee_id = $request->employee_id;
+            $employee = Employee::find($employee_id);
+            /* Получаем employee id */
 
-        DB::table('employees')
-            ->where('id', '=', $employee_id)
-            ->update(['balance' => $new_balance]);
+            $add_sum = $request->balance;
+            $balance = $employee->balance;
+
+            $new_balance = $balance + $add_sum;
+
+            DB::table('employees')
+                ->where('id', '=', $employee_id)
+                ->update(['balance' => $new_balance]);
 
 
-        /* Проверка оповещенияй (включено ли) */
-        $user_id = Auth::user()->id;
-        $notification_check = DB::table('user_options')->where('id','=', $user_id)->first();
+            /* Проверка оповещенияй (включено ли) */
+            $user_id = Auth::user()->id;
+            $notification_check = DB::table('user_options')->where('id','=', $user_id)->first();
 
-        if($notification_check->tg_income_notification == 1){
+            if($notification_check->tg_income_notification == 1){
 
-            /* Оповещения для телеграма */
-            $text = "У вас новое начисление!\n"
-            . "<b>Размер начисления: </b>\n"
-            . "$add_sum\n"
-            . "<b>Новый баланс: </b>\n"
-            . "$new_balance";
+                /* Оповещения для телеграма */
+                $text = "У вас новое начисление!\n"
+                . "<b>Размер начисления: </b>\n"
+                . "$add_sum\n"
+                . "<b>Новый баланс: </b>\n"
+                . "$new_balance";
 
-            Telegram::sendMessage([
-                'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
-                'parse_mode' => 'HTML',
-                'text' => $text
-            ]);
-        
+                Telegram::sendMessage([
+                    'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+                    'parse_mode' => 'HTML',
+                    'text' => $text
+                ]);
+            
+            } else {
+
+            }
+
+            // Добавить начисление в общие логи
+            $employee_balance_log = new Employee_balance_log;
+            $employee_balance_log->amount = $add_sum;
+            $employee_balance_log->action = 'Ручное начисление';
+            $employee_balance_log->reason = $request->reason;
+            $employee_balance_log->date = date('Y-m-d');
+            $employee_balance_log->type = 'Начисление'; // Тип записи
+            $employee_balance_log->status = 'Принят(тест)'; // Статус
+            $employee_balance_log->employee_id = $employee_id;
+            $employee_balance_log->old_balance = $balance;
+            $employee_balance_log->save();
+
+            /* Возвращаемся на страницу */
+            return back();
+            //return Redirect::back()->withErrors(['Операция Успешна!', 'The Message']);
+
         } else {
+
+            return Redirect::back()->withErrors(['Неверный Пароль!', 'The Message']);
 
         }
 
-        // Добавить начисление в общие логи
-        $employee_balance_log = new Employee_balance_log;
-        $employee_balance_log->amount = $add_sum;
-        $employee_balance_log->action = 'Ручное начисление';
-        $employee_balance_log->reason = $request->reason;
-        $employee_balance_log->date = date('Y-m-d');
-        $employee_balance_log->type = 'Начисление'; // Тип записи
-        $employee_balance_log->status = 'Принят(тест)'; // Статус
-        $employee_balance_log->employee_id = $employee_id;
-        $employee_balance_log->old_balance = $balance;
-        $employee_balance_log->save();
-
-        /* Возвращаемся на страницу */
-
-        return back();
     }
 
     /*
