@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use App\Employee;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
-class HourlySendBirthdays extends Command
+class DailySendBirthdays extends Command
 {
     /**
      * The name and signature of the console command.
