@@ -41,7 +41,8 @@ class Assignments_Admin_Controller extends Controller
             DB::table('assignments')
                 ->join('employees', 'assignments.responsible_employee_id', '=', 'employees.id')
                 ->join('cars_in_service', 'assignments.car_id', '=', 'cars_in_service.id')
-                ->join('clients', 'assignments.car_id', '=', 'clients.id')
+                //->join('clients', 'assignments.car_id', '=', 'clients.id')
+                ->join('workzones', 'cars_in_service.workzone', '=', 'workzones.id') // Джоин рабочей зоны
                 ->orderBy('order','ASC')
                 ->select(
                         'assignments.*',
@@ -50,8 +51,12 @@ class Assignments_Admin_Controller extends Controller
                         'cars_in_service.vin_number AS vin_number',
                         'cars_in_service.release_year AS release_year',
                         'cars_in_service.reg_number AS reg_number',
-                        'clients.phone AS clients_phone',
-                        'clients.fio AS clients_fio'
+                        'cars_in_service.car_color AS car_color',
+                        'cars_in_service.workzone AS workzone',
+                        'workzones.general_name as workzone_name', //Имя рабочей зоны
+                        'workzones.workzone_color as workzone_color' //Цвет рабчоей зоны
+                        //'clients.phone AS clients_phone',
+                        //'clients.fio AS clients_fio'
                     )
                 ->get();
 

@@ -4,7 +4,7 @@
 Страница начислений по сотруднику: {{ $employee->name }}
 
 {{-- Вернуться : Кнопка --}}
-    <a href="{{ URL::previous() }}">
+    <a href="{{ url('/supervisor/employee_finances/'.$employee->id) }}">
         <div class="btn btn-danger">
             Вернуться
         </div>

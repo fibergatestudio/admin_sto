@@ -17,6 +17,7 @@ use App\Assignment;
 use App\Car_model_list;
 use App\Cars_logs;
 use App\Cars_notes_logs;
+use App\Workzone;
 
 //TEST NOTE DELETE
 use App\Deleted_notes;
@@ -42,12 +43,16 @@ class Cars_in_service_Admin_Controller extends Controller
         /* Если клиент указан*/
         if(!empty($client_id)){
             $client = Client::find($client_id);
-            return view('admin.cars_in_service.add_car_in_service', ['client' => $client]);
+            $workzones = DB::table('workzones')->get();
+
+            return view('admin.cars_in_service.add_car_in_service', ['client' => $client, 'workzones' => $workzones]);//->with('workzones', $workzones);
         } else {
         /* Если клиент не указан */
             //$clients = Client::all();
+            //$workzones = Workzone::pluck('general_name','id','workzone_color','works_direction')->toArray();
+            $workzones = DB::table('workzones')->get();
             $clients = Client::orderByDesc('created_at')->get();
-            return view('admin.cars_in_service.add_car_in_service', ['client' => '', 'clients' => $clients]);
+            return view('admin.cars_in_service.add_car_in_service', ['client' => '', 'clients' => $clients, 'workzones' => $workzones]);//->with('workzones', $workzones);
         }
     }
 
@@ -93,6 +98,8 @@ class Cars_in_service_Admin_Controller extends Controller
         $new_car_in_service->fuel_type = $request->fuel_type;
         $new_car_in_service->vin_number = $request->vin_number;
         $new_car_in_service->engine_capacity = $request->engine_capacity;
+        $new_car_in_service->car_color = $request->car_color; //Добавление цвета авто
+        $new_car_in_service->workzone = $request->workzone; //Добавление рабочей зоны (тест)
         $new_car_in_service->save();
 
         /* - Добавдение создания машины в логи - */

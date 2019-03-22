@@ -113,10 +113,15 @@
                 <td>{{ $assignment->vin_number }}</td>
 
                 {{-- Цвет --}}
-                <td>Color</td>
+                <td>@if (!empty($assignment->car_color ))
+                <i style="width:35px; height:35px; display:flex;background-color:{{ $assignment->car_color }};"></i>
+                @else
+                null
+                @endif
+                </td>
 
                 {{-- Рабочии зоны --}}
-                <td>Workzone</td>
+                <td style="background-color: {{ $assignment->workzone_color }}; color: white;">{{ $assignment->workzone_name }}</td>
 
                 {{-- Кнопка подробнее --}}
                 <td>

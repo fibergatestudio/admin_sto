@@ -79,6 +79,7 @@ class Workzones_Admin_Controller extends Controller
         $edit_workzones->general_name = $request->general_name;
         $edit_workzones->description = $request->description;
         $edit_workzones->workzone_color = $request->workzone_color;
+        $edit_workzones->works_direction = $request->works_direction;
         $edit_workzones->save();
 
 

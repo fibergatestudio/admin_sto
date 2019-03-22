@@ -27,6 +27,24 @@ class CreateUserOptionsTable extends Migration
             $table->string('tg_client_master_notification')->default('1')->nullable();
             $table->timestamps();
         });
+
+        $admin_values = [
+            [
+                'id' => 1,
+                'user_id' => 1,
+                'user_role' => 'admin'
+            ]
+        ];
+        $employee_values = [
+            [
+                'id' => 2,
+                'user_id' => 2,
+                'user_role' => 'employee'
+            ]
+        ];
+
+        DB::table('user_options')->insert($admin_values);
+        DB::table('user_options')->insert($employee_values);
     }
 
     /**

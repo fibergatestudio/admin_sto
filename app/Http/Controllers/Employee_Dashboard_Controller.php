@@ -50,42 +50,144 @@ class Employee_Dashboard_Controller extends Controller
     }
     /***** ИСТОРИЯ ФИНАНСОВ *****/ 
 
-       public function finance_history(){
+       public function finance_history(Request $request){
 
         $user = Auth::user();
         $employee_user_id = $user->id;
         $employee = DB::table('employees')->where('user_id', $employee_user_id)->first();
         $employee_id = $employee->id;
 
-        /* Получаем Штрафы */
-        $employee_fines = DB::table('employee_fines')->where('employee_id', '=', $employee_id)->get();
+        $filter_income = $request->filter_income;
+        $filter_payout = $request->filter_payout;
+        $filter_fine = $request->filter_fine;
+        $filter_coffee = $request->filter_coffee;
 
-        /* Получаем Жетоны */
-        $token_logs = Coffee_token_log::where('employee_id', $employee_id)->get();
+        /* Общая таблица */
+        $all_logs = DB::table('employee_balance_logs')->where('employee_id', '=', $employee_id)->get();
 
-        /* Получаем Начислеения */
-        $balance_logs = Employee_balance_log::where(
-            [
-                ['employee_id', $employee_id],
-                ['action', '=', 'deposit']
-            ])->orderBy('created_at', 'desc')->get();
+        if(empty($filter_income)){
 
-        /* Получаем Выплаты */
-        $payout_logs = Employee_balance_log::where( 
-            [
+            $view_income = 'null';
 
-                ['employee_id', $employee_id],
-                ['action', '=', 'withdrawal'],
-                ['reason', '=', 'Выплата']
+        } else {
 
-            ])->orderBy('created_at', 'desc')->get();
+            $view_income = DB::table('employee_balance_logs')
+            ->where('employee_id', '=', $employee_id)
+            ->where('type', '=', 'Начисление')
+            ->get();
+
+        }
+        //dd($view_income);
+
+        if(empty($filter_payout)){
+
+            $view_payout = 'null';
+
+        } else {
+
+            $view_payout = DB::table('employee_balance_logs')
+            ->where('employee_id', '=', $employee_id)
+            ->where('type', '=', 'Выплата')
+            ->get();
+
+        }
+
+        if(empty($filter_fine)){
+
+            $view_fine = 'null';
+
+        } else {
+
+            
+            $view_fine = DB::table('employee_balance_logs')
+            ->where('employee_id', '=', $employee_id)
+            ->where('type', '=', 'Штраф')
+            ->get();
+
+        }
+        if(empty($filter_coffee)){
+
+            $view_coffee = 'null';
+
+        } else {
+
+            $view_coffee = DB::table('employee_balance_logs')
+            ->where('employee_id', '=', $employee_id)
+            ->where('type', '=', 'Кофе')
+            ->get();
+        }
 
         return view('employee.finance_history',
         [
-            'employee_fines' => $employee_fines,
-            'token_logs' => $token_logs,
-            'balance_logs' => $balance_logs,
-            'payout_logs' => $payout_logs
+            'view_fine' => $view_fine,
+            'view_coffee' => $view_coffee,
+            'view_payout' =>  $view_payout,
+            'view_income' =>  $view_income,
+            'all_logs' => $all_logs
+        ]);
+    }
+
+    public function finance_history_filter(Request $request){
+
+        // $filter_income = $request->filter_income;
+        // $filter_payout = $request->filter_payout;
+        // $filter_fine = $request->filter_fine;
+        // $filter_coffee = $request->filter_coffee;
+
+        // $employee_id = Auth::user()->id;
+
+
+        // if(empty($filter_income)){
+
+        //     $view_income = DB::table('employee_balance_logs')
+        //     ->where('employee_id', '=', $employee_id)
+        //     ->where('type', '=', 'Начисление')
+        //     ->get();
+
+        // } else {
+
+        // }
+
+        // if(empty($filter_payout)){
+
+        //     $view_payout = DB::table('employee_balance_logs')
+        //     ->where('employee_id', '=', $employee_id)
+        //     ->where('type', '=', 'Выплата')
+        //     ->get();
+
+        // } else {
+
+        // }
+
+        // if(empty($filter_fine)){
+
+        //     $view_fine = DB::table('employee_balance_logs')
+        //     ->where('employee_id', '=', $employee_id)
+        //     ->where('type', '=', 'Штраф')
+        //     ->get();
+
+        // } else {
+
+        // }
+        // if(empty($filter_coffee)){
+
+        //     $view_coffee = DB::table('employee_balance_logs')
+        //     ->where('employee_id', '=', $employee_id)
+        //     ->where('type', '=', 'Кофе')
+        //     ->get();
+
+        // } else {
+
+        // }
+        //return back();
+
+        return view('employee.finance_history',
+        [
+            // 'view_fine' => $view_fine,
+            // 'view_coffee' => $view_coffee,
+            // 'view_payout' =>  $view_payout,
+            // 'view_income' =>  $view_income,
+            // 'all_logs' => $all_logs
         ]);
     }
 

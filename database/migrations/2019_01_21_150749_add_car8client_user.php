@@ -36,7 +36,7 @@ class AddCar8clientUser extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cars_in_service');
+        //Schema::dropIfExists('cars_in_service');
     }
 
 

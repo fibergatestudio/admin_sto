@@ -76,6 +76,13 @@ class EmployeesAdminController extends Controller
         // $new_employee_balance->employee_id = $new_employee_id;
         // $new_employee_balance->save();
 
+        /* Создать файл настроек оповещений cотрудника */
+
+        $employee_settings = new User_options();
+        $employee_settings->user_id = $new_user_id;
+        $employee_settings->user_role = 'employee';
+        $employee_settings->save();
+
         /* - Добавление в логи создание сотрудника  - */
         $create_employee_log_entry = new Employees_logs();
         $create_employee_log_entry->employee_id = $new_employee->id; //id сотрудника
@@ -514,7 +521,7 @@ class EmployeesAdminController extends Controller
         // Добавить запись в общие логи
         $employee_balance = new Employee_balance_log;
         $employee_balance->amount = $amount;
-        $employee_balance->action = 'dposit';
+        $employee_balance->action = 'deposit';
         $employee_balance->source = 'auto';
         $employee_balance->date = date('Y-m-d');
         $employee_balance->employee_id = $employee_id;
@@ -581,6 +588,8 @@ class EmployeesAdminController extends Controller
         $employee_balance_log->action = 'Ручное начисление';
         $employee_balance_log->reason = $request->reason;
         $employee_balance_log->date = date('Y-m-d');
+        $employee_balance_log->type = 'Начисление'; // Тип записи
+        $employee_balance_log->status = 'Принят(тест)'; // Статус
         $employee_balance_log->employee_id = $employee_id;
         $employee_balance_log->old_balance = $balance;
         $employee_balance_log->save();
@@ -650,9 +659,11 @@ class EmployeesAdminController extends Controller
         // Добавить запись в общие логи
         $employee_balance_log = new Employee_balance_log;
         $employee_balance_log->amount = -$add_payout;
-        $employee_balance_log->action = 'Ручная Выплата';
+        $employee_balance_log->action = 'Ручная выплата';
         $employee_balance_log->reason = 'Выплата';
         $employee_balance_log->date = date('Y-m-d');
+        $employee_balance_log->type = 'Выплата'; // Тип записи
+        $employee_balance_log->status = 'Принят(тест)'; // Статус
         $employee_balance_log->employee_id = $employee_id;
         $employee_balance_log->old_balance = $balance;
         $employee_balance_log->save();
@@ -716,6 +727,19 @@ class EmployeesAdminController extends Controller
         DB::table('employees')
             ->where('id', '=', $fine->employee_id)
             ->update(['balance' => $new_balance]);
+
+
+         // Добавить запись в общие логи
+         $employee_balance_log = new Employee_balance_log;
+         $employee_balance_log->amount = -$fine->amount;
+         $employee_balance_log->action = 'Применение штрафа';
+         $employee_balance_log->reason = 'Штраф';
+         $employee_balance_log->date = date('Y-m-d');
+         $employee_balance_log->type = 'Штраф'; // Тип записи
+         $employee_balance_log->status = 'Принят(тест)'; // Статус
+         $employee_balance_log->employee_id = $fine->employee_id;
+         $employee_balance_log->old_balance = $employee_balance->balance;
+         $employee_balance_log->save();
 
 
         // $employee_fine = DB::table('employee_fines')
@@ -861,8 +885,10 @@ class EmployeesAdminController extends Controller
         $employee_balance_log = new Employee_balance_log;
         $employee_balance_log->amount = $token_total;
         $employee_balance_log->reason = 'Списание за выдачу жетонов кофе';
-        $employee_balance_log->action = 'withdrawal';
+        $employee_balance_log->action = 'Списание за жетоны';
         $employee_balance_log->source = 'auto';
+        $employee_balance_log->type = 'Кофе'; // Тип записи
+        $employee_balance_log->status = 'Принят(тест)'; // Статус
         $employee_balance_log->date = date('Y-m-d');
         $employee_balance_log->employee_id = $employee_id;
         $employee_balance_log->save();
@@ -999,9 +1025,10 @@ class EmployeesAdminController extends Controller
         $id = Auth::user()->id;
         $role = Auth::user()->role;
 
-        $settings = new User_settings();
+        $settings = new User_options();
         $settings->user_id = $id;
-        $settings->role = $role;
+        $settings->user_role = $role;
+        $settings->save();
 
         //dd($exist);
 

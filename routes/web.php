@@ -519,8 +519,11 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
     Route::get('/employee/employee_profile', 'Employee_Dashboard_Controller@employee_profile');
 
 /**** История Финансов ****/
-    /* Мой профиль */
+    /* Страница финансов */
     Route::get('/employee/finance_history', 'Employee_Dashboard_Controller@finance_history');
+
+    /* Применить фильтр */
+    Route::post('/employee/finance_history/filter', 'Employee_Dashboard_Controller@finance_history');
 
 /**** Наряды : работник ****/
     /* Мои наряды */

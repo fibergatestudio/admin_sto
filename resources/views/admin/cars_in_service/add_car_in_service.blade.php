@@ -81,30 +81,46 @@
 
                 <div class="form-row">  
                     {{-- Регистрационный номер --}}
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label>Регистрационный номер</label>
-                        <input type="text" name="reg_number" id="regnumber" class="form-control typeahead" required>
+                        <input type="text" name="reg_number" id="regnumber" class="form-control" required>
                     </div>
 
                     {{-- Тип топлива --}}
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label>Тип топлива</label>
-                        <input type="text" name="fuel_type" id="fueltype" class="form-control typeahead" required>
+                        <input type="text" name="fuel_type" id="fueltype" class="form-control" required>
+                    </div>
+
+                    {{-- Цвет --}}
+                    <div class="form-group col-md-4">
+                        <label>Цвет</label>
+                        <div id="cp2" class="input-group colorpicker-component"> 
+                            <span class="input-group-addon"><i style="width:35px; height:35px; display:flex;"></i></span> 
+                            <input type="text" name="car_color" value="Цвет не задан" class="form-control" placeholder="Цвет не задан" required/> 
+                        </div>
                     </div>
                 </div>
 
                 <div class="form-row">  
                     {{-- VIN --}}
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label>VIN</label>
-                        <input type="text" name="vin_number" id="vinnumber" class="form-control typeahead" required>
+                        <input type="text" name="vin_number" id="vinnumber" class="form-control" required>
                     </div>
 
                     {{-- Обьем мотора --}}
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label>Объем мотора</label>
-                        <input type="text" name="engine_capacity" id="enginecapacity" class="form-control typeahead" required>
+                        <input type="text" name="engine_capacity" id="enginecapacity" class="form-control" required>
                     </div>
+
+                    {{-- Рабочая зона (тест) --}}
+                    <div class="form-group col-md-4">
+                        <label>Рабочая зона</label>
+                        <input type="text" name="workzone" id="enginecapacity" class="form-control" required>
+                    </div>
+
                 </div>
             
             <button type="submit" class="btn btn-primary">
@@ -222,29 +238,48 @@
 
                 <div class="form-row">  
                     {{-- Регистрационный номер --}}
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label>Регистрационный номер</label>
-                        <input type="text" name="reg_number" id="regnumber" class="form-control typeahead" required>
+                        <input type="text" name="reg_number" id="regnumber" class="form-control" required>
                     </div>
 
                     {{-- Тип топлива --}}
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label>Тип топлива</label>
-                        <input type="text" name="fuel_type" id="fueltype" class="form-control typeahead" required>
+                        <input type="text" name="fuel_type" id="fueltype" class="form-control" required>
+                    </div>
+
+                    {{-- Цвет --}}
+                    <div class="form-group col-md-4">
+                        <label>Цвет</label>
+                        <div id="cp2" class="input-group colorpicker-component"> 
+                            <span class="input-group-addon"><i style="width:35px; height:35px; display:flex;"></i></span> 
+                            <input type="text" name="car_color" value="Цвет не задан" class="form-control" placeholder="Цвет не задан" required/> 
+                        </div>
                     </div>
                 </div>
 
                 <div class="form-row">  
                     {{-- VIN --}}
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label>VIN</label>
-                        <input type="text" name="vin_number" id="vinnumber" class="form-control typeahead" required>
+                        <input type="text" name="vin_number" id="vinnumber" class="form-control" required>
                     </div>
 
                     {{-- Обьем мотора --}}
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label>Объем мотора</label>
-                        <input type="text" name="engine_capacity" id="enginecapacity" class="form-control typeahead" required>
+                        <input type="text" name="engine_capacity" id="enginecapacity" class="form-control" required>
+                    </div>
+
+                    {{-- Рабочая зона (тест) --}}
+                    <div class="form-group col-md-4">
+                        <label>Рабочая зона</label>
+                        <select name="workzone" id="categories" class="form-control">
+                            @foreach ($workzones as $wz )
+                            <option value="{{ $wz->id}}">{{ $wz->general_name }}</option>               
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 

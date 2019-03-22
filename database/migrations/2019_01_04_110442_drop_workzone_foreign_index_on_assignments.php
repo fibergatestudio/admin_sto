@@ -27,9 +27,18 @@ class DropWorkzoneForeignIndexOnAssignments extends Migration
     public function down()
     {
         /* Проблема, нужна проверка */
-        Schema::table('assignments', function (Blueprint $table) {
-            $table->unsignedInteger('workzone_id');
-            $table->foreign('workzone_id')->references('id')->on('workzones');
-        });
+        // Schema::table('assignments', function (Blueprint $table) {
+        //     // $table->unsignedInteger('workzone_id');
+        //     // $table->foreign('workzone_id')->references('id')->on('workzones');
+        //     $table->dropColumn('workzone_id');
+        // });
+
+        if (Schema::hasColumn('assignments', 'workzone_id'))
+        {
+            Schema::table('assignments', function (Blueprint $table)
+            {
+                $table->dropColumn('workzone_id');
+            });
+        }
     }
 }

@@ -285,5 +285,11 @@
 
 
 </body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/js/bootstrap-colorpicker.min.js"></script>
+<script>
+	$('#cp2').colorpicker();
+</script>
+
 @yield('custom_scripts')
 </html>

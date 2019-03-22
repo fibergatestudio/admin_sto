@@ -26,9 +26,17 @@ class AddUrgencyToSupplyOrdersTable extends Migration
      */
     public function down()
     {
-        /* Проблема, нужна проверка */
-        Schema::table('supply_orders', function (Blueprint $table) {
-            $table->dropColumn('urgency');
-        });
+        // /* Проблема, нужна проверка */
+        // Schema::table('supply_orders', function (Blueprint $table) {
+        //     $table->dropColumn('urgency');
+        // });
+
+        if (Schema::hasColumn('supply_orders', 'urgency'))
+        {
+            Schema::table('supply_orders', function (Blueprint $table)
+            {
+                $table->dropColumn('urgency');
+            });
+        }
     }
 }
