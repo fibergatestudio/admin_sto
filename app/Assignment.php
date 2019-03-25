@@ -32,5 +32,17 @@ class Assignment extends Model
         $car = Cars_in_service::find($this->car_id);
         return $car->general_name;
     }
+
+    /* Получить год машины */
+    public function get_car_year(){
+        $car = Cars_in_service::find($this->car_id);
+        return $car->release_year;
+    }
+
+    /* Получить гос. номер машины */
+    public function get_car_reg_number(){
+        $car = Cars_in_service::find($this->car_id);
+        return $car->reg_number;
+    }
     
 }

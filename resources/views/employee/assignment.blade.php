@@ -247,6 +247,7 @@
             <th>Название</th>
             <th>Основание</th>
             <th>Дата</th>
+            <th>Статус</th>
             <th></th>{{-- Кнопки управления --}}
         </tr>
     </thead>
@@ -261,6 +262,22 @@
         </td>
         <td>
         {{ date('d m Y', $work_entry->created_at->timestamp) }}<br>
+        </td>
+        @if ($work_entry->status == 'unconfirmed')
+
+        <td style="width: 100px;" class="bg-warning">
+        Неподтвержден<br>
+        </td>
+
+        @else
+
+        <td style="width: 100px;" class="bg-success">
+        Подтвержден<br>
+        </td>
+
+        @endif
+        <td>
+
         </td>
     </tr>
     @endforeach

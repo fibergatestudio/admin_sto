@@ -38,7 +38,7 @@
             <td>
                 <a href="{{ url('admin/workzones/edit/'.$workzone->id) }}">
                     <div class="btn btn-light" style="margin-left: 10px">
-                        Изменить название
+                        Изменить информацию
                     </div>
                 </a>
             </td>

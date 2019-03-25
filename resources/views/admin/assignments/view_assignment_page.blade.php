@@ -106,8 +106,36 @@
 
 @section('content')
     {{-- Статическая информация по наряду --}}
-    Клиент: {{ $assignment->client_name }} <br>
-    Авто: {{ $assignment->car_name }}<br>
+    <div class="row">
+      <div class="list-group col-md-6">
+        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">Клиент:</h5>
+          </div>
+          <h4 class="mb-1 text-success">{{ $assignment->client_name }}</h4>
+        </a>
+        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">Машина:</h5>
+          </div>
+          <h4 class="mb-1 text-success">{{ $assignment->car_name }}</h4>
+        </a>
+      </div>
+      <div class="list-group col-md-6">
+        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">Год машины:</h5>
+          </div>
+          <h4 class="mb-1 text-success">{{ $assignment->car_year }}</h4>
+        </a>
+        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">Гос. номер:</h5>
+          </div>
+          <h4 class="mb-1 text-success">{{ $assignment->car_reg_number }}</h4>
+        </a>
+      </div>
+    </div>
     <hr>
 
     {{-- Зональные наряды --}}
@@ -136,12 +164,12 @@
                 </div>
             </td>
             <td>{{ $sub_assignment->id }}</td>
-            <td>{{ $sub_assignment->name }} {{-- Название наряда --}}</td>
-            <td>{{ $sub_assignment->workzone_name }} {{-- Название рабочей зоны --}}</td>
-            <td>{{ $sub_assignment->responsible_employee }} {{-- Название ответственного сотрудника --}}</td>
-            <td>{{ $sub_assignment->date_of_creation }} {{-- Дата создания --}}</td>
-            <td>{{ $sub_assignment->start_time }} {{-- Время начала работ --}}</td>
-            <td>{{ $sub_assignment->end_time }} {{-- Время окончания работ --}}</td>
+            <td>{{ $sub_assignment->name }} </td>{{-- Название наряда --}}
+            <td>{{ $sub_assignment->workzone_name }} </td>{{-- Название рабочей зоны --}}
+            <td>{{ $sub_assignment->responsible_employee }} </td>{{-- Название ответственного сотрудника --}}
+            <td>{{ $sub_assignment->date_of_creation }} </td>{{-- Дата создания --}}
+            <td>{{ $sub_assignment->start_time }} </td>{{-- Время начала работ --}}
+            <td>{{ $sub_assignment->end_time }} </td>{{-- Время окончания работ --}}
 
             {{-- url('admin/assignments/view/'.$assignment->id.'/management') --}}
             <td>
@@ -274,7 +302,6 @@
 
     {{-- Доходная часть --}}
     <h2>Доходная часть</h2>
-    
     {{-- Вывод текущих заходов денег --}}
     <table class="table">
         <thead>
@@ -283,11 +310,11 @@
                 <th>Валюта</th>
                 <th>Основание</th>
                 <th>Описание</th>
-                <th>Номер наряда(текущий)</th>
-                <th>Машина</th>
+                <th>Номер наряда</th>
+                <!-- <th>Машина</th>
                 <th>Год</th>
                 <th>Гос.Номер</th>
-                <th>Фамилия Клиента</th>
+                <th>Фамилия Клиента</th> -->
                 <th></th>{{-- Кнопки управления --}}
             </tr>
         </thead>
@@ -309,7 +336,7 @@
             <td>
             {{ $income_entry->assignment_id }}<br>
             </td>
-            <td>
+            <!-- <td>
             {{ $income_entry->assignment_car_name }}<br>
             </td>
             <td>
@@ -320,8 +347,35 @@
             </td>
             <td>
             {{ $income_entry->assignment_client_name }}<br>
-            </td>
+            </td> -->
         </tr>
+        @endforeach
+        {{-- Вывода зональных заходов --}}
+        @foreach($zonal_assignment_income as $zonal_income)
+
+        <tr>
+
+          <td>
+          {{ $zonal_income->zonal_amount }}<br>
+          </td>
+          <td>
+          {{ $zonal_income->zonal_currency }}<br>
+          </td>
+          <td>
+          {{ $zonal_income->zonal_basis }}<br>
+          </td>
+          <td>
+          {{ $zonal_income->zonal_description }}<br>
+          </td>
+          <td>
+          {{ $zonal_income->sub_assignment_id }} (Зон.)<br>
+          </td>
+          <td>
+          {{ $zonal_income->assignment_id}}<br>
+          </td>
+        
+        </tr>
+
         @endforeach
         </tbody>
     </table>

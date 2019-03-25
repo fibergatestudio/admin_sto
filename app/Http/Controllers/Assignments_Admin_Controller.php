@@ -149,13 +149,17 @@ class Assignments_Admin_Controller extends Controller
         $assignment->client_name = $assignment->get_client_name();
         /* Авто */
         $assignment->car_name = $assignment->get_car_name();
+        /* Год авто */
+        $assignment->car_year = $assignment->get_car_year();
+        /* Рег. номер авто */
+        $assignment->car_reg_number = $assignment->get_car_reg_number();
 
                 /* Доход/расход/работы */
                 /* Получаем доходную часть */
                 // $assignment_income = Assignments_income::where('assignment_id', $assignment_id)->get();
                 $assignment_income = Assignments_income::where('assignment_id', $assignment_id)
                 ->join('assignments', 'assignments_income.assignment_id', '=', 'assignments.id')
-                ->join('cars_in_service', 'assignments.id', '=', 'cars_in_service.id')
+                ->join('cars_in_service', 'assignments.car_id', '=', 'cars_in_service.id')
                 ->join('clients', 'cars_in_service.owner_client_id', '=', 'clients.id')
                 ->orderBy('order','ASC')
                 ->select(
@@ -168,6 +172,24 @@ class Assignments_Admin_Controller extends Controller
                         'clients.general_name AS assignment_client_name'
                     )
                 ->get();
+
+                /* Получаем зональную доходную часть */
+                $zonal_assignment_income = Sub_assignment::where('assignment_id', $assignment_id)
+                ->join('zonal_assignments_income', 'sub_assignments.id', '=', 'zonal_assignments_income.sub_assignment_id')
+                ->join('assignments', 'sub_assignments.assignment_id', '=', 'assignments.id')
+                ->orderBy('order','ASC')
+                ->select(
+                    'sub_assignments.*',
+                    'sub_assignments.id AS sub_assignment_id',
+                    'zonal_assignments_income.zonal_amount AS sub_as_amount',
+                    'assignments.id AS assignment_id'
+                )
+                ->get();
+
+                //dd($zonal_assignment_income);
+
+
+
                 /* Получаем расходную часть */
                 $assignment_expense = Assignments_expense::where('assignment_id', $assignment_id)->get();
                 /* Получаем выполненые работы */
@@ -250,13 +272,14 @@ class Assignments_Admin_Controller extends Controller
                 'accepted_image_urls'=> $accepted_images,
                 'repair_image_urls'=> $repair_images,
                 'finished_image_urls'=> $finished_images,
-                'assignment_income' => $assignment_income, 
+                'assignment_income' => $assignment_income,
+                'zonal_assignment_income' => $zonal_assignment_income,
                 'assignment_expense' => $assignment_expense,
                 'zonal_assignment_income' => $zonal_assignment_income, 
                 'zonal_assignment_expense' => $zonal_assignment_expense, 
                 'assignment_work' => $assignment_work,
                 'usd' => $usd,
-                'eur' => $eur,           
+                'eur' => $eur       
             ]);
     }
 
