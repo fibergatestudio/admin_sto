@@ -152,7 +152,7 @@
 
                     <div class="form-group col-md-6">
                         <label>Телеграм ID</label>
-                        <input type="number" name="telegram_id" value="{{ $employee->telegram_id }}" class="form-control typeahead">
+                        <input type="text" name="telegram_id" value="{{ $employee->telegram_id }}" class="form-control typeahead">
                     </div>
 
                     <div class="form-group col-md-6">
@@ -189,10 +189,14 @@
                     <div class="modal-body">
                         <div class="form-row">
                             <ol>
-                                <li>Перейти по ссылке https://telegram.me/userinfobot</li>
+                                <li>Зайти в свой телеграм, создать новый канал с именем например @channel_name</li>
+                                <li>Добавить в свой канал (@channel_name) бот @fs_sto_bot, как администратора </li>
+                                <li>В форму вставить имя созданного канала (@channel_name) </li>
+
+                               <!-- <li>Перейти по ссылке https://telegram.me/userinfobot</li>
                                 <li>В открывшемся диалоге с ботом написать /start</li>
                                 <li>Получивши сообщение-ответ скопировать ID</li>
-                                <li>Вставить в форму</li>
+                                <li>Вставить в форму</li> -->
                             </ol>
                         </div>
                     </div>
