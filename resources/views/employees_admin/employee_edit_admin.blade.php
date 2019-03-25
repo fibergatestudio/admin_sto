@@ -144,7 +144,7 @@
 
                     <div class="form-group col-md-6">
                         <label>Размер платы за смену</label>
-                        <input type="number" name="pay_per_shift" value="{{ $employee->pay_per_shift}}" class="form-control typeahead">
+                        <input type="number" name="pay_per_shift" value="{{ $employee->pay_per_shift }}" class="form-control typeahead">
                     </div>
                 </div>
 

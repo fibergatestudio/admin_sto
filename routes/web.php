@@ -381,6 +381,9 @@ Route::post('/admin/profitability_index/month', 'Assignments_Admin_Controller@pr
         /* Управление зонального наряда */
         Route::get('admin/assignments/view/{sub_assignment_id}/management', 'Assignments_Admin_Controller@assignment_management');
 
+            /* Добавить зональную доходную часть : POST */
+            Route::post('admin/assignments/view/{sub_assignment_id}/management/update_zonal_assignment_time', 'Assignments_Admin_Controller@update_zonal_assignment_time');
+
              /* Добавить зональную доходную часть : POST */
             Route::post('admin/assignments/view/{sub_assignment_id}/management/add_zonal_assignment_income', 'Assignments_Admin_Controller@add_zonal_assignment_income');
 

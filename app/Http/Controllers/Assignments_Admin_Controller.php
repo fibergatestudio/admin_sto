@@ -527,8 +527,9 @@ class Assignments_Admin_Controller extends Controller
             /* Создаём новое вхождение по выполненым работам и вносим туда информацию */
             $new_works_entry = new Assignments_completed_works();
             $new_works_entry->assignment_id = $request->assignment_id; /* Идентификатор наряда */
-            $new_works_entry->basis = $request->basis; /* Основание для расхода денег */
-            $new_works_entry->description = $request->description; /* Описание для расхода */
+            $new_works_entry->basis = $request->basis; 
+            $new_works_entry->description = $request->description; 
+            $new_works_entry->status = 'unconfirmed';
             $new_works_entry->save();
     
     
@@ -575,6 +576,24 @@ class Assignments_Admin_Controller extends Controller
 
 
         /* Возвращаемся обратно на страницу наряда */
+        return back();
+    }
+
+    public function update_zonal_assignment_time(Request $request){
+
+        $sub_assignment_id = $request->assignment_id;
+        $new_start_time = $request->new_start_time;
+        $new_end_time = $request->new_end_time;
+
+        // $time = DB::table('sub_assignments')->where('id', $sub_assignment_id)
+
+        DB::table('sub_assignments')
+        ->where('id', '=', $sub_assignment_id)
+        ->update([
+            'start_time' => $new_start_time,
+            'end_time' => $new_end_time
+            ]);
+
         return back();
     }
 

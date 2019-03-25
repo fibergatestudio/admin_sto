@@ -422,8 +422,9 @@ class Employee_Dashboard_Controller extends Controller
         /* Создаём новое вхождение по выполненым работам и вносим туда информацию */
         $new_works_entry = new Assignments_completed_works();
         $new_works_entry->assignment_id = $request->assignment_id; /* Идентификатор наряда */
-        $new_works_entry->basis = $request->basis; /* Основание для работы */
-        $new_works_entry->description = $request->description; /* Описание для расхода */
+        $new_works_entry->basis = $request->basis; 
+        $new_works_entry->description = $request->description; 
+        $new_works_entry->status = 'unconfirmed';
         $new_works_entry->save();
 
 
@@ -619,6 +620,38 @@ class Employee_Dashboard_Controller extends Controller
             
         }
 
+         /* Проверка оповещенияй (включено ли) */
+         $user_id = Auth::user()->id;
+         $user_name = Auth::user()->name;
+         $notification_check = DB::table('user_options')->where('id','=', $user_id)->first();
+ 
+         if($notification_check->tg_supply_order_notification == 1){
+            /* Нужно переделать под каждый товар (щас для одного твоара в заказе приходит оповещение) */
+             /* Оповещения для телеграма */
+             $text = "У вас новый заказ!\n"
+             . "<b>Заказчик: </b>\n"
+             . "$user_name\n"
+             . "<b>Комментарий: </b>\n"
+             . "$new_order->order_comment\n"
+             . "<b>Название товара: </b>\n"
+             . "$item_name\n"
+             . "<b>Кол-во: </b>\n"
+             . "$item_count\n"
+             . "<b>Дата: </b>\n"
+             . "$new_order->created_at\n"
+             . "<b>Срочность: </b>\n" 
+             .  $item_urgency;
+ 
+             Telegram::sendMessage([
+             'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+             'parse_mode' => 'HTML',
+             'text' => $text
+             ]);
+ 
+         } else {
+ 
+         }
+
         /* Вносим в лог запись о том, что заказ создан*/
         // ...
 
@@ -662,7 +695,41 @@ class Employee_Dashboard_Controller extends Controller
             
             $item->save();
             $i++;
-        }      
+        }
+
+        /* Проверка оповещенияй (включено ли) */
+        $user_id = Auth::user()->id;
+        $user_name = Auth::user()->name;
+        $notification_check = DB::table('user_options')->where('id','=', $user_id)->first();
+
+        if($notification_check->tg_supply_order_notification == 1){
+           /* Нужно переделать под каждый товар (щас для одного твоара в заказе приходит оповещение) */
+            /* Оповещения для телеграма */
+            $text = "У вас изменение заказа!\n"
+            . "<b>Заказчик: </b>\n"
+            . "$user_name\n"
+            . "<b>Комментарий: </b>\n"
+            . "$edit_order->order_comment\n"
+            . "<b>Название товара: </b>\n"
+            . "$item_name\n"
+            . "<b>Кол-во: </b>\n"
+            . "$item_count\n"
+            . "<b>Дата: </b>\n"
+            . "$edit_order->created_at\n"
+            . "<b>Срочность: </b>\n" 
+            .  $item_urgency;
+
+            Telegram::sendMessage([
+            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+            'parse_mode' => 'HTML',
+            'text' => $text
+            ]);
+
+        } else {
+
+        }
+        
+        
        
         return redirect('/employee/orders/index');
     }

@@ -22,6 +22,8 @@
                 <thead>
                     <tr>
                         <th>Номер наряда</th>
+                        <th>Основание</th>
+                        <th>Описание</th>
                         <th>Сумма</th>
                         <th>Валюта</th>
                     </tr>
@@ -30,6 +32,12 @@
                 <tr>
                     <td>
                         {{$test->id}}
+                    </td>
+                    <td>
+                        {{$test->as_bas}}
+                    </td>
+                    <td>
+                        {{$test->as_des}}
                     </td>
                     <td>
                         {{$test->as_inc}}

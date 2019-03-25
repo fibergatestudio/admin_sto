@@ -33,7 +33,7 @@
     </table>
     
     <div class="btn btn-primary" data-toggle="modal" data-target="#addFineModal">Добавить штраф вручную</div>
-    <div class="btn btn-secondary">История штрафов</div>
+    <div class="btn btn-secondary" data-toggle="modal" data-target="#fineHistory">История штрафов</div>
 
     <a href="{{ url('supervisor/employee_finances/'.$employee->id) }}">
         <div class="btn btn-danger">Вернуться</div>
@@ -77,6 +77,64 @@
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
                     </div>{{-- / MODAL FOOTER --}}
                 </form>
+                {{-- Конец формы --}}
+            </div>{{-- / MODAL CONTENT --}}
+        </div>{{-- / MODAL DIALOG --}}
+    </div>
+
+    {{-- История штрафов - модальное окно --}}
+    <div class="modal" tabindex="-1" role="dialog" id="fineHistory">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">История штрафов</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>{{-- / MODAL HEADER --}}
+                {{-- Непосредственно форма --}}
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Дата</th>
+                                        <th>Тип</th>
+                                        <th>Сумма</th>
+                                        <th>Остаток</th>
+                                        <th>Основание</th>
+                                        <th>Статус</th>
+                                    </tr>
+                                </thead>
+                                @foreach ($fines_history as $fh )
+                                <tr>
+                                    <td>
+                                        {{ $fh->date }}
+                                    </td>
+                                    <td>
+                                        {{ $fh->type }}
+                                    </td>
+                                    <td>
+                                        {{ $fh->amount }}
+                                    </td>
+                                    <td>
+                                        {{ $fh->old_balance }}
+                                    </td>
+                                    <td>
+                                        {{ $fh->reason }}
+                                    </td>
+                                    <td>
+                                        {{ $fh->status }}
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </table>
+                        </div>
+                    </div>{{-- / MODAL BODY --}}
+                    <div class="modal-footer">
+                    <hr>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    </div>{{-- / MODAL FOOTER --}}
                 {{-- Конец формы --}}
             </div>{{-- / MODAL CONTENT --}}
         </div>{{-- / MODAL DIALOG --}}

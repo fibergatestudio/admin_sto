@@ -172,28 +172,19 @@ class EmployeesAdminController extends Controller
 
         $employee_id = $request->id;
 
-
-        $fio = $request->fio;
-        $birthday = $request->birthday;
-        $passport = $request->passport;
-        $balance = $request->balance; //не было добавления баланса
-        $reserve_phone = $request->reserve_phone;
-        $phone = $request->phone;
-        $hour_from = $request->hour_from ;
-        $hour_to = $request->hour_to;
-        $telegram_id = $request->telegram_id;
-
         $employee = Employee::find($employee_id);
 
-        $employee->fio = $fio;
-        $employee->birthday = $birthday;
-        $employee->passport =  $passport;
-        $employee->balance = $balance; //не было добавления баланса
-        $employee->reserve_phone = $reserve_phone;
-        $employee->phone = $phone;
-        $employee->hour_from = $hour_from;
-        $employee->hour_to = $hour_to;
-        $employee->telegram_id = $telegram_id;
+        $employee->fio = $request->fio;
+        $employee->birthday = $request->birthday;
+        $employee->passport =  $request->passport;
+        $employee->balance = $request->balance;
+        $employee->reserve_phone = $request->reserve_phone;
+        $employee->phone = $request->phone;
+        $employee->hour_from = $request->hour_from;
+        $employee->hour_to = $request->hour_to;
+        $employee->fixed_charge = $request->fixed_charge;
+        $employee->pay_per_shift = $request->pay_per_shift;
+        $employee->telegram_id = $request->telegram_id;
         $employee->save();
 
         if(!empty($request->document)){
@@ -253,7 +244,10 @@ class EmployeesAdminController extends Controller
         ->select(
             'assignments.*',
             'assignments_income.amount AS as_inc',
-            'assignments_income.currency AS as_cur'
+            'assignments_income.currency AS as_cur',
+            'assignments_income.basis AS as_bas',
+            'assignments_income.description AS as_des'
+
             )
         ->get();
 
@@ -704,6 +698,7 @@ class EmployeesAdminController extends Controller
 
     /* Страница начисления штрафов */
     public function view_employee_fines($employee_id){
+
         $employee = Employee::find($employee_id);
 
         $fines =
@@ -713,10 +708,17 @@ class EmployeesAdminController extends Controller
                     ])
                 ->get();
 
+        $fines_history = Employee_balance_log::where(
+            [
+                ['employee_id', $employee_id],
+                ['action', '=', 'Применение штрафа']
+            ])->orderBy('created_at', 'desc')->get();
+
         return view('employees_admin.employee_fines_admin',
             [
                 'employee' => $employee,
-                'fines' => $fines
+                'fines' => $fines,
+                'fines_history' => $fines_history
             ]
         );
 

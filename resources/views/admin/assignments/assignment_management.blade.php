@@ -10,6 +10,58 @@
     Описание наряда: {{ $sub_assignment->description }}<br>
     <hr>
 
+    {{-- Редактирование времени --}}
+
+    <form action="{{ url('admin/assignments/view/'.$sub_assignment->id.'/management/update_zonal_assignment_time') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+
+            <input type="hidden" name="assignment_id" value="{{ $sub_assignment->id }}">
+
+            <div class="row">
+                <div class="col-lg-2">
+                    <div class="custom-control">
+                        <label>Текущее время: </label>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="custom-control">
+                        <input class="form-control" value="{{ $sub_assignment->start_time }}" type="datetime-local" disabled>
+                        <label>Время начала работ</label>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="custom-control">
+                        <input class="form-control" value="{{ $sub_assignment->end_time }}" type="datetime-local" disabled>
+                        <label>Время окончания работ</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <div class="custom-control">
+                        <label>Новое время: </label>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="custom-control">
+                        <input class="form-control" name="new_start_time" type="datetime-local">
+                        <label>Время начала работ</label>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="custom-control">
+                        <input class="form-control" name="new_end_time" type="datetime-local">
+                        <label>Время окончания работ</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 col-lg-6">
+                  <button type="sumbit" class="btn btn-primary btn-block">Применить</button>
+                </div>
+            </div>
+        </form>
+
     <hr>
     {{-- Доходная часть --}}
     <h2>Доходная часть</h2>
