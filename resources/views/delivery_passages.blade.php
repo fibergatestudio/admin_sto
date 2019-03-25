@@ -10,13 +10,11 @@
 <table class="table datatable-basic" id="summary-table">
 	<thead>
 		<tr>
-			<th>logId</th>
-			<th>time</th>
-			<th>empId</th>
-			<th>internalEmpId</th>
-			<th>direction</th>
-			<th>created_at</th>
-			<th>updated_at</th>
+			<th>Id в системе Sigur</th>
+			<th>Время прохода</th>
+			<th>Имя</th>
+			<th>Табельный номер</th>
+			<th>Направление</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -27,9 +25,13 @@
                 <td>{{ date("Y-m-d H:i:s", $passage->time) }}</td>
                 <td>{{ $passage->emp_id }}</td>
                 <td>{{ $passage->internal_emp_id }}</td>
-                <td>{{ $passage->direction }}</td>
-                <td>{{ $passage->created_at }}</td>
-                <td>{{ $passage->updated_at }}</td>
+                @if($passage->direction == 1)
+                <td>{{ 'вход' }}</td>
+                @elseif($passage->direction == 2)
+                <td>{{ 'выход' }}</td>
+                @elseif($passage->direction == 3)
+                <td>{{ 'неизвестно' }}</td>               
+                @endif
             </tr>
         @endforeach    
 		@endif
@@ -38,28 +40,11 @@
 
 {{ $passages->links() }}
 <script type="text/javascript">
+	
+	// Генерирует тестовые POST данные о проходе через Сигур
 	$('#submit').click(function (){
 		var someObj = {
-						"logs":[
-						{
-						"logId":925244,
-						"time":1510826281,
-						"empId":"",
-						"internalEmpId":0,
-						"accessPoint":1,
-						"direction":2,
-						"keyHex":"5AB860"
-						},
-						{
-						"logId":925247,
-						"time":1510826858,
-						"empId":"",
-						"internalEmpId":0,
-						"accessPoint":1,
-						"direction":2,
-						"keyHex":"5AB860"
-						}
-						]
+						"logs":"logId=18&date=2019-03-22&time=09:07:02&name1=Роман&name2=Майданский-test&direction=вход&tabnum=069017785"
 					};
 		$.ajax({
                     url: "{{ route('processing_query') }}",
@@ -80,6 +65,7 @@
 		alert("Данные сгенерированы!");
 		document.location.reload(true);
 
-	});	
+	});
+
 </script>
 @endsection
