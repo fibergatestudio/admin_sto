@@ -362,7 +362,7 @@ Route::post('/admin/profitability_index', 'Assignments_Admin_Controller@add_exch
 /****** Ежемесячная рентабельность с учетом расходов: Администратор ******/
 Route::get('/admin/profitability_index/month', 'Assignments_Admin_Controller@profitability_month_index')->middleware('can:admin_rights');
 
-Route::get('/admin/profitability_index/month/{date}', 'Assignments_Admin_Controller@profitability_month_show')->middleware('can:admin_rights');
+Route::get('/admin/profitability_index/month/{start_date}/{end_date}', 'Assignments_Admin_Controller@profitability_month_show')->middleware('can:admin_rights');
 
 /****** Ежемесячная рентабельность с учетом расходов - добавление: Администратор ******/
 Route::post('/admin/profitability_index/month', 'Assignments_Admin_Controller@profitability_month')->middleware('can:admin_rights');

@@ -48,25 +48,49 @@
     <form method="POST" action="{{ url('/admin/profitability_index/month') }}">
         @csrf
         <div class="row">            
-            <div class="col-md-2">
+            <div class="col-lg-3">
                 <div class="form-group">
                     <label>Стоимость аренды</label>
                     <input type="number" name="rental_price" class="form-control" step="0.01">
                 </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-lg-3">
                 <div class="form-group">
                     <label>Электричество</label>
                     <input type="number" name="electricity" class="form-control" step="0.01">
                 </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-lg-3">
                 <div class="form-group">
                     <label>Водоснабжение</label>
                     <input type="number" name="water_supply" class="form-control" step="0.01">
                 </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label>Газ</label>
+                    <input type="number" name="gas" class="form-control" step="0.01">
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label>Уборка</label>
+                    <input type="number" name="cleaning" class="form-control" step="0.01">
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label>Вывоз мусора</label>
+                    <input type="number" name="garbage_removal" class="form-control" step="0.01">
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label>Прочие расходы</label>
+                    <input type="number" name="other_expenses" class="form-control" step="0.01">
+                </div>
+            </div>
+            <div class="col-lg-3">
                 <div class="form-group">
                     <label>Дата</label>
                     <input type="date" name="date" value="{{ date('Y-m-d') }}" min="2000-01-01" max="{{ date('Y-m-d') }}">
@@ -201,7 +225,7 @@
         @if(isset($profitability_months))
         @foreach($profitability_months as $profitability_month)
         <?php
-            $sum -= $profitability_month->rental_price + $profitability_month->electricity + $profitability_month->water_supply;
+            $sum -= $profitability_month->rental_price + $profitability_month->electricity + $profitability_month->water_supply + $profitability_month->gas + $profitability_month->cleaning + $profitability_month->garbage_removal + $profitability_month->other_expenses;
         ?>
         <tr>
             <td>- 
@@ -231,6 +255,50 @@
             </td>
             <td>
             {{ 'Водоснабжение' }}<br>
+            </td>
+            <td>
+            {{ 'MDL' }}<br>
+            </td>
+        </tr>
+        <tr>
+            <td>- 
+            {{ $profitability_month->gas }}<br>
+            </td>
+            <td>
+            {{ 'Газ' }}<br>
+            </td>
+            <td>
+            {{ 'MDL' }}<br>
+            </td>
+        </tr>
+        <tr>
+            <td>- 
+            {{ $profitability_month->cleaning }}<br>
+            </td>
+            <td>
+            {{ 'Уборка' }}<br>
+            </td>
+            <td>
+            {{ 'MDL' }}<br>
+            </td>
+        </tr>
+        <tr>
+            <td>- 
+            {{ $profitability_month->garbage_removal }}<br>
+            </td>
+            <td>
+            {{ 'Вывоз мусора' }}<br>
+            </td>
+            <td>
+            {{ 'MDL' }}<br>
+            </td>
+        </tr>
+        <tr>
+            <td>- 
+            {{ $profitability_month->other_expenses }}<br>
+            </td>
+            <td>
+            {{ 'Прочие расходы' }}<br>
             </td>
             <td>
             {{ 'MDL' }}<br>

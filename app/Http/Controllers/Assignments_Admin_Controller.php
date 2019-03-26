@@ -673,7 +673,15 @@ class Assignments_Admin_Controller extends Controller
         $rental_price = $month_profitability->rental_price;
         $electricity = $month_profitability->electricity;
         $water_supply = $month_profitability->water_supply;
+        $gas = $month_profitability->gas;
+        $cleaning = $month_profitability->cleaning;
+        $garbage_removal = $month_profitability->garbage_removal;
+        $other_expenses = $month_profitability->other_expenses;
         $date = $month_profitability->date;
+
+        $start_date = $date;
+        $end_date = $date;
+        $date_arr[] = substr($date,0,-3);
 
         return view('assignments_admin.profitability_month_index',
         [
@@ -686,12 +694,18 @@ class Assignments_Admin_Controller extends Controller
             'rental_price' => $rental_price,
             'electricity' => $electricity,
             'water_supply' => $water_supply,
-            'date' => $date,
+            'gas' => $gas,
+            'cleaning' => $cleaning,
+            'garbage_removal' => $garbage_removal,
+            'other_expenses' => $other_expenses,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'date_arr' => $date_arr,
         ]);
     }
 
     /* Отображение месячной рентабельности с заданной датой*/
-    public function profitability_month_show($our_date){
+    public function profitability_month_show($start_date, $end_date){
         /* Получаем всю нужную информацию по нарядам */        
         /* Получаем зональную доходную часть */
         $zonal_assignment_income = Zonal_assignments_income::all();
@@ -713,19 +727,56 @@ class Assignments_Admin_Controller extends Controller
 
         /* Получаем ежемесячные расходы */
         $profitability_months = Month_profitability::all();
-        /* Получаем заданную запись в таблице расходов */
-        foreach($profitability_months as $value) {
-            if (substr($our_date,0,-3) === substr($value->date,0,-3)) {
-                $month_profitability = Month_profitability::find($value->id);
-                
-                $rental_price = $month_profitability->rental_price;
-                $electricity = $month_profitability->electricity;
-                $water_supply = $month_profitability->water_supply;
-                $date = $month_profitability->date;
-                break;
+
+        /* Получаем записи в таблице расходов за определенный период*/
+
+        $rental_price = 0;
+        $electricity = 0;
+        $water_supply = 0;
+        $gas = 0;
+        $cleaning = 0;
+        $garbage_removal = 0;
+        $other_expenses = 0;
+        $date_arr = [];
+        $start_date_new = substr($start_date,0,-3).'-01';
+        $end_date_new = substr($end_date,0,-3).'-01';
+
+        /* Если у нас даты включают один месяц*/
+        if (substr($start_date,0,-3) === substr($end_date,0,-3)) {
+            foreach($profitability_months as $value) {
+                if (substr($end_date,0,-3) === substr($value->date,0,-3)) {
+                    $month_profitability = Month_profitability::find($value->id);
+
+                    $rental_price = $month_profitability->rental_price;
+                    $electricity = $month_profitability->electricity;
+                    $water_supply = $month_profitability->water_supply;
+                    $gas = $month_profitability->gas;
+                    $cleaning = $month_profitability->cleaning;
+                    $garbage_removal = $month_profitability->garbage_removal;
+                    $other_expenses = $month_profitability->other_expenses;
+                    $date_arr[] = substr($month_profitability->date,0,-3);
+                    break;
+                }
             }
         }
-
+        /* Если у нас даты включают несколько месяцев*/
+        else{
+            foreach($profitability_months as $value) {
+                if ( strtotime(substr($value->date,0,-3).'-01') >= strtotime($start_date_new) AND strtotime(substr($value->date,0,-3).'-01') <= strtotime($end_date_new) ) {
+                    
+                    $month_profitability = Month_profitability::find($value->id);                                       
+                    $rental_price += $month_profitability->rental_price;
+                    $electricity += $month_profitability->electricity;
+                    $water_supply += $month_profitability->water_supply;
+                    $gas += $month_profitability->gas;
+                    $cleaning += $month_profitability->cleaning;
+                    $garbage_removal += $month_profitability->garbage_removal;
+                    $other_expenses += $month_profitability->other_expenses;
+                    $date_arr[] = substr($month_profitability->date,0,-3);
+                }
+            }
+        }
+        
         return view('assignments_admin.profitability_month_index',
         [
             'zonal_assignment_income' => $zonal_assignment_income,
@@ -737,7 +788,13 @@ class Assignments_Admin_Controller extends Controller
             'rental_price' => $rental_price,
             'electricity' => $electricity,
             'water_supply' => $water_supply,
-            'date' => $date,
+            'gas' => $gas,
+            'cleaning' => $cleaning,
+            'garbage_removal' => $garbage_removal,
+            'other_expenses' => $other_expenses,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'date_arr' => $date_arr,
         ]);
     }       
 
@@ -779,11 +836,27 @@ class Assignments_Admin_Controller extends Controller
                 if (isset($request->water_supply)) {
                     $month_profitability->water_supply = $request->water_supply;
                 }
+                if (isset($request->gas)) {
+                    $month_profitability->gas = $request->gas;
+                }
+                if (isset($request->cleaning)) {
+                    $month_profitability->cleaning = $request->cleaning;
+                }
+                if (isset($request->garbage_removal)) {
+                    $month_profitability->garbage_removal = $request->garbage_removal;
+                }
+                if (isset($request->other_expenses)) {
+                    $month_profitability->other_expenses = $request->other_expenses;
+                }
                 $month_profitability->save();
                 
                 $rental_price = $month_profitability->rental_price;
                 $electricity = $month_profitability->electricity;
-                $water_supply = $month_profitability->water_supply;
+                $water_supply = $month_profitability->water_supply;                
+                $gas = $month_profitability->gas;
+                $cleaning = $month_profitability->cleaning;
+                $garbage_removal = $month_profitability->garbage_removal;
+                $other_expenses = $month_profitability->other_expenses;
                 $date = $month_profitability->date;
                 break;
             }
@@ -794,14 +867,26 @@ class Assignments_Admin_Controller extends Controller
             $new_month_profitability->rental_price = $request->rental_price;
             $new_month_profitability->electricity = $request->electricity;
             $new_month_profitability->water_supply = $request->water_supply;
+            $new_month_profitability->gas = $request->gas;
+            $new_month_profitability->cleaning = $request->cleaning;
+            $new_month_profitability->garbage_removal = $request->garbage_removal;
+            $new_month_profitability->other_expenses = $request->other_expenses;
             $new_month_profitability->date = $request->date;
             $new_month_profitability->save();
 
             $rental_price = $request->rental_price;
             $electricity = $request->electricity;
             $water_supply = $request->water_supply;
+            $gas = $request->gas;
+            $cleaning = $request->cleaning;
+            $garbage_removal = $request->garbage_removal;
+            $other_expenses = $request->other_expenses;
             $date = $request->date;
         }
+
+        $start_date = $date;
+        $end_date = $date;
+        $date_arr[] = substr($date,0,-3);
 
         return view('assignments_admin.profitability_month_index',
         [
@@ -814,7 +899,13 @@ class Assignments_Admin_Controller extends Controller
             'rental_price' => $rental_price,
             'electricity' => $electricity,
             'water_supply' => $water_supply,
-            'date' => $date,
+            'gas' => $gas,
+            'cleaning' => $cleaning,
+            'garbage_removal' => $garbage_removal,
+            'other_expenses' => $other_expenses,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
+            'date_arr' => $date_arr,
         ]);
     }    
 
