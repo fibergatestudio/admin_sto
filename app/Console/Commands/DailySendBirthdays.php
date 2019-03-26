@@ -53,39 +53,43 @@ class DailySendBirthdays extends Command
         $text = $textToday."\n".$textTomorrow; // текст для телеграм
         
         // Посылка сообщений тем у кого ДР сегодня (сообщение о тех у кого ДР завтра)
-        foreach(Employee::getBirthdayToday() as $employee){                     
-            if(!empty($employee->telegram_id)){
-                Telegram::sendMessage([
-                    'chat_id' => $employee->telegram_id,
-                    'parse_mode' => 'HTML',
-                    'text' => $textTomorrow
-                ]); 
-            }else{  // если поле с данными telegram_id пустое, отсылаем в тестовый канал
-                Telegram::sendMessage([
-                    'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
-                    'parse_mode' => 'HTML',
-                    'text' => $textTomorrow
-                ]); 
-            }                                   
-        } //end foreach
-        
-        // Посылка сообщений всем работникам со статусом 'active', кроме именинников сегодня
-        foreach(Employee::where('status', 'active')->get() as $employee){
-            if($dateToday != $employee->birthday_m_d){
+        if($namesTomorrow != ''){  
+            foreach(Employee::getBirthdayToday() as $employee){                     
                 if(!empty($employee->telegram_id)){
                     Telegram::sendMessage([
                         'chat_id' => $employee->telegram_id,
                         'parse_mode' => 'HTML',
-                        'text' => $text
+                        'text' => $textTomorrow
                     ]); 
                 }else{  // если поле с данными telegram_id пустое, отсылаем в тестовый канал
                     Telegram::sendMessage([
                         'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
                         'parse_mode' => 'HTML',
-                        'text' => $text
+                        'text' => $textTomorrow
                     ]); 
-                }
-            }                                               
-        } // end foreach      
+                }                                   
+            } //end foreach
+        }//end if    
+        
+        // Посылка сообщений всем работникам со статусом 'active', кроме именинников сегодня
+        if($namesToday != '' || $namesTomorrow != ''){
+            foreach(Employee::where('status', 'active')->get() as $employee){
+                if($dateToday != $employee->birthday_m_d){
+                    if(!empty($employee->telegram_id)){
+                        Telegram::sendMessage([
+                            'chat_id' => $employee->telegram_id,
+                            'parse_mode' => 'HTML',
+                            'text' => $text
+                        ]); 
+                    }else{  // если поле с данными telegram_id пустое, отсылаем в тестовый канал
+                        Telegram::sendMessage([
+                            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+                            'parse_mode' => 'HTML',
+                            'text' => $text
+                        ]); 
+                    }
+                }                                               
+            } // end foreach   
+        } //end if      
     }
 }
