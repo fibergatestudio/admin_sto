@@ -16,7 +16,7 @@ class Employee extends Model
 
     /* Задать новую ставку за смену */
     public function set_new_wage($wage){
-        $this->standard_shift_wage = $wage;
+        $this->pay_per_shift = $wage;
         $this->save();
     }
     
