@@ -41,7 +41,7 @@
 
 
 
-                        <li class="nav-item">
+                                                <li class="nav-item">
 							<a href="{{ url('view_employees') }}" class="nav-link {{ request()->is('view_employees') ? 'active' : ''}}">
 
 								<i class="icon-profile"></i>
@@ -52,7 +52,7 @@
 						</li>
 
 						<li class="nav-item">
-							<a href="{{ url('/admin/shifts') }}" class="nav-link {{ request()->is('/admin/shifts/') ? 'active' : ''}}">
+							<a href="{{ url('/admin/shifts') }}" class="nav-link {{ request()->is('admin/shifts') ? 'active' : ''}}">
 
 								<i class="icon-profile"></i>
 								<span>
@@ -62,7 +62,7 @@
 						</li>
 
                         <li class="nav-item">
-							<a href="{{ url('admin/workzones/index') }}" class="nav-link">
+							<a href="{{ url('admin/workzones/index') }}" class="nav-link {{ request()->is('admin/workzones/index') ? 'active' : ''}}">
 								<i class="icon-grid5"></i>
 								<span>
 									Рабочие зоны
@@ -71,7 +71,7 @@
 						</li>
 
                         <li class="nav-item">
-							<a href="{{ url('admin/assignments_index') }}" class="nav-link">
+							<a href="{{ url('admin/assignments_index') }}" class="nav-link {{ request()->is('admin/assignments_index') ? 'active' : ''}}">
 								<i class="icon-list3"></i>
 								<span>
 									Наряды
@@ -80,7 +80,7 @@
 						</li>
 
                         <li class="nav-item">
-							<a href="{{ url('admin/clients_index') }}" class="nav-link">
+							<a href="{{ url('admin/clients_index') }}" class="nav-link {{ request()->is('admin/clients_index') ? 'active' : ''}}">
 								<i class="icon-users2"></i>
 								<span>
 									Клиенты
@@ -89,7 +89,7 @@
 						</li>
 
                         <li class="nav-item">
-							<a href="{{ url('admin/cars_in_service/index') }}" class="nav-link">
+							<a href="{{ url('admin/cars_in_service/index') }}" class="nav-link {{ request()->is('admin/cars_in_service/index') ? 'active' : ''}}">
 								<i class="icon-wrench"></i>
 								<span>
 									Машины в сервисе
@@ -107,7 +107,7 @@
 						</li>
 
 						<li class="nav-item">
-							<a href="{{ url('/admin/finances/index') }}" class="nav-link">
+							<a href="{{ url('/admin/finances/index') }}" class="nav-link {{ request()->is('admin/finances/index') ? 'active' : ''}}">
 								<i class="icon-book3"></i>
 								<span>
 									Финансы
@@ -116,7 +116,7 @@
 						</li>
 						{{-- Модели Машин --}}
 						<li class="nav-item">
-							<a href="{{ url('/admin/cars/index') }}" class="nav-link">
+							<a href="{{ url('/admin/cars/index') }}" class="nav-link {{ request()->is('admin/cars/index') ? 'active' : ''}}">
 								<i class="icon-car"></i>
 								<span>
 									Модели Машин
@@ -125,7 +125,7 @@
 						</li>
 
 						<li class="nav-item">
-							<a href="{{ url('/admin/statistics_analysis/') }}" class="nav-link">
+							<a href="{{ url('/admin/statistics_analysis/') }}" class="nav-link {{ request()->is('admin/statistics_analysis') ? 'active' : ''}}">
 								<i class="icon-graph"></i>
 								<span>
 									Статистика и Анализ
@@ -134,7 +134,7 @@
 						</li>
 
 						<li class="nav-item">
-							<a href="{{ url('/admin/profitability_index/') }}" class="nav-link">
+							<a href="{{ url('/admin/profitability_index/') }}" class="nav-link {{ request()->is('admin/profitability_index') ? 'active' : ''}}">
 								<i class="icon-calendar3"></i>
 								<span>
 									Расчет рентабельности и курс валют
@@ -143,7 +143,7 @@
 						</li>
 
 						<li class="nav-item">
-							<a href="{{ url('/delivery-passages') }}" class="nav-link">
+							<a href="{{ url('/delivery-passages') }}" class="nav-link {{ request()->is('delivery-passages') ? 'active' : ''}}">
 								<i class="icon-man-woman"></i>
 								<span>
 									Проходы через систему контроля
@@ -152,7 +152,7 @@
 						</li>
 
 						<li class="nav-item">
-							<a href="{{ url('/admin/all_users') }}" class="nav-link">
+							<a href="{{ url('/admin/all_users') }}" class="nav-link {{ request()->is('admin/all_users') ? 'active' : ''}}">
 								<i class="icon-book3"></i>
 								<span>
 									Управление доступом
@@ -188,7 +188,7 @@
 						<li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs">Телеграм</div> <i class="icon-menu" title="Main"></i></li>
 
 						<li class="nav-item">
-							<a href="{{ url('/send-message') }}" class="nav-link">
+							<a href="{{ url('/send-message') }}" class="nav-link {{ request()->is('send-message') ? 'active' : ''}}">
 								<span>
 									Отправить сообщение
 								</span>
@@ -196,7 +196,7 @@
 						</li>
 
 						<li class="nav-item">
-							<a href="{{ url('/send-photo') }}" class="nav-link">
+							<a href="{{ url('/send-photo') }}" class="nav-link {{ request()->is('send-photo') ? 'active' : ''}}">
 								<span>
 									Отправить фото
 								</span>

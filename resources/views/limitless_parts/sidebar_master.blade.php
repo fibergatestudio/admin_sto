@@ -6,7 +6,7 @@
 		<li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs">Меню</div> <i class="icon-menu" title="Main"></i></li>
 
 		<li class="nav-item">
-			<a class="nav-link" href="{{ url('master/assignments ') }}">
+			<a href="{{ url('master/assignments') }}" class="nav-link {{ request()->is('master/assignments') ? 'active' : ''}}">
 				<i class="icon-list"></i>
 				<span>
 								Управление нарядами
@@ -15,7 +15,7 @@
 		</li>
 
 		<li class="nav-item">
-			<a class="nav-link" href="{{ url('master/employees') }}">
+			<a href="{{ url('master/employees') }}" class="nav-link {{ request()->is('master/employees') ? 'active' : ''}}">
 				<i class="icon-list"></i>
 				<span>
 								Просмотр профилей
@@ -24,7 +24,7 @@
 		</li>
 
 		<li class="nav-item">
-			<a class="nav-link" href="{{ url('master/confirm') }}">
+			<a href="{{ url('master/confirm') }}" class="nav-link {{ request()->is('master/confirm') ? 'active' : ''}}">
 				<i class="icon-list"></i>
 				<span>
 								Подтвержденные записи
