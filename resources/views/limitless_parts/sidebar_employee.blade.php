@@ -80,7 +80,10 @@
 						<li class="nav-item">
 							<a href="{{ url('/employee/orders/index') }}" class="nav-link {{ request()->is('employee/orders/index') ? 'active' : ''}}">
 							<i class="icon-color-sampler"></i>
-								Мои заказы
+                                                        <span>
+                                                            Мои заказы
+                                                        </span>
+								
 							</a>
                         </li>
 

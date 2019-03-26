@@ -30,13 +30,21 @@
 					
 						<li class="nav-item">
 							<a href="{{ url('supply_officer/all_orders') }}" class="nav-link {{ request()->is('supply_officer/all_orders') ? 'active' : ''}}">
-								Заказы на снабжение (активные)
+							<i class="icon-list"></i>
+                                                        <span>
+                                                            Заказы на снабжение (активные)
+                                                        </span>	
+                                                            
 							</a>
       					</li>
 
 						<li class="nav-item">
 							<a href="{{ url('supply_officer/completed_orders') }}" class="nav-link {{ request()->is('supply_officer/completed_orders') ? 'active' : ''}}">
-								Выполненные заказы
+                                                            <i class="icon-list"></i>
+                                                            <span>
+                                                                Выполненные заказы
+                                                            </span>
+                                                            
 							</a>
       					</li>
 						
