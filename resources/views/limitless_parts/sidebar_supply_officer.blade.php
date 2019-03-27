@@ -29,14 +29,22 @@
 						<li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs">Меню</div> <i class="icon-menu" title="Main"></i></li>
 					
 						<li class="nav-item">
-							<a class="nav-link" href="{{ url('supply_officer/all_orders') }}">
-								Заказы на снабжение (активные)
+							<a href="{{ url('supply_officer/all_orders') }}" class="nav-link {{ request()->is('supply_officer/all_orders') ? 'active' : ''}}">
+							<i class="icon-list"></i>
+                                                        <span>
+                                                            Заказы на снабжение (активные)
+                                                        </span>	
+                                                            
 							</a>
       					</li>
 
 						<li class="nav-item">
-							<a class="nav-link" href="{{ url('supply_officer/completed_orders') }}">
-								Выполненные заказы
+							<a href="{{ url('supply_officer/completed_orders') }}" class="nav-link {{ request()->is('supply_officer/completed_orders') ? 'active' : ''}}">
+                                                            <i class="icon-list"></i>
+                                                            <span>
+                                                                Выполненные заказы
+                                                            </span>
+                                                            
 							</a>
       					</li>
 						
