@@ -231,7 +231,7 @@ class EmployeesAdminController extends Controller
 
         /* Получаем Выплаты */
         $payout_logs = Employee_balance_log::where(
-            [ 
+            [
 
                 ['employee_id', $employee_id],
                 ['action', '=', 'Ручная выплата'],
@@ -708,7 +708,7 @@ class EmployeesAdminController extends Controller
     }
 
     /* Функция начисления сотруднику */
-    public function add_balance(request $request){
+    public function add_balance(Request $request){
 
         $hashedPassword = Auth::user()->password;
         $enteredPassord = $request->password;

@@ -51,7 +51,7 @@
 
     <hr>
     {{-- Ставка сотрудника за смену --}}
-    <b>Ставка сотрудника за смену:</b> {{ $employee->standard_shift_wage }}<br>
+    <b>Ставка сотрудника за смену:</b> {{ $employee->pay_per_shift }}<br>
 
         {{-- Изменить ставку : модальное окно --}}
         <div class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="margin-top: 10px">
@@ -109,7 +109,7 @@
                         <input type="hidden" name="employee_id" value="{{ $employee->id }}">
                         
                         {{-- Вывод данных по текущей ставке --}}
-                        <b>Текущая ставка:</b> {{ $employee->standard_shift_wage }}
+                        <b>Текущая ставка:</b> {{ $employee->pay_per_shift }}
 
                         {{-- Новая ставка --}}
                         <div class="form-group">
