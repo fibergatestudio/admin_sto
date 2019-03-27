@@ -83,19 +83,19 @@ class Logs_Admin_Controller extends Controller
             if($action_choose == 'deposit')
             {
 
-                $text = 'Сотрудник - '. $employee_name . 'получил начисление - '. $employee_finances_logs->amount . 'на основании - '. $employee_finances_logs->reason;  
+                $text = 'Сотрудник - '. $employee_name . 'получил начисление - '. $employee_finances_log_entry->amount . 'на основании - '. $employee_finances_log_entry->reason;  
             }
             else
             {
 
-                $text = 'С cотрудника - '. $employee_name . 'списано - '. $employee_finances_logs->amount . 'на основании - '. $employee_finances_logs->reason;
+                $text = 'С cотрудника - '. $employee_name . 'списано - '. $employee_finances_log_entry . 'на основании - '. $employee_finances_log_entry->reason;
             }
 
             $employee_finances_log_entry->text = $text;
 
         }
 
-        return view ('admin.logs.finances_logs.finances_logs', compact('$employees_finances_logs'));
+        return view ('admin.logs.finances_logs.finances_logs', compact('employees_finances_logs'));
         
     }
      

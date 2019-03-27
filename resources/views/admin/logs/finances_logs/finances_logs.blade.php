@@ -17,12 +17,12 @@
                 {{-- Дата --}}
                 <td>
                     <p>
-                        {{ date('j. m. Y H:i', strtotime($$employees_finances_log->created_at)) }}
+                        {{ date('j. m. Y H:i', strtotime($employee_finances_log->created_at)) }}
                     </p>
                 
                 </td>
                 
-                {{- - Текст лога - -}}
+                {{-- Текст лога --}}
                 <td>
                     <a>
                         {{ $employees_finances_logs }}    
