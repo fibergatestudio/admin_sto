@@ -134,6 +134,11 @@
 			</ul>	
 			
 		</div>
+            @if(Auth::user()->isAdmin())
+                <div>
+                    <span>Привет, admin!</span>                    
+                </div>
+            @endif
 	</div>
 	<!-- /main navbar -->
 
