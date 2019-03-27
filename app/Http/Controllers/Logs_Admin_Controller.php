@@ -83,12 +83,12 @@ class Logs_Admin_Controller extends Controller
             if($action_choose == 'deposit')
             {
 
-                $text = 'Сотрудник - '. $employee_name . 'получил начисление - '. $employee_finances_log_entry->amount . 'на основании - '. $employee_finances_log_entry->reason;  
+                $text = 'Сотрудник : '. $employee_name . ' получил начисление : '. $employee_finances_log_entry->amount . ' на основании : '. $employee_finances_log_entry->reason . '. Было на балансе : '. $employee_finances_log_entry->old_balance . '. Стало на балансе : '. ($employee_finances_log_entry->old_balance + $employee_finances_log_entry->amount);  
             }
             else
             {
 
-                $text = 'С cотрудника - '. $employee_name . 'списано - '. $employee_finances_log_entry . 'на основании - '. $employee_finances_log_entry->reason;
+                $text = 'С cотрудника : '. $employee_name . ' списано : '. $employee_finances_log_entry->amount . ' на основании : '. $employee_finances_log_entry->reason . '. Было на балансе : '. $employee_finances_log_entry->old_balance . '. Стало на балансе : '. ($employee_finances_log_entry->old_balance - $employee_finances_log_entry->amount);
             }
 
             $employee_finances_log_entry->text = $text;

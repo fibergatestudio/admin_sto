@@ -25,7 +25,7 @@
                 {{-- Текст лога --}}
                 <td>
                     <a>
-                        {{ $employees_finances_logs }}    
+                        {{ $employee_finances_log->text }}    
                     </a>    
                 </td>
                 

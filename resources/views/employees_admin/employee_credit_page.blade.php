@@ -71,7 +71,7 @@
                 <tr>
                     <td>{{ $employee_balance_entry->amount}}</td>
                     <td>{{ $employee_balance_entry->date}}</td>
-                    <td>{{ $employee_balance_entry->action}}</td>
+                    <td>{{ $employee_balance_entry->type}}</td>
                     <td>{{ $employee_balance_entry->reason}}</td>
                 </tr>
             @endforeach

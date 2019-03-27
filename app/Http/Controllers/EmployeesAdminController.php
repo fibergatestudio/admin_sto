@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Input;
 use App\User;
 use App\Employee;
 use App\Employee_fine;
-use App\Employee_balance_log;
+use App\Employee_balance_logs;
 use App\Coffee_token_log;
 use Telegram\Bot\Laravel\Facades\Telegram;
 use App\Employees_notes;
@@ -221,19 +221,19 @@ class EmployeesAdminController extends Controller
         $token_logs = Coffee_token_log::where('employee_id', $employee_id)->get();
 
         /* Получаем Начислеения */
-        $balance_logs = Employee_balance_log::where(
+        $balance_logs = Employee_balance_logs::where(
             [
                 ['employee_id', $employee_id],
-                ['action', '=', 'Ручное начисление']
+                ['action', '=', 'deposit']
             ])->orderBy('created_at', 'desc')->get();
 
         /* Получаем Выплаты */
-        $payout_logs = Employee_balance_log::where(
+        $payout_logs = Employee_balance_logs::where(
             [
 
                 ['employee_id', $employee_id],
-                ['action', '=', 'Ручная выплата'],
-                ['reason', '=', 'Выплата']
+                ['action', '=', 'payout'],
+                ['reason', '=', 'Ручная выплата']
 
             ])->orderBy('created_at', 'desc')->get();
 
@@ -503,46 +503,16 @@ class EmployeesAdminController extends Controller
     public function employee_credit_page($employee_id){
         $employee = Employee::find($employee_id);
 
-        // $user_password = Auth::user()->password;
-        // $password = Crypt::decrypt($user_password);
-
         //данные о последних 10 операциях
-        $balance = Employee_balance_log::where(
+        $balance = Employee_balance_logs::where(
             [
-
                 ['employee_id', $employee_id],
-                ['action', '=', 'Ручное начисление']
-            ])->orderBy('created_at', 'desc')->get();
+                ['action', '=', 'deposit']
+            ])->orderBy('created_at', 'desc')->limit(10)->get();
 
         return view('employees_admin.employee_credit_page', ['employee' => $employee, 'balance' => $balance ]);
     }
 
-    public function add_employee_payment_manualy(Request $request){
-
-        $request->validate([
-            'balance' => 'required|numeric'
-        ]);
-
-        /* -----Добавить начисление ------ */
-        $balance = Employee::find($request->employee_id);
-        $balance_entry->balance = $request->balance;
-        $balance_entry->date = date('Y-m-d');
-        $balance_entry->save();
-
-        return redirect('/supervisor/employee_finances/credit/{employee_id}', compact('balance'));
-
-
-        // Добавить запись в общие логи
-        $employee_balance = new Employee_balance_log;
-        $employee_balance->amount = $amount;
-        $employee_balance->action = 'deposit';
-        $employee_balance->source = 'auto';
-        $employee_balance->date = date('Y-m-d');
-        $employee_balance->employee_id = $employee_id;
-        $employee_balance->save();
-
-        return back();
-    }
 
     /* Начисления сотруднику : POST */
     public function employee_credit_page_post(Request $request){
@@ -582,32 +552,35 @@ class EmployeesAdminController extends Controller
             $user_id = Auth::user()->id;
             $notification_check = DB::table('user_options')->where('id','=', $user_id)->first();
 
-            if($notification_check->tg_income_notification == 1){
+            if ($notification_check) {
+                if($notification_check->tg_income_notification == 1){
 
-                /* Оповещения для телеграма */
-                $text = "У вас новое начисление!\n"
-                . "<b>Размер начисления: </b>\n"
-                . "$add_sum\n"
-                . "<b>Новый баланс: </b>\n"
-                . "$new_balance";
+                    /* Оповещения для телеграма */
+                    $text = "У вас новое начисление!\n"
+                    . "<b>Размер начисления: </b>\n"
+                    . "$add_sum\n"
+                    . "<b>Новый баланс: </b>\n"
+                    . "$new_balance";
 
-                Telegram::sendMessage([
-                    'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
-                    'parse_mode' => 'HTML',
-                    'text' => $text
-                ]);
+                    Telegram::sendMessage([
+                        'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+                        'parse_mode' => 'HTML',
+                        'text' => $text
+                    ]);
 
-            } else {
+                } else {
 
+                }
             }
 
+
             // Добавить начисление в общие логи
-            $employee_balance_log = new Employee_balance_log;
+            $employee_balance_log = new Employee_balance_logs;
             $employee_balance_log->amount = $add_sum;
-            $employee_balance_log->action = 'Ручное начисление';
+            $employee_balance_log->action = 'deposit';
             $employee_balance_log->reason = $request->reason;
             $employee_balance_log->date = date('Y-m-d');
-            $employee_balance_log->type = 'Начисление'; // Тип записи
+            $employee_balance_log->type = 'Ручное начисление'; // Тип записи
             $employee_balance_log->status = 'Принят(тест)'; // Статус
             $employee_balance_log->employee_id = $employee_id;
             $employee_balance_log->old_balance = $balance;
@@ -634,12 +607,12 @@ class EmployeesAdminController extends Controller
         $employee = Employee::find($employee_id);
 
         /* Получаем выплаты по сотруднику */
-        $employee_payout = Employee_balance_log::where(
+        $employee_payout = Employee_balance_logs::where(
             [
 
                 ['employee_id', $employee_id],
-                ['action', '=', 'Ручная выплата'],
-                ['reason', '=', 'Выплата']
+                ['action', '=', 'payout'],
+                ['reason', '=', 'Ручная выплата']
 
             ])->orderBy('created_at', 'desc')->get();
 
@@ -683,12 +656,12 @@ class EmployeesAdminController extends Controller
 
 
         // Добавить запись в общие логи
-        $employee_balance_log = new Employee_balance_log;
+        $employee_balance_log = new Employee_balance_logs;
         $employee_balance_log->amount = -$add_payout;
-        $employee_balance_log->action = 'Ручная выплата';
-        $employee_balance_log->reason = 'Выплата';
+        $employee_balance_log->action = 'payout';
+        $employee_balance_log->reason = 'Ручная выплата';
         $employee_balance_log->date = date('Y-m-d');
-        $employee_balance_log->type = 'Выплата'; // Тип записи
+        $employee_balance_log->type = 'Ручная выплата'; // Тип записи
         $employee_balance_log->status = 'Принят(тест)'; // Статус
         $employee_balance_log->employee_id = $employee_id;
         $employee_balance_log->old_balance = $balance;
@@ -723,10 +696,10 @@ class EmployeesAdminController extends Controller
                     ])
                 ->get();
 
-        $fines_history = Employee_balance_log::where(
+        $fines_history = Employee_balance_logs::where(
             [
                 ['employee_id', $employee_id],
-                ['action', '=', 'Применение штрафа']
+                ['action', '=', 'payout']
             ])->orderBy('created_at', 'desc')->get();
 
         return view('employees_admin.employee_fines_admin',
@@ -764,10 +737,10 @@ class EmployeesAdminController extends Controller
 
 
          // Добавить запись в общие логи
-         $employee_balance_log = new Employee_balance_log;
+         $employee_balance_log = new Employee_balance_logs;
          $employee_balance_log->amount = -$fine->amount;
-         $employee_balance_log->action = 'Применение штрафа';
-         $employee_balance_log->reason = 'Штраф';
+         $employee_balance_log->action = 'payout';
+         $employee_balance_log->reason = 'Применение штрафа';
          $employee_balance_log->date = date('Y-m-d');
          $employee_balance_log->type = 'Штраф'; // Тип записи
          $employee_balance_log->status = 'Принят(тест)'; // Статус
@@ -788,26 +761,28 @@ class EmployeesAdminController extends Controller
         $user_id = Auth::user()->id;
         $notification_check = DB::table('user_options')->where('id','=', $user_id)->first();
 
-        if($notification_check->tg_fine_notification == 1){
+        if ($notification_check) {
+            if($notification_check->tg_fine_notification == 1){
 
-            /* Оповещения для телеграма */
-            $text = "У вас новый штраф!\n"
-            . "<b>Размер штрафа: </b>\n"
-            . "$fine->amount\n"
-            . "<b>Сумма с вычетом штрафа: </b>\n"
-            . "$new_balance";
+                /* Оповещения для телеграма */
+                $text = "У вас новый штраф!\n"
+                . "<b>Размер штрафа: </b>\n"
+                . "$fine->amount\n"
+                . "<b>Сумма с вычетом штрафа: </b>\n"
+                . "$new_balance";
 
-            Telegram::sendMessage([
-                'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
-                'parse_mode' => 'HTML',
-                'text' => $text
-            ]);
+                Telegram::sendMessage([
+                    'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+                    'parse_mode' => 'HTML',
+                    'text' => $text
+                ]);
 
-        } else {
+            } else {
 
+            }
         }
 
-
+        
         // Редирект на страницу штрафов сотрудника
         return redirect()->route('employee_fines', ['employee_id' => $fine->employee_id]);
 
@@ -893,7 +868,6 @@ class EmployeesAdminController extends Controller
         $token_total = $token_price * $token_count;
         $employee_balance = DB::table('employees')->where('id', '=', $employee_id)->first();
         $new_employee_balance = $employee_balance->balance - $token_total;
-        //$employee_balance->save();
 
         DB::table('employees')
         ->where('id', '=', $employee_id)
@@ -916,15 +890,16 @@ class EmployeesAdminController extends Controller
         $employee_coffee_log_entry->save();
 
         // Добавить запись в общие логи
-        $employee_balance_log = new Employee_balance_log;
+        $employee_balance_log = new Employee_balance_logs;
         $employee_balance_log->amount = $token_total;
         $employee_balance_log->reason = 'Списание за выдачу жетонов кофе';
-        $employee_balance_log->action = 'Списание за жетоны';
+        $employee_balance_log->action = 'payout';
         $employee_balance_log->source = 'auto';
         $employee_balance_log->type = 'Кофе'; // Тип записи
         $employee_balance_log->status = 'Принят(тест)'; // Статус
         $employee_balance_log->date = date('Y-m-d');
         $employee_balance_log->employee_id = $employee_id;
+        $employee_balance_log->old_balance = $emp_balance;
         $employee_balance_log->save();
 
 

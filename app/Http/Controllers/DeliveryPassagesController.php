@@ -158,7 +158,7 @@ class DeliveryPassagesController extends Controller
                             $author = User::find($author_id);
                             $author_name = $author->general_name;
 
-                            $create_employee_log_entry->text = 'Создан новый сотрудник - ' .$employee_name. 'автор - '.$author_name;  //текст о создании сотрудника(имя) и автор(имя)
+                            $create_employee_log_entry->text = 'Создан новый сотрудник - ' .$employee_name. ' | автор - '.$author_name;  //текст о создании сотрудника(имя) и автор(имя)
                             /* Тип? Тест */
                             $create_employee_log_entry->type = '';
                             $create_employee_log_entry->save();
@@ -223,7 +223,7 @@ class DeliveryPassagesController extends Controller
                             $author = User::find($author_id);
                             $author_name = $author->general_name;
 
-                            $fine_to_employee_log_entry->text = 'Штраф сотруднику - ' .$employee_name. 'был добавлен согласно данным о проходах в системе Sigur';  //текст лога о добавлении штрафа сотруднику(имя) автором(имя)
+                            $fine_to_employee_log_entry->text = 'Штраф сотруднику - ' .$employee_name. ' был добавлен согласно данным о проходах в системе Sigur';  //текст лога о добавлении штрафа сотруднику(имя) автором(имя)
                             /* Тип? Тест */
                             $fine_to_employee_log_entry->type = '';
                             $fine_to_employee_log_entry->save();
@@ -333,7 +333,7 @@ class DeliveryPassagesController extends Controller
                     $author = User::find($author_id);
                     $author_name = $author->general_name;
 
-                    $create_employee_log_entry->text = 'Создан новый сотрудник - ' .$employee_name. 'автор - '.$author_name;  //текст о создании сотрудника(имя) и автор(имя)
+                    $create_employee_log_entry->text = 'Создан новый сотрудник - ' .$employee_name. ' | автор - '.$author_name;  //текст о создании сотрудника(имя) и автор(имя)
                     /* Тип? Тест */
                     $create_employee_log_entry->type = '';
                     $create_employee_log_entry->save();
@@ -398,7 +398,7 @@ class DeliveryPassagesController extends Controller
                     $author = User::find($author_id);
                     $author_name = $author->general_name;
 
-                    $fine_to_employee_log_entry->text = 'Штраф сотруднику - ' .$employee_name. 'был добавлен согласно данным о проходах в системе Sigur';  //текст лога о добавлении штрафа сотруднику(имя) автором(имя)
+                    $fine_to_employee_log_entry->text = 'Штраф сотруднику - ' .$employee_name. ' был добавлен согласно данным о проходах в системе Sigur';  //текст лога о добавлении штрафа сотруднику(имя) автором(имя)
                     /* Тип? Тест */
                     $fine_to_employee_log_entry->type = '';
                     $fine_to_employee_log_entry->save();
