@@ -116,7 +116,7 @@ class Assignments_Admin_Controller extends Controller
             /* Оповещения для телеграма */
             $text = "У вас новый наряд!\n"
             . "<b>Клиент: </b>\n"
-            . "$client->general_name\n"
+            . "$client->fio\n"
             . "<b>Авто: </b>\n"
             . "$car->general_name\n"
             . "<b>Дата: </b>\n"

@@ -61,7 +61,7 @@ class Clients_Admin_Controller extends Controller
         /* - Имя клиента -*/
         $client_id = $create_client_log_entry->client_id;
         $client = Client::find($client_id);
-        $client_name = $client->general_name;
+        $client_name = $client->fio;
         /* - Имя автора - */
         $author_id = $create_client_log_entry->author_id;
         $author = User::find($author_id);
@@ -115,7 +115,7 @@ class Clients_Admin_Controller extends Controller
         /* - Имя клиента -*/
         $client_id = $create_client_note_log_entry->client_id;
         $client = Client::find($client_id);
-        $client_name = $client->general_name;
+        $client_name = $client->fio;
 
         /* - Имя автора - */
         $author_id = $create_client_note_log_entry->author_id;
@@ -153,7 +153,7 @@ class Clients_Admin_Controller extends Controller
         /* - Имя клиента - */
         $client_id = $edit_client_note_log_entry->client_id;
         $client = Client::find($client_id);
-        $client_name = $client->general_name;
+        $client_name = $client->fio;
         /* - Имя автора - */
         $author_id = $edit_client_note_log_entry->author_id;
         $author = User::find($author_id);
@@ -181,7 +181,7 @@ class Clients_Admin_Controller extends Controller
         /* - Имя клиента - */
         $client_id = $note_info->client_id;
         $client = Client::find($client_id);
-        $client_name = $client->general_name;
+        $client_name = $client->fio;
         /* - Имя автора - */
         $author_id = $delete_client_note_log->author_id;
         $author = User::find($author_id);
@@ -251,7 +251,7 @@ class Clients_Admin_Controller extends Controller
                 foreach($clients as $client){
                     $output .= '
                     <tr>
-                     <td><a href="view_client/'.$client->id.'">'.$client->general_name.'</a></td>
+                     <td><a href="view_client/'.$client->id.'">'.$client->fio.'</a></td>
 
                     </tr>
                     ';

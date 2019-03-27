@@ -1,7 +1,7 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    Карточка клиента: {{ $client->general_name }}
+    Карточка клиента: {{ $client->fio }}
 @endsection
 
 @section('content')

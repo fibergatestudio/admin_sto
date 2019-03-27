@@ -118,7 +118,7 @@ class Cars_in_service_Admin_Controller extends Controller
         /* - Имя клиента - */
         $client_id = $request->client_id;
         $client = Client::find($client_id);
-        $client_name = $client->general_name;
+        $client_name = $client->fio;
 
         /* - Имя автора - */
         $author_id = $create_car_in_service_log_entry->author_id;
@@ -203,7 +203,7 @@ class Cars_in_service_Admin_Controller extends Controller
         /* - Имя клиента - */
         $client_id = $car->owner_client_id;
         $client = Client::find($client_id);
-        $client_name = $client->general_name;
+        $client_name = $client->fio;
         /* - Имя автора - */
         $author_id = $create_car_note_log_entry->author_id;
         $author = User::find($author_id);
@@ -251,7 +251,7 @@ class Cars_in_service_Admin_Controller extends Controller
         /* - Имя клиента - */
         $client_id = $car->owner_client_id;
         $client = Client::find($client_id);
-        $client_name = $client->general_name;
+        $client_name = $client->fio;
         /* - Имя автора - */
         $author_id = $edit_car_note_log_entry->author_id;
         $author = User::find($author_id);
@@ -283,7 +283,7 @@ class Cars_in_service_Admin_Controller extends Controller
         /* - Имя клиента - */
         $client_id = $car->owner_client_id;
         $client = Client::find($client_id);
-        $client_name = $client->general_name;
+        $client_name = $client->fio;
         /* - Имя автора - */
         $author_id = $delete_car_note_log->author_id;
         $author = User::find($author_id);

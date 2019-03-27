@@ -7,7 +7,7 @@
 @section('content')
     {{-- Если клиент задан изначально--}}
     @if(!empty($client))
-        <h2>Добавить машину клиента: {{ $client->general_name }}</h2>
+        <h2>Добавить машину клиента: {{ $client->fio }}</h2>
 <div id="markmodel">
         {{-- Форма добавления машины для клиента --}}
         <form action="{{ url('admin/cars_in_service/add') }}" method="POST">
@@ -161,7 +161,7 @@
                     <label>Выберите клиента</label>
                     <select class="form-control" name="client_id">
                         @foreach($clients as $client)
-                            <option value="{{ $client->id }}">{{ $client->general_name }}</option>
+                            <option value="{{ $client->id }}">{{ $client->fio }}</option>
                         @endforeach
 
                     </select>
