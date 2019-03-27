@@ -246,6 +246,18 @@ class Master_Controller extends Controller
         return back();
     }
 
+    public function zonal_confirm_work(Request $request){
+
+
+        $id = $request->id;
+        $status = 'confirmed';
+        Zonal_assignments_completed_works::where('id',$id)->update(['status'=>$status]);
+        
+        /* Возвращаемся на страницу */
+        return back();
+
+    }
+
 
     public function master_employees()
     {

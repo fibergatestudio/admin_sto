@@ -12,7 +12,7 @@
 
     {{-- Редактирование времени --}}
 
-    <form action="{{ url('admin/assignments/view/'.$sub_assignment->id.'/management/update_zonal_assignment_time') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ url('/employee/manage_assignment/'.$sub_assignment->id.'/management/update_zonal_assignment_time') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
             <input type="hidden" name="assignment_id" value="{{ $sub_assignment->id }}">
@@ -96,74 +96,6 @@
         @endforeach
         </tbody>
     </table>
-    <!--<p>Сумма зональных заходов: {{ $zonal_assignment_income->sum('zonal_amount') }}<br></p>-->
-
-    {{-- Добавить заход денег : Кнопка открытия модального окна --}}
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addZonalIncomeModal">
-        Добавить заход денег
-    </button>
-
-    {{-- Добавить зональный заход денег : Форма и модальное окно --}}
-    <form action="{{ url('admin/assignments/view/'.$sub_assignment->id.'/management/add_zonal_assignment_income') }}" method="POST">
-        @csrf
-
-        <div class="modal fade" id="addZonalIncomeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Добавить зональный заход денег</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        
-                            {{-- ID наряда --}}
-                            <input type="hidden" name="assignment_id" value="{{ $assignment->id }}">
-                            <input type="hidden" name="assignment_id" value="{{ $sub_assignment->id }}">
-
-                            <div class="form-row">
-                                {{-- Сумма --}}
-                                <div class="form-group col-md-6">
-                                    <label>Сумма</label>
-                                    <input type="number" name="zonal_amount" min="0" class="form-control" required>
-                                </div>
-                                {{-- Валюта --}}
-                                <div class="form-group col-md-6">
-                                    <label>Валюта</label>
-                                    <!--<input type="number" name="amount" min="0" class="form-control" required>-->
-                                    <select name="currency"class="form-control">
-                                        <option value="MDL">MDL</option>
-                                        <option value="USD">USD</option>
-                                        <option value="EUR">EUR</option>
-                                    </select>
-                                </div>
-                            </div>
-                        
-                            
-                            {{-- Основание --}}
-                            <div class="form-group">
-                                <label>Основание (реквизиты документа или действие)</label>
-                                <input type="text" name="zonal_basis" class="form-control" required>
-                            </div>
-
-                            {{-- Описание - не обязательно --}}
-                            <div class="form-group">
-                                <label>Описание</label>
-                                <textarea name="zonal_description" class="form-control" required></textarea>
-                            </div>
-
-                        
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                        <button type="submit" class="btn btn-primary">Добавить</button>
-                    </div>
-                </div>{{-- /modal-content --}}
-            </div>{{-- /modal-dialog --}}
-        </div>{{-- /modal fade --}}
-    </form>
 
     <hr>
     {{-- Расходная часть --}}
@@ -199,74 +131,6 @@
         @endforeach
         </tbody>
     </table>
-    <!--<p>Сумма зональных расходов: {{ $zonal_assignment_expense->sum('zonal_amount') }}<br></p>-->
-
-    {{-- Добавить расход денег : Кнопка открытия модального окна --}}
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addZonalExpenseModal">
-        Добавить расход денег
-    </button>
-
-    {{-- Добавить зональный расход денег : Форма и модальное окно --}}
-    <form action="{{ url('admin/assignments/view/'.$sub_assignment->id.'/management/add_zonal_assignment_expense') }}" method="POST">
-        @csrf
-
-        <div class="modal fade" id="addZonalExpenseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Добавить зональный расход денег</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        
-                            {{-- ID наряда --}}
-                            <input type="hidden" name="assignment_id" value="{{ $assignment->id }}">
-                            <input type="hidden" name="assignment_id" value="{{ $sub_assignment->id }}">
-                            
-
-                            <div class="form-row">
-                                {{-- Сумма --}}
-                                <div class="form-group col-md-6">
-                                    <label>Сумма</label>
-                                    <input type="number" name="zonal_amount" min="0" class="form-control" required>
-                                </div>
-                                {{-- Валюта --}}
-                                <div class="form-group col-md-6">
-                                    <label>Валюта</label>
-                                    <!--<input type="number" name="amount" min="0" class="form-control" required>-->
-                                    <select name="currency"class="form-control">
-                                        <option value="MDL">MDL</option>
-                                        <option value="USD">USD</option>
-                                        <option value="EUR">EUR</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            {{-- Основание --}}
-                            <div class="form-group">
-                                <label>Основание (реквизиты документа или действие)</label>
-                                <input type="text" name="zonal_basis" class="form-control" required>
-                            </div>
-
-                            {{-- Описание - не обязательно --}}
-                            <div class="form-group">
-                                <label>Описание</label>
-                                <textarea name="zonal_description" class="form-control" required></textarea>
-                            </div>
-
-                        
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                        <button type="submit" class="btn btn-primary">Добавить</button>
-                    </div>
-                </div>{{-- /modal-content --}}
-            </div>{{-- /modal-dialog --}}
-        </div>{{-- /modal fade --}}
-    </form>
 
     <hr>
 
@@ -297,10 +161,11 @@
         <td>
         {{ date('d m Y', $work_entry->created_at->timestamp) }}<br>
         </td>
+        </td>
         @if ($work_entry->status == 'unconfirmed')
 
         <td style="width: 100px; white-space: nowrap;" class="bg-warning">
-        Не подтвержден<br>
+        Не подтвержден
         </td>
 
         @else
@@ -311,9 +176,6 @@
 
         @endif
         <td>
-
-        </td>
-        
     </tr>
     @endforeach
     
@@ -326,7 +188,7 @@
     </button>
 
     {{-- Добавить зональную выполненую работу : Форма и модальное окно --}}
-    <form action="{{ url('admin/assignments/view/'.$sub_assignment->id.'/management/add_zonal_assignment_works') }}" method="POST">
+    <form action="{{ url('/employee/manage_assignment/'.$sub_assignment->id.'/management/add_zonal_assignment_works') }}" method="POST">
         @csrf
 
         <div class="modal fade" id="addZonalWorksModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

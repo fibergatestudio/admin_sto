@@ -16,6 +16,10 @@ use App\Assignments_completed_works;
 use App\Coffee_token_log;
 use App\Employee_balance_log;
 use App\Employee;
+use App\Sub_assignment;
+use App\Zonal_assignments_income;
+use App\Zonal_assignments_expense;
+use App\Zonal_assignments_completed_works;
 
 use Telegram\Bot\Laravel\Facades\Telegram;
 
@@ -117,7 +121,7 @@ class Employee_Dashboard_Controller extends Controller
             ->get();
         }
 
-        return view('employee.finance_history',
+        return view('employee.employee_profile',
         [
             'view_fine' => $view_fine,
             'view_coffee' => $view_coffee,
@@ -214,7 +218,7 @@ class Employee_Dashboard_Controller extends Controller
                     ]
                 )
                 ->get();
-        
+
         return view('employee.assignments_index', ['assignments' => $assignments_data]);
     }
 
@@ -282,6 +286,20 @@ class Employee_Dashboard_Controller extends Controller
         $assignment_expense = Assignments_expense::where('assignment_id', $assignment_id)->get();
         /* Получаем выполненые работы */
         $assignment_work = Assignments_completed_works::where('assignment_id', $assignment_id)->get();
+
+
+        $sub_assignments = 
+        DB::table('sub_assignments')
+        ->where('assignment_id', $assignment_id)
+        ->join('workzones', 'sub_assignments.workzone_id', '=', 'workzones.id')
+        ->join('employees', 'sub_assignments.responsible_employee_id', '=', 'employees.id')
+        ->orderBy('order','ASC')
+        ->select(
+            'sub_assignments.*', 
+            'workzones.general_name AS workzone_name',
+            'employees.fio AS employee_name'
+            )
+        ->get();
         
         
         // .. Собираем историю по наряду
@@ -292,7 +310,8 @@ class Employee_Dashboard_Controller extends Controller
             'assignment' => $assignment, 
             'assignment_income' => $assignment_income, 
             'assignment_expense' => $assignment_expense, 
-            'assignment_work' => $assignment_work
+            'assignment_work' => $assignment_work,
+            'sub_assignments' => $sub_assignments
         ]);
     }
 
@@ -470,6 +489,64 @@ class Employee_Dashboard_Controller extends Controller
         [
             'assignments_archive' => $assignments_archive
         ]);
+    }
+
+    public function manage_zonal_assignment($sub_assignment_id){
+
+        $sub_assignment = Sub_assignment::find($sub_assignment_id); 
+        $assignment = Assignment::find($sub_assignment->assignment_id); 
+        
+        // .. Собираем информацию по наряду
+        
+        /* Получаем доходную часть */
+        $zonal_assignment_income = Zonal_assignments_income::where('sub_assignment_id', $sub_assignment_id)->get();
+        /* Получаем расходную часть */
+        $zonal_assignment_expense = Zonal_assignments_expense::where('sub_assignment_id', $sub_assignment_id)->get();
+        /* Получаем выполненые работы */
+        $zonal_assignment_work = Zonal_assignments_completed_works::where('sub_assignment_id', $sub_assignment_id)->get();
+    
+        return view('employee.zonal_assignment',
+        [
+            'assignment' =>  $assignment,
+            'sub_assignment' => $sub_assignment,
+            'zonal_assignment_income' => $zonal_assignment_income, 
+            'zonal_assignment_expense' => $zonal_assignment_expense, 
+            'zonal_assignment_work' => $zonal_assignment_work
+        ]);
+
+        //return back();
+    }
+
+    public function update_zonal_assignment_time(Request $request){
+
+        $sub_assignment_id = $request->assignment_id;
+        $new_start_time = $request->new_start_time;
+        $new_end_time = $request->new_end_time;
+
+        DB::table('sub_assignments')
+        ->where('id', '=', $sub_assignment_id)
+        ->update([
+            'start_time' => $new_start_time,
+            'end_time' => $new_end_time
+            ]);
+
+        return back();
+
+    }
+
+    public function add_zonal_assignment_works(Request $request){
+
+        /* Создаём новое вхождение по выполненым работам и вносим туда информацию */
+        $new_zonal_works_entry = new Zonal_assignments_completed_works();
+        $new_zonal_works_entry->sub_assignment_id = $request->sub_assignment_id; /* Идентификатор наряда */
+        $new_zonal_works_entry->zonal_basis = $request->zonal_basis; /* Основание для расхода денег */
+        $new_zonal_works_entry->zonal_description = $request->zonal_description; /* Описание для расхода */
+        $new_zonal_works_entry->status = 'unconfirmed'; /* Статус зональной работы */
+        $new_zonal_works_entry->save();
+
+        /* Возвращаемся обратно на страницу наряда */
+        return back();
+
     }
 
     /**** Смены ****/

@@ -73,13 +73,16 @@ Route::post('/master/confirm_work/{id}', 'Master_Controller@confirm_work')->midd
 /*Редактирование мастером зональных нарядов*/
 
 /*Редактирование доходной части наряда мастером*/
-Route::post('/master/zonal_income_entry/{id}', 'Master_Controller@zonal_income_entry')->middleware('can:master_rights');///
+Route::post('/master/zonal_income_entry/{id}', 'Master_Controller@zonal_income_entry')->middleware('can:master_rights');
 
 /*Редактирование расходной части наряда мастером*/
-Route::post('/master/zonal_expense_entry/{id}', 'Master_Controller@zonal_expense_entry')->middleware('can:master_rights');///
+Route::post('/master/zonal_expense_entry/{id}', 'Master_Controller@zonal_expense_entry')->middleware('can:master_rights');
 
 /*Редактирование списка выполненых работ мастером*/
 Route::post('/master/zonal_work_entry/{id}', 'Master_Controller@zonal_work_entry')->middleware('can:master_rights');
+
+/* Подтверждение зональной работы мастером */
+Route::post('/master/zonal_confirm_work/{id}', 'Master_Controller@zonal_confirm_work')->middleware('can:master_rights');
 /**/
 
 
@@ -169,6 +172,8 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
 
         /* Изменить ставку сотруднику : POST */
         Route::post('/admin/employee_finances/change_standard_shift_wage', 'EmployeesAdminController@change_standard_shift_wage');
+        /* NEWTEST */
+        Route::post('/supervisor/employee_finances/{employee_id}', 'EmployeesAdminController@employee_finances');
 
     /* Страница выплат по сотруднику */
     Route::get('/supervisor/employee_finances/payout/{employee_id}', 'EmployeesAdminController@employee_payout_page')->middleware('can:admin_rights');
@@ -381,7 +386,7 @@ Route::post('/admin/profitability_index/month', 'Assignments_Admin_Controller@pr
         /* Управление зонального наряда */
         Route::get('admin/assignments/view/{sub_assignment_id}/management', 'Assignments_Admin_Controller@assignment_management');
 
-            /* Добавить зональную доходную часть : POST */
+            /* Изменить время зонального наряда : POST */
             Route::post('admin/assignments/view/{sub_assignment_id}/management/update_zonal_assignment_time', 'Assignments_Admin_Controller@update_zonal_assignment_time');
 
              /* Добавить зональную доходную часть : POST */
@@ -561,6 +566,15 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
 
              /* Наряд архив : POST */
              Route::get('/employee/manage_assignment/{assignment_id}/assignment_archive', 'Employee_Dashboard_Controller@assignment_archive');
+
+    /* Страница управления ЗОНАЛЬНЫМ нарядом  */
+    Route::get('/employee/manage_assignment/{sub_assignment_id}/management', 'Employee_Dashboard_Controller@manage_zonal_assignment');
+
+        /* Изменить время зонального наряда : POST */
+        Route::post('/employee/manage_assignment/{sub_assignment_id}/management/update_zonal_assignment_time', 'Employee_Dashboard_Controller@update_zonal_assignment_time');
+
+        /* Добавить зональный список выполненых работ : POST */
+        Route::post('/employee/manage_assignment/{sub_assignment_id}/management/add_zonal_assignment_works', 'Employee_Dashboard_Controller@add_zonal_assignment_works');
 
     /* Архив моих нарядов */
     Route::get('/employee/my_assignments_archive', 'Employee_Dashboard_Controller@my_assignments_archive');

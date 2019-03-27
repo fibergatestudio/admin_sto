@@ -133,134 +133,210 @@
         </div>
     </div>
 
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <b>Последние начисления:</b>
+    <div class="card card-outline-secondary col-md-12">
+        <div class="form-group">
+            <div class="card-header">
+                <h3 class="mb-0">История Финансов:</h3>
+            </div>
+        <form action="{{ url('/supervisor/employee_finances/'.$employee->id) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <input type="hidden" name="employee_id" value="$employee->id">
+            <div class="row">
+                <div class="col">
+                    <div class="custom-control">
+                        <label>Фильтры типа: </label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" name="filter_income" value="1" class="custom-control-input" id="check1" 
+                        @if ($view_income == 'null')
+                        
+                        @else
+                            checked
+                        @endif
+                        >
+                        <label class="custom-control-label" for="check1">Начисления</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" name="filter_payout" value="2" class="custom-control-input" id="check2"
+                        @if ($view_payout == 'null')
+                        
+                        @else
+                            checked
+                        @endif
+                        >
+                        <label class="custom-control-label" for="check2">Выплаты</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" name="filter_fine" value="3" class="custom-control-input" id="check3"
+                        @if ($view_fine == 'null')
+                        
+                        @else
+                            checked
+                        @endif
+                        >
+                        <label class="custom-control-label" for="check3">Штрафы</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" name="filter_coffee" value="4" class="custom-control-input" id="check4"
+                        @if ($view_coffee == 'null')
+                        
+                        @else
+                            checked
+                        @endif
+                        >
+                        <label class="custom-control-label" for="check4">Кофе</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="custom-control">
+                        <button type="sumbit" class="btn btn-primary">Применить</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        
+            <hr>
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Номер наряда</th>
                         <th>Дата</th>
+                        <th>Тип</th>
                         <th>Сумма</th>
                         <th>Остаток</th>
-                    </tr>
-                </thead>
-                @foreach($balance_logs as $balance_logs )
-                <tr>
-                    <td>
-                        #
-                    </td>
-                    <td>
-                    {{ $balance_logs->date }}
-                    </td>
-                    <td>
-                    {{ $balance_logs->amount }}
-                    </td>
-                    <td>
-                    {{ $balance_logs->old_balance }}
-                    </td>
-                    <td>
-      
-                    </td>
-                </tr>
-                @endforeach
-            </table>
-        </div>
-        <div class="form-group col-md-6">
-            <b>Последние выплаты:</b>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Номер наряда</th>
-                        <th>Дата</th>
-                        <th>Сумма</th>
-                        <th>Остаток</th>
-                    </tr>
-                </thead>
-                @foreach ($payout_logs as $payout_log )
-                <tr>
-                    <td>
-                        #
-                    </td>
-                    <td>
-                    {{ $payout_log->date }}
-                    </td>
-                    <td>
-                    {{ $payout_log->amount }}
-                    </td>
-                    <td>
-                    {{ $payout_log->old_balance }}
-                    </td>
-                    <td>
-
-                    </td>
-                </tr>
-                @endforeach
-            </table>
-        </div>
-    </div>
-
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <b>Последние штрафы:</b>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Дата</th>
-                        <th>Сумма</th>
-                        <th>Остаток</th>
-                        <th>Статус</th>
                         <th>Основание</th>
+                        <th>Статус</th>
                     </tr>
                 </thead>
-                @foreach($employee_fines as $employee_fines)
-                <tr>
-                    <td>
-                        {{ $employee_fines->date }}
-                    </td>
-                    <td>
-                        -{{ $employee_fines->amount }}
-                    </td>
-                    <td>
-                        {{ $employee_fines->old_balance }}
-                    </td>
-                    <td>
-                        {{ $employee_fines->status }}
-                    </td>
-                    <td>
-                        {{ $employee_fines->reason }}
-                    </td>
-                </tr>
-                @endforeach
-            </table>
-        </div>
-        <div class="form-group col-md-6">
-            <b>Жетоны:</b>
-            <table class="table">
-                <thead>
+
+                @if ($view_payout == 'null')
+
+                @else
+
+                    {{-- Вывод выплат --}}
+                    @foreach ($view_payout as $view_payout)
                     <tr>
-                        <th>Кол-во жетонов</th>
-                        <th>Сумма</th>
-                        <th>Остаток</th>
-                        <th>Дата</th>
+                        <td>
+                            {{ $view_payout->date }}
+                        </td>
+                        <td>
+                            {{ $view_payout->type }}
+                        </td>
+                        <td>
+                            -{{ $view_payout->amount }}
+                        </td>
+                        <td>
+                            {{ $view_payout->old_balance }}
+                        </td>
+                        <td>
+                            {{ $view_payout->reason }}
+                        </td>
+                        <td>
+                            {{ $view_payout->status }}
+                        </td>
                     </tr>
-                </thead>
-                @foreach($token_logs as  $token_logs)
+                    @endforeach
+
+                @endif
+
+                @if ($view_income == 'null')
+                
+                @else
+
+                    {{-- Вывод заходы --}}
+                    @foreach ($view_income as $view_income)
+                    <tr>
+                        <td>
+                            {{ $view_income->date }}
+                        </td>
+                        <td>
+                            {{ $view_income->type }}
+                        </td>
+                        <td>
+                            -{{ $view_income->amount }}
+                        </td>
+                        <td>
+                            {{ $view_income->old_balance }}
+                        </td>
+                        <td>
+                            {{ $view_income->reason }}
+                        </td>
+                        <td>
+                            {{ $view_income->status }}
+                        </td>
+                    </tr>
+                    @endforeach
+
+                @endif
+
+                @if($view_fine == 'null')
+
+                @else
+
+                    {{-- Вывод штрафы --}}
+                    @foreach ($view_fine as $view_fine)
+                    <tr>
+                        <td>
+                            {{ $view_fine->date }}
+                        </td>
+                        <td>
+                            {{ $view_fine->type }}
+                        </td>
+                        <td>
+                            -{{ $view_fine->amount }}
+                        </td>
+                        <td>
+                            {{ $view_fine->old_balance }}
+                        </td>
+                        <td>
+                            {{ $view_fine->reason }}
+                        </td>
+                        <td>
+                            {{ $view_fine->status }}
+                        </td>
+                    </tr>
+                    @endforeach
+
+                @endif
+                
+                @if ($view_coffee == 'null')
+
+                @else
+
+                {{-- Вывод штрафы --}}
+                @foreach ($view_coffee as $view_coffee)
                 <tr>
                     <td>
-                    {{ $token_logs->token_count}}
+                        {{ $view_coffee->date }}
                     </td>
                     <td>
-                    -{{ $token_logs->token_count*5}}
+                        {{ $view_coffee->type }}
                     </td>
                     <td>
-                    {{ $token_logs->old_balance }}
+                        -{{ $view_coffee->amount }}
                     </td>
                     <td>
-                    {{ $token_logs->date }}
+                        {{ $view_coffee->old_balance }}
+                    </td>
+                    <td>
+                        {{ $view_coffee->reason }}
+                    </td>
+                    <td>
+                        {{ $view_coffee->status }}
                     </td>
                 </tr>
                 @endforeach
+
+                @endif
+                
+               
             </table>
         </div>
     </div>

@@ -363,6 +363,8 @@
             <th>Название</th>
             <th>Основание</th>
             <th>Дата</th>
+            <th>Статус</th>
+            <th></th>{{-- Кнопки управления --}}
             <th></th>{{-- Кнопки управления --}}
         </tr>
         </thead>
@@ -380,10 +382,25 @@
                 </td>
 
                 <td>
+                    {{ $work_entry->status }}
+                </td>
+
+                <td>
                     {{-- Редактировать модель машны : Кнопка открытия модального окна --}}
                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#work_entry{{$work_entry->id}}">
                         Редактировать
                     </button><br>
+                </td>
+                <td>
+                    @if ($work_entry->status == 'unconfirmed')
+                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#confirm_work{{$work_entry->id}}">
+                        Подтвердить
+                    </button><br>
+                    @elseif ($work_entry->status == 'confirmed')
+                    <button type="button" class="btn btn-secondary" disabled>
+                        Подтверждено
+                    </button><br>
+                    @endif
                 </td>
             </tr>
 
@@ -427,6 +444,48 @@
                 </div>
 
             </form>
+
+            <!-- Форма подтверждения работы -->
+    <form action="{{ url('/master/zonal_confirm_work/'.$work_entry->id) }}" method="POST">
+        @csrf
+
+        <div class="modal fade" id="confirm_work{{$work_entry->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Подтвердить работу?</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                        <input type="hidden" name="id" value="{{ $work_entry->id }}">
+
+                        {{-- Название --}}
+                        <div class="form-group">
+                            <label>Название</label>
+                            <input type="text" name="new_basis" class="form-control" value="{{ $work_entry->zonal_basis }}" disabled>
+                        </div>
+
+                        {{-- Название --}}
+                        <div class="form-group">
+                            <label>Описание</label>
+                            <input type="text" name="new_description" class="form-control" value="{{ $work_entry->zonal_description }}" disabled>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                        <button type="submit" class="btn btn-success">Подтвердить</button>
+                    </div>
+                </div>{{-- /modal-content --}}
+            </div>
+        </div>
+
+    </form>
+
 
         @endforeach
         </tbody>

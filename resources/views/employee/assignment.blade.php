@@ -35,6 +35,54 @@
             </a>
         </div>
     </div>
+    <hr>
+    {{-- Зональные наряды --}}
+    <h3>Текущие зональные наряды:</h3>
+    <table id="table" class="table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Номер</th>
+          <th>Название</th>
+          <th>Рабочая зона</th>
+          <th>Ответственный сотрудник </th>
+          <th>Дата</th>
+          <th>Время начал работ</th>
+          <th>Время окончания работ</th>
+          <th></th>{{-- Кнопка просмотр --}}
+        </tr>
+      </thead>
+      <tbody id="tablecontents">
+        @foreach($sub_assignments as $sub_assignment)
+          <tr class="row1" data-id="{{ $sub_assignment->id }}">
+            <td>
+                <div style="color:rgb(124,77,255); padding-left: 10px; float: left; font-size: 20px; cursor: pointer;" title="change display order">
+                <i class="icon-menu-open"></i>
+                <i class=""></i>
+                </div>
+            </td>
+            <td>{{ $sub_assignment->id }}</td>
+            <td>{{ $sub_assignment->name }} </td>{{-- Название наряда --}}
+            <td>{{ $sub_assignment->workzone_name }} </td>{{-- Название рабочей зоны --}}
+            <td>{{ $sub_assignment->employee_name }} </td>{{-- Название ответственного сотрудника --}}
+            <td>{{ $sub_assignment->date_of_creation }} </td>{{-- Дата создания --}}
+            <td>{{ $sub_assignment->start_time }} </td>{{-- Время начала работ --}}
+            <td>{{ $sub_assignment->end_time }} </td>{{-- Время окончания работ --}}
+
+            {{-- url('admin/assignments/view/'.$assignment->id.'/management') --}}
+            <td>
+              {{-- Кнопка управления --}}
+              <a href="{{ url('/employee/manage_assignment/'.$sub_assignment->id.'/management') }}">
+                <div class="btn btn-light">
+                  Управление зональным нарядом
+                </div>
+              </a>
+            </td>
+          </tr>
+        @endforeach
+      </tbody>
+    </table>
+    <hr>
 
     {{-- Доходная часть --}}
     <h2>Доходная часть</h2>
@@ -168,12 +216,6 @@
         @endforeach
         </tbody>
     </table>
-    <!--<p>Сумма расходов: {{ $assignment_expense->sum('amount') }}<br></p>-->
-
-    <!-- {{-- Добавить расход денег : Кнопка открытия модального окна --}}
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addExpenseModal">
-        Добавить расход денег
-    </button> -->
 
     {{-- Добавить расход денег : Форма и модальное окно --}}
     <form action="{{ url('/employee/manage_assignment/add_expense_entry') }}" method="POST">
@@ -265,8 +307,8 @@
         </td>
         @if ($work_entry->status == 'unconfirmed')
 
-        <td style="width: 100px;" class="bg-warning">
-        Неподтвержден<br>
+        <td style="width: 100px; white-space: nowrap;" class="bg-warning">
+        Не подтвержден<br>
         </td>
 
         @else
