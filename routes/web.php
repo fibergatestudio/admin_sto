@@ -90,7 +90,7 @@ Route::get('/master/employees', 'Master_Controller@master_employees')->middlewar
 Route::get('/master/employee_finances/{id}', 'Master_Controller@employee_finances')->middleware('can:master_rights');
 
 /*Деавторизация*/
-Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
+Route::get('/Logs_Admin_Controllerout', '\App\Http\Controllers\Auth\LoginController@logout');
 /*Деавторизация*/
 /* Путь с редиректами по ролям */
 Route::get('/home', 'HomeController@index')->name('home');
@@ -511,6 +511,15 @@ Route::get('/admin/supply_orders/archive', 'Supply_orders_Admin_Controller@archi
 // ... Удалить авто
 
 // ... Редактировать авто
+
+/****************************************/
+/*******  Логи : Администратор  *********/
+/****************************************/
+
+Route::get('/admin/employees_logs', 'Logs_Admin_Controller@employees_logs');  //страница логов по сотрдуникам
+Route::get('/admin/clients_logs', 'Logs_Admin_Controller@clients_logs');  //страница логов по клиентам
+Route::get('/admin/cars_in_service_logs', 'Logs_Admin_Controller@cars_in_service_logs');  //страница логов по авто
+Route::get('/admin/finances_logs', 'Logs_Admin_Controller@finances_logs'); //страница логов по финансам 
 
 /****************************************/
 /********** РАБОТНИК : секция **********/

@@ -6,7 +6,7 @@
 
 @section('content')
     <h2>Логи по сотрудникам</h2>
-    
+
     <table class="table">
         <tr>
             <td><b>Дата</b></td>
@@ -17,18 +17,18 @@
                 {{-- Дата --}}
                 <td>
                     <p>
-                        {{ date('j. n. Y H:i', strtotime($employee_log->created_at)) }}
+                        {{ date('j. m. Y H:i', strtotime($employee_log->created_at)) }}
                     </p>
-                
+
                 </td>
-                
+
                 {{-- Текст лога --}}
                 <td>
                     <a>
                         {{ $employee_log->text }}
-                    </a>    
+                    </a>
                 </td>
-                
+
             </tr>
         @endforeach
     </table>
@@ -44,18 +44,18 @@
                 {{-- Дата --}}
                 <td>
                     <p>
-                        {{ date('j. n. Y H:i', strtotime($employee_note_log->created_at)) }}
+                        {{ date('j. m. Y H:i', strtotime($employee_note_log->created_at)) }}
                     </p>
-                
+
                 </td>
-                
+
                 {{-- Текст лога --}}
                 <td>
                     <p>
                         {{ $employee_note_log->text }}
-                    </p>    
+                    </p>
                 </td>
-                
+
             </tr>
         @endforeach
     </table>

@@ -169,6 +169,17 @@
 							</a>
 						</li>
 
+						<li class="nav-item nav-item-submenu">
+							<a href="#" class="nav-link legitRipple"><i class="icon-copy"></i> <span>Логирование</span></a>
+
+							<ul class="nav nav-group-sub" data-submenu-title="Layouts" style="display: none;">
+								<li class="nav-item"><a href="{{ url('/admin/employees_logs') }}" class="nav-link legitRipple">Сотрудники</a></li>
+								<li class="nav-item"><a href="{{ url('/admin/clients_logs') }}" class="nav-link legitRipple">Клиенты</a></li>
+								<li class="nav-item"><a href="{{ url('/admin/cars_in_service_logs') }}" class="nav-link legitRipple">Машины в сервисе</a></li>
+								<li class="nav-item"><a href="{{ url('/admin/finances_logs') }}" class="nav-link legitRipple">Финансы</a></li>
+								</ul>
+						</li>
+
 						<li class="nav-item">
 							<a class="nav-link" href="{{ url('/logout') }}"
                                 onclick="event.preventDefault();

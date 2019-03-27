@@ -6,29 +6,29 @@
 
 @section('content')
     <h2>Логи по машинам в сервисе</h2>
-    
+
     <table class="table">
         <tr>
             <td><b>Дата</b></td>
             <td><b>Текст лога</b></td>
         </tr>
-        @foreach($cars_in_service_logs as $car_in_service_log)
+        @foreach($cars_in_service_logs as $cars_in_service_log)
             <tr>
                 {{-- Дата --}}
                 <td>
                     <p>
-                        {{ date('j. n. Y H:i', strtotime($car_in_service_log->created_at)) }}
+                        {{ date('j. m. Y H:i', strtotime($cars_in_service_log->created_at)) }}
                     </p>
-                
+
                 </td>
-                
+
                 {{-- Текст лога --}}
                 <td>
                     <a>
-                        {{ $car_in_service_log->text }}
-                    </a>    
+                        {{ $cars_in_service_log->text }}
+                    </a>
                 </td>
-                
+
             </tr>
         @endforeach
     </table>
@@ -39,23 +39,23 @@
             <td><b>Дата</b></td>
             <td><b>Текст лога</b></td>
         </tr>
-        @foreach($cars_in_service_notes_logs as $car_in_service_note_log)
+        @foreach($cars_in_service_notes_logs as $cars_in_service_note_log)
             <tr>
                 {{-- Дата --}}
                 <td>
                     <p>
-                        {{ date('j. n. Y H:i', strtotime($car_in_service_note_log->created_at)) }}
+                        {{ date('j. m. Y H:i', strtotime($cars_in_service_note_log->created_at)) }}
                     </p>
-                
+
                 </td>
-                
+
                 {{-- Текст лога --}}
                 <td>
                     <a>
-                        {{ $car_in_service_note_log->text }}
-                    </a>    
+                        {{ $cars_in_service_note_log->text }}
+                    </a>
                 </td>
-                
+
             </tr>
         @endforeach
     </table>

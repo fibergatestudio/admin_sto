@@ -99,7 +99,7 @@ class EmployeesAdminController extends Controller
         $author = User::find($author_id);
         $author_name = $author->general_name;
 
-        $create_employee_log_entry->text = 'Создан новый сотрудник - ' .$employee_name. 'автор - '.$author_name;  //текст о создании сотрудника(имя) и автор(имя)
+        $create_employee_log_entry->text = 'Создан новый сотрудник - ' .$employee_name. ' | автор - '.$author_name;  //текст о создании сотрудника(имя) и автор(имя)
         /* Тип? Тест */
         $create_employee_log_entry->type = '';
         $create_employee_log_entry->save();
@@ -144,7 +144,7 @@ class EmployeesAdminController extends Controller
         $author = User::find($author_id);
         $author_name = $author->general_name;
 
-        $archive_employee_log_entry->text = 'Перевод в архив сотрудника - ' .$employee_name. 'автор - '.$author_name;  //текст лога архивации сотрудника (имя) и автор(имя)
+        $archive_employee_log_entry->text = 'Перевод в архив сотрудника - ' .$employee_name. ' | автор - '.$author_name;  //текст лога архивации сотрудника (имя) и автор(имя)
         /* Тип? Тест */
         $archive_employee_log_entry->type = '';
         $archive_employee_log_entry->save();
@@ -312,7 +312,7 @@ class EmployeesAdminController extends Controller
         $author = User::find($author_id);
         $author_name = $author->general_name;
 
-        $create_employee_note_log_entry->text = 'Создана заметка по сотруднику - ' .$name. 'автор - '.$author_name; //текст о создании заметки по клиенту(имя) и автор(имя)
+        $create_employee_note_log_entry->text = 'Создана заметка по сотруднику - ' .$name. ' | автор - '.$author_name; //текст о создании заметки по клиенту(имя) и автор(имя)
         /* Тип? Тест */
         $create_employee_note_log_entry->type = '';
         $create_employee_note_log_entry->save();
@@ -361,7 +361,7 @@ class EmployeesAdminController extends Controller
         $author = User::find($author_id);
         $author_name = $author->general_name;
 
-        $edit_employee_note_log_entry->text = 'Редактирование заметки о сотруднике - ' .$employee_name. 'автор - '.$author_name;  //текст лога о редактировании заметки по клиенту(имя) и автор(имя)
+        $edit_employee_note_log_entry->text = 'Редактирование заметки о сотруднике - ' .$employee_name. '  | автор - '.$author_name;  //текст лога о редактировании заметки по клиенту(имя) и автор(имя)
         /* Тип? Тест */
         $edit_employee_note_log_entry->type = '';
         $edit_employee_note_log_entry->save();
@@ -391,7 +391,7 @@ class EmployeesAdminController extends Controller
         $author = User::find($author_id);
         $author_name = $author->general_name;
 
-        $delete_employee_note_log_entry->text = 'Удаление заметки о сотруднике - ' .$employee_name. 'автор - '.$author_name;  //текст лога удаления заметки по сотруднику(имя) автор(имя)
+        $delete_employee_note_log_entry->text = 'Удаление заметки о сотруднике - ' .$employee_name. ' | автор - '.$author_name;  //текст лога удаления заметки по сотруднику(имя) автор(имя)
         /* Тип? Тест */
         $delete_employee_note_log_entry->type = '';
         $delete_employee_note_log_entry->save();
@@ -420,7 +420,7 @@ class EmployeesAdminController extends Controller
         $author = User::find($author_id);
         $author_name = $author->general_name;
 
-        $change_employee_shift_wage_log_entry->text = 'Изменение ставки сотрудника - ' .$employee_name. 'автор - ' .$author_name;  //текст лога о изменении ставки сотрудника(имя) и автор(имя)
+        $change_employee_shift_wage_log_entry->text = 'Изменение ставки сотрудника - ' .$employee_name. ' | автор - ' .$author_name;  //текст лога о изменении ставки сотрудника(имя) и автор(имя)
         /* Тип? Тест */
         $change_employee_shift_wage_log_entry->type = '';
         $change_employee_shift_wage_log_entry->save();
@@ -859,7 +859,7 @@ class EmployeesAdminController extends Controller
         $author = User::find($author_id);
         $author_name = $author->general_name;
 
-        $fine_to_employee_log_entry->text = 'Штраф сотруднику - ' .$employee_name. 'был добавлен в ручную -' . $author_name;  //текст лога о добавлении штрафа сотруднику(имя) автором(имя)
+        $fine_to_employee_log_entry->text = 'Штраф сотруднику - ' .$employee_name. ' был добавлен в ручную - ' . $author_name;  //текст лога о добавлении штрафа сотруднику(имя) автором(имя)
         /* Тип? Тест */
         $fine_to_employee_log_entry->type = '';
         $fine_to_employee_log_entry->save();
