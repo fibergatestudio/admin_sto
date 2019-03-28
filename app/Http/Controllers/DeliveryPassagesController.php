@@ -10,13 +10,15 @@ use App\Delivery_passage;
 use App\Employee;
 use App\Employee_fine;
 use App\Employees_logs;
+use App\Employee_balance_logs;
+use Telegram\Bot\Laravel\Facades\Telegram;
 use DB;
 
 class DeliveryPassagesController extends Controller
 {
 
     public function index(){
-        $passages = Delivery_passage::paginate(10);
+        $passages = Delivery_passage::orderBy('updated_at', 'desc')->paginate(10);
         //echo '<pre>'.print_r($data_arr_assoc,true).'</pre>';
         return view('delivery_passages',['passages' => $passages]);
     }
@@ -176,7 +178,13 @@ class DeliveryPassagesController extends Controller
                         /* ----------------------Проверка на опоздание и штраф----------------------- */
 
                         $sum_money = 0;
-                        
+                        $time_arr = [];
+                        $sum_hours = 0;
+                        $sum_minutes = 0;
+                        $employee_id = $passage_user_id;
+                        $employee = Employee::find($employee_id);
+                        $employee_name = $employee->general_name;
+                       
                         //Есть ли основание для штрафа
                         if ($new_passage->direction == '1') {
                             $time_arr = explode(":", $time);
@@ -188,9 +196,9 @@ class DeliveryPassagesController extends Controller
                                 $sum_money = $sum_hours*60 + $sum_minutes;
                             }
                         }
-
+ 
                         //Если есть то добавляем штраф
-                        if ($sum_money > 0) {
+                        if ($sum_money > 0 AND $employee->fixed_charge) {
 
                             /* Найти айди рабочего */
                             $employee_balance = DB::table('employees')
@@ -213,23 +221,94 @@ class DeliveryPassagesController extends Controller
                             $fine_to_employee_log_entry = new Employees_logs();
                             $fine_to_employee_log_entry->employee_id = $passage_user_id;  //id сотрудника
                             $fine_to_employee_log_entry->author_id = User::where('role', 'admin')->first()->id;  //id автора
-
-                            /* - Имя сотрудника - */
-                            $employee_id = $passage_user_id;
-                            $employee = Employee::find($employee_id);
-                            $employee_name = $employee->general_name;
+                           
                             /* - Имя автора - */
                             $author_id = $fine_to_employee_log_entry->author_id;
                             $author = User::find($author_id);
                             $author_name = $author->general_name;
 
-                            $fine_to_employee_log_entry->text = 'Штраф сотруднику - ' .$employee_name. ' был добавлен согласно данным о проходах в системе Sigur';  //текст лога о добавлении штрафа сотруднику(имя) автором(имя)
+                            $fine_to_employee_log_entry->text = 'Штраф сотруднику - ' .$employee_name. ' в размере ' .$sum_money.' лей, был добавлен согласно данным о проходах в системе Sigur'; 
                             /* Тип? Тест */
                             $fine_to_employee_log_entry->type = '';
                             $fine_to_employee_log_entry->save();
+
+                            /* Оповещения для телеграма */
+                            $text = "<b>Произошло опоздание сотрудника!</b>\n"
+                            . "<b>Сотрудник: </b>\n"
+                            . "$new_passage->emp_id\n"
+                            . "Опоздал на работу на\n"
+                            . "$sum_money минут\n"
+                            . "<b>Дата: </b>\n"
+                            . "$date $time\n"
+                            ;
+
+                            Telegram::sendMessage([
+                                'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+                                //'chat_id' => 671480169,
+                                'parse_mode' => 'HTML',
+                                'text' => $text
+                            ]);
                         }
                         
                         /* ----------------------Конец проверки на опоздание и штраф----------------------- */
+
+
+                        /* --------- Начисление ставки за день ( в случае фикс оплаты ) и оповещение в Телеграм -------------- */
+
+                        //Если произошел вход
+                        if ($new_passage->direction == '1') {
+
+                            //Проверяем есть ли фиксированная оплата
+                            if (!$employee->fixed_charge) return $login;
+
+                            //Проверяем если в этот день ставка уже добавлялась
+                            $check_balance_logs = Employee_balance_logs::where('employee_id', $employee_id)->get();
+
+                            foreach ($check_balance_logs as $log) {
+                                if ($log->date == $date AND $log->amount == $employee->pay_per_shift) {
+                                    return $log->amount;
+                                }
+                            }
+                            
+                            $add_sum = $employee->pay_per_shift;
+                            $balance = $employee->balance;
+
+                            $new_balance = $balance + $add_sum;
+
+                            DB::table('employees')
+                            ->where('id', '=', $employee_id)
+                            ->update(['balance' => $new_balance]);
+
+
+                            /* Оповещения для телеграма */
+                            $text = "У вас новое начисление!\n"
+                            . "<b>Размер начисления: </b>\n"
+                            . "$add_sum\n"
+                            . "<b>Новый баланс: </b>\n"
+                            . "$new_balance";
+
+                            $chat_id = ($employee->telegram_id) ? $employee->telegram_id : env('TELEGRAM_CHANNEL_ID', '');
+
+                            Telegram::sendMessage([
+                            'chat_id' => $chat_id,
+                            //'chat_id' => 671480169,  
+                            'parse_mode' => 'HTML',
+                            'text' => $text
+                         ]);
+
+                            // Добавить начисление в общие логи
+                            $employee_balance_log = new Employee_balance_logs;
+                            $employee_balance_log->amount = $add_sum;
+                            $employee_balance_log->action = 'deposit';
+                            $employee_balance_log->reason = 'Начисление дневной ставки при проходе';
+                            $employee_balance_log->type = 'Начисление';
+                            $employee_balance_log->date = $date;
+                            $employee_balance_log->employee_id = $employee_id;
+                            $employee_balance_log->old_balance = $balance;
+                            $employee_balance_log->save();
+                        }
+                                               
+                        /* ------ Конец начисление ставки за день ( в случае фикс оплаты ) и оповещение в Телеграм -------- */
                         
 
                         return $login;
@@ -333,7 +412,7 @@ class DeliveryPassagesController extends Controller
                     $author = User::find($author_id);
                     $author_name = $author->general_name;
 
-                    $create_employee_log_entry->text = 'Создан новый сотрудник - ' .$employee_name. ' | автор - '.$author_name;  //текст о создании сотрудника(имя) и автор(имя)
+                    $create_employee_log_entry->text = 'Создан новый сотрудник - ' .$employee_name. ' | автор - '.$author_name;
                     /* Тип? Тест */
                     $create_employee_log_entry->type = '';
                     $create_employee_log_entry->save();
@@ -351,7 +430,13 @@ class DeliveryPassagesController extends Controller
                 /* ----------------------Проверка на опоздание и штраф----------------------- */
 
                 $sum_money = 0;
-                
+                $time_arr = [];
+                $sum_hours = 0;
+                $sum_minutes = 0;
+                $employee_id = $passage_user_id;
+                $employee = Employee::find($employee_id);
+                $employee_name = $employee->general_name;
+
                 //Есть ли основание для штрафа
                 if ($new_passage->direction == '1') {
                     $time_arr = explode(":", $time);
@@ -364,14 +449,14 @@ class DeliveryPassagesController extends Controller
                     }
                 }
 
-                //Если есть то добавляем штраф
-                if ($sum_money > 0) {
+                //Если есть основание и у работника фикс-ставка то добавляем штраф
+                if ($sum_money > 0 AND $employee->fixed_charge) {
 
                     /* Найти айди рабочего */
                     $employee_balance = DB::table('employees')
                     ->where('id', '=', $passage_user_id)
                     ->first();
-                  
+
                     $emp_balance = $employee_balance->balance;
 
                     /* Добавление штрафа в режиме "ожидает применения" */
@@ -379,33 +464,104 @@ class DeliveryPassagesController extends Controller
                     $new_fine->employee_id = $passage_user_id;
                     $new_fine->amount = $sum_money;
                     $new_fine->reason = 'Опоздание на '.$sum_money.' минут '.$date.' '.$time;
-                    $new_fine->old_balance = $emp_balance; // Добавления остатка
+                    $new_fine->old_balance = $emp_balance;
                     $new_fine->status = 'pending';
                     $new_fine->date = date('Y-m-d');
                     $new_fine->save();
 
                     /* - Добавляем в логи применение штрафа сотруднику - */
                     $fine_to_employee_log_entry = new Employees_logs();
-                    $fine_to_employee_log_entry->employee_id = $passage_user_id;  //id сотрудника
-                    $fine_to_employee_log_entry->author_id = User::where('role', 'admin')->first()->id;  //id автора
+                    $fine_to_employee_log_entry->employee_id = $passage_user_id;
+                    $fine_to_employee_log_entry->author_id = User::where('role', 'admin')->first()->id;
 
-                    /* - Имя сотрудника - */
-                    $employee_id = $passage_user_id;
-                    $employee = Employee::find($employee_id);
-                    $employee_name = $employee->general_name;
                     /* - Имя автора - */
                     $author_id = $fine_to_employee_log_entry->author_id;
                     $author = User::find($author_id);
                     $author_name = $author->general_name;
 
-                    $fine_to_employee_log_entry->text = 'Штраф сотруднику - ' .$employee_name. ' был добавлен согласно данным о проходах в системе Sigur';  //текст лога о добавлении штрафа сотруднику(имя) автором(имя)
+                    $fine_to_employee_log_entry->text = 'Штраф сотруднику - ' .$employee_name. ' в размере ' .$sum_money.' лей, был добавлен согласно данным о проходах в системе Sigur'; 
                     /* Тип? Тест */
                     $fine_to_employee_log_entry->type = '';
                     $fine_to_employee_log_entry->save();
+
+                    /* Оповещения для телеграма */
+                    $text = "<b>Произошло опоздание сотрудника!</b>\n"
+                    . "<b>Сотрудник: </b>\n"
+                    . "$new_passage->emp_id\n"
+                    . "Опоздал на работу на\n"
+                    . "$sum_money минут\n"
+                    . "<b>Дата: </b>\n"
+                    . "$date $time\n"
+                    ;
+
+                    Telegram::sendMessage([
+                        'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+                        //'chat_id' => 671480169,
+                        'parse_mode' => 'HTML',
+                        'text' => $text
+                    ]);
                 }
-                
+
                 /* ----------------------Конец проверки на опоздание и штраф----------------------- */
 
+
+                /* --------- Начисление ставки за день ( в случае фикс оплаты ) и оповещение в Телеграм -------------- */
+
+                //Если произошел вход
+                if ($new_passage->direction == '1') {
+
+                    //Проверяем есть ли фиксированная оплата
+                    if (!$employee->fixed_charge) return $login;
+
+                    //Проверяем если в этот день ставка уже добавлялась
+                    $check_balance_logs = Employee_balance_logs::where('employee_id', $employee_id)->get();
+
+                    foreach ($check_balance_logs as $log) {
+                        if ($log->date == $date AND $log->amount == $employee->pay_per_shift) {
+                            return $log->amount;
+                        }
+                    }
+
+                    $add_sum = $employee->pay_per_shift;
+                    $balance = $employee->balance;
+
+                    $new_balance = $balance + $add_sum;
+
+                    DB::table('employees')
+                    ->where('id', '=', $employee_id)
+                    ->update(['balance' => $new_balance]);
+
+                    /* Оповещения для телеграма */
+                    $text = "У вас новое начисление!\n"
+                    . "<b>Размер начисления: </b>\n"
+                    . "$add_sum\n"
+                    . "<b>Новый баланс: </b>\n"
+                    . "$new_balance";
+
+                    $chat_id = ($employee->telegram_id) ? $employee->telegram_id : env('TELEGRAM_CHANNEL_ID', '');
+
+                    Telegram::sendMessage([
+                        'chat_id' => $chat_id,
+                        //'chat_id' => 671480169,  
+                        'parse_mode' => 'HTML',
+                        'text' => $text
+                    ]);
+
+                    // Добавить начисление в общие логи
+                    $employee_balance_log = new Employee_balance_logs;
+                    $employee_balance_log->amount = $add_sum;
+                    $employee_balance_log->action = 'deposit';
+                    $employee_balance_log->reason = 'Начисление дневной ставки при проходе';
+                    $employee_balance_log->type = 'Начисление';
+                    $employee_balance_log->date = $date;
+                    $employee_balance_log->employee_id = $employee_id;
+                    $employee_balance_log->old_balance = $balance;
+                    $employee_balance_log->save();
+                }
+
+                /* ------ Конец начисление ставки за день ( в случае фикс оплаты ) и оповещение в Телеграм -------- */
+
+                
                 return $login;
             }
         }

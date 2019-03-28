@@ -690,17 +690,29 @@ class Assignments_Admin_Controller extends Controller
         foreach ($eur as $value) {
             $eur = $value->eur;
         }
+
+        $rental_price = 0;
+        $electricity = 0;
+        $water_supply = 0;
+        $gas = 0;
+        $cleaning = 0;
+        $garbage_removal = 0;
+        $other_expenses = 0;
+        $date = date("Y-m-d");
+        
         /* Получаем последнюю запись в таблице расходов */
         $month_profitability = Month_profitability::latest()->first();
 
-        $rental_price = $month_profitability->rental_price;
-        $electricity = $month_profitability->electricity;
-        $water_supply = $month_profitability->water_supply;
-        $gas = $month_profitability->gas;
-        $cleaning = $month_profitability->cleaning;
-        $garbage_removal = $month_profitability->garbage_removal;
-        $other_expenses = $month_profitability->other_expenses;
-        $date = $month_profitability->date;
+        if ($month_profitability) {
+            $rental_price = $month_profitability->rental_price;
+            $electricity = $month_profitability->electricity;
+            $water_supply = $month_profitability->water_supply;
+            $gas = $month_profitability->gas;
+            $cleaning = $month_profitability->cleaning;
+            $garbage_removal = $month_profitability->garbage_removal;
+            $other_expenses = $month_profitability->other_expenses;
+            $date = $month_profitability->date;
+        }        
 
         $start_date = $date;
         $end_date = $date;

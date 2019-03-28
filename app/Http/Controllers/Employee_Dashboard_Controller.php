@@ -14,7 +14,7 @@ use App\Assignments_income;
 use App\Assignments_expense;
 use App\Assignments_completed_works;
 use App\Coffee_token_log;
-use App\Employee_balance_log;
+use App\Employee_balance_logs;
 use App\Employee;
 
 use Telegram\Bot\Laravel\Facades\Telegram;
@@ -530,11 +530,13 @@ class Employee_Dashboard_Controller extends Controller
             ->update(['balance' => $apply_shift]);
 
         // Добавить выплату за смену в общие логи
-        $employee_balance_log = new Employee_balance_log;
+        $employee_balance_log = new Employee_balance_logs;
         $employee_balance_log->amount = $shift_wage;
         $employee_balance_log->reason = 'Выплата за смену';
         $employee_balance_log->action = 'deposit';
         $employee_balance_log->source = 'auto';
+        $employee_balance_log->type = 'Выплата';
+        $employee_balance_log->old_balance = $employee->balance;
         $employee_balance_log->date = date('Y-m-d');
         $employee_balance_log->employee_id = $employee_id;
         $employee_balance_log->save();
