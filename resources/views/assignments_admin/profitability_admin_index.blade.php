@@ -15,7 +15,7 @@
     
     {{-- Курс валют --}}
     <h2>Курс валют</h2>
-    <form method="POST" action="{{ url('/admin/profitability_index') }}">
+    <form method="POST" action="{{ url('/admin/profitability/profitability_index') }}">
         @csrf
         <div class="row">            
             <div class="col-md-2">
@@ -45,7 +45,7 @@
     {{-- Ежемесячные расходы --}}
     <h2>Ежемесячные расходы</h2>
     <p>*Если в выбранный месяц расходы уже вводились, то данные обновятся.</p>
-    <form method="POST" action="{{ url('/admin/profitability_index/month') }}">
+    <form method="POST" action="{{ url('/admin/profitability/profitability_index/month') }}">
         @csrf
         <div class="row">            
             <div class="col-lg-3">
@@ -101,7 +101,7 @@
         <button type="submit" class="btn btn-primary">Сохранить</button>
     </form>
     <hr>
-    <a href="{{ url('/admin/profitability_index/month') }}" class="btn btn-success">Просмотреть ежемесячную рентабельность</a>
+    <a href="{{ url('/admin/profitability/profitability_index/month') }}" class="btn btn-success">Просмотреть ежемесячную рентабельность</a>
     <hr>
 
     {{-- Расчет рентабельности --}}

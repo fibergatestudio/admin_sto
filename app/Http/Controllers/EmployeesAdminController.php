@@ -462,8 +462,9 @@ class EmployeesAdminController extends Controller
     public function add_documents_post(Request $request){
         $employee_id = $request->employee_id;
         $employee = Employee::find($employee_id);
-
-        $request->scan->store('public/employee/'.$employee_id);
+        if (!empty($request->scan)) {
+            $request->scan->store('public/employee/'.$employee_id);
+        }        
 
         return redirect('/documents/'.$request->employee_id);
     }
@@ -943,7 +944,7 @@ class EmployeesAdminController extends Controller
         $user->role = $request->rights;
         $user->save();
 
-        return redirect('/admin/all_users');
+        return redirect('/admin/access/all_users');
     }
 
     public function admin_shifts_index(){

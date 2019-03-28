@@ -23,7 +23,7 @@
     <hr>
     {{-- Вернуться : кнопка --}}
     <a href="{{ url('admin/cars_in_service/view/' .$car_note->car_id) }}">
-        <div class="btn btn-secondary">
+        <div class="btn btn-danger">
             Вернуться
         </div>
     </a>

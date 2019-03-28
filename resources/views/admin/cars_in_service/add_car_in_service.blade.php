@@ -171,7 +171,7 @@
                     
                 </p>
                 {{-- Добавить клиента : переход на страницу --}}
-                <a href="{{ url('admin/add_client') }}">
+                <a href="{{ url('admin/clients/add_client') }}">
                     <div class="btn btn-secondary">
                         Добавить клиента
                     </div>
@@ -269,7 +269,7 @@
                     {{-- Обьем мотора --}}
                     <div class="form-group col-md-4">
                         <label>Объем мотора</label>
-                        <input type="text" name="engine_capacity" id="enginecapacity" class="form-control" required>
+                        <input type="number" min="0" max="10" step="0.1" name="engine_capacity" id="enginecapacity" class="form-control" required>
                     </div>
 
                     {{-- Рабочая зона (тест) --}}

@@ -25,7 +25,7 @@
                 </td>
 
                 <td>
-                    <a href="{{ url('admin/change_access_rights/'.$employee->id) }}" class="btn btn-secondary">Изменить права доступа</a>
+                    <a href="{{ url('admin/access/change_access_rights/'.$employee->id) }}" class="btn btn-secondary">Изменить права доступа</a>
                 </td>                
             </tr>
         </tbody>

@@ -7,7 +7,7 @@
 @section('content')
 
 {{-- Форма --}}
-<form action="{{ url('admin/change_access_rights_post/') }}" method="POST">
+<form action="{{ url('admin/access/change_access_rights_post/') }}" method="POST">
     @csrf
     {{-- ID сотрудника --}}
     <input type="hidden" name="user_id" value="{{ $user->id }}">

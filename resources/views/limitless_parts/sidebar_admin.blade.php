@@ -41,8 +41,8 @@
 
 
 
-                                                <li class="nav-item">
-							<a href="{{ url('/view_employees') }}" class="nav-link {{ request()->is('view_employees') ? 'active' : ''}}">
+                        <li class="nav-item">
+							<a href="{{ url('/supervisor/view_employees') }}" class="nav-link {{ request()->is('supervisor/*') ? 'active' : ''}}">
 
 								<i class="icon-profile"></i>
 								<span>
@@ -80,7 +80,7 @@
 						</li>
 
                                                 <li class="nav-item">
-							<a href="{{ url('admin/clients_index') }}" class="nav-link {{ request()->is('admin/clients_index') ? 'active' : ''}}">
+							<a href="{{ url('admin/clients/clients_index') }}" class="nav-link {{ request()->is('admin/clients/*') ? 'active' : ''}}">
 								<i class="icon-users2"></i>
 								<span>
 									Клиенты
@@ -89,7 +89,7 @@
 						</li>
 
                                                 <li class="nav-item">
-							<a href="{{ url('admin/cars_in_service/index') }}" class="nav-link {{ request()->is('admin/cars_in_service/index') ? 'active' : ''}}">
+							<a href="{{ url('admin/cars_in_service/index') }}" class="nav-link {{ request()->is('admin/cars_in_service/*') ? 'active' : ''}}">
 								<i class="icon-wrench"></i>
 								<span>
 									Машины в сервисе
@@ -116,7 +116,7 @@
 						</li>
 						{{-- Модели Машин --}}
 						<li class="nav-item">
-							<a href="{{ url('/admin/cars/index') }}" class="nav-link {{ request()->is('admin/cars/index') ? 'active' : ''}}">
+							<a href="{{ url('/admin/cars/index') }}" class="nav-link {{ request()->is('admin/cars/*') ? 'active' : ''}}">
 								<i class="icon-car"></i>
 								<span>
 									Модели Машин
@@ -134,7 +134,7 @@
 						</li>
 
 						<li class="nav-item">
-							<a href="{{ url('/admin/profitability_index/') }}" class="nav-link {{ request()->is('admin/profitability_index') ? 'active' : ''}}">
+							<a href="{{ url('/admin/profitability/profitability_index/') }}" class="nav-link {{ request()->is('admin/profitability/*') ? 'active' : ''}}">
 								<i class="icon-calendar3"></i>
 								<span>
 									Расчет рентабельности и курс валют
@@ -152,7 +152,7 @@
 						</li>
 
 						<li class="nav-item">
-							<a href="{{ url('/admin/all_users') }}" class="nav-link {{ request()->is('admin/all_users') ? 'active' : ''}}">
+							<a href="{{ url('/admin/access/all_users') }}" class="nav-link {{ request()->is('admin/access/*') ? 'active' : ''}}">
 								<i class="icon-book3"></i>
 								<span>
 									Управление доступом

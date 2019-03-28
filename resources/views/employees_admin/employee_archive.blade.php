@@ -9,8 +9,8 @@
         {{ $archived_employee->general_name }}
     @endforeach
     <hr>
-    <a href="{{ url('view_employees') }}">
-        <div class="btn btn-primary">
+    <a href="{{ url('/supervisor/view_employees') }}">
+        <div class="btn btn-danger">
             Вернуться
         </div>
     </a>

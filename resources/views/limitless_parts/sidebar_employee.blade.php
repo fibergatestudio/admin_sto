@@ -32,7 +32,7 @@
 
 
 						<li class="nav-item">
-							<a class="nav-link" href="{{ url('employee/employee_profile') }}">
+							<a  href="{{ url('employee/employee_profile') }}" class="nav-link {{ request()->is('employee/employee_profile') ? 'active' : ''}}">
 							<i class="icon-person"></i>
 							<span>
 								Мой профиль
@@ -41,17 +41,17 @@
       					</li>
 
 						<li class="nav-item">
-							<a class="nav-link" href="{{ url('employee/my_assignments') }}">
+							<a  href="{{ url('employee/my_assignments') }}" class="nav-link {{ request()->is('employee/my_assignments') ? 'active' : ''}}">
 							<i class="icon-list"></i>
 							<span>
 								Мои наряды
 							</span>
 							</a>
-                                                </li>
+                        </li>
 
 
 						<li class="nav-item">
-							<a class="nav-link" href="{{ url('employee/my_completed_assignments') }}">
+							<a  href="{{ url('employee/my_completed_assignments') }}" class="nav-link {{ request()->is('employee/my_completed_assignments') ? 'active' : ''}}">
 							<i class="icon-check"></i>
 								<span>
 									Выполненые наряды
@@ -59,7 +59,7 @@
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link" href="{{ url('employee/my_uncompleted_assignments') }}">
+							<a  href="{{ url('employee/my_uncompleted_assignments') }}" class="nav-link {{ request()->is('employee/my_uncompleted_assignments') ? 'active' : ''}}">
 							<i class="icon-fire"></i>
 								<span>
 									Невыполненые наряды
@@ -69,7 +69,7 @@
 
 
 						<li class="nav-item">
-							<a class="nav-link" href="{{ url('employee/shifts/index') }}">
+							<a href="{{ url('employee/shifts/index') }}" class="nav-link {{ request()->is('employee/shifts/index') ? 'active' : ''}}">
 							<i class="icon-book"></i>
 							<span>
 								Мои cмены
@@ -78,14 +78,16 @@
 						</li>
 								<!-- Заказы работника -->
 						<li class="nav-item">
-							<a class="nav-link" href="{{ url('/employee/orders/index') }}">
+							<a href="{{ url('/employee/orders/index') }}" class="nav-link {{ request()->is('employee/orders/*') ? 'active' : ''}}" >
 							<i class="icon-color-sampler"></i>
+							<span>
 								Мои заказы
+							</span>								
 							</a>
                         </li>
 
 						<li class="nav-item">
-							<a class="nav-link" href="{{ url('employee/finance_history') }}">
+							<a href="{{ url('employee/finance_history') }}" class="nav-link {{ request()->is('employee/finance_history') ? 'active' : ''}}" >
 							<i class="icon-history"></i>
 							<span>
 								История финансов
@@ -95,7 +97,7 @@
 
 						
 						  <li class="nav-item">
-							<a href="{{ url('/employee/notification') }}" class="nav-link">
+							<a href="{{ url('/employee/notification') }}" class="nav-link {{ request()->is('employee/notification') ? 'active' : ''}}">
 								<i class="icon-circle"></i>
 								<span>
 									Настройка уведомлений
@@ -120,7 +122,7 @@
 						<li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs">Телеграм</div> <i class="icon-menu" title="Main"></i></li>
 
 						<li class="nav-item">
-							<a href="{{ url('/send-message') }}" class="nav-link">
+							<a href="{{ url('/send-message') }}" class="nav-link {{ request()->is('send-message') ? 'active' : ''}}">
 								<span>
 									Отправить сообщение
 								</span>
@@ -128,7 +130,7 @@
 						</li>
 
 						<li class="nav-item">
-							<a href="{{ url('/send-photo') }}" class="nav-link">
+							<a href="{{ url('/send-photo') }}" class="nav-link {{ request()->is('send-photo') ? 'active' : ''}}">
 								<span>
 									Отправить фото
 								</span>

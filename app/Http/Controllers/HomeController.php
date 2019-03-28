@@ -29,7 +29,7 @@ class HomeController extends Controller
         
         /* Если пользователь администратор - отправляем его на админскую панель */
         if(Auth::user()->isAdmin()){
-            return redirect('view_employees');
+            return redirect('supervisor/view_employees');
         } else if (Auth::user()->isEmployee()) {
             /* Если пользователь - сотрудник, то отправляем его на панель сотрудника */
             return redirect('employee/dashboard');

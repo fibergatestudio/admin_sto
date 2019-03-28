@@ -9,7 +9,7 @@
         <div class="row">
             {{-- Новый заказ : кнопка --}}
             <div class="col-2">
-                <a href="{{ url('employee/order/new') }}" class="btn btn-success">Новый заказ</a>
+                <a href="{{ url('employee/orders/new') }}" class="btn btn-success">Новый заказ</a>
             </div>           
         
             {{-- Заказы со статусом активный (подтвержденные) : кнопка --}}
@@ -72,7 +72,7 @@
 
                     <td >
                         {{-- Кнопка управления --}}
-                        <a href="{{ url('/employee/order/edit/'.$supply_order->id) }}">
+                        <a href="{{ url('/employee/orders/edit/'.$supply_order->id) }}">
                             <div class="btn btn-primary">
                                 Редактировать
                             </div>
