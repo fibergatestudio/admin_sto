@@ -20,25 +20,25 @@ Route::get('/', function () {
 Auth::routes();
 
 /*Путь к клиенту*/
-Route::get('/client', 'Client_Controller@client')->middleware('can:client_rights');
+Route::get('/client/cars/assignments', 'Client_Controller@client')->middleware('can:client_rights');
 
 /*Путь к профилю клиента*/
-Route::get('/profile', 'Client_Controller@profile')->middleware('can:client_rights');
+Route::get('/client/profile', 'Client_Controller@profile')->middleware('can:client_rights');
 
 /*Путь к нарядам клиента*/
-Route::get('/client/assignments/{id}', 'Client_Controller@assignments')->middleware('can:client_rights');
+Route::get('/client/cars/assignments/{id}', 'Client_Controller@assignments')->middleware('can:client_rights');
 
 /*Путь к зональным нарядам клиента*/
-Route::get('/client/sub_assignments/{id}', 'Client_Controller@sub_assignments')->middleware('can:client_rights');
+Route::get('/client/cars/sub_assignments/{id}', 'Client_Controller@sub_assignments')->middleware('can:client_rights');
 
 /*Путь к архивным нарядам клиента*/
-Route::get('/client/assignments_archive/{id}', 'Client_Controller@assignments_archive')->middleware('can:client_rights');
+Route::get('/client/cars/assignments_archive/{id}', 'Client_Controller@assignments_archive')->middleware('can:client_rights');
 
 /*Путь к мастеру*/
 Route::get('/master', 'Master_Controller@master')->middleware('can:master_rights');
 
 /*Путь к управлению нарядами мастером*/
-Route::get('/master/assignments', 'Master_Controller@master_assignments')->middleware('can:master_rights');
+Route::get('/master/assignments/list', 'Master_Controller@master_assignments')->middleware('can:master_rights');
 
 /*Путь к подтвержденным записям*/
 Route::get('/master/confirm', 'Master_Controller@master_confirm')->middleware('can:master_rights');
@@ -55,7 +55,7 @@ Route::get('/master/assignments/view/{id}', 'Master_Controller@master_view_assig
 Route::post('/master/redact_subassignments/{id}', 'Master_Controller@redact_subassignments')->middleware('can:master_rights');
 
 /*Управление зональным нарядом мастером*/
-Route::get('/master/redact_subassignments/{id}/management', 'Master_Controller@redact_subassignments_management')->middleware('can:master_rights');///
+Route::get('/master/assignments/redact_subassignments/{id}/management', 'Master_Controller@redact_subassignments_management')->middleware('can:master_rights');///
 
 /*Редактирование доходной части наряда мастером*/
 Route::post('/master/income_entry/{id}', 'Master_Controller@income_entry')->middleware('can:master_rights');///
@@ -84,10 +84,10 @@ Route::post('/master/zonal_work_entry/{id}', 'Master_Controller@zonal_work_entry
 
 
 /*Путь к профилям рабочих для просмотра мастером*/
-Route::get('/master/employees', 'Master_Controller@master_employees')->middleware('can:master_rights');
+Route::get('/master/employees/profiles', 'Master_Controller@master_employees')->middleware('can:master_rights');
 
 /*Путь к профилям рабочих для просмотра финансов сотрудника*/
-Route::get('/master/employee_finances/{id}', 'Master_Controller@employee_finances')->middleware('can:master_rights');
+Route::get('/master/employees/employee_finances/{id}', 'Master_Controller@employee_finances')->middleware('can:master_rights');
 
 /*Деавторизация*/
 Route::get('/Logs_Admin_Controllerout', '\App\Http\Controllers\Auth\LoginController@logout');
@@ -532,17 +532,17 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
 
 /**** История Финансов ****/
     /* Страница финансов */
-    Route::get('/employee/finance_history', 'Employee_Dashboard_Controller@finance_history');
+    Route::get('/employee/finance/finance_history', 'Employee_Dashboard_Controller@finance_history');
 
     /* Применить фильтр */
-    Route::post('/employee/finance_history/filter', 'Employee_Dashboard_Controller@finance_history');
+    Route::post('/employee/finance/finance_history/filter', 'Employee_Dashboard_Controller@finance_history');
 
 /**** Наряды : работник ****/
     /* Мои наряды */
-    Route::get('/employee/my_assignments', 'Employee_Dashboard_Controller@my_assignments');
+    Route::get('/employee/assignments/my_assignments', 'Employee_Dashboard_Controller@my_assignments');
 
     /* Страница управления одним нарядом */
-    Route::get('/employee/manage_assignment/{assignment_id}', 'Employee_Dashboard_Controller@manage_assignment');
+    Route::get('/employee/assignments/manage_assignment/{assignment_id}', 'Employee_Dashboard_Controller@manage_assignment');
 
         /* Добавить доходную часть : POST */
         Route::post('/employee/manage_assignment/add_income_entry', 'Employee_Dashboard_Controller@add_income_post');
@@ -563,7 +563,7 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
              Route::get('/employee/manage_assignment/{assignment_id}/assignment_archive', 'Employee_Dashboard_Controller@assignment_archive');
 
     /* Архив моих нарядов */
-    Route::get('/employee/my_assignments_archive', 'Employee_Dashboard_Controller@my_assignments_archive');
+    Route::get('/employee/assignments/my_assignments_archive', 'Employee_Dashboard_Controller@my_assignments_archive');
 
     /* Выполненые наряды */
     Route::get('/employee/my_completed_assignments', 'Employee_Dashboard_Controller@my_complete_assignments');
@@ -642,13 +642,13 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
     Route::get('/supply_officer/index', 'Supply_officer_Controller@index')->middleware('can:supply_officer_rights');
 
     /* Активные заказы : список */
-    Route::get('/supply_officer/all_orders', 'Supply_officer_Controller@all_orders')->middleware('can:supply_officer_rights');
+    Route::get('/supply_officer/all_orders/list', 'Supply_officer_Controller@all_orders')->middleware('can:supply_officer_rights');
 
     /* Выполненные заказы : список */
     Route::get('/supply_officer/completed_orders', 'Supply_officer_Controller@completed_orders')->middleware('can:supply_officer_rights');
 
     /* Страница одного заказа : просмотр */
-    Route::get('/supply_officer/view_order/{order_id}', 'Supply_officer_Controller@view_order')->middleware('can:supply_officer_rights');
+    Route::get('/supply_officer/all_orders/view_order/{order_id}', 'Supply_officer_Controller@view_order')->middleware('can:supply_officer_rights');
 
     /* Заказ выполнен : POST */
     Route::post('/supply_officer/order_completed_action', 'Supply_officer_Controller@order_completed_action')->middleware('can:supply_officer_rights');

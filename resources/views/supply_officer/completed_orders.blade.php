@@ -65,7 +65,7 @@
 
                     <td>
                         {{-- Кнопка управления --}}
-                        <a href="{{ url('supply_officer/view_order/'.$supply_order->id) }}">
+                        <a href="{{ url('supply_officer/all_orders/view_order/'.$supply_order->id) }}">
                             <div class="btn btn-primary">
                                 Просмотр
                             </div>

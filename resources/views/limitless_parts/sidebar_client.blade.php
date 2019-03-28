@@ -5,15 +5,15 @@
 		<!-- Main -->
 		<li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs">Меню</div> <i class="icon-menu" title="Main"></i></li>
 		<li class="nav-item">
-			<a class="nav-link" href="{{ url('/profile') }}">
-				<i class="icon-profile"></i>
-				<span>
-				Профиль
-	      		</span>
-			</a>
+                    <a href="{{ url('/client/profile') }}" class="nav-link {{ request()->is('client/profile') ? 'active' : ''}}">
+                        <i class="icon-profile"></i>
+                        <span>
+                            Профиль
+                        </span>
+                    </a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" href="{{ url('/client') }}">
+			<a href="{{ url('/client/cars/assignments') }}" class="nav-link {{ request()->is('client/cars/*') ? 'active' : ''}}">
 				<i class="icon-car"></i>
 				<span>
 				Машины клиента

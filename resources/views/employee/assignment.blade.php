@@ -3,7 +3,8 @@
 @section('page_name')
     Наряд # {{ $assignment->id }}<br>
     {{ $assignment->description }}
-
+    <hr>
+    <a href="{{ url('/employee/assignments/my_assignments') }}" class="btn btn-danger" title="К активным нарядам">Вернуться</a>
 @endsection
 
 @section('content')

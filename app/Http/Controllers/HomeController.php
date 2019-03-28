@@ -39,7 +39,7 @@ class HomeController extends Controller
         }
         else if (Auth::user()->isClient()){
             /* Если пользователь - клиент, то отправляем его на панель клиента */
-            return redirect('/client');
+            return redirect('/client/profile');
         }
         else if (Auth::user()->isMaster()){
             /* Если пользователь - мастер, то отправляем его на панель мастера */

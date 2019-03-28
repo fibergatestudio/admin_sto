@@ -29,7 +29,7 @@
                 <td>{{($employee->hour_from)}} {{--  Статус --}}</td>
                 <td>{{($employee->hour_to)}} {{--  Статус --}}</td>
                 <td>
-                    <a href="{{ url('/master/employee_finances/'.$employee->id) }}">
+                    <a href="{{ url('/master/employees/employee_finances/'.$employee->id) }}">
                         <div class="btn btn-primary">
                             Финансы
                         </div>

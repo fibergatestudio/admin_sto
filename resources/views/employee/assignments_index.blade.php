@@ -15,7 +15,7 @@
                 
                 {{-- Управление : переход --}}
                 <td>
-                    <a href="{{ url('/employee/manage_assignment/'.$assignment->id) }}">
+                    <a href="{{ url('/employee/assignments/manage_assignment/'.$assignment->id) }}">
                         <div class="btn btn-primary">
                             Управление
                         </div>
@@ -27,7 +27,7 @@
     <hr>
     
     {{-- Архив нарядов : переход --}}
-    <a href="{{ url('employee/my_assignments_archive') }}">
+    <a href="{{ url('employee/assignments/my_assignments_archive') }}">
         <div class="btn btn-secondary">
             Архив моих нарядов
         </div>

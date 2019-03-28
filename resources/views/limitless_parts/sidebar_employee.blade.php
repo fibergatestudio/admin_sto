@@ -38,16 +38,16 @@
 								Мой профиль
 							</span>
 							</a>
-      					</li>
+                                                </li>
 
 						<li class="nav-item">
-							<a  href="{{ url('employee/my_assignments') }}" class="nav-link {{ request()->is('employee/my_assignments') ? 'active' : ''}}">
+							<a  href="{{ url('employee/assignments/my_assignments') }}" class="nav-link {{ request()->is('employee/assignments/*') ? 'active' : ''}}">
 							<i class="icon-list"></i>
 							<span>
 								Мои наряды
 							</span>
 							</a>
-                        </li>
+                                                </li>
 
 
 						<li class="nav-item">
@@ -87,7 +87,7 @@
                         </li>
 
 						<li class="nav-item">
-							<a href="{{ url('employee/finance_history') }}" class="nav-link {{ request()->is('employee/finance_history') ? 'active' : ''}}" >
+							<a href="{{ url('employee/finance/finance_history') }}" class="nav-link {{ request()->is('employee/finance/*') ? 'active' : ''}}" >
 							<i class="icon-history"></i>
 							<span>
 								История финансов

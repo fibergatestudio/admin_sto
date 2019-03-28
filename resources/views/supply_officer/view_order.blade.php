@@ -2,6 +2,13 @@
 
 @section('page_name')
 Просмотр заказа № {{ $supply_order->id }}
+    <hr>
+    {{-- Вернуться : кнопка --}}
+    <a href="{{ url('supply_officer/all_orders/list') }}">
+        <div class="btn btn-danger">
+            К списку активных заказов
+        </div>
+    </a>
 @endsection
 
 @section('content')
@@ -82,12 +89,6 @@
         </form>
     @endif
 
-    <hr>
-    {{-- Вернуться : кнопка --}}
-    <a href="{{ url('supply_officer/all_orders') }}">
-        <div class="btn btn-dark">
-            К списку активных заказов
-        </div>
-    </a>
+    
     
 @endsection

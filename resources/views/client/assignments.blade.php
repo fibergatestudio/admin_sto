@@ -1,7 +1,7 @@
 @extends('layouts.limitless')
 @section('page_name')
     Активные наряды клиента
-    <a href="{{ url('/client') }}">
+    <a href="{{ url('/client/cars/assignments') }}">
         <div class="btn btn-danger">
             Вернуться
         </div>

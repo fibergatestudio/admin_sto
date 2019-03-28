@@ -6,30 +6,30 @@
 		<li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs">Меню</div> <i class="icon-menu" title="Main"></i></li>
 
 		<li class="nav-item">
-			<a class="nav-link" href="{{ url('master/assignments ') }}">
-				<i class="icon-list"></i>
-				<span>
-								Управление нарядами
-							</span>
-			</a>
+                    <a  href="{{ url('master/assignments/list') }}" class="nav-link {{ request()->is('master/assignments/*') ? 'active' : ''}}">
+			<i class="icon-list"></i>
+                        <span>
+                            Управление нарядами
+                        </span>
+                    </a>
 		</li>
 
 		<li class="nav-item">
-			<a class="nav-link" href="{{ url('master/employees') }}">
-				<i class="icon-list"></i>
-				<span>
-								Просмотр профилей
-							</span>
-			</a>
+                    <a href="{{ url('master/employees/profiles') }}" class="nav-link {{ request()->is('master/employees/*') ? 'active' : ''}}">
+			<i class="icon-list"></i>
+			<span>
+                            Просмотр профилей
+			</span>
+                    </a>
 		</li>
 
 		<li class="nav-item">
-			<a class="nav-link" href="{{ url('master/confirm') }}">
-				<i class="icon-list"></i>
-				<span>
-								Подтвержденные записи
-							</span>
-			</a>
+                    <a href="{{ url('master/confirm') }}" class="nav-link {{ request()->is('master/confirm') ? 'active' : ''}}">
+			<i class="icon-list"></i>
+			<span>
+                            Подтвержденные записи
+			</span>
+                    </a>
 		</li>
 
 		<li class="nav-item">

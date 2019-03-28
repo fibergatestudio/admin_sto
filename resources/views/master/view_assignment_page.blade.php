@@ -2,6 +2,8 @@
 
 @section('page_name')
     Наряд: {{ $assignment->description }}
+    <hr>
+    <a href="{{ url('master/assignments/list') }}" class="btn btn-danger">Вернуться</a>
 @endsection
 
 @section('content')
@@ -36,7 +38,7 @@
                     </button><br>
                 </td>
                 <td>
-                    <a href="{{ url('/master/redact_subassignments/'.$sub_assignment->id.'/management') }}">
+                    <a href="{{ url('/master/assignments/redact_subassignments/'.$sub_assignment->id.'/management') }}">
                         <div class="btn btn-primary">
                             Управление нарядом
                         </div>
