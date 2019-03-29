@@ -129,7 +129,7 @@
         </form>
         <hr>
         {{-- Вернуться в карточку клиента --}}
-        <a href="{{ url('/admin/view_client/'.$client->id) }}">
+        <a href="{{ url('/admin/clients/view_client/'.$client->id) }}">
             <div class="btn btn-secondary">
                 Вернуться
             </div>
@@ -289,6 +289,13 @@
                 <button type="submit" class="btn btn-success">
                     Добавить авто
                 </button>
+
+                {{-- Вернуться в карточку клиента --}}
+                <a href="{{ url('/admin/cars_in_service/index') }}">
+                    <div class="btn btn-secondary">
+                        Вернуться
+                    </div>
+                </a>
 
                 
             </form>

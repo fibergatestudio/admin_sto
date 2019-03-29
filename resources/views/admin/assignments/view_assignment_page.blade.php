@@ -101,6 +101,11 @@
     </div>
   </form>
 </div>
+<a href="{{ url('/admin/assignments_index') }}">
+        <div class="btn btn-danger">
+            Вернуться
+        </div>
+    </a>
 
 @endsection
 

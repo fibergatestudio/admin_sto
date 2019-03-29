@@ -2,6 +2,13 @@
 
 @section('page_name')
     Выдать жетоны на кофе
+
+    {{-- Вернуться : Кнопка --}}
+    <a href="{{ url('/supervisor/employee_finances/'.$employee->id) }}">
+        <div class="btn btn-danger">
+            Вернуться
+        </div>
+    </a>
 @endsection
 
 @section('content')
