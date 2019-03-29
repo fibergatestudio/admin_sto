@@ -10,7 +10,7 @@ use App\Delivery_passage;
 use App\Employee;
 use App\Employee_fine;
 use App\Employees_logs;
-use App\Employee_balance_log;
+use App\Employee_balance_logs;
 use Telegram\Bot\Laravel\Facades\Telegram;
 use DB;
 
@@ -178,7 +178,9 @@ class DeliveryPassagesController extends Controller
                         /* ----------------------Проверка на опоздание и штраф----------------------- */
 
                         $sum_money = 0;
-                        /* - Имя сотрудника - */
+                        $time_arr = [];
+                        $sum_hours = 0;
+                        $sum_minutes = 0;
                         $employee_id = $passage_user_id;
                         $employee = Employee::find($employee_id);
                         $employee_name = $employee->general_name;
@@ -225,7 +227,7 @@ class DeliveryPassagesController extends Controller
                             $author = User::find($author_id);
                             $author_name = $author->general_name;
 
-                            $fine_to_employee_log_entry->text = 'Штраф сотруднику - ' .$employee_name. ' был добавлен согласно данным о проходах в системе Sigur';  //текст лога о добавлении штрафа сотруднику(имя) автором(имя)
+                            $fine_to_employee_log_entry->text = 'Штраф сотруднику - ' .$employee_name. ' в размере ' .$sum_money.' лей, был добавлен согласно данным о проходах в системе Sigur';
                             /* Тип? Тест */
                             $fine_to_employee_log_entry->type = '';
                             $fine_to_employee_log_entry->save();
@@ -260,7 +262,7 @@ class DeliveryPassagesController extends Controller
                             if (!$employee->fixed_charge) return $login;
 
                             //Проверяем если в этот день ставка уже добавлялась
-                            $check_balance_logs = Employee_balance_log::where('employee_id', $employee_id)->get();
+                            $check_balance_logs = Employee_balance_logs::where('employee_id', $employee_id)->get();
 
                             foreach ($check_balance_logs as $log) {
                                 if ($log->date == $date AND $log->amount == $employee->pay_per_shift) {
@@ -295,10 +297,11 @@ class DeliveryPassagesController extends Controller
                          ]);
 
                             // Добавить начисление в общие логи
-                            $employee_balance_log = new Employee_balance_log;
+                            $employee_balance_log = new Employee_balance_logs;
                             $employee_balance_log->amount = $add_sum;
                             $employee_balance_log->action = 'deposit';
-                            $employee_balance_log->reason = 'Начисление';
+                            $employee_balance_log->reason = 'Начисление дневной ставки при проходе';
+                            $employee_balance_log->type = 'Начисление';
                             $employee_balance_log->date = $date;
                             $employee_balance_log->employee_id = $employee_id;
                             $employee_balance_log->old_balance = $balance;
@@ -409,7 +412,7 @@ class DeliveryPassagesController extends Controller
                     $author = User::find($author_id);
                     $author_name = $author->general_name;
 
-                    $create_employee_log_entry->text = 'Создан новый сотрудник - ' .$employee_name. ' | автор - '.$author_name;  //текст о создании сотрудника(имя) и автор(имя)
+                    $create_employee_log_entry->text = 'Создан новый сотрудник - ' .$employee_name. ' | автор - '.$author_name;
                     /* Тип? Тест */
                     $create_employee_log_entry->type = '';
                     $create_employee_log_entry->save();
@@ -427,7 +430,9 @@ class DeliveryPassagesController extends Controller
                 /* ----------------------Проверка на опоздание и штраф----------------------- */
 
                 $sum_money = 0;
-                /* - Имя сотрудника - */
+                $time_arr = [];
+                $sum_hours = 0;
+                $sum_minutes = 0;
                 $employee_id = $passage_user_id;
                 $employee = Employee::find($employee_id);
                 $employee_name = $employee->general_name;
@@ -474,7 +479,7 @@ class DeliveryPassagesController extends Controller
                     $author = User::find($author_id);
                     $author_name = $author->general_name;
 
-                    $fine_to_employee_log_entry->text = 'Штраф сотруднику - ' .$employee_name. ' был добавлен согласно данным о проходах в системе Sigur';  //текст лога о добавлении штрафа сотруднику(имя) автором(имя)
+                    $fine_to_employee_log_entry->text = 'Штраф сотруднику - ' .$employee_name. ' в размере ' .$sum_money.' лей, был добавлен согласно данным о проходах в системе Sigur';
                     /* Тип? Тест */
                     $fine_to_employee_log_entry->type = '';
                     $fine_to_employee_log_entry->save();
@@ -509,7 +514,7 @@ class DeliveryPassagesController extends Controller
                     if (!$employee->fixed_charge) return $login;
 
                     //Проверяем если в этот день ставка уже добавлялась
-                    $check_balance_logs = Employee_balance_log::where('employee_id', $employee_id)->get();
+                    $check_balance_logs = Employee_balance_logs::where('employee_id', $employee_id)->get();
 
                     foreach ($check_balance_logs as $log) {
                         if ($log->date == $date AND $log->amount == $employee->pay_per_shift) {
@@ -543,10 +548,11 @@ class DeliveryPassagesController extends Controller
                     ]);
 
                     // Добавить начисление в общие логи
-                    $employee_balance_log = new Employee_balance_log;
+                    $employee_balance_log = new Employee_balance_logs;
                     $employee_balance_log->amount = $add_sum;
                     $employee_balance_log->action = 'deposit';
-                    $employee_balance_log->reason = 'Начисление';
+                    $employee_balance_log->reason = 'Начисление дневной ставки при проходе';
+                    $employee_balance_log->type = 'Начисление';
                     $employee_balance_log->date = $date;
                     $employee_balance_log->employee_id = $employee_id;
                     $employee_balance_log->old_balance = $balance;

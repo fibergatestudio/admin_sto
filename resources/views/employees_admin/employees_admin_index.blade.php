@@ -9,7 +9,7 @@
         @foreach($employee_data as $employee)
             <tr>
                 <td>
-                    {{ $employee->general_name }}
+                    <a href="{{ url('/admin/employee/'.$employee->id) }}">{{ $employee->general_name }}</a>
                 </td>
 
                 <td>

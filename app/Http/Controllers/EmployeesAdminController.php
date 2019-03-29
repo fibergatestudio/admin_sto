@@ -732,7 +732,7 @@ class EmployeesAdminController extends Controller
             $employee_balance_log->action = 'deposit';
             $employee_balance_log->reason = $request->reason;
             $employee_balance_log->date = date('Y-m-d');
-            $employee_balance_log->type = 'Ручное начисление'; // Тип записи
+            $employee_balance_log->type = 'Начисление'; // Тип записи
             $employee_balance_log->status = 'Принят(тест)'; // Статус
             $employee_balance_log->employee_id = $employee_id;
             $employee_balance_log->old_balance = $balance;
@@ -813,7 +813,7 @@ class EmployeesAdminController extends Controller
         $employee_balance_log->action = 'payout';
         $employee_balance_log->reason = 'Ручная выплата';
         $employee_balance_log->date = date('Y-m-d');
-        $employee_balance_log->type = 'Ручная выплата'; // Тип записи
+        $employee_balance_log->type = 'Выплата'; // Тип записи
         $employee_balance_log->status = 'Принят(тест)'; // Статус
         $employee_balance_log->employee_id = $employee_id;
         $employee_balance_log->old_balance = $balance;
@@ -1019,19 +1019,12 @@ class EmployeesAdminController extends Controller
         $token_price = 5; // Сделать подтягивание с базы
         $token_total = $token_price * $token_count;
         $employee_balance = DB::table('employees')->where('id', '=', $employee_id)->first();
+        $emp_balance = $employee_balance->balance;
         $new_employee_balance = $employee_balance->balance - $token_total;
 
         DB::table('employees')
         ->where('id', '=', $employee_id)
         ->update(['balance' => $new_employee_balance]);
-
-
-        /* Найти айди рабочего */
-        $employee_balance = DB::table('employees')
-        ->where('id', '=', $request->employee_id)
-        ->first();
-
-        $emp_balance = $employee_balance->balance;
 
         // Добавить жетоны в историю
         $employee_coffee_log_entry = new Coffee_token_log;

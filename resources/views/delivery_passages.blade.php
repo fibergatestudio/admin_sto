@@ -30,21 +30,21 @@
                 @elseif($passage->direction == 2)
                 <td>{{ 'выход' }}</td>
                 @elseif($passage->direction == 3)
-                <td>{{ 'неизвестно' }}</td>               
+                <td>{{ 'неизвестно' }}</td>
                 @endif
             </tr>
-        @endforeach    
+        @endforeach
 		@endif
 	</tbody>
 </table>
 
 {{ $passages->links() }}
 <script type="text/javascript">
-	
+
 	// Генерирует тестовые POST данные о проходе через Сигур
 	$('#submit').click(function (){
 		var someObj = {
-						"logs":"logId=18&date=2019-03-22&time=09:14:02&name1=Роман&name2=Майданский-test&direction=вход&tabnum=069017785"
+						"logs":"logId=18&date=2019-03-18&time=09:10:02&name1=Роман&name2=Майданский-test&direction=вход&tabnum=069017785"
 					};
 		$.ajax({
                     url: "{{ route('processing_query') }}",

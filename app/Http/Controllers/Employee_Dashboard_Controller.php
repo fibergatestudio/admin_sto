@@ -612,6 +612,8 @@ class Employee_Dashboard_Controller extends Controller
         $employee_balance_log->reason = 'Выплата за смену';
         $employee_balance_log->action = 'deposit';
         $employee_balance_log->source = 'auto';
+        $employee_balance_log->type = 'Выплата';
+        $employee_balance_log->old_balance = $employee->balance;
         $employee_balance_log->date = date('Y-m-d');
         $employee_balance_log->employee_id = $employee_id;
         $employee_balance_log->save();
