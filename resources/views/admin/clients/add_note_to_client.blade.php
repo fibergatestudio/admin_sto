@@ -25,8 +25,8 @@
 
     <hr>
     {{-- Вернуться : кнопка --}}
-    <a href="{{ url('admin/clients/view/'.$client->id) }}">
-        <div class="btn btn-secondary">
+    <a href="{{ url('admin/clients/view_client/'.$client->id) }}">
+        <div class="btn btn-danger">
             Вернуться
         </div>
     </a>

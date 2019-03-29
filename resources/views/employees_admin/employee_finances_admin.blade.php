@@ -3,7 +3,7 @@
 @section('page_name')
 Финансы по сотруднику: {{ $employee->general_name }}
 {{-- Вернуться : Кнопка --}}
-    <a href="{{ url('view_employees') }}">
+    <a href="{{ url('/supervisor/view_employees') }}">
         <div class="btn btn-danger">
             Вернуться
         </div>

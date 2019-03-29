@@ -38,7 +38,7 @@
 
                 <td>
 
-                        <a class="btn btn-secondary" href="{{ url('/add_documents/'.$employee->id) }}">Добавить документы</a>
+                        <a class="btn btn-secondary" href="{{ url('/supervisor/add_documents/'.$employee->id) }}">Добавить документы</a>
 
                         <a class="btn btn-secondary" href="{{ url('/documents/'.$employee->id) }}">Посмотреть документы</a>
 
@@ -47,13 +47,13 @@
         @endforeach
     </table>
 
-    <a href="{{ url('/add_employee') }}">
+    <a href="{{ url('/supervisor/add_employee') }}">
         <div class="btn btn-primary">
             Добавить сотрудника
         </div>
     </a>
     <hr>
-    <a href="{{ url('admin/employee_archive') }}">
+    <a href="{{ url('/supervisor/employee_archive') }}">
         <div class="btn btn-secondary">
             Архив сотрудников
         </div>

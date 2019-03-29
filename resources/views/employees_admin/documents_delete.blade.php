@@ -28,5 +28,5 @@
     @endforeach
 
     {{-- Кнопка вернуться : на страницу с документами --}}
-    <a class="btn btn-light" href="{{ url('/documents/'.$employee_id) }}">Вернуться</a>
+    <a class="btn btn-danger" href="{{ url('/documents/'.$employee_id) }}">Вернуться</a>
 @endsection

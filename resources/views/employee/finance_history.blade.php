@@ -13,7 +13,7 @@
             <div class="card-header">
                 <h3 class="mb-0">История Финансов:</h3>
             </div>
-        <form action="{{ url('employee/finance_history/filter') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ url('employee/finance/finance_history/filter') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="row">
                 <div class="col">

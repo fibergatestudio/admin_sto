@@ -23,7 +23,7 @@ class DeliveryPassagesController extends Controller
         return view('delivery_passages',['passages' => $passages]);
     }
 
-    
+
     // Функция проверки на Json формат
     public function isJson($string) {
         json_decode($string);
@@ -53,8 +53,8 @@ class DeliveryPassagesController extends Controller
 
         if (isset($request)) {
 
-            $data = $request->getContent();         
-            
+            $data = $request->getContent();
+
             // Если это Json, то это тестовые данные, создаем ассоциативный массив и заносим данные в базу
             if($this->isJson($data)){
 
@@ -69,7 +69,7 @@ class DeliveryPassagesController extends Controller
                         $data_arr = explode("&", $val);
 
                         for ($i=0; $i < count($data_arr); $i++) {
-                            $temp = explode("=", $data_arr[$i]); 
+                            $temp = explode("=", $data_arr[$i]);
                             $data_arr_assoc[$temp[0]] = $temp[1];
                         }
 
@@ -89,10 +89,10 @@ class DeliveryPassagesController extends Controller
                             }
                             elseif ($key == 'time') {
                                 $time = $value;
-                            }                    
+                            }
                             elseif ($key == 'name1') {
                                 $name1 = $value;
-                            } 
+                            }
                             elseif ($key == 'name2') {
                                 $name2 = $value;
                             }
@@ -102,25 +102,25 @@ class DeliveryPassagesController extends Controller
                                 }
                                 elseif ($value == 'выход'){
                                     $new_passage->direction = '2';
-                                }                       
+                                }
                             }
                             elseif ($key == 'tabnum') {
                                 $new_passage->internal_emp_id = $value;
                             }
                             $new_passage->time = strtotime($date.' '.$time);
-                            $new_passage->emp_id = $name1.' '.$name2;                            
+                            $new_passage->emp_id = $name1.' '.$name2;
                         }
-                        
+
                         $new_passage->save();
 
 
                         /* ----------------------Создать тестового сотрудника----------------------- */
-        
+
                         $login = $this->translit($new_passage->emp_id);
-                        $has_user = User::where('name', $login)->first();                       
-                        
+                        $has_user = User::where('name', $login)->first();
+
                         if (!$has_user) {
-                                                                         
+
                             $password = 'password';
                             $new_user = new User();
                             $new_user->name = $login;
@@ -160,18 +160,18 @@ class DeliveryPassagesController extends Controller
                             $author = User::find($author_id);
                             $author_name = $author->general_name;
 
-                            $create_employee_log_entry->text = 'Создан новый сотрудник - ' .$employee_name. 'автор - '.$author_name;  //текст о создании сотрудника(имя) и автор(имя)
+                            $create_employee_log_entry->text = 'Создан новый сотрудник - ' .$employee_name. ' | автор - '.$author_name;  //текст о создании сотрудника(имя) и автор(имя)
                             /* Тип? Тест */
                             $create_employee_log_entry->type = '';
                             $create_employee_log_entry->save();
 
                             $passage_user_id = $new_employee->id;
-                        
+
                         }
                         else{
                             $passage_user_id = Employee::where('user_id', $has_user->id)->first()->id;
                         }
-                        
+
                         /* ----------------------Конец создания тестового сотрудника----------------------- */
 
 
@@ -182,7 +182,7 @@ class DeliveryPassagesController extends Controller
                         $employee_id = $passage_user_id;
                         $employee = Employee::find($employee_id);
                         $employee_name = $employee->general_name;
-                        
+
                         //Есть ли основание для штрафа
                         if ($new_passage->direction == '1') {
                             $time_arr = explode(":", $time);
@@ -202,7 +202,7 @@ class DeliveryPassagesController extends Controller
                             $employee_balance = DB::table('employees')
                             ->where('id', '=', $passage_user_id)
                             ->first();
-                          
+
                             $emp_balance = $employee_balance->balance;
 
                             /* Добавление штрафа в режиме "ожидает применения" */
@@ -219,13 +219,13 @@ class DeliveryPassagesController extends Controller
                             $fine_to_employee_log_entry = new Employees_logs();
                             $fine_to_employee_log_entry->employee_id = $passage_user_id;  //id сотрудника
                             $fine_to_employee_log_entry->author_id = User::where('role', 'admin')->first()->id;  //id автора
-                           
+
                             /* - Имя автора - */
                             $author_id = $fine_to_employee_log_entry->author_id;
                             $author = User::find($author_id);
                             $author_name = $author->general_name;
 
-                            $fine_to_employee_log_entry->text = 'Штраф сотруднику - ' .$employee_name. 'был добавлен согласно данным о проходах в системе Sigur';  //текст лога о добавлении штрафа сотруднику(имя) автором(имя)
+                            $fine_to_employee_log_entry->text = 'Штраф сотруднику - ' .$employee_name. ' был добавлен согласно данным о проходах в системе Sigur';  //текст лога о добавлении штрафа сотруднику(имя) автором(имя)
                             /* Тип? Тест */
                             $fine_to_employee_log_entry->type = '';
                             $fine_to_employee_log_entry->save();
@@ -247,7 +247,7 @@ class DeliveryPassagesController extends Controller
                                 'text' => $text
                             ]);
                         }
-                        
+
                         /* ----------------------Конец проверки на опоздание и штраф----------------------- */
 
 
@@ -267,7 +267,7 @@ class DeliveryPassagesController extends Controller
                                     return $log->amount;
                                 }
                             }
-                            
+
                             $add_sum = $employee->pay_per_shift;
                             $balance = $employee->balance;
 
@@ -289,7 +289,7 @@ class DeliveryPassagesController extends Controller
 
                             Telegram::sendMessage([
                             'chat_id' => $chat_id,
-                            //'chat_id' => 671480169,  
+                            //'chat_id' => 671480169,
                             'parse_mode' => 'HTML',
                             'text' => $text
                          ]);
@@ -304,9 +304,9 @@ class DeliveryPassagesController extends Controller
                             $employee_balance_log->old_balance = $balance;
                             $employee_balance_log->save();
                         }
-                                               
+
                         /* ------ Конец начисление ставки за день ( в случае фикс оплаты ) и оповещение в Телеграм -------- */
-                        
+
 
                         return $login;
                     }
@@ -317,9 +317,9 @@ class DeliveryPassagesController extends Controller
                 $data_arr_assoc = [];
                 $data_arr = explode("&", $data);
                 $data_arr_test[] = $data;
-                
+
                 for ($i=0; $i < count($data_arr); $i++) {
-                    $temp = explode("=", $data_arr[$i]); 
+                    $temp = explode("=", $data_arr[$i]);
                     $data_arr_assoc[$temp[0]] = $temp[1];
                 }
                 $new_passage = new Delivery_passage();
@@ -338,10 +338,10 @@ class DeliveryPassagesController extends Controller
                     }
                     elseif ($key == 'time') {
                         $time = $value;
-                    }                    
+                    }
                     elseif ($key == 'name1') {
                         $name1 = $value;
-                    } 
+                    }
                     elseif ($key == 'name2') {
                         $name2 = $value;
                     }
@@ -351,13 +351,13 @@ class DeliveryPassagesController extends Controller
                         }
                         elseif ($value == 'выход'){
                             $new_passage->direction = '2';
-                        }                       
+                        }
                     }
                     elseif ($key == 'tabnum') {
                         $new_passage->internal_emp_id = $value;
                     }
                     $new_passage->time = strtotime($date.' '.$time);
-                    $new_passage->emp_id = $name1.' '.$name2;                            
+                    $new_passage->emp_id = $name1.' '.$name2;
                 }
 
                 $new_passage->save();
@@ -366,10 +366,10 @@ class DeliveryPassagesController extends Controller
                 /* ----------------------Создать тестового сотрудника----------------------- */
 
                 $login = $this->translit($new_passage->emp_id.'-test');
-                $has_user = User::where('name', $login)->first();                       
-                
+                $has_user = User::where('name', $login)->first();
+
                 if (!$has_user) {
-                                                                 
+
                     $password = 'password';
                     $new_user = new User();
                     $new_user->name = $login;
@@ -409,18 +409,18 @@ class DeliveryPassagesController extends Controller
                     $author = User::find($author_id);
                     $author_name = $author->general_name;
 
-                    $create_employee_log_entry->text = 'Создан новый сотрудник - ' .$employee_name. 'автор - '.$author_name;  //текст о создании сотрудника(имя) и автор(имя)
+                    $create_employee_log_entry->text = 'Создан новый сотрудник - ' .$employee_name. ' | автор - '.$author_name;  //текст о создании сотрудника(имя) и автор(имя)
                     /* Тип? Тест */
                     $create_employee_log_entry->type = '';
                     $create_employee_log_entry->save();
 
                     $passage_user_id = $new_employee->id;
-                
+
                 }
                 else{
                     $passage_user_id = Employee::where('user_id', $has_user->id)->first()->id;
                 }
-                
+
                 /* ----------------------Конец создания тестового сотрудника----------------------- */
 
 
@@ -474,7 +474,7 @@ class DeliveryPassagesController extends Controller
                     $author = User::find($author_id);
                     $author_name = $author->general_name;
 
-                    $fine_to_employee_log_entry->text = 'Штраф сотруднику - ' .$employee_name. 'был добавлен согласно данным о проходах в системе Sigur'; 
+                    $fine_to_employee_log_entry->text = 'Штраф сотруднику - ' .$employee_name. ' был добавлен согласно данным о проходах в системе Sigur';  //текст лога о добавлении штрафа сотруднику(имя) автором(имя)
                     /* Тип? Тест */
                     $fine_to_employee_log_entry->type = '';
                     $fine_to_employee_log_entry->save();
@@ -537,7 +537,7 @@ class DeliveryPassagesController extends Controller
 
                     Telegram::sendMessage([
                         'chat_id' => $chat_id,
-                        //'chat_id' => 671480169,  
+                        //'chat_id' => 671480169,
                         'parse_mode' => 'HTML',
                         'text' => $text
                     ]);
@@ -555,11 +555,9 @@ class DeliveryPassagesController extends Controller
 
                 /* ------ Конец начисление ставки за день ( в случае фикс оплаты ) и оповещение в Телеграм -------- */
 
-                
+
                 return $login;
             }
         }
     }
 }
-
-

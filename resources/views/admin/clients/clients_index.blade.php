@@ -34,7 +34,7 @@
         <br>
     @endforeach -->
     <hr>
-    <a href="{{ url('admin/add_client') }}">
+    <a href="{{ url('admin/clients/add_client') }}">
         <div class="btn btn-primary">
             Добавить клиента
         </div>

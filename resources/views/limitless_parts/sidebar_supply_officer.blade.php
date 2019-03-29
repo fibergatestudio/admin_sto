@@ -3,18 +3,18 @@
 				<div class="sidebar-user">
 					<div class="card-body">
 						<div class="media">
-							
+
 
 							<div class="media-body">
 								<div class="media-title font-weight-semibold">
                                     {{ Auth::user()->general_name }}
                                 </div>
 								<div class="font-size-xs opacity-50">
-									
+
 								</div>
 							</div>
 
-							
+
 						</div>
 					</div>
 				</div>
@@ -27,32 +27,24 @@
 
 						<!-- Main -->
 						<li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs">Меню</div> <i class="icon-menu" title="Main"></i></li>
-					
+
 						<li class="nav-item">
-							<a href="{{ url('supply_officer/all_orders') }}" class="nav-link {{ request()->is('supply_officer/all_orders') ? 'active' : ''}}">
-							<i class="icon-list"></i>
-                                                        <span>
-                                                            Заказы на снабжение (активные)
-                                                        </span>	
-                                                            
+							<a href="{{ url('supply_officer/all_orders/list') }}" class="nav-link {{ request()->is('supply_officer/all_orders/*') ? 'active' : ''}}">
+								Заказы на снабжение (активные)
 							</a>
       					</li>
 
 						<li class="nav-item">
 							<a href="{{ url('supply_officer/completed_orders') }}" class="nav-link {{ request()->is('supply_officer/completed_orders') ? 'active' : ''}}">
-                                                            <i class="icon-list"></i>
-                                                            <span>
-                                                                Выполненные заказы
-                                                            </span>
-                                                            
+								Выполненные заказы
 							</a>
       					</li>
-						
+
 						<li class="nav-item">
 							<a class="nav-link" href="{{ url('/logout') }}"
                                 onclick="event.preventDefault();
                                         document.getElementById('logout-form').submit();">
-								
+
                                 <i class="icon-exit2"></i>
 								<span>
 									Выход
@@ -67,8 +59,8 @@
                         <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
                             {{ csrf_field() }}
                         </form>
-						
-						
+
+
 						<!-- /page kits -->
 
 					</ul>

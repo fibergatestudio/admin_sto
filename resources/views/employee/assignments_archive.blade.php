@@ -2,6 +2,8 @@
 
 @section('page_name')
 Архив моих нарядов
+<hr>
+<a href="{{ url('/employee/assignments/my_assignments') }}" class="btn btn-danger">Вернуться</a>
 @endsection
 
 @section('content')
@@ -15,7 +17,7 @@
                 
                 {{-- Управление : переход --}}
                 <td>
-                    <a href="{{ url('/employee/manage_assignment/'.$assignment->id) }}">
+                    <a href="{{ url('/employee/assignments/manage_assignment/'.$assignment->id) }}">
                         <div class="btn btn-primary">
                             Управление
                         </div>

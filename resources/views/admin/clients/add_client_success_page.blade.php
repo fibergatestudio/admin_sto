@@ -7,4 +7,7 @@
 @section('content')
     <h2>Отлично! Вы добавили клиента {{ $client->fio }}</h2>
     <p>Теперь вы можете <a href="{{ url('admin/cars_in_service/add') }}">добавить машину клиента.</a></p>
+
+    <hr>
+	<a href="{{ url('admin/clients/clients_index') }}" class="btn btn-danger">Вернуться</a>
 @endsection

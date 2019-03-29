@@ -171,7 +171,7 @@
 
             </form>
             <hr>
-            <a href="{{ url('view_employees') }}" class="btn btn-primary">Вернуться</a>
+            <a href="{{ url('/supervisor/view_employees') }}" class="btn btn-danger">Вернуться</a>
 
 {{-- Как узнать Телеграм ID : Форма и модальное окно --}}
     <form method="POST">

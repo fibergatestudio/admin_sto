@@ -1,7 +1,7 @@
 @extends('layouts.limitless')
 @section('page_name')
     Архив нарядов клиента
-    <a href="{{ url('/client') }}">
+    <a href="{{ url('/client/cars/assignments') }}">
         <div class="btn btn-danger">
             Вернуться
         </div>
@@ -26,7 +26,7 @@
                     <td>{{($assignment->employee_name)}} {{-- Ответственный работник --}}</td>
                     <td>{{($assignment->car_name)}} {{-- Назва авто --}}</td>
                     <td>
-                        <a href="{{ url('/client/sub_assignments/'.$assignment->id) }}">
+                        <a href="{{ url('/client/cars/sub_assignments/'.$assignment->id) }}">
                             <div class="btn btn-secondary">
                                 Архив зональных нарядов
                             </div>

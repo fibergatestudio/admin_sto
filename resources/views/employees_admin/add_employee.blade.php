@@ -7,7 +7,7 @@
 @section('content')
     <h2>Новый сотрудник</h2>
 
-    <form action="{{ url('add_employee') }}" method="POST">
+    <form action="{{ url('/supervisor/add_employee') }}" method="POST">
         @csrf
         {{-- Фамилия --}}
         <div class="form-group">
@@ -43,4 +43,6 @@
 
         <button class="btn btn-primary">Добавить</button>
     </form>
+    <hr>
+        <a href="{{ url('/supervisor/view_employees') }}" class="btn btn-danger">Вернуться</a>
 @endsection

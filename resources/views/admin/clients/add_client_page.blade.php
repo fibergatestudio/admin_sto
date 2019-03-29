@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <form action="{{ url('admin/add_client') }}" method="POST">
+    <form action="{{ url('admin/clients/add_client') }}" method="POST">
         @csrf
         <!-- <div class="form-group">
             <label>Имя клиента или название организации (Old)</label>

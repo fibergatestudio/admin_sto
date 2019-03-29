@@ -71,7 +71,7 @@
 
     {{-- Вернуться на страницу всех постов --}}
     <a href="{{ url('admin/workzones/index') }}">
-        <div class="btn btn-secondary">
+        <div class="btn btn-danger">
             Вернуться
         </div>
     </a>

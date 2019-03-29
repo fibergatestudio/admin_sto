@@ -24,7 +24,7 @@
                 
                 {{-- Клиент : имя + ссылка --}}
                 <td>
-                    <a href="{{ url('admin/view_client/'.$car->owner_client_id) }}">
+                    <a href="{{ url('admin/clients/view_client/'.$car->owner_client_id) }}">
                         {{ $car->client_name }}
                     </a>    
                 </td>

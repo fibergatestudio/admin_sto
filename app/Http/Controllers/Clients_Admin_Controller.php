@@ -128,7 +128,7 @@ class Clients_Admin_Controller extends Controller
         $create_client_note_log_entry->save();
 
         // И вернуться на страницу клиента
-        return redirect('admin/view_client/'.$client->id);
+        return redirect('admin/clients/view_client/'.$client->id);
     }
 
     /* - Редактирование примечания о клиенте : страница - */
@@ -163,7 +163,7 @@ class Clients_Admin_Controller extends Controller
         $edit_client_note_log_entry->type = '';
         $edit_client_note_log_entry->save();
 
-        return redirect('admin/view_client/' .$client_note_entry->client_id);
+        return redirect('admin/clients/view_client/' .$client_note_entry->client_id);
     }
 
 

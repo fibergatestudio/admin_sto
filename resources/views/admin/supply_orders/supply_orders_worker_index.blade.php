@@ -115,7 +115,7 @@
     {{-- Конец вывода --}}
     <hr>
     {{-- Вернуться : кнопка --}}
-    <a href="{{ url('admin/supply_orders/index') }}" class="btn btn-light">Вернуться к заказам</a>
+    <a href="{{ url('admin/supply_orders/index') }}" class="btn btn-danger">Вернуться к заказам</a>
     
     
     

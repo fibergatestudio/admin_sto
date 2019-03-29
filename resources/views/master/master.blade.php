@@ -5,4 +5,7 @@
 @endsection
 
 @section('content')
+<p>
+    Для навигации используйте меню
+</p>
 @endsection

@@ -281,7 +281,13 @@
         </tbody>
     </table>
     <h4 id="total">Итого: {{ $sum }} лей</h4>
-
+    <hr>
+    {{-- Вернуться : кнопка --}}
+    <a href="{{ url('/admin/profitability/profitability_index') }}">
+        <div class="btn btn-danger">
+            Вернуться
+        </div>
+    </a>
     <script type="text/javascript">
         var rootSite = '<?=URL::to('/')?>';
         function showProfitability(){
@@ -293,7 +299,7 @@
                 alert("Выберите корректный период !");
                 return 0;
             }
-            window.location.href = rootSite + '/admin/profitability_index/month/'+ valueStart +'/' + valueEnd;
+            window.location.href = rootSite + '/admin/profitability/profitability_index/month/'+ valueStart +'/' + valueEnd;
         }
     </script>
     

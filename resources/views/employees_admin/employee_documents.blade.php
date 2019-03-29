@@ -50,10 +50,13 @@
         {{-- Конец модального окна для вывода лайтбокса --}}    
     </div>
      {{-- Документы : переход на страницу загрузки --}}   
-    <a class="btn btn-light" href="{{ url('/add_documents/'.$employee->id) }}">Добавить документ</a>
+    <a class="btn btn-light" href="{{ url('/supervisor/add_documents/'.$employee->id) }}">Добавить документ</a>
      
     {{-- Удаление документов : переход на страницу --}}              
     <a class="btn btn-secondary" href="{{ url('/documents_delete/'.$employee->id) }}">Удалить документ</a>
+
+    <hr>
+    <a href="{{ url('/supervisor/view_employees') }}" class="btn btn-danger">Вернуться</a>
 
        
 @endsection

@@ -38,10 +38,10 @@
 								Мой профиль
 							</span>
 							</a>
-      					</li>
+                                                </li>
 
 						<li class="nav-item">
-							<a href="{{ url('employee/my_assignments') }}" class="nav-link {{ request()->is('employee/my_assignments') ? 'active' : ''}}">
+							<a  href="{{ url('employee/assignments/my_assignments') }}" class="nav-link {{ request()->is('employee/assignments/*') ? 'active' : ''}}">
 							<i class="icon-list"></i>
 							<span>
 								Мои наряды
@@ -51,7 +51,7 @@
 
 
 						<li class="nav-item">
-							<a href="{{ url('employee/my_completed_assignments') }}" class="nav-link {{ request()->is('employee/my_completed_assignments') ? 'active' : ''}}">
+							<a  href="{{ url('employee/my_completed_assignments') }}" class="nav-link {{ request()->is('employee/my_completed_assignments') ? 'active' : ''}}">
 							<i class="icon-check"></i>
 								<span>
 									Выполненые наряды
@@ -59,7 +59,7 @@
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="{{ url('employee/my_uncompleted_assignments') }}" class="nav-link {{ request()->is('employee/my_uncompleted_assignments') ? 'active' : ''}}">
+							<a  href="{{ url('employee/my_uncompleted_assignments') }}" class="nav-link {{ request()->is('employee/my_uncompleted_assignments') ? 'active' : ''}}">
 							<i class="icon-fire"></i>
 								<span>
 									Невыполненые наряды
@@ -78,17 +78,16 @@
 						</li>
 								<!-- Заказы работника -->
 						<li class="nav-item">
-							<a href="{{ url('/employee/orders/index') }}" class="nav-link {{ request()->is('employee/orders/index') ? 'active' : ''}}">
+							<a href="{{ url('/employee/orders/index') }}" class="nav-link {{ request()->is('employee/orders/*') ? 'active' : ''}}" >
 							<i class="icon-color-sampler"></i>
-                                                        <span>
-                                                            Мои заказы
-                                                        </span>
-								
+							<span>
+								Мои заказы
+							</span>
 							</a>
                         </li>
 
 						<li class="nav-item">
-							<a href="{{ url('employee/finance_history') }}" class="nav-link {{ request()->is('employee/finance_history') ? 'active' : ''}}">
+							<a href="{{ url('employee/finance/finance_history') }}" class="nav-link {{ request()->is('employee/finance/*') ? 'active' : ''}}" >
 							<i class="icon-history"></i>
 							<span>
 								История финансов
@@ -96,9 +95,9 @@
 							</a>
       					</li>
 
-						
+
 						  <li class="nav-item">
-							<a href="{{ url('/employee/notification') }}" class="nav-link">
+							<a href="{{ url('/employee/notification') }}" class="nav-link {{ request()->is('employee/notification') ? 'active' : ''}}">
 								<i class="icon-circle"></i>
 								<span>
 									Настройка уведомлений

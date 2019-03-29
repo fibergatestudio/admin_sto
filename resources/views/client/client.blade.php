@@ -27,7 +27,7 @@
 
                     <td>
                         {{-- Активные наряды клиента : кнопка --}}
-                        <a href="{{ url('client/assignments/'.$car->id) }}">
+                        <a href="{{ url('client/cars/assignments/'.$car->id) }}">
                             <div class="btn btn-success">
                                 Активные наряды
                             </div>
@@ -35,7 +35,7 @@
                     </td>
                     <td>
                         {{--  Архивные наряды : переход --}}
-                        <a href="{{ url('client/assignments_archive/'.$car->id) }}">
+                        <a href="{{ url('client/cars/assignments_archive/'.$car->id) }}">
                             <div class="btn btn-light">
                                 Архивные наряды
                             </div>

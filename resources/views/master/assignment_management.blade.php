@@ -2,7 +2,8 @@
 
 @section('page_name')
     Зональный наряд: {{ $sub_assignment->name }}
-
+    <hr>
+    <a href="{{ url('/master/assignments/view/'.$assignment->id) }}" class="btn btn-danger">Вернуться</a>
 @endsection
 
 @section('content')

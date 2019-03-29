@@ -21,8 +21,8 @@
     <hr>
     
     {{-- Вернуться к списку клиентов --}}
-    <a href="{{ url('admin/clients_index') }}">
-        <div class="btn btn-secondary">
+    <a href="{{ url('admin/clients/clients_index') }}">
+        <div class="btn btn-danger">
             Вернуться
         </div>
 
