@@ -32,7 +32,7 @@
 
                     <div class="row">
                       <div class="col-lg-6">
-                        <a href="{{ url('admin/add_client') }}">
+                        <a href="{{ url('admin/clients/add_client') }}">
                             <div class="btn btn-large btn-primary">
                                 Новый клиент
                             </div>
