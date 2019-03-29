@@ -12,6 +12,7 @@ class CreateClientsNotesLogsTable extends Migration
      * @return void
      */
     public function up()
+    
     {
         Schema::create('clients_notes_logs', function (Blueprint $table) {
             $table->increments('id');

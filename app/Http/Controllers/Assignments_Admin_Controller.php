@@ -524,6 +524,34 @@ class Assignments_Admin_Controller extends Controller
             $new_income_entry->basis = $request->basis; /* Основание для захода денег */
             $new_income_entry->description = $request->description; /* Описание для захода */
             $new_income_entry->save();
+
+
+            /* Проверка оповещенияй (включено ли) */
+            $user_id = Auth::user()->id;
+            $notification_check = DB::table('user_options')->where('id','=', $user_id)->first();
+    
+            if($notification_check->tg_income_notification == 1){
+    
+                /* Оповещения для телеграма */
+                $text = "У вас новый доход!\n"
+                . "<b>ID Наряда: </b>\n"
+                . "$new_income_entry->assignment_id\n"
+                . "<b>Сумма Дохода: </b>\n"
+                . "$new_income_entry->amount $new_income_entry->currency\n"
+                . "<b>Основание: </b>\n"
+                . "$new_income_entry->basis\n"
+                . "<b>Описание: </b>\n"
+                .  $new_income_entry->description;
+    
+                Telegram::sendMessage([
+                'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+                'parse_mode' => 'HTML',
+                'text' => $text
+                ]);
+    
+            } else {
+    
+            }
     
             
     
@@ -540,6 +568,33 @@ class Assignments_Admin_Controller extends Controller
             $new_expense_entry->basis = $request->basis; /* Основание для расхода денег */
             $new_expense_entry->description = $request->description; /* Описание для расхода */
             $new_expense_entry->save();
+
+            /* Проверка оповещенияй (включено ли) */
+            $user_id = Auth::user()->id;
+            $notification_check = DB::table('user_options')->where('id','=', $user_id)->first();
+
+            if($notification_check->tg_expense_notification == 1){
+
+                /* Оповещения для телеграма */
+                $text = "У вас новый расход!\n"
+                . "<b>ID Наряда: </b>\n"
+                . "$new_expense_entry->assignment_id\n"
+                . "<b>Сумма Расхода: </b>\n"
+                . "$new_expense_entry->amount $new_expense_entry->currency\n"
+                . "<b>Основание: </b>\n"
+                . "$new_expense_entry->basis\n"
+                . "<b>Описание: </b>\n"
+                .  $new_expense_entry->description;
+
+                Telegram::sendMessage([
+                'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+                'parse_mode' => 'HTML',
+                'text' => $text
+                ]);
+
+            } else {
+
+            }
     
     
             /* Возвращаемся обратно на страницу наряда */
@@ -570,6 +625,33 @@ class Assignments_Admin_Controller extends Controller
         $new_zonal_income_entry->zonal_description = $request->zonal_description; /* Описание для захода */
         $new_zonal_income_entry->save();
 
+         /* Проверка оповещенияй (включено ли) */
+         $user_id = Auth::user()->id;
+         $notification_check = DB::table('user_options')->where('id','=', $user_id)->first();
+ 
+         if($notification_check->tg_income_notification == 1){
+ 
+             /* Оповещения для телеграма */
+             $text = "У вас новый зональный доход!\n"
+             . "<b>ID Наряда: </b>\n"
+             . "$new_zonal_income_entry->sub_assignment_id\n"
+             . "<b>Сумма Дохода: </b>\n"
+             . "$new_zonal_income_entry->zonal_amount $new_zonal_income_entry->zonal_currency\n"
+             . "<b>Основание: </b>\n"
+             . "$new_zonal_income_entry->zonal_basis\n"
+             . "<b>Описание: </b>\n"
+             .  $new_zonal_income_entry->zonal_description;
+ 
+             Telegram::sendMessage([
+             'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+             'parse_mode' => 'HTML',
+             'text' => $text
+             ]);
+ 
+         } else {
+ 
+         }
+
         /* Возвращаемся обратно на страницу наряда */
         return back();
     }
@@ -583,6 +665,33 @@ class Assignments_Admin_Controller extends Controller
         $new_zonal_expense_entry->zonal_basis = $request->zonal_basis; /* Основание для расхода денег */
         $new_zonal_expense_entry->zonal_description = $request->zonal_description; /* Описание для расхода */
         $new_zonal_expense_entry->save();
+
+        /* Проверка оповещенияй (включено ли) */
+        $user_id = Auth::user()->id;
+        $notification_check = DB::table('user_options')->where('id','=', $user_id)->first();
+
+        if($notification_check->tg_expense_notification == 1){
+
+            /* Оповещения для телеграма */
+            $text = "У вас новый зональный расход!\n"
+            . "<b>ID Наряда: </b>\n"
+            . "$new_zonal_expense_entry->sub_assignment_id\n"
+            . "<b>Сумма Расхода: </b>\n"
+            . "$new_zonal_expense_entry->zonal_amount $new_zonal_expense_entry->zonal_currency\n"
+            . "<b>Основание: </b>\n"
+            . "$new_zonal_expense_entry->zonal_basis\n"
+            . "<b>Описание: </b>\n"
+            .  $new_zonal_expense_entry->zonal_description;
+
+            Telegram::sendMessage([
+            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+            'parse_mode' => 'HTML',
+            'text' => $text
+            ]);
+
+        } else {
+
+        }
 
 
         /* Возвращаемся обратно на страницу наряда */
