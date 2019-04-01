@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <h2>Страниц смен</h2>
+    <h2>Страница смен</h2>
     
 
     

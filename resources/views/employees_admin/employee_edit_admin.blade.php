@@ -2,6 +2,7 @@
 
 @section('page_name')
     Редактирование сотрудника: {{ $employee->general_name }}
+    <a href="{{ url('/supervisor/view_employees') }}" class="btn btn-danger" title="Страница Сотрудники">Вернуться</a>
 @endsection
 
 @section('content')
@@ -171,7 +172,7 @@
 
             </form>
             <hr>
-            <a href="{{ url('/supervisor/view_employees') }}" class="btn btn-danger">Вернуться</a>
+            
 
 {{-- Как узнать Телеграм ID : Форма и модальное окно --}}
     <form method="POST">

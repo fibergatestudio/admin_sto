@@ -1,7 +1,9 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    Сотрудники
+Сотрудники
+    <a href="{{ url('/supervisor/add_employee') }}" class="btn btn-primary">Добавить сотрудника</a>    
+    <a href="{{ url('/supervisor/employee_archive') }}" class="btn btn-secondary">Архив сотрудников</a>
 @endsection
 
 @section('content')
@@ -46,20 +48,4 @@
             </tr>
         @endforeach
     </table>
-
-    <a href="{{ url('/supervisor/add_employee') }}">
-        <div class="btn btn-primary">
-            Добавить сотрудника
-        </div>
-    </a>
-    <hr>
-    <a href="{{ url('/supervisor/employee_archive') }}">
-        <div class="btn btn-secondary">
-            Архив сотрудников
-        </div>
-    </a>
-
-
-
-
 @endsection

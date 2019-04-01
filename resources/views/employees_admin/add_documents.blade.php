@@ -2,6 +2,7 @@
 
 @section('page_name')
 Добавление документов
+<a href="{{ url('/supervisor/view_employees') }}" class="btn btn-danger" title="Страница Сотрудники">Вернуться</a>
 @endsection
 
 @section('content')
@@ -27,7 +28,7 @@
     </div>
 </form>
 <hr>
-<a href="{{ url('/supervisor/view_employees') }}" class="btn btn-danger">Вернуться</a>
+
 {{-- Конец формы --}}
 
 @endsection

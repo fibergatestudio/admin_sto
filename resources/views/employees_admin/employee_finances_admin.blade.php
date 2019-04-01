@@ -3,9 +3,36 @@
 @section('page_name')
 Финансы по сотруднику: {{ $employee->general_name }}
 {{-- Вернуться : Кнопка --}}
-    <a href="{{ url('/supervisor/view_employees') }}">
+    <a href="{{ url('/supervisor/view_employees') }}" title="Страница Содрудники">
         <div class="btn btn-danger">
             Вернуться
+        </div>
+    </a>
+{{-- Начисления : Кнопка --}}
+    <a href="{{ url('/supervisor/employee_finances/credit/'.$employee->id) }}">
+        <div class="btn btn-success">
+            Начисления
+        </div>
+    </a>
+    {{-- Выплата : Кнопка --}}
+    <a href="{{ url('/supervisor/employee_finances/payout/'.$employee->id) }}">
+        <div class="btn btn-warning">
+            Выплата
+        </div>
+    </a>
+
+    
+    {{-- Штрафы : Кнопка --}}
+    <a href="{{ url('/supervisor/employee_fines/'.$employee->id ) }}">
+        <div class="btn btn-secondary">
+            Штрафы сотрудинка
+        </div>
+    </a>
+    
+    {{-- Жетоны на кофе : Кнопка --}}
+    <a href="{{ url('/supervisor/employee_coffee_tokens/'.$employee->id ) }}">
+        <div class="btn btn-info">
+            Жетоны на кофе
         </div>
     </a>
 @endsection
@@ -56,36 +83,7 @@
         {{-- Изменить ставку : модальное окно --}}
         <div class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" style="margin-top: 10px">
             Изменить ставку
-        </div>
-
-    <hr>
-    {{-- Начисления : Кнопка --}}
-    <a href="{{ url('/supervisor/employee_finances/credit/'.$employee->id) }}">
-        <div class="btn btn-success">
-            Начисления
-        </div>
-    </a>
-    {{-- Выплата : Кнопка --}}
-    <a href="{{ url('/supervisor/employee_finances/payout/'.$employee->id) }}">
-        <div class="btn btn-warning">
-            Выплата
-        </div>
-    </a>
-
-    
-    {{-- Штрафы : Кнопка --}}
-    <a href="{{ url('/supervisor/employee_fines/'.$employee->id ) }}">
-        <div class="btn btn-secondary">
-            Штрафы сотрудинка
-        </div>
-    </a>
-    
-    {{-- Жетоны на кофе : Кнопка --}}
-    <a href="{{ url('/supervisor/employee_coffee_tokens/'.$employee->id ) }}">
-        <div class="btn btn-info">
-            Жетоны на кофе
-        </div>
-    </a>
+        </div> 
 
     <hr>
 

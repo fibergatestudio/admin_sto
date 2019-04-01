@@ -2,6 +2,13 @@
 
 @section('page_name')
 Штрафы сотрудника: {{ $employee->general_name }}
+<a href="{{ url('supervisor/employee_finances/'.$employee->id) }}">
+    <div class="btn btn-danger">Вернуться</div>
+</a>
+<div class="btn btn-primary" data-toggle="modal" data-target="#addFineModal">Добавить штраф вручную</div>
+<div class="btn btn-secondary" data-toggle="modal" data-target="#fineHistory">История штрафов</div>
+
+   
 @endsection
 
 @section('content')
@@ -31,14 +38,7 @@
             </tr>
         @endforeach
     </table>
-    
-    <div class="btn btn-primary" data-toggle="modal" data-target="#addFineModal">Добавить штраф вручную</div>
-    <div class="btn btn-secondary" data-toggle="modal" data-target="#fineHistory">История штрафов</div>
-
-    <a href="{{ url('supervisor/employee_finances/'.$employee->id) }}">
-        <div class="btn btn-danger">Вернуться</div>
-    </a>
-
+     
 
     {{-- Добавление штрафа вручную - модальное окно --}}
     <div class="modal" tabindex="-1" role="dialog" id="addFineModal">

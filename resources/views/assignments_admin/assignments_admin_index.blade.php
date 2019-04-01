@@ -167,7 +167,7 @@
      $.ajax({
        type: "POST", 
        dataType: "json", 
-       url: "{{ url('/admin/assignments_index') }}",
+       url: "{{ url('/admin/assignments/assignments_index') }}",
        data: {
          order:order,
          _token: '{{csrf_token()}}'

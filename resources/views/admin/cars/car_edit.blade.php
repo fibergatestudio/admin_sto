@@ -2,6 +2,8 @@
 
 @section('page_name')
 Редактирование Модели
+ {{-- Вернуться : кнопка --}}
+    <a href="{{ url('admin/cars/index') }}" class="btn btn-danger" title="Вернуться к машинам">Вернуться</a> 
 @endsection
 
 

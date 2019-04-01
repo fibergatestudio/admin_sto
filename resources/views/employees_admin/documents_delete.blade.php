@@ -2,6 +2,7 @@
 
 @section('page_name')
     Страница удаления документов сотрудника
+     <a class="btn btn-danger" href="{{ url('/documents/'.$employee_id) }}" title="Страница Документы сотрудника">Вернуться</a>
 @endsection
 
 @section('content')
@@ -28,5 +29,5 @@
     @endforeach
 
     {{-- Кнопка вернуться : на страницу с документами --}}
-    <a class="btn btn-danger" href="{{ url('/documents/'.$employee_id) }}">Вернуться</a>
+   
 @endsection

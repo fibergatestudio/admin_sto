@@ -101,7 +101,7 @@
     </div>
   </form>
 </div>
-<a href="{{ url('/admin/assignments_index') }}">
+<a href="{{ url('/admin/assignments/assignments_index') }}">
         <div class="btn btn-danger">
             Вернуться
         </div>

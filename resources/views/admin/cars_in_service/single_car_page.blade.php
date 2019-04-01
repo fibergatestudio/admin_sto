@@ -2,6 +2,12 @@
 
 @section('page_name')
     Страница машины: {{ $car->general_name }}
+    {{-- Вернуться на страницу Машины в сервисе --}}
+                <a href="{{ url('/admin/cars_in_service/index') }}" title="На страницу Машины в сервисе">
+                    <div class="btn btn-danger">
+                        Вернуться
+                    </div>
+                </a>
 @endsection
 
 @section('content')

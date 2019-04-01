@@ -2,6 +2,7 @@
 
 @section('page_name')
     Документы сотрудника - {{$employee->general_name}}
+    <a href="{{ url('/supervisor/view_employees') }}" class="btn btn-danger" title="Страница Сотрудники">Вернуться</a>
 @endsection
 
 @section('content')
@@ -56,7 +57,7 @@
     <a class="btn btn-secondary" href="{{ url('/documents_delete/'.$employee->id) }}">Удалить документ</a>
 
     <hr>
-    <a href="{{ url('/supervisor/view_employees') }}" class="btn btn-danger">Вернуться</a>
+    
 
        
 @endsection

@@ -2,6 +2,8 @@
 
 @section('page_name')
     Заказы для поставщиков (необходимо подтвердить)
+    {{-- Вернуться : кнопка --}}
+    <a href="{{ url('admin/supply_orders/index') }}" class="btn btn-danger">Вернуться к заказам</a>
 @endsection
 
 @section('content')
@@ -114,8 +116,7 @@
     
     {{-- Конец вывода --}}
     <hr>
-    {{-- Вернуться : кнопка --}}
-    <a href="{{ url('admin/supply_orders/index') }}" class="btn btn-danger">Вернуться к заказам</a>
+    
     
     
     

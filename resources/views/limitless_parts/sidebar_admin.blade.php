@@ -71,7 +71,7 @@
 						</li>
 
                                                 <li class="nav-item">
-							<a href="{{ url('admin/assignments_index') }}" class="nav-link {{ request()->is('admin/assignments_index') ? 'active' : ''}}">
+							<a href="{{ url('admin/assignments/assignments_index') }}" class="nav-link {{ request()->is('admin/assignments/*') ? 'active' : ''}}">
 								<i class="icon-list3"></i>
 								<span>
 									Наряды

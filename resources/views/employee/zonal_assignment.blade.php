@@ -2,6 +2,12 @@
 
 @section('page_name')
 Зональный наряд: {{ $sub_assignment->name }}
+{{-- Архив нарядов : переход --}}
+    <a href="{{ url('/employee/assignments/manage_assignment/'.$assignment->id) }}">
+        <div class="btn btn-danger">
+            Вернуться
+        </div>
+    </a>
 
 @endsection
 

@@ -2,6 +2,8 @@
 
 @section('page_name')
 Добавить новый заказ
+ <a href="{{ url('employee/orders/index') }}" class="btn btn-info">Вернуться в заказы</a>
+  
 @endsection
 
 @section('content')
@@ -58,9 +60,7 @@
         </button>
     </form>
     <hr>
-    <div class="col-2">
-        <a href="{{ url('employee/orders/index') }}" class="btn btn-info">Вернуться в заказы</a>
-    </div> 
+    
 
     <script>
         var currentCounter = 1;

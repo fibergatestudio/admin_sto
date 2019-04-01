@@ -73,7 +73,7 @@
             {{-- url('admin/assignments/view/'.$assignment->id.'/management') --}}
             <td>
               {{-- Кнопка управления --}}
-              <a href="{{ url('/employee/manage_assignment/'.$sub_assignment->id.'/management') }}">
+              <a href="{{ url('/employee/assignments/manage_assignment/'.$sub_assignment->id.'/management') }}">
                 <div class="btn btn-light">
                   Управление зональным нарядом
                 </div>

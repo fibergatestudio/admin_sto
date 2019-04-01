@@ -24,7 +24,7 @@
                 <div class="col">
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" name="filter_income" value="1" class="custom-control-input" id="check1" 
-                        @if ($view_income == 'null')
+                        @if($view_income == 'null')
                         
                         @else
                             checked
