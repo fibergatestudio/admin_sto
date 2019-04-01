@@ -18,7 +18,7 @@
             <input type="hidden" name="assignment_id" value="{{ $sub_assignment->id }}">
 
             <div class="row">
-                <div class="col-lg-2">
+                <div class="col-lg-1">
                     <div class="custom-control">
                         <label>Текущее время: </label>
                     </div>
@@ -37,7 +37,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-2">
+                <div class="col-lg-1">
                     <div class="custom-control">
                         <label>Новое время: </label>
                     </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 use App\Records;
 
 use Illuminate\Support\Facades\DB;
@@ -177,6 +178,12 @@ class RecordsController extends Controller
         $new_record->record_date = $request->record_date;
         $new_record->record_time = $request->record_time; //Желаемое время
         $new_record->phone = $request->phone;
+
+        $record_services = Input::get('record_services');
+        $record_services_imp = implode ('!!', $record_services);
+        //dd($record_services_imp);
+
+        $new_record->record_services = $record_services_imp; //Желаемые виды услуг
         $new_record->save();
 
         return back();
@@ -198,6 +205,31 @@ class RecordsController extends Controller
 
         /* Возвращаемся обратно на страницу записей */
         return back();
+    }
+
+    public function edit_record_page($record_id){
+
+        //dd($records);
+
+        //$records = Records::all();
+
+        $record = Records::where('id', $record_id)->first();
+
+        $record_services = $record->record_services;
+        $explode_services = explode('!!', $record_services);
+
+        //dd($explode_services);
+
+        return view('admin.assignments.edit_record_page',
+        [
+            'record' => $record,
+            'explode_services' => $explode_services
+        ]);
+    }
+
+    public function apply_record_edit(Request $request){
+
+        return view('admin.assignments.records_admin_index');
     }
 
     public function delete_record(Request $request){

@@ -121,7 +121,7 @@ class Employee_Dashboard_Controller extends Controller
             ->get();
         }
 
-        return view('employee.employee_profile',
+        return view('employee.finance_history',
         [
             'view_fine' => $view_fine,
             'view_coffee' => $view_coffee,

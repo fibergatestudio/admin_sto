@@ -22,6 +22,7 @@
                 <th>Подтвержденное время</th>
                 <th></th>{{-- Кнопки управления --}}
                 <th></th>{{-- Кнопка удалить --}}
+                <th></th>{{-- Кнопка редактировать --}}
             </tr>
         </thead>
         <tbody>
@@ -89,6 +90,9 @@
                         </form>
                 </div>
             </td>
+            <td>
+                <a href="{{ url('/records/'.$record->id.'/edit_page') }}"><button type="submit" class="btn btn-primary">Редактировать</button></a>
+            </td>
         </tr>
         @endforeach
     </tbody>
@@ -140,6 +144,39 @@
                                 <label class="col-lg-3 col-form-label form-control-label">Номер машины</label>
                                 <div class="col-lg-9">
                                     <input class="form-control" name="car_number" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label form-control-label">Услуги</label>
+                                <div class="col-lg-9">
+                                    <div class="form-check form-check-inline custom-checkbox">
+                                        <input class="custom-control-input" name="record_services[]" type="checkbox" id="inlineCheckbox1" value="Полировка">
+                                        <label class="custom-control-label" for="inlineCheckbox1">Полировка</label>
+                                    </div>
+                                    <div class="form-check form-check-inline custom-checkbox">
+                                        <input class="custom-control-input" name="record_services[]" type="checkbox" id="inlineCheckbox2" value="Развал-схождение">
+                                        <label class="custom-control-label" for="inlineCheckbox2">Развал-схождение</label>
+                                    </div>
+                                    <div class="form-check form-check-inline custom-checkbox">
+                                        <input class="custom-control-input" name="record_services[]" type="checkbox" id="inlineCheckbox3" value="Шиномонтаж">
+                                        <label class="custom-control-label" for="inlineCheckbox3">Шиномонтаж</label>
+                                    </div>
+                                    <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                        Показать больше
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-12">
+                                        {{-- Услуги - доп список --}}
+                                        <div class="collapse" id="collapseExample">
+                                            <div class="card card-body">
+                                                <div class="form-check form-check-inline custom-checkbox">
+                                                    <input class="custom-control-input" name="record_services[]" type="checkbox" id="inlineCheckbox4" value="Химчистка">
+                                                    <label class="custom-control-label" for="inlineCheckbox4">Химчистка</label>
+                                                </div>
+                                            </div>
+                                        </div>
                                 </div>
                             </div>
                             <div class="form-group row">

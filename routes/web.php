@@ -120,6 +120,10 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
 
     /* Страница записей */
     Route::get('/records', 'RecordsController@records_index')->middleware('can:admin_rights');
+        /* Редактировать запись (Страница) */
+        Route::get('/records/{record_id}/edit_page', 'RecordsController@edit_record_page');
+            /* Редактировать запись (Применить изменения) */
+            Route::get('/records/{record_id}/apply_edit', 'RecordsController@edit_record_page');
         /* Добавить запись */
         Route::post('/add_record', 'RecordsController@add_record')->middleware('can:admin_rights');
         /* Подтвердить запись */
@@ -537,7 +541,7 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
 
 /**** История Финансов ****/
     /* Страница финансов */
-    Route::get('/employee/finance/finance_history', 'Employee_Dashboard_Controller@finance_history');
+    Route::get('/employee/finance/finance_history', 'Employee_Dashboard_Controller@finance_history'); 
 
     /* Применить фильтр */
     Route::post('/employee/finance/finance_history/filter', 'Employee_Dashboard_Controller@finance_history');

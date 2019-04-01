@@ -23,13 +23,13 @@
                         <label>Текущее время: </label>
                     </div>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-lg-5">
                     <div class="custom-control">
                         <input class="form-control" value="{{ $sub_assignment->start_time }}" type="datetime-local" disabled>
                         <label>Время начала работ</label>
                     </div>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-lg-5">
                     <div class="custom-control">
                         <input class="form-control" value="{{ $sub_assignment->end_time }}" type="datetime-local" disabled>
                         <label>Время окончания работ</label>
@@ -42,13 +42,13 @@
                         <label>Новое время: </label>
                     </div>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-lg-5">
                     <div class="custom-control">
                         <input class="form-control" name="new_start_time" type="datetime-local">
                         <label>Время начала работ</label>
                     </div>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-lg-5">
                     <div class="custom-control">
                         <input class="form-control" name="new_end_time" type="datetime-local">
                         <label>Время окончания работ</label>
@@ -56,7 +56,7 @@
                 </div>
             </div>
             <div class="row">
-              <div class="col-md-6 col-lg-6">
+              <div class="col-md-2 col-lg-2">
                   <button type="sumbit" class="btn btn-primary btn-block">Применить</button>
                 </div>
             </div>
