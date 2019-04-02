@@ -118,21 +118,55 @@
 			
 
 			<!-- Вывод fio работников у кого сегодня и завтра день рождения, видят все кроме работников у которых сегодня и завтра ДР-->
-			<ul>
-				<li>
-					<span>Именинники сегодня: </span>
-					@foreach(App\Employee::getBirthdayToday() as $employee)						
-                                            {{$employee->fio}},										
-					@endforeach
-				</li>				
-				<li>
-					<span>Именинники завтра: </span>	
-					@foreach(App\Employee::getBirthdayTomorrow() as $employee)	
-						{{$employee->fio}},
-					@endforeach
-				</li>
-			</ul>	
-			
+			@php
+                            $dateToday = date("m-d");
+                            $namesToday = ''; // имена тех у кого сегодня ДР
+                            $namesTomorrow = ''; // имена тех у кого завтра ДР
+                            foreach(App\Employee::getBirthdayToday() as $employeeToday){                     
+                                $namesToday .= $employeeToday->fio.', ';                                 
+                            }
+                            foreach(App\Employee::getBirthdayTomorrow() as $employeeTomorrow){                      
+                                $namesTomorrow .= $employeeTomorrow->fio.', ';                                  
+                            }
+                            $textToday = "Именинники сегодня:\n". $namesToday;
+                            $textTomorrow = "Именинники завтра:\n". $namesTomorrow;
+                        @endphp
+                        
+                        <!-- Вариант 1  - без Алерта -->
+                       <!-- 
+                        <ul>  
+                            @if($namesToday != '')
+                                @if(App\Employee::get_employee_by_user_id(Auth::user()->id) != $employeeToday)                                
+                                <li><span>{{$textToday}}</span></li>
+                                @endif                           
+                            @endif
+
+                            @if($namesTomorrow != '')
+                                @if(App\Employee::get_employee_by_user_id(Auth::user()->id) != $employeeTomorrow)                                
+                                <li><span>{{$textTomorrow}}</span></li>
+                                @endif                           
+                            @endif	
+                        </ul>
+                        -->
+                        <!-- Вариант 2  - с Алертом, но после закрытия Алерта, уведомление будет выскакивать при каждом обновлении страницы -->
+                        @if($namesToday != '')
+                            @if(App\Employee::get_employee_by_user_id(Auth::user()->id) != $employeeToday)
+                                <div class="alert alert-styled-left alert-styled-custom alert-arrow-left alpha-teal border-teal alert-dismissible" style="color: #000">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <span>{{$textToday}}</span>
+                                </div>    
+                            @endif                           
+                        @endif
+                        @if($namesTomorrow != '')
+                            @if(App\Employee::get_employee_by_user_id(Auth::user()->id) != $employeeTomorrow)
+                                <div class="alert alert-styled-left alert-styled-custom alert-arrow-left alpha-teal border-teal alert-dismissible" style="color: #000">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <span>{{$textTomorrow}}</span>
+                                </div>                            
+                            @endif                           
+                        @endif
+                       
+                        
 		</div>
             @if(Auth::user()->isAdmin())
                 <div>
