@@ -27,22 +27,6 @@
                         </div>
                     </a>
                 </td>
-                {{-- Кнопка редактирования сотрудника --}}
-                <td>
-                    <a href="{{ url('/supervisor/manage_employee_status/'.$employee->id) }}">
-                        <div class="btn btn-secondary">
-                            Статус сотрудника
-                        </div>
-                    </a>
-                </td>
-
-                <td>
-
-                        <a class="btn btn-secondary" href="{{ url('/supervisor/add_documents/'.$employee->id) }}">Добавить документы</a>
-
-                        <a class="btn btn-secondary" href="{{ url('/documents/'.$employee->id) }}">Посмотреть документы</a>
-
-                </td>
             </tr>
         @endforeach
     </table>

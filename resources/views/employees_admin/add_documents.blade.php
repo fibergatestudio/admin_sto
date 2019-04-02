@@ -27,7 +27,7 @@
     </div>
 </form>
 <hr>
-<a href="{{ url('/supervisor/view_employees') }}" class="btn btn-danger">Вернуться</a>
+<a href="{{ url('/supervisor/manage_employee_status/'. $employee->id .'/employee_edit') }}" class="btn btn-danger">Вернуться</a>
 {{-- Конец формы --}}
 
 @endsection

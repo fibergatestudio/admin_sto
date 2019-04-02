@@ -7,7 +7,7 @@
 @section('content')
     @foreach($images as $image)
         {{-- Изображение --}}
-        <img src="..{{ Storage::url($image) }}" width="200px">
+        <img src="{{ Storage::url($image) }}" width="200px">
 
         {{-- Кнопка удаления --}}
         <form method="POST" action="{{ url('/documents_delete_post/') }}">
@@ -28,5 +28,5 @@
     @endforeach
 
     {{-- Кнопка вернуться : на страницу с документами --}}
-    <a class="btn btn-danger" href="{{ url('/documents/'.$employee_id) }}">Вернуться</a>
+    <a class="btn btn-danger" href="{{ url('/supervisor/manage_employee_status/'. $employee_id .'/documents') }}">Вернуться</a>
 @endsection

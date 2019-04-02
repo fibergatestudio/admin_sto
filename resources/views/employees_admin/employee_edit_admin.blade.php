@@ -1,7 +1,37 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    Редактирование сотрудника: {{ $employee->general_name }}
+    <div class="row">
+        <div class="col-lg-10">
+            Редактирование сотрудника: {{ $employee->general_name }}
+        </div>
+    <?php
+        $status_array = [
+            'active' => 'Действующий',
+            'archived' => 'Архивная запись'
+        ];
+    ?>
+        <div class="col-lg-2">
+            {{-- Перевести сотрудника в архив --}}
+            <form action="{{ url('/supervisor/manage_employee_status/'.$employee->id.'/archive_employee') }}" method="POST">
+                @csrf
+                <input type="hidden" name="employee_id" value="{{ $employee->id }}">
+
+                <button type="submit" class="btn btn-primary">
+                    Перевести в архив
+                </button>
+
+            </form>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            Текущий статус: {{ $status_array[$employee->status] }}
+        </div>
+    </div>
+
+    
 @endsection
 
 @section('content')
@@ -83,84 +113,90 @@
                         <input type="date" name="date_join"  value="{{ $employee->date_join }}" min="2000-01-01" max="2019-12-31" class="form-control">
                     </div> -->
 
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label>ФИО</label>
                         <input type="text" name="fio" value="{{ $employee->fio }}" class="form-control typeahead">
                     </div>
 
-                    <div class="form-group col-md-2">
+                    <div class="form-group col-md-4">
                         <label>День Рождения</label>
                         <input type="date" name="birthday" value="{{ $employee->birthday }}" class="form-control typeahead">
                     </div>
 
-                </div>
-
-                <div class="form-row">
-
-                    <div class="form-group col-md-6">
-                        <label>Серия и номер паспорта</label>
-                        <input type="text" name="passport" value="{{ $employee->passport }}" class="form-control">
-                    </div>
-
-                    <div class="form-group col-md-6">
-                        <label>Телефон</label>
-                        <input type="text" name="phone" value="{{ $employee->phone }}" class="form-control">
-                    </div>
-
-                </div>
-
-                <div class="form-row">
-
-                    <div class="form-group col-md-6">
+                    
+                    <div class="form-group col-md-4">
                         <label>Баланс</label>
                         <input type="number" name="balance" value="{{ $employee->balance }}" class="form-control typeahead">
                     </div>
 
-                    <div class="form-group col-md-6">
-                        <label>Резервный телефон</label>
-                        <input type="tel"  name="reserve_phone" value="{{ $employee->reserve_phone }}" class="form-control typeahead">
-                    </div>
                 </div>
 
                 <div class="form-row">
 
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
+                        <label>Серия и номер паспорта</label>
+                        <input type="text" name="passport" value="{{ $employee->passport }}" class="form-control">
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label>Телефон</label>
+                        <input type="text" name="phone" value="{{ $employee->phone }}" class="form-control">
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label>Резервный телефон</label>
+                        <input type="tel"  name="reserve_phone" value="{{ $employee->reserve_phone }}" class="form-control typeahead">
+                    </div>
+
+                </div>
+
+                <div class="form-row">
+
+                    <div class="form-group col-md-4">
                         <label>С какого часа</label>
                         <input type="time" name="hour_from" value="{{ $employee->hour_from }}" class="form-control typeahead">
                     </div>
 
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label>По какой час</label>
                         <input type="time" name="hour_to" value="{{ $employee->hour_to}}" class="form-control typeahead">
                     </div>
-                </div>
 
-                <div class="form-row">
-
-                    <div class="form-group col-md-6">
-                        <label>Фиксированная плата</label>
-                        <input type="checkbox" name="fixed_charge" value="fixed" @if($employee->fixed_charge == 'fixed') checked @endif class="form-control typeahead">
-                    </div>
-
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-2">
                         <label>Размер платы за смену</label>
                         <input type="number" name="pay_per_shift" value="{{ $employee->pay_per_shift }}" class="form-control typeahead">
                     </div>
+
+                    <div class="form-group col-md-2">
+                        <label>Фиксированная плата</label> 
+                        <input type="checkbox" name="fixed_charge" value="fixed" @if($employee->fixed_charge == 'fixed') checked @endif class="form-control typeahead">
+                    </div>
+
                 </div>
+                
+                <hr>
 
                 <div class="form-row">
 
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                         <label>Телеграм ID</label>
                         <input type="text" name="telegram_id" value="{{ $employee->telegram_id }}" class="form-control typeahead">
                     </div>
 
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-2">
                         {{-- Как узнать Телеграм ID : Кнопка открытия модального окна --}}
                         <label>Как узнать Телеграм ID</label><br>
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#howToGetId">
                             Туториал
                         </button>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Добавить документы</label>
+                        <a class="btn btn-secondary" href="{{ url('/supervisor/manage_employee_status/'. $employee->id .'/add_documents') }}">Добавить документы</a>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label>Просмотреть документы</label>
+                        <a class="btn btn-secondary" href="{{ url('/supervisor/manage_employee_status/'. $employee->id .'/documents') }}">Посмотреть документы</a>
                     </div>
 
                 </div>

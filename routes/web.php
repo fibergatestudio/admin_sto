@@ -160,7 +160,7 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
     Route::get('/supervisor/manage_employee_status/{employee_id}', 'EmployeesAdminController@manage_employee_status');
 
         /* Действие архивация сотрудника (условное "увольнение") */
-        Route::post('/supervisor/archive_employee', 'EmployeesAdminController@archive_employee')->middleware('can:admin_rights');
+        Route::post('/supervisor/manage_employee_status/{employee_id}/archive_employee', 'EmployeesAdminController@archive_employee')->middleware('can:admin_rights');
 
         /* Редактирование сотрудника */
         Route::get('/supervisor/manage_employee_status/{employee_id}/employee_edit', 'EmployeesAdminController@employee_edit')->name('employee_edit');
@@ -217,16 +217,15 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
                     'EmployeesAdminController@employee_coffee_token_issue')->middleware('can:admin_rights');
 
     /* Страница добавления документов сотрудника*/
-    Route::get('/supervisor/add_documents/{employee_id}', 'EmployeesAdminController@add_documents')->middleware('can:admin_rights');
-
+    Route::get('/supervisor/manage_employee_status/{employee_id}/add_documents', 'EmployeesAdminController@add_documents')->middleware('can:admin_rights');
         // Добавление документов POST
         Route::post('/add_documents_post/', 'EmployeesAdminController@add_documents_post')->middleware('can:admin_rights');
 
     // Страница сотрудника с его документами
-    Route::get('/documents/{employee_id}', 'EmployeesAdminController@show_employee_documents')->middleware('can:admin_rights');
+    Route::get('/supervisor/manage_employee_status/{employee_id}/documents', 'EmployeesAdminController@show_employee_documents')->middleware('can:admin_rights');
 
     // Страница удаления документов
-    Route::get('/documents_delete/{employee_id}', 'EmployeesAdminController@documents_delete')->middleware('can:admin_rights');
+    Route::get('/supervisor/manage_employee_status/{employee_id}/documents_delete', 'EmployeesAdminController@documents_delete')->middleware('can:admin_rights');
 
     // Удаление документов сотрудника POST
     Route::post('/documents_delete_post/', 'EmployeesAdminController@documents_delete_post')->middleware('can:admin_rights');

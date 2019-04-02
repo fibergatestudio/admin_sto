@@ -617,7 +617,7 @@ class EmployeesAdminController extends Controller
             $request->scan->store('public/employee/'.$employee_id);
         }        
 
-        return redirect('/documents/'.$request->employee_id);
+        return redirect('/supervisor/manage_employee_status/'.$request->employee_id.'/documents');
     }
 
     // Страница сотрудника его документами
@@ -645,7 +645,7 @@ class EmployeesAdminController extends Controller
         Storage::delete($request->path_to_file);
 
         /* Вернуться на страницу удаления документов */
-        return redirect('documents_delete/'.$request->employee_id);
+        return redirect('/supervisor/manage_employee_status/'.$request->employee_id.'/documents_delete');
     }
 
     /*

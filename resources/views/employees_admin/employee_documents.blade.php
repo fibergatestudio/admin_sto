@@ -11,13 +11,12 @@
             
             @foreach($images as $image)
 
-                
                 <div class="col-lg-2 col-md-3 col-xs-6 thumb">
                     <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title=""
-                    data-image="..{{Storage::url($image)}}"
+                    data-image="{{Storage::url($image)}}"
                     data-target="#image-gallery">
                         <img class="img-thumbnail"
-                            src="..{{Storage::url($image)}}"
+                            src="{{Storage::url($image)}}"
                             alt="скан паспорта {{$employee->general_name}}">
                     </a>
                 </div>
@@ -50,13 +49,13 @@
         {{-- Конец модального окна для вывода лайтбокса --}}    
     </div>
      {{-- Документы : переход на страницу загрузки --}}   
-    <a class="btn btn-light" href="{{ url('/supervisor/add_documents/'.$employee->id) }}">Добавить документ</a>
+    <a class="btn btn-light" href="{{ url('/supervisor/manage_employee_status/'. $employee->id .'/add_documents') }}">Добавить документ</a>
      
     {{-- Удаление документов : переход на страницу --}}              
-    <a class="btn btn-secondary" href="{{ url('/documents_delete/'.$employee->id) }}">Удалить документ</a>
+    <a class="btn btn-secondary" href="{{ url('/supervisor/manage_employee_status/'. $employee->id .'/documents_delete') }}">Удалить документ</a>
 
     <hr>
-    <a href="{{ url('/supervisor/view_employees') }}" class="btn btn-danger">Вернуться</a>
+    <a href="{{ url('/supervisor/manage_employee_status/'. $employee->id .'/employee_edit') }}" class="btn btn-danger">Вернуться</a>
 
        
 @endsection
