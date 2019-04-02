@@ -128,8 +128,8 @@
                             foreach(App\Employee::getBirthdayTomorrow() as $employeeTomorrow){                      
                                 $namesTomorrow .= $employeeTomorrow->fio.', ';                                  
                             }
-                            $textToday = "Именинники сегодня:\n". $namesToday;
-                            $textTomorrow = "Именинники завтра:\n". $namesTomorrow;
+                            $textToday = "Сегодня День рождения у \n". $namesToday;
+                            $textTomorrow = "Завтра День рождения у \n". $namesTomorrow;
                         @endphp
                         
                         <!-- Вариант 1  - без Алерта -->
