@@ -157,13 +157,15 @@ class EmployeesAdminController extends Controller
 
         //$employee = Employee::find($employee_id)->first();
         $employee = Employee::find($employee_id);
+        $workzones = DB::table('workzones')->get();
 
         //$employee_edit = DB::table('employees')->where('id', $employee_id)->first();
 
         return view('employees_admin.employee_edit_admin',
         [
             //'employee_edit' => $employee_edit,
-            'employee' => $employee
+            'employee' => $employee,
+            'workzones' => $workzones
 
         ]);
     }
@@ -185,6 +187,10 @@ class EmployeesAdminController extends Controller
         $pay_per_shift = $request->pay_per_shift;
         $telegram_id = $request->telegram_id;
         $birthday_m_d = substr($birthday, 5);
+        $workzone = $request->workzone;
+        $position = $request->position;
+
+
 
         $employee = Employee::find($employee_id);
 
@@ -200,6 +206,8 @@ class EmployeesAdminController extends Controller
         $employee->pay_per_shift = $pay_per_shift;
         $employee->telegram_id = $telegram_id;
         $employee->birthday_m_d = $birthday_m_d;
+        $employee->workzone = $workzone;
+        $employee->position = $position;
         $employee->save();
 
         if(!empty($request->document)){

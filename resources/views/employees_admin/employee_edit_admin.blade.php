@@ -173,6 +173,24 @@
                     </div>
 
                 </div>
+
+                <div class="form-row">
+
+                    <div class="form-group col-md-4">
+                        <label>Должность</label>
+                        <input type="text" name="position" value="{{ $employee->position }}" class="form-control typeahead">
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label>Место дислокации (р.зона)</label>
+                        <select name="workzone" id="categories" class="form-control">
+                            @foreach ($workzones as $wz )
+                            <option value="{{ $wz->id}}">{{ $wz->general_name }}</option>               
+                            @endforeach
+                        </select>
+                    </div>
+
+                </div>
                 
                 <hr>
 
