@@ -308,11 +308,11 @@ class Supply_orders_Admin_Controller extends Controller
 
     }
 
-    /* Заказы требующие подтверждения (статус - worker) */
+    /* Заказы требующие подтверждения (статус - active) */
     public function supply_orders_worker_index(){
 
         /* Получаем из базы данные обо всех рабочих заказах на поставку */
-        $supply_orders = Supply_order::where('status', 'worker')->get();
+        $supply_orders = Supply_order::where('status', 'active')->get();
 
         /* Собираем дополнительные данные */
         foreach($supply_orders as $supply_order){

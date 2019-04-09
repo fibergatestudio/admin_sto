@@ -318,7 +318,7 @@ class Employee_Dashboard_Controller extends Controller
     /* Пометить наряд выполнено */
     public function assignment_complete($assignment_id){
 
-        $complete = 'complete';
+        $complete = 'завершен';
 
         $complete_assignment = Assignment::find($assignment_id);
         $complete_assignment->status = $complete;
@@ -332,7 +332,7 @@ class Employee_Dashboard_Controller extends Controller
     /* Пометить наряд невыполнено */
     public function assignment_uncomplete($assignment_id){
 
-        $uncomplete = 'active';
+        $uncomplete = 'незавершенный';
 
         $uncomplete_assignment = Assignment::find($assignment_id);
         $uncomplete_assignment->status = $uncomplete;
@@ -346,7 +346,7 @@ class Employee_Dashboard_Controller extends Controller
     /* Пометить наряд "архив" */
     public function assignment_archive($assignment_id){
 
-        $uncomplete = 'archive';
+        $uncomplete = 'архивный';
 
         $uncomplete_assignment = Assignment::find($assignment_id);
         $uncomplete_assignment->status = $uncomplete;
@@ -638,7 +638,7 @@ class Employee_Dashboard_Controller extends Controller
     public function employee_orders_index(){
 
         /* Получаем из базы данные обо всех активных заказах на поставку */
-        $supply_orders = Supply_order::where('status', 'worker')->where('creator_id', Auth::user()->id)->get();
+        $supply_orders = Supply_order::where('status', 'active')->where('creator_id', Auth::user()->id)->get();
         
         /* Собираем дополнительные данные */
         foreach($supply_orders as $supply_order){
@@ -674,7 +674,7 @@ class Employee_Dashboard_Controller extends Controller
         $new_order = new Supply_order();
         $new_order->creator_id = Auth::user()->id; // Создатель заказа
         $new_order->order_comment = $request->order_comment; // комментарий к заказу
-        $new_order->status = 'worker';
+        $new_order->status = 'active';
         $new_order->save();
         
         /* Вносим предметы из заказа в базу */
