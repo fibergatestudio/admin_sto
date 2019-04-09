@@ -238,7 +238,7 @@ class Employee_Dashboard_Controller extends Controller
                 ->where(
                     [
                         ['responsible_employee_id', '=', $employee_id],
-                        ['status', '=', 'complete']
+                        ['status', '=', 'завершен']
                     ]
                 )
                 ->get();
@@ -263,7 +263,7 @@ class Employee_Dashboard_Controller extends Controller
                 ->where(
                     [
                         ['responsible_employee_id', '=', $employee_id],
-                        ['status', '=', 'active']
+                        ['status', '=', 'незавершенный']
                     ]
                 )
                 ->get();
