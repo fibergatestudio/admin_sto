@@ -132,8 +132,8 @@
                             $textTomorrow = "Завтра День рождения у \n". $namesTomorrow;
                         @endphp
                         
-                        <!-- Вариант 1  - без Алерта -->
-                       <!-- 
+                        <!-- Вариант 1  - без Алерта 
+                        
                         <ul>  
                             @if($namesToday != '')
                                 @if(App\Employee::get_employee_by_user_id(Auth::user()->id) != $employeeToday)                                

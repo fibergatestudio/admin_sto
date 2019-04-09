@@ -13,7 +13,7 @@
 @section('content')
     {{-- Клиент-владелец : ссылка --}}
     <p>Клиент-владелец: 
-        <a href="{{ url('admin/view_client/'.$client->id) }}">
+        <a href="{{ url('admin/clients/view_client/'.$client->id) }}">
             {{ $client->general_name }}
         </a>
     
