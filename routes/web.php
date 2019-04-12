@@ -176,8 +176,8 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
 
         /* Изменить ставку сотруднику : POST */
         Route::post('/admin/employee_finances/change_standard_shift_wage', 'EmployeesAdminController@change_standard_shift_wage');
-        /* NEWTEST */
-        Route::post('/supervisor/employee_finances/{employee_id}', 'EmployeesAdminController@employee_finances');
+        // /* NEWTEST */
+        Route::post('/supervisor/employee_finances/{employee_id}/asc', 'EmployeesAdminController@employee_finances_asc');
 
     /* Страница выплат по сотруднику */
     Route::get('/supervisor/employee_finances/payout/{employee_id}', 'EmployeesAdminController@employee_payout_page')->middleware('can:admin_rights');
@@ -278,6 +278,10 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
  Route::get('admin/workzones/delete/{workzone_id}', 'Workzones_Admin_Controller@delete_workzone')->middleware('can:admin_rights');
 
 
+/**** Учет Мойки : Админ ****/
+
+    /* Страница Учета Мойки */
+    Route::get('/admin/wash', 'EmployeesAdminController@admin_wash_index');
 
 
 
@@ -425,6 +429,9 @@ Route::post('/admin/profitability/profitability_index/month', 'Assignments_Admin
 
     /* Удаление фотографий : Страница */
     Route::get('/admin/assignments/{assignment_id}/delete_photos_page', 'Assignments_Admin_Controller@delete_photos_page');
+
+    /* Настройка печати : Страница */
+    Route::get('/admin/assignments/{assignment_id}/print_settings', 'Assignments_Admin_Controller@print_settings_page');
 
         /* Удаление фотографий : POST */
         Route::post('/admin/assignments/delete_photo_from_assignment', 'Assignments_Admin_Controller@delete_photos_post');
@@ -630,12 +637,21 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
 /********** ТЕЛЕГРАМ : секция **********/
 /****************************************/
 
-    /* Телеграм */
+    /* Телеграм тест */
     Route::get('/send-message', 'TelegramBotController@sendMessage');
     Route::post('/store-message', 'TelegramBotController@storeMessage');
     Route::get('/send-photo', 'TelegramBotController@sendPhoto');
     Route::post('/store-photo', 'TelegramBotController@storePhoto');
     Route::get('/updated-activity', 'TelegramBotController@updatedActivity');
+    /* Тест команд телеграма */
+    Route::get('/get_info', 'TelegramBotController@getInfo');
+    /* Регистрация webhook */
+    Route::get('/set_webhook', 'TelegramBotController@setWebhook');
+    /* Удаление вебхука */
+    Route::get('/unset_webhook', 'TelegramBotController@unsetWebhook');
+    Route::get('/<token>/webhook', 'TelegramBotController@webhooktest');
+    /* getUpdates */
+    Route::get('/get_updates', 'TelegramBotController@getUpdates');
 
     /* Страница настройки уведеомлений Администратора */
     Route::get('/admin/notification','EmployeesAdminController@admin_tg_notification_index');

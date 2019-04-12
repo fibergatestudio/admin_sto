@@ -114,7 +114,7 @@
 
                 {{-- Цвет --}}
                 <td>@if (!empty($assignment->car_color ))
-                <i style="width:35px; height:35px; display:flex;background-color:{{ $assignment->car_color }};"></i>
+                <i style="width:35px; height:35px; display:flex;background-color:{{ $assignment->car_color }}; border: 2px solid rgb(97, 97, 97);"></i>
                 @else
                 null
                 @endif

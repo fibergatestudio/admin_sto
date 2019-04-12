@@ -69,57 +69,55 @@ class Employee_Dashboard_Controller extends Controller
         /* Общая таблица */
         $all_logs = DB::table('employee_balance_logs')->where('employee_id', '=', $employee_id)->get();
 
-        if(empty($filter_income)){
+        $view_income = DB::table('employee_balance_logs')
+        ->where('employee_id', '=', $employee_id)
+        ->where('type', '=', 'Начисление')
+        ->orderBy('created_at', 'asc')
+        ->get();
 
-            $view_income = 'null';
+        $view_payout = DB::table('employee_balance_logs')
+        ->where('employee_id', '=', $employee_id)
+        ->where('type', '=', 'Выплата')
+        ->orderBy('created_at', 'asc')
+        ->get();
 
-        } else {
+        $view_fine = DB::table('employee_balance_logs')
+        ->where('employee_id', '=', $employee_id)
+        ->where('type', '=', 'Штраф')
+        ->orderBy('created_at', 'asc')
+        ->get();
 
-            $view_income = DB::table('employee_balance_logs')
-            ->where('employee_id', '=', $employee_id)
-            ->where('type', '=', 'Начисление')
-            ->get();
+        $view_coffee = DB::table('employee_balance_logs')
+        ->where('employee_id', '=', $employee_id)
+        ->where('type', '=', 'Кофе')
+        ->orderBy('created_at', 'asc')
+        ->get();
 
-        }
-        //dd($view_income);
+        /**  Уменьш. тест **/
 
-        if(empty($filter_payout)){
+        $view_income_desc = DB::table('employee_balance_logs')
+        ->where('employee_id', '=', $employee_id)
+        ->where('type', '=', 'Начисление')
+        ->orderBy('created_at', 'desc')
+        ->get();
 
-            $view_payout = 'null';
+        $view_payout_desc = DB::table('employee_balance_logs')
+        ->where('employee_id', '=', $employee_id)
+        ->where('type', '=', 'Выплата')
+        ->orderBy('created_at', 'desc')
+        ->get();
 
-        } else {
+        $view_fine_desc = DB::table('employee_balance_logs')
+        ->where('employee_id', '=', $employee_id)
+        ->where('type', '=', 'Штраф')
+        ->orderBy('created_at', 'desc')
+        ->get();
 
-            $view_payout = DB::table('employee_balance_logs')
-            ->where('employee_id', '=', $employee_id)
-            ->where('type', '=', 'Выплата')
-            ->get();
-
-        }
-
-        if(empty($filter_fine)){
-
-            $view_fine = 'null';
-
-        } else {
-
-            
-            $view_fine = DB::table('employee_balance_logs')
-            ->where('employee_id', '=', $employee_id)
-            ->where('type', '=', 'Штраф')
-            ->get();
-
-        }
-        if(empty($filter_coffee)){
-
-            $view_coffee = 'null';
-
-        } else {
-
-            $view_coffee = DB::table('employee_balance_logs')
-            ->where('employee_id', '=', $employee_id)
-            ->where('type', '=', 'Кофе')
-            ->get();
-        }
+        $view_coffee_desc = DB::table('employee_balance_logs')
+        ->where('employee_id', '=', $employee_id)
+        ->where('type', '=', 'Кофе')
+        ->orderBy('created_at', 'desc')
+        ->get();
 
         return view('employee.finance_history',
         [
@@ -127,6 +125,10 @@ class Employee_Dashboard_Controller extends Controller
             'view_coffee' => $view_coffee,
             'view_payout' =>  $view_payout,
             'view_income' =>  $view_income,
+            'view_fine_desc' => $view_fine_desc,
+            'view_coffee_desc' => $view_coffee_desc,
+            'view_payout_desc' =>  $view_payout_desc,
+            'view_income_desc' =>  $view_income_desc,
             'all_logs' => $all_logs
         ]);
     }

@@ -302,7 +302,15 @@
         <div class="btn btn-dark">
             К удалению фотографий
         </div>
-    </a><br>
+    </a>
+
+    {{-- Настройки печати : переход на страницу --}}
+    <a href="{{ url('/admin/assignments/'.$assignment->id.'/print_settings') }}">
+        <div class="btn btn-primary">
+            Настройки печати
+        </div>
+    </a>
+    <br>
     <br>
 
     {{-- Доходная часть --}}

@@ -20,7 +20,7 @@
             <div class="col-md-12">
                 <label>Цвет рабочей зоны</label>
                 <div id="cp2" class="input-group colorpicker-component"> 
-                    <span class="input-group-addon"><i style="width:35px; height:35px; display:flex;"></i></span> 
+                    <span class="input-group-addon"><i style="width:35px; height:35px; display:flex; border: 2px solid rgb(97, 97, 97);"></i></span> 
                     <input type="text" name="workzone_color" value="#00AABB" class="form-control" /> 
                 </div>
             </div>

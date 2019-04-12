@@ -61,7 +61,17 @@
 							</a>
 						</li>
 
-                                                <li class="nav-item">
+						<li class="nav-item">
+							<a href="{{ url('/admin/wash') }}" class="nav-link {{ request()->is('admin/wash') ? 'active' : ''}}">
+
+								<i class="icon-fan"></i>
+								<span>
+									Учет Мойки
+								</span>
+							</a>
+						</li>
+
+                        <li class="nav-item">
 							<a href="{{ url('admin/workzones/index') }}" class="nav-link {{ request()->is('admin/workzones/*') ? 'active' : ''}}">
 								<i class="icon-grid5"></i>
 								<span>

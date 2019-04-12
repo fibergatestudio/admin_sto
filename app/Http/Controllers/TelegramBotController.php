@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Telegram\Bot\FileUpload\InputFile;
 use Telegram\Bot\Laravel\Facades\Telegram;
+use Telegram\Bot\Api;
+use Telegram\Bot\Actions;
+use Telegram\Bot\Commands\Command;
  
 class TelegramBotController extends Controller
 {
@@ -65,5 +68,54 @@ class TelegramBotController extends Controller
         ]);
  
         return redirect()->back();
+    }
+
+    public function getInfo(){
+
+        $telegram = new Api('776333854:AAFN5rVXzS4fT77nnkqOO9YMCJGFyZQmLbU');
+
+        $response = $telegram->getMe();
+
+        $botId = $response->getId();
+        $firstName = $response->getFirstName();
+        $username = $response->getUsername();
+
+        dd($response);
+
+
+    }
+
+    public function setWebhook(){
+
+        $response = Telegram::setWebhook(['url' => 'https://www.site-dev.com/776333854:AAFN5rVXzS4fT77nnkqOO9YMCJGFyZQmLbU/webhook']);
+        dd($response);
+
+    }
+
+    public function unsetWebhook(){
+
+        $response = Telegram::removeWebhook();
+        dd($response);
+
+    }
+
+    public function getUpdates(){
+
+        $response = Telegram::getUpdates();
+        dd($response);
+
+
+    }
+
+    public function webhooktest(){
+
+        $update = Telegram::commandsHandler(true);
+        
+        // Commands handler method returns an Update object.
+        // So you can further process $update object 
+        // to however you want.
+        
+        return 'ok';
+
     }
 }

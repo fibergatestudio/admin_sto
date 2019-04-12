@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\DailySendBirthdays::class
+        Commands\DailySendBirthdays::class,
+        Commands\HourlyUpdate::class
     ];
 
     /**
@@ -25,6 +26,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('send:birthday')->dailyAt('8:00');
+        $schedule->command('hour:update')
+                ->hourly();
     }
 
     /**

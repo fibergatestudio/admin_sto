@@ -21,7 +21,7 @@
         <tr>
             <td style="width: 35px;">
                 @if (!empty($workzone->workzone_color ))
-                <i style="width:35px; height:35px; display:flex;background-color:{{ $workzone->workzone_color }};"></i>
+                <i style="width:35px; height:35px; display:flex;background-color:{{ $workzone->workzone_color }}; border: 2px solid rgb(97, 97, 97);"></i>
                 @else
                 null
                 @endif

@@ -29,6 +29,9 @@ use App\Zonal_assignments_income;
 use App\Zonal_assignments_expense;
 use App\Zonal_assignments_completed_works;
 
+use DateTime;
+use App\Exchange_rates;
+
 use App\Month_profitability;
 
 class Assignments_Admin_Controller extends Controller
@@ -490,6 +493,13 @@ class Assignments_Admin_Controller extends Controller
         return redirect('admin/assignments/'.$request->assignment_id.'/delete_photos_page');
     }
 
+    public function print_settings_page(){
+
+
+
+        return view('admin.assignments.print_settings_page');
+    }
+
     public function assignment_management($sub_assignment_id){
 
         $sub_assignment = Sub_assignment::find($sub_assignment_id); 
@@ -731,6 +741,19 @@ class Assignments_Admin_Controller extends Controller
 
     /* Отображения общей рентабельности */
     public function profitability_index(){
+
+        // ** Получаем валюту **//
+
+        // Конверт. 1 USD в MDL
+
+        $exchange_rates = DB::table('exchange_rates')->first();
+
+        //$usd_to_mdl = $rates->exchange('USD', 1, 'MDL');
+
+        // Конверт. 1 EUR в MDL
+        //$eur_to_mdl = $rates->exchange('EUR', 1, 'MDL');
+
+
         /* Получаем всю нужную информацию по нарядам */        
         /* Получаем зональную доходную часть */
         $zonal_assignment_income = Zonal_assignments_income::all();
@@ -761,6 +784,7 @@ class Assignments_Admin_Controller extends Controller
             'usd' => $usd,
             'eur' => $eur,
             'profitability_months' => $profitability_months,
+            'exchange_rates' => $exchange_rates
         ]);
     }
 

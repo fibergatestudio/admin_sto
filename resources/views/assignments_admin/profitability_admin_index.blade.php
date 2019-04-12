@@ -15,6 +15,29 @@
     
     {{-- Курс валют --}}
     <h2>Курс валют</h2>
+    <h4>Текущий Курс(тест)</h4>
+    <div class="row">
+        <div class="col-md-2">
+                <div class="form-group">
+                    <label>MDL</label>
+                    <input type="number" name="mdl_currency" class="form-control" value="1" disabled="disabled">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label>USD</label>
+                    <input type="number" name="usd_currency" class="form-control" value="{{ $exchange_rates->usd }}" disabled>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label>EUR</label>
+                    <input type="number" name="eur_currency" class="form-control" value="{{ $exchange_rates->eur }}" disabled>
+                </div>
+            </div>
+
+    </div>
+
     <form method="POST" action="{{ url('/admin/profitability/profitability_index') }}">
         @csrf
         <div class="row">            

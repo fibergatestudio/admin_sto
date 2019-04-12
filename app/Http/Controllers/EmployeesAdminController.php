@@ -293,57 +293,55 @@ class EmployeesAdminController extends Controller
         /* Общая таблица */
         $all_logs = DB::table('employee_balance_logs')->where('employee_id', '=', $employee_id)->get();
 
-        if(empty($filter_income)){
-
-            $view_income = 'null';
-
-        } else {
-
             $view_income = DB::table('employee_balance_logs')
             ->where('employee_id', '=', $employee_id)
             ->where('type', '=', 'Начисление')
+            ->orderBy('created_at', 'asc')
             ->get();
-
-        }
-        //dd($view_income);
-
-        if(empty($filter_payout)){
-
-            $view_payout = 'null';
-
-        } else {
 
             $view_payout = DB::table('employee_balance_logs')
             ->where('employee_id', '=', $employee_id)
             ->where('type', '=', 'Выплата')
+            ->orderBy('created_at', 'asc')
             ->get();
-
-        }
-
-        if(empty($filter_fine)){
-
-            $view_fine = 'null';
-
-        } else {
 
             $view_fine = DB::table('employee_balance_logs')
             ->where('employee_id', '=', $employee_id)
             ->where('type', '=', 'Штраф')
+            ->orderBy('created_at', 'asc')
             ->get();
-
-        }
-        if(empty($filter_coffee)){
-
-            $view_coffee = 'null';
-
-        } else {
 
             $view_coffee = DB::table('employee_balance_logs')
             ->where('employee_id', '=', $employee_id)
             ->where('type', '=', 'Кофе')
+            ->orderBy('created_at', 'asc')
             ->get();
-        }
 
+            /**  Уменьш. тест **/
+
+            $view_income_desc = DB::table('employee_balance_logs')
+            ->where('employee_id', '=', $employee_id)
+            ->where('type', '=', 'Начисление')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+            $view_payout_desc = DB::table('employee_balance_logs')
+            ->where('employee_id', '=', $employee_id)
+            ->where('type', '=', 'Выплата')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+            $view_fine_desc = DB::table('employee_balance_logs')
+            ->where('employee_id', '=', $employee_id)
+            ->where('type', '=', 'Штраф')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+            $view_coffee_desc = DB::table('employee_balance_logs')
+            ->where('employee_id', '=', $employee_id)
+            ->where('type', '=', 'Кофе')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return view('employees_admin.employee_finances_admin',
         [
@@ -357,88 +355,13 @@ class EmployeesAdminController extends Controller
              'view_coffee' => $view_coffee,
              'view_payout' =>  $view_payout,
              'view_income' =>  $view_income,
+             'view_fine_desc' => $view_fine_desc,
+             'view_coffee_desc' => $view_coffee_desc,
+             'view_payout_desc' =>  $view_payout_desc,
+             'view_income_desc' =>  $view_income_desc,
              'all_logs' => $all_logs
 
         ]);
-    }
-
-    public function employee_finances_update(Request $request){
-
-        //NEWTEST
-
-        $user = Auth::user();
-        $employee_user_id = $user->id;
-        $employee = DB::table('employees')->where('user_id', $employee_user_id)->first();
-        $employee_id = $request->employee_id;
-
-        $filter_income = $request->filter_income;
-        $filter_payout = $request->filter_payout;
-        $filter_fine = $request->filter_fine;
-        $filter_coffee = $request->filter_coffee;
-
-        /* Общая таблица */
-        $all_logs = DB::table('employee_balance_logs')->where('employee_id', '=', $employee_id)->get();
-
-        if(empty($filter_income)){
-
-            $view_income = 'null';
-
-        } else {
-
-            $view_income = DB::table('employee_balance_logs')
-            ->where('employee_id', '=', $employee_id)
-            ->where('type', '=', 'Начисление')
-            ->get();
-
-        }
-        //dd($view_income);
-
-        if(empty($filter_payout)){
-
-            $view_payout = 'null';
-
-        } else {
-
-            $view_payout = DB::table('employee_balance_logs')
-            ->where('employee_id', '=', $employee_id)
-            ->where('type', '=', 'Выплата')
-            ->get();
-
-        }
-
-        if(empty($filter_fine)){
-
-            $view_fine = 'null';
-
-        } else {
-
-            $view_fine = DB::table('employee_balance_logs')
-            ->where('employee_id', '=', $employee_id)
-            ->where('type', '=', 'Штраф')
-            ->get();
-
-        }
-        if(empty($filter_coffee)){
-
-            $view_coffee = 'null';
-
-        } else {
-
-            $view_coffee = DB::table('employee_balance_logs')
-            ->where('employee_id', '=', $employee_id)
-            ->where('type', '=', 'Кофе')
-            ->get();
-        }
-
-        return view('employees_admin.employee_finances_admin',
-        [
-            'view_fine' => $view_fine,
-            'view_coffee' => $view_coffee,
-            'view_payout' =>  $view_payout,
-            'view_income' =>  $view_income,
-            'all_logs' => $all_logs
-        ]);
-
     }
 
     /* - Добавления примечания к сотруднику: страница - */
@@ -1114,6 +1037,19 @@ class EmployeesAdminController extends Controller
             'shifts' => $shifts
         ]);
     }
+
+    /* 
+    ********** Учёт мойки *************
+    */
+
+    public function admin_wash_index(){
+
+
+        return view('admin.wash.admin_wash_index',[
+            
+        ]);
+    }
+
     /*
     ********** Настройка уведеомлений **********
     */

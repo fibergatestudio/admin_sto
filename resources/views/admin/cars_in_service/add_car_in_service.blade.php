@@ -96,7 +96,7 @@
                     <div class="form-group col-md-4">
                         <label>Цвет</label>
                         <div id="cp2" class="input-group colorpicker-component"> 
-                            <span class="input-group-addon"><i style="width:35px; height:35px; display:flex;"></i></span> 
+                            <span class="input-group-addon"><i style="width:35px; height:35px; display:flex; border: 2px solid rgb(97, 97, 97);"></i></span> 
                             <input type="text" name="car_color" value="Цвет не задан" class="form-control" placeholder="Цвет не задан" required/> 
                         </div>
                     </div>
@@ -253,7 +253,7 @@
                     <div class="form-group col-md-4">
                         <label>Цвет</label>
                         <div id="cp2" class="input-group colorpicker-component"> 
-                            <span class="input-group-addon"><i style="width:35px; height:35px; display:flex;"></i></span> 
+                            <span class="input-group-addon"><i style="width:35px; height:35px; display:flex; border: 2px solid rgb(97, 97, 97);"></i></span> 
                             <input type="text" name="car_color" value="Цвет не задан" class="form-control" placeholder="Цвет не задан" required/> 
                         </div>
                     </div>

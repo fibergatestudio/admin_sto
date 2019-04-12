@@ -81,10 +81,14 @@ class Clients_Admin_Controller extends Controller
         $client = Client::find($client_id);
         $client_cars = Cars_in_service::where('owner_client_id', $client_id)->get();
 
+        //$client_notes = Client_notes::where('client_id', $client_id)->get();
+        $client_notes = Client_notes::where('client_id', $client_id)->first();
+
         return view('admin.clients.view_client',
             [
                 'client' => $client,
-                'cars' => $client_cars
+                'cars' => $client_cars,
+                'client_notes' => $client_notes
             ]);
     }
 

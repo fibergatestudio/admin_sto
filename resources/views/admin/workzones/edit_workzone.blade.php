@@ -23,7 +23,7 @@
             <div class="col-md-12">
                 <label>Цвет рабочей зоны</label>
                 <div id="cp2" class="input-group colorpicker-component"> 
-                    <span class="input-group-addon"><i style="width:35px; height:35px; display:flex;"></i></span> 
+                    <span class="input-group-addon"><i style="width:35px; height:35px; display:flex; border: 2px solid rgb(97, 97, 97);"></i></span> 
                     <input type="text" name="workzone_color" value="{{ $workzone->workzone_color }}" class="form-control" /> 
                 </div>
             </div>
@@ -33,7 +33,7 @@
             <div class="col-md-12">
                 <label>Цвет рабочей зоны</label>
                 <div id="cp2" class="input-group colorpicker-component"> 
-                    <span class="input-group-addon"><i style="width:35px; height:35px; display:flex;"></i></span> 
+                    <span class="input-group-addon"><i style="width:35px; height:35px; display:flex; border: 2px solid rgb(97, 97, 97);"></i></span> 
                     <input type="text" name="workzone_color" value="Цвет не задан" class="form-control" placeholder="Цвет не задан" /> 
                 </div>
             </div>

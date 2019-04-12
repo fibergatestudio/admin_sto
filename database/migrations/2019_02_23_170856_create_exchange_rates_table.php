@@ -14,8 +14,8 @@ class CreateExchangeRatesTable extends Migration
     public function up()
     {
         Schema::create('exchange_rates', function (Blueprint $table) {
-            $table->float('usd', 5, 5)->nullable();
-            $table->float('eur', 5, 5)->nullable();
+            $table->float('usd')->nullable();
+            $table->float('eur')->nullable();
             $table->timestamps();
         });
     }
