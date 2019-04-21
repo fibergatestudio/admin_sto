@@ -115,13 +115,22 @@
                 {{-- Цвет --}}
                 <td>@if (!empty($assignment->car_color ))
                 <i style="width:35px; height:35px; display:flex;background-color:{{ $assignment->car_color }};"></i>
-                @else
-                null
                 @endif
                 </td>
 
                 {{-- Рабочии зоны --}}
-                <td style="background-color: {{ $assignment->workzone_color }}; color: white;">{{ $assignment->workzone_name }}</td>
+                <td style="color: white;">
+                  <?php $workzone = json_decode($assignment->workzone); ?>
+                  @if ($workzone)
+                  @for($i=0; $i < count($workzone); $i++)
+                  @foreach($workzone_data as $work_data)
+                  @if ($work_data->id == $workzone[$i])
+                  <p style="background-color: {{ $work_data->workzone_color }};">{{ $work_data->general_name }}</p>
+                  @endif
+                  @endforeach
+                  @endfor
+                  @endif
+                </td>
 
                 {{-- Кнопка подробнее --}}
                 <td>

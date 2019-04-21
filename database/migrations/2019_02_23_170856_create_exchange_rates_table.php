@@ -18,6 +18,15 @@ class CreateExchangeRatesTable extends Migration
             $table->float('eur', 5, 5)->nullable();
             $table->timestamps();
         });
+
+        $demo_values = [
+            [
+                'usd' => 0.57,
+                'eur'=> 0.52
+            ]
+        ];
+
+        DB::table('exchange_rates')->insert($demo_values);
     }
 
     /**

@@ -43,14 +43,10 @@
         <div class="form-group">
             <div class="col-md-12">
                 <label>Направление работ</label>
-                <!-- <input type="text" name="name" class="form-control" required> -->
                 <select class="form-control" name="works_direction" required>
-                    <option value="Разборка-Сборка">Разборка-Сборка</option>
-                    <option value="Электрика">Электрика</option>
-                    <option value="Слесарка">Слесарка</option>
-                    <option value="Рихтовка">Рихтовка</option>
-                    <option value="Покраска">Покраска</option>
-                    <option value="Детэйлинг">Детэйлинг</option>
+                    @foreach($work_directions as $direction)
+                    <option value="{{ $direction->name }}">{{ $direction->name }}</option>
+                    @endforeach
                 </select>
             </div>
         </div>

@@ -7,13 +7,15 @@
 @section('content')
     
     <h3>Машины клиента:</h3>
-    <p>
+    
         @foreach($cars as $car)
+        <p>
             <a href="{{ url('admin/cars_in_service/view/'.$car->id) }}">
                 {{ $car->general_name }}
             </a>
+        </p>    
         @endforeach
-    </p>
+    
     
     {{-- Добавить машину клиента --}}
     <a href="{{ url('admin/cars_in_service/add/'.$client->id) }}">

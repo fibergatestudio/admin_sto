@@ -408,6 +408,9 @@ Route::post('/admin/profitability/profitability_index/month', 'Assignments_Admin
         /* Добавление зонального наряда : POST */
         Route::post('admin/assignments/add_sub_assignment', 'Assignments_Admin_Controller@add_sub_assignment_post');
 
+        /* Добавление нового зонального наряда : POST */
+        Route::post('admin/assignments/add_new_sub_assignment', 'Assignments_Admin_Controller@add_new_sub_assignment_post')->name('add_new_sub_assignment');
+
     /* Загрузка фотографии в CRM : Страница */
     Route::get('/admin/assignments/{assignment_id}/add_photo_page', 'Assignments_Admin_Controller@add_photo_to_assignment_page');
 

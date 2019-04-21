@@ -30,9 +30,12 @@ use App\Zonal_assignments_expense;
 use App\Zonal_assignments_completed_works;
 
 use App\Month_profitability;
+use App\Work_direction;
+use App\New_sub_assignment;
 
 class Assignments_Admin_Controller extends Controller
 {
+
     
     /* Отображения списка всех нарядов */
     public function assignments_index(){
@@ -41,8 +44,6 @@ class Assignments_Admin_Controller extends Controller
             DB::table('assignments')
                 ->join('employees', 'assignments.responsible_employee_id', '=', 'employees.id')
                 ->join('cars_in_service', 'assignments.car_id', '=', 'cars_in_service.id')
-                //->join('clients', 'assignments.car_id', '=', 'clients.id')
-                ->join('workzones', 'cars_in_service.workzone', '=', 'workzones.id') // Джоин рабочей зоны
                 ->orderBy('order','ASC')
                 ->select(
                         'assignments.*',
@@ -52,15 +53,12 @@ class Assignments_Admin_Controller extends Controller
                         'cars_in_service.release_year AS release_year',
                         'cars_in_service.reg_number AS reg_number',
                         'cars_in_service.car_color AS car_color',
-                        'cars_in_service.workzone AS workzone',
-                        'workzones.general_name as workzone_name', //Имя рабочей зоны
-                        'workzones.workzone_color as workzone_color' //Цвет рабчоей зоны
-                        //'clients.phone AS clients_phone',
-                        //'clients.fio AS clients_fio'
+                        'cars_in_service.workzone AS workzone'
                     )
                 ->get();
-
-        return view('assignments_admin.assignments_admin_index', ['assignments' => $assignments_data]);
+        $workzone_data = DB::table('workzones')->get();       
+//echo '<pre>'.print_r($assignments_data,true).'</pre>';
+        return view('assignments_admin.assignments_admin_index', ['assignments' => $assignments_data, 'workzone_data' => $workzone_data]);
     }
 
     /* Добавления наряда: страница с формой */
@@ -188,8 +186,6 @@ class Assignments_Admin_Controller extends Controller
 
                 //dd($zonal_assignment_income);
 
-
-
                 /* Получаем расходную часть */
                 $assignment_expense = Assignments_expense::where('assignment_id', $assignment_id)->get();
                 /* Получаем выполненые работы */
@@ -262,6 +258,40 @@ class Assignments_Admin_Controller extends Controller
             $eur = $value->eur;
         }
 
+        // Получаем рабочие посты
+        $workzone_data = DB::table('workzones')->get();
+        //Получаем список работников
+        $employees = Employee::where([
+          ['status', '=', 'active'],
+          ['fixed_charge', '=', null]
+        ])->get();
+        // Получаем рабочие направления
+        $work_directions = DB::table('work_directions')->get();
+        
+        // Получаем новые зональные наряды
+        $new_sub_assignments_arr = [];
+        
+        foreach ($work_directions as $value) {
+            $temp_arr = [];
+            
+            $new_sub_work_assignments = New_sub_assignment::where([
+                    ['assignment_id','=' ,$assignment_id],
+                    ['work_row_index','!=' ,null],
+                    ['d_table_work_direction','=' ,$value->name],
+                ])->get();
+            $temp_arr[] = $new_sub_work_assignments;
+            
+            $new_sub_spares_assignments = New_sub_assignment::where([
+                    ['assignment_id','=' ,$assignment_id],
+                    ['spares_row_index','!=' ,null],
+                    ['d_table_work_direction','=' ,$value->name],
+                ])->get();
+            $temp_arr[] = $new_sub_spares_assignments;
+            
+            $new_sub_assignments_arr[$value->id] = $temp_arr;
+        }
+        
+        $currency_arr = ['MDL','USD','EUR'];
 
         /* Возвращаем представление */
         return view('admin.assignments.view_assignment_page',
@@ -279,7 +309,14 @@ class Assignments_Admin_Controller extends Controller
                 'zonal_assignment_expense' => $zonal_assignment_expense, 
                 'assignment_work' => $assignment_work,
                 'usd' => $usd,
-                'eur' => $eur       
+                'eur' => $eur,
+                'workzone_data' => $workzone_data,
+                'employees' => $employees,
+                'work_directions' => $work_directions,
+                'new_sub_work_assignments' => $new_sub_work_assignments,
+                'new_sub_spares_assignments' => $new_sub_spares_assignments,
+                'currency_arr' => $currency_arr,
+                'new_sub_assignments_arr' => $new_sub_assignments_arr,
             ]);
     }
 
@@ -381,6 +418,104 @@ class Assignments_Admin_Controller extends Controller
 
         /* Возвращаемся на страницу */
         return redirect('/admin/assignments/view/'.$main_assignment_id);
+    }
+    
+    /* Добавление нового зонального наряда : POST */
+    public function add_new_sub_assignment_post(Request $request){
+
+        /* Получаем данные из запроса */
+        $sub_assignment_arr = $request->valueArr;
+        
+        $temp_arr = [];
+        for ($i=0; $i < count($sub_assignment_arr); $i++) {
+        foreach ($sub_assignment_arr[$i] as $key => $value) {
+                $temp_arr[$key] = $value;
+            } 
+        }
+
+        $is_post_work_row = null;
+        $is_post_spares_row = null;
+
+        if (isset($temp_arr['work_row_index'])) {
+            $is_post_work_row = New_sub_assignment::where([
+                ['assignment_id','=', $temp_arr['assignment_id']],
+                ['work_row_index','=', $temp_arr['work_row_index']]
+            ])->first();
+        }
+        
+        if (isset($temp_arr['spares_row_index'])) {
+            $is_post_spares_row = New_sub_assignment::where([
+                ['assignment_id','=', $temp_arr['assignment_id']],
+                ['spares_row_index','=', $temp_arr['spares_row_index']]
+            ])->first();
+        }        
+
+        /* Создание нового зонального наряда */
+        if (!$is_post_work_row AND isset($temp_arr['work_row_index'])) {
+            $sub_assignment = new New_sub_assignment();
+            $sub_assignment->assignment_id = $temp_arr['assignment_id'];
+            $sub_assignment->d_table_work_direction = $temp_arr['d_table_work_direction'];
+            $sub_assignment->number_sub_assignment = $temp_arr['number_sub_assignment'];
+            $sub_assignment->work_row_index = $temp_arr['work_row_index'];
+            $sub_assignment->d_table_workzone = $temp_arr['d_table_workzone'];
+            $sub_assignment->d_table_time_start = $temp_arr['d_table_time_start'];
+            $sub_assignment->d_table_time_finish = $temp_arr['d_table_time_finish'];
+            $sub_assignment->d_table_responsible_officer = $temp_arr['d_table_responsible_officer'];
+            $sub_assignment->d_table_list_completed_works = $temp_arr['d_table_list_completed_works'];
+            $sub_assignment->d_table_quantity = $temp_arr['d_table_quantity'];
+            $sub_assignment->d_table_price = $temp_arr['d_table_price'];
+            $sub_assignment->d_table_currency = $temp_arr['d_table_currency'];
+            $sub_assignment->work_sum_row = $temp_arr['d_table_quantity']*$temp_arr['d_table_price'];           
+            $sub_assignment->work_is_locked = $temp_arr['work_is_locked'];            
+            $sub_assignment->status = 'active';
+            $sub_assignment->save();
+        }
+        elseif (!$is_post_spares_row AND isset($temp_arr['spares_row_index'])) {
+            $sub_assignment = new New_sub_assignment();
+            $sub_assignment->assignment_id = $temp_arr['assignment_id'];
+            $sub_assignment->d_table_work_direction = $temp_arr['d_table_work_direction'];
+            $sub_assignment->number_sub_assignment = $temp_arr['number_sub_assignment'];
+            $sub_assignment->spares_row_index = $temp_arr['spares_row_index'];
+            $sub_assignment->d_table_spares_detail = $temp_arr['d_table_spares_detail'];
+            $sub_assignment->d_table_spares_vendor_code = $temp_arr['d_table_spares_vendor_code'];
+            $sub_assignment->d_table_spares_unit_measurements = $temp_arr['d_table_spares_unit_measurements'];
+            $sub_assignment->d_table_spares_quantity = $temp_arr['d_table_spares_quantity'];
+            $sub_assignment->d_table_spares_price = $temp_arr['d_table_spares_price'];
+            $sub_assignment->d_table_spares_currency = $temp_arr['d_table_spares_currency'];
+            $sub_assignment->spares_sum_row = $temp_arr['d_table_spares_quantity']*$temp_arr['d_table_spares_price'];
+            $sub_assignment->spares_is_locked = $temp_arr['spares_is_locked'];
+            $sub_assignment->status = 'active';
+            $sub_assignment->save();
+        }
+        /* Обновление нового зонального наряда */
+        elseif($is_post_work_row){
+            $is_post_work_row->work_row_index = $temp_arr['work_row_index'];
+            $is_post_work_row->d_table_workzone = $temp_arr['d_table_workzone'];
+            $is_post_work_row->d_table_time_start = $temp_arr['d_table_time_start'];
+            $is_post_work_row->d_table_time_finish = $temp_arr['d_table_time_finish'];
+            $is_post_work_row->d_table_responsible_officer = $temp_arr['d_table_responsible_officer'];
+            $is_post_work_row->d_table_list_completed_works = $temp_arr['d_table_list_completed_works'];
+            $is_post_work_row->d_table_quantity = $temp_arr['d_table_quantity'];
+            $is_post_work_row->d_table_price = $temp_arr['d_table_price'];
+            $is_post_work_row->d_table_currency = $temp_arr['d_table_currency'];
+            $is_post_work_row->work_sum_row = $temp_arr['d_table_quantity']*$temp_arr['d_table_price'];            
+            $is_post_work_row->work_is_locked = $temp_arr['work_is_locked'];            
+            $is_post_work_row->save();
+        }
+        elseif ($is_post_spares_row) {
+            $is_post_spares_row->spares_row_index = $temp_arr['spares_row_index'];
+            $is_post_spares_row->d_table_spares_detail = $temp_arr['d_table_spares_detail'];
+            $is_post_spares_row->d_table_spares_vendor_code = $temp_arr['d_table_spares_vendor_code'];
+            $is_post_spares_row->d_table_spares_unit_measurements = $temp_arr['d_table_spares_unit_measurements'];
+            $is_post_spares_row->d_table_spares_quantity = $temp_arr['d_table_spares_quantity'];
+            $is_post_spares_row->d_table_spares_price = $temp_arr['d_table_spares_price'];
+            $is_post_spares_row->d_table_spares_currency = $temp_arr['d_table_spares_currency'];
+            $is_post_spares_row->spares_sum_row = $temp_arr['d_table_spares_quantity']*$temp_arr['d_table_spares_price'];
+            $is_post_spares_row->spares_is_locked = $temp_arr['spares_is_locked'];
+            $is_post_spares_row->save();
+        }
+
+        return $temp_arr;
     }
 
     /* Добавление фотографий к наряду : Страница */
