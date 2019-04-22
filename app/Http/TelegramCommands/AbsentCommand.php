@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Http\Commands;
+namespace App\Http\TelegramCommands;
 
 use Telegram\Bot\Actions;
 use Telegram\Bot\Commands\Command;
 
-class StartCommand extends Command
+class AbsentCommand extends Command
 {
     /**
      * @var string Command Name
      */
-    protected $name = "start";
+    protected $name = "absent";
 
     /**
      * @var string Command Description
      */
-    protected $description = "Start Command to get you started";
+    protected $description = "Absent Command";
 
     /**
      * @inheritdoc
@@ -26,7 +26,7 @@ class StartCommand extends Command
         // the user/chat id who triggered this command.
         // `replyWith<Message|Photo|Audio|Video|Voice|Document|Sticker|Location|ChatAction>()` all the available methods are dynamically
         // handled when you replace `send<Method>` with `replyWith` and use the same parameters - except chat_id does NOT need to be included in the array.
-        $this->replyWithMessage(['text' => 'Hello! Welcome to our bot, Here are our available commands:']);
+        $this->replyWithMessage(['text' => 'Test Absent Command']);
 
         // This will update the chat status to typing...
         $this->replyWithChatAction(['action' => Actions::TYPING]);

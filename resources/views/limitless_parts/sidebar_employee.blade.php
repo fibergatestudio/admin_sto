@@ -9,6 +9,7 @@
 							<div class="media-body">
 								<div class="media-title font-weight-semibold">
                                     {{ Auth::user()->general_name }}
+									
                                 </div>
 								<div class="font-size-xs opacity-50">
 								<!-- Вывод баланса аккаунта -->
@@ -91,6 +92,16 @@
 							<i class="icon-history"></i>
 							<span>
 								История финансов
+							</span>
+							</a>
+      					</li>
+
+						  
+						<li class="nav-item">
+							<a href="{{ url('employee/calendar/'.Auth::user()->id) }}" class="nav-link {{ request()->is('employee/calendar') ? 'active' : ''}}" >
+							<i class="icon-calendar"></i>
+							<span>
+								Календарь
 							</span>
 							</a>
       					</li>

@@ -85,11 +85,25 @@ class TelegramBotController extends Controller
 
     }
 
-    public function setWebhook(){
+    // public function setWebhook(){
 
-        $response = Telegram::setWebhook(['url' => 'https://www.site-dev.com/776333854:AAFN5rVXzS4fT77nnkqOO9YMCJGFyZQmLbU/webhook']);
+    //     $response = Telegram::setWebhook(['url' => 'https://www.site-dev.com/776333854:AAFN5rVXzS4fT77nnkqOO9YMCJGFyZQmLbU/webhook']);
+    //     dd($response);
+
+    // }
+
+    public function setWebhook()
+    {
+        $url = 'https://api.telegram.org/bot' . env('TELEGRAM_BOT_TOKEN') . '/webhook';
+        $response = Telegram::setWebhook(['url' => $url]);
+
+        //$update = Telegram::commandsHandler(true);
+
+        // dd($update);
+
         dd($response);
-
+    
+        //return $response == true ? redirect()->back() : dd($response);
     }
 
     public function unsetWebhook(){
@@ -101,21 +115,53 @@ class TelegramBotController extends Controller
 
     public function getUpdates(){
 
-        $response = Telegram::getUpdates();
+        //$updates = Telegram::getWebhookUpdates();
+
+        $response = Telegram::getWebhookInfo();
+        //dd($)
         dd($response);
 
 
     }
 
-    public function webhooktest(){
+    // public function handleRequest(Request $request)
+    // {
+    //     $this->chat_id = $request['message']['chat']['id'];
+    //     $this->username = $request['message']['from']['username'];
+    //     $this->text = $request['message']['text'];
+ 
+    //     switch ($this->text) {
+    //         case '/start':
+    //         case '/menu':
+    //             $this->showMenu();
+    //             break;
+    //         case '/info':
+    //             $this->getTestMessage();
+    //             break;
+    //         default:
+    //             $this->getTestMessage();
+    //     }
+    // }
+ 
+    // public function showMenu($info = null)
+    // {
+    //     $message = '';
+    //     if ($info) {
+    //         $message .= $info . chr(10);
+    //     }
+    //     $message .= '/menu' . chr(10);
+    //     $message .= '/getGlobal' . chr(10);
+    //     $message .= '/getTicker' . chr(10);
+    //     $message .= '/getCurrencyTicker' . chr(10);
+ 
+    //     $this->sendMessage($message);
+    // }
+ 
+    // public function getTestMessage()
+    // {
+    //     $message = "Test Message";
+ 
+    //     $this->sendMessage($message);
+    // }
 
-        $update = Telegram::commandsHandler(true);
-        
-        // Commands handler method returns an Update object.
-        // So you can further process $update object 
-        // to however you want.
-        
-        return 'ok';
-
-    }
 }

@@ -31,7 +31,16 @@
             </tr>
         @endforeach
     </table>
-    
+
+    {{-- График Начислений --}}
+    <div v-if="payout_graph">
+        Тест график
+        <div style="max-width:600px; max-height: 400px;">
+            {!! $chart->container() !!}
+            {!! $chart->script() !!}
+        </div>
+    </div>
+
     <div class="btn btn-primary" data-toggle="modal" data-target="#addFineModal">Добавить штраф вручную</div>
     <div class="btn btn-secondary" data-toggle="modal" data-target="#fineHistory">История штрафов</div>
 

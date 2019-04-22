@@ -115,18 +115,18 @@
 
                     <div class="form-group col-md-4">
                         <label>ФИО</label>
-                        <input type="text" name="fio" value="{{ $employee->fio }}" class="form-control typeahead">
+                        <input type="text" name="fio" value="{{ $employee->fio }}" class="form-control">
                     </div>
 
                     <div class="form-group col-md-4">
                         <label>День Рождения</label>
-                        <input type="date" name="birthday" value="{{ $employee->birthday }}" class="form-control typeahead">
+                        <input type="date" name="birthday" value="{{ $employee->birthday }}" class="form-control">
                     </div>
 
                     
                     <div class="form-group col-md-4">
                         <label>Баланс</label>
-                        <input type="number" name="balance" value="{{ $employee->balance }}" class="form-control typeahead">
+                        <input type="number" name="balance" value="{{ $employee->balance }}" class="form-control">
                     </div>
 
                 </div>
@@ -145,7 +145,7 @@
 
                     <div class="form-group col-md-4">
                         <label>Резервный телефон</label>
-                        <input type="tel"  name="reserve_phone" value="{{ $employee->reserve_phone }}" class="form-control typeahead">
+                        <input type="tel"  name="reserve_phone" value="{{ $employee->reserve_phone }}" class="form-control">
                     </div>
 
                 </div>
@@ -154,22 +154,22 @@
 
                     <div class="form-group col-md-4">
                         <label>С какого часа</label>
-                        <input type="time" name="hour_from" value="{{ $employee->hour_from }}" class="form-control typeahead">
+                        <input type="time" name="hour_from" value="{{ $employee->hour_from }}" class="form-control">
                     </div>
 
                     <div class="form-group col-md-4">
                         <label>По какой час</label>
-                        <input type="time" name="hour_to" value="{{ $employee->hour_to}}" class="form-control typeahead">
+                        <input type="time" name="hour_to" value="{{ $employee->hour_to}}" class="form-control">
                     </div>
 
                     <div class="form-group col-md-2">
                         <label>Размер платы за смену</label>
-                        <input type="number" name="pay_per_shift" value="{{ $employee->pay_per_shift }}" class="form-control typeahead">
+                        <input type="number" name="pay_per_shift" value="{{ $employee->pay_per_shift }}" class="form-control">
                     </div>
 
                     <div class="form-group col-md-2">
                         <label>Фиксированная плата</label> 
-                        <input type="checkbox" name="fixed_charge" value="fixed" @if($employee->fixed_charge == 'fixed') checked @endif class="form-control typeahead">
+                        <input type="checkbox" name="fixed_charge" value="fixed" @if($employee->fixed_charge == 'fixed') checked @endif class="form-control">
                     </div>
 
                 </div>

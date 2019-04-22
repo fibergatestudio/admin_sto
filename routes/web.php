@@ -282,6 +282,8 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
 
     /* Страница Учета Мойки */
     Route::get('/admin/wash', 'EmployeesAdminController@admin_wash_index');
+        /* Добавления машины в мойку */
+        Route::post('/admin/wash_post', 'EmployeesAdminController@admin_wash_post');
 
 
 
@@ -552,6 +554,14 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
     /* Применить фильтр */
     Route::post('/employee/finance/finance_history/filter', 'Employee_Dashboard_Controller@finance_history');
 
+/**** Календарь ****/
+    /* Страница календаря */
+    Route::get('/employee/calendar/{user_id}', 'TasksController@index');
+    Route::get('/employee/calendar/{employee_id}/test_late', 'Employee_Dashboard_Controller@test_late');
+    Route::get('/employee/calendar/{employee_id}/test_ontime', 'Employee_Dashboard_Controller@test_ontime');
+    Route::get('/employee/calendar_edit', 'TasksController@edit');
+    //Route::get('/employee/calendar', 'TasksController'); 
+
 /**** Наряды : работник ****/
     /* Мои наряды */
     Route::get('/employee/assignments/my_assignments', 'Employee_Dashboard_Controller@my_assignments');
@@ -644,14 +654,12 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
     Route::post('/store-photo', 'TelegramBotController@storePhoto');
     Route::get('/updated-activity', 'TelegramBotController@updatedActivity');
     /* Тест команд телеграма */
-    Route::get('/get_info', 'TelegramBotController@getInfo');
-    /* Регистрация webhook */
+
     Route::get('/set_webhook', 'TelegramBotController@setWebhook');
-    /* Удаление вебхука */
     Route::get('/unset_webhook', 'TelegramBotController@unsetWebhook');
-    Route::get('/<token>/webhook', 'TelegramBotController@webhooktest');
-    /* getUpdates */
     Route::get('/get_updates', 'TelegramBotController@getUpdates');
+
+
 
     /* Страница настройки уведеомлений Администратора */
     Route::get('/admin/notification','EmployeesAdminController@admin_tg_notification_index');

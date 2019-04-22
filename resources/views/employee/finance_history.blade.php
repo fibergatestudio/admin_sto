@@ -54,7 +54,7 @@
                 </div>
             </div>
         </form>
-        
+        <!-- Пойдет? да, норм. слева новое, справа старое? + -->
             <hr>
             <table id="table" class="table">
                 <thead>
@@ -67,200 +67,54 @@
                         <th>Статус</th>
                     </tr>
                 </thead>
-            <tbody v-if="!sort" id="tablecontents">
-                {{-- Вывод выплат --}}
-                    @foreach ($view_payout as $view_payout)
-                    <tr v-if="payout">
-                        <td>
-                            {{ $view_payout->date }}
-                        </td>
-                        <td>
-                            {{ $view_payout->type }}
-                        </td>
-                        <td>
-                            {{ $view_payout->amount }}
-                        </td>
-                        <td>
-                            {{ $view_payout->old_balance }}
-                        </td>
-                        <td>
-                            {{ $view_payout->reason }}
-                        </td>
-                        <td>
-                            {{ $view_payout->status }}
-                        </td>
-                    </tr>
-                    @endforeach
-
-                    {{-- Вывод заходы --}}
-                    @foreach ($view_income as $view_income)
-                    <tr v-if="income">
-                        <td>
-                            {{ $view_income->date }}
-                        </td>
-                        <td>
-                            {{ $view_income->type }}
-                        </td>
-                        <td>
-                            {{ $view_income->amount }}
-                        </td>
-                        <td>
-                            {{ $view_income->old_balance }}
-                        </td>
-                        <td>
-                            {{ $view_income->reason }}
-                        </td>
-                        <td>
-                            {{ $view_income->status }}
-                        </td>
-                    </tr>
-                    @endforeach
-
-                    {{-- Вывод штрафы --}}
-                    @foreach ($view_fine as $view_fine)
-                    <tr v-if="fine">
-                        <td>
-                            {{ $view_fine->date }}
-                        </td>
-                        <td>
-                            {{ $view_fine->type }}
-                        </td>
-                        <td>
-                            {{ $view_fine->amount }}
-                        </td>
-                        <td>
-                            {{ $view_fine->old_balance }}
-                        </td>
-                        <td>
-                            {{ $view_fine->reason }}
-                        </td>
-                        <td>
-                            {{ $view_fine->status }}
-                        </td>
-                    </tr>
-                    @endforeach
-
-                 {{-- Вывод штрафы --}}
-                @foreach ($view_coffee as $view_coffee)
-                <tr v-if="coffee">
-                    <td>
-                        {{ $view_coffee->date }}
-                    </td>
-                    <td>
-                        {{ $view_coffee->type }}
-                    </td>
-                    <td>
-                        {{ $view_coffee->amount }}
-                    </td>
-                    <td>
-                        {{ $view_coffee->old_balance }}
-                    </td>
-                    <td>
-                        {{ $view_coffee->reason }}
-                    </td>
-                    <td>
-                        {{ $view_coffee->status }}
-                    </td>
-                </tr>
-                @endforeach           
-            </tbody>
-            <tbody v-if="sort" id="tablecontents">
-                {{-- Вывод выплат --}}
-                    @foreach ($view_payout_desc as $view_payout)
-                    <tr v-if="payout">
-                        <td>
-                            {{ $view_payout->date }}
-                        </td>
-                        <td>
-                            {{ $view_payout->type }}
-                        </td>
-                        <td>
-                            {{ $view_payout->amount }}
-                        </td>
-                        <td>
-                            {{ $view_payout->old_balance }}
-                        </td>
-                        <td>
-                            {{ $view_payout->reason }}
-                        </td>
-                        <td>
-                            {{ $view_payout->status }}
-                        </td>
-                    </tr>
-                    @endforeach
-
-                    {{-- Вывод заходы --}}
-                    @foreach ($view_income_desc as $view_income)
-                    <tr v-if="income">
-                        <td>
-                            {{ $view_income->date }}
-                        </td>
-                        <td>
-                            {{ $view_income->type }}
-                        </td>
-                        <td>
-                            {{ $view_income->amount }}
-                        </td>
-                        <td>
-                            {{ $view_income->old_balance }}
-                        </td>
-                        <td>
-                            {{ $view_income->reason }}
-                        </td>
-                        <td>
-                            {{ $view_income->status }}
-                        </td>
-                    </tr>
-                    @endforeach
-
-                    {{-- Вывод штрафы --}}
-                    @foreach ($view_fine_desc as $view_fine)
-                    <tr v-if="fine">
-                        <td>
-                            {{ $view_fine->date }}
-                        </td>
-                        <td>
-                            {{ $view_fine->type }}
-                        </td>
-                        <td>
-                            {{ $view_fine->amount }}
-                        </td>
-                        <td>
-                            {{ $view_fine->old_balance }}
-                        </td>
-                        <td>
-                            {{ $view_fine->reason }}
-                        </td>
-                        <td>
-                            {{ $view_fine->status }}
-                        </td>
-                    </tr>
-                    @endforeach
-
-                 {{-- Вывод штрафы --}}
-                @foreach ($view_coffee_desc as $view_coffee)
-                <tr v-if="coffee">
-                    <td>
-                        {{ $view_coffee->date }}
-                    </td>
-                    <td>
-                        {{ $view_coffee->type }}
-                    </td>
-                    <td>
-                        {{ $view_coffee->amount }}
-                    </td>
-                    <td>
-                        {{ $view_coffee->old_balance }}
-                    </td>
-                    <td>
-                        {{ $view_coffee->reason }}
-                    </td>
-                    <td>
-                        {{ $view_coffee->status }}
-                    </td>
-                </tr>
-                @endforeach           
-            </tbody>
+                <tbody v-if="!sort" id="tablecontents">         
+                    @foreach($all_logs_asc as $all_logs_asc_entry)
+                        <tr v-if="{{ $all_logs_asc_entry->eng_type }}">
+                                <td>
+                                    {{ $all_logs_asc_entry->date }}
+                                </td>
+                                <td>
+                                    {{ $all_logs_asc_entry->type }}
+                                </td>
+                                <td>
+                                    {{ $all_logs_asc_entry->amount }}
+                                </td>
+                                <td>
+                                    {{ $all_logs_asc_entry->old_balance }}
+                                </td>
+                                <td>
+                                    {{ $all_logs_asc_entry->reason }}
+                                </td>
+                                <td>
+                                    {{ $all_logs_asc_entry->status }}
+                                </td>
+                            </tr>
+                    @endforeach         
+                </tbody>
+                <tbody v-if="sort" id="tablecontents">
+                @foreach($all_logs_desc as $all_logs_desc_entry)
+                        <tr v-if="{{ $all_logs_desc_entry->eng_type }}">
+                                <td>
+                                    {{ $all_logs_desc_entry->date }}
+                                </td>
+                                <td>
+                                    {{ $all_logs_desc_entry->type }}
+                                </td>
+                                <td>
+                                    {{ $all_logs_desc_entry->amount }}
+                                </td>
+                                <td>
+                                    {{ $all_logs_desc_entry->old_balance }}
+                                </td>
+                                <td>
+                                    {{ $all_logs_desc_entry->reason }}
+                                </td>
+                                <td>
+                                    {{ $all_logs_desc_entry->status }}
+                                </td>
+                            </tr>
+                    @endforeach         
+                </tbody>
             </table>
         </div>
     </div>
@@ -275,6 +129,7 @@
             payout: 'true',
             fine: 'true',
             coffee: 'true',
+            test: 'admin',
             sort: false
         }
     

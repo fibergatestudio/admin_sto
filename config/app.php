@@ -162,6 +162,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Telegram\Bot\Laravel\TelegramServiceProvider::class,
+        ConsoleTVs\Charts\ChartsServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -175,6 +176,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        
 
     ],
 
@@ -226,6 +228,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Telegram' => Telegram\Bot\Laravel\Facades\Telegram::class,
 
+        'Charts' => ConsoleTVs\Charts\Facades\Charts::class,
     ],
 
 ];

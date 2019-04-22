@@ -26,6 +26,14 @@
     </form>
 
     <h2>История выдачи жетонов (последние 10 операций)</h2>
+    {{-- График Кофе --}}
+            <div v-if="payout_graph">
+                Тест график
+                <div style="max-width:600px; max-height: 400px;">
+                    {!! $chart->container() !!}
+                    {!! $chart->script() !!}
+                </div>
+            </div>
     <table class="table">
         <thead>
             <tr>

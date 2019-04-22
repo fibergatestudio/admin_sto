@@ -26,6 +26,10 @@ use Telegram\Bot\Laravel\Facades\Telegram;
 use App\Supply_order;
 use App\Supply_order_item;
 
+use Calendar;
+use App\Task;
+use App\EventTable;
+
 
 class Employee_Dashboard_Controller extends Controller
 {
@@ -69,67 +73,44 @@ class Employee_Dashboard_Controller extends Controller
         /* Общая таблица */
         $all_logs = DB::table('employee_balance_logs')->where('employee_id', '=', $employee_id)->get();
 
-        $view_income = DB::table('employee_balance_logs')
-        ->where('employee_id', '=', $employee_id)
-        ->where('type', '=', 'Начисление')
-        ->orderBy('created_at', 'asc')
-        ->get();
+        $all_logs_asc = $all_logs = DB::table('employee_balance_logs')->where('employee_id', '=', $employee_id)->orderBy('created_at', 'asc')->get();
+        
+        // задаём англ типы
+        foreach($all_logs_asc as $all_logs_asc_entry){
+            if($all_logs_asc_entry->type == 'Начисление'){
+                $all_logs_asc_entry->eng_type = 'income';
+            } else if ($all_logs_asc_entry->type == 'Выплата'){
+                $all_logs_asc_entry->eng_type = 'payout';
+            } else if ($all_logs_asc_entry->type == 'Штраф'){
+                $all_logs_asc_entry->eng_type = 'fine';
+            } else if ($all_logs_asc_entry->type == 'Кофе'){
+                $all_logs_asc_entry->eng_type = 'coffee';
+            }
+        }
 
-        $view_payout = DB::table('employee_balance_logs')
-        ->where('employee_id', '=', $employee_id)
-        ->where('type', '=', 'Выплата')
-        ->orderBy('created_at', 'asc')
-        ->get();
+        //$all_logs_desc = $all_logs = DB::table('employee_balance_logs')->where('employee_id', '=', $employee_id)->orderBy('created_at', 'asc')->get();
 
-        $view_fine = DB::table('employee_balance_logs')
-        ->where('employee_id', '=', $employee_id)
-        ->where('type', '=', 'Штраф')
-        ->orderBy('created_at', 'asc')
-        ->get();
-
-        $view_coffee = DB::table('employee_balance_logs')
-        ->where('employee_id', '=', $employee_id)
-        ->where('type', '=', 'Кофе')
-        ->orderBy('created_at', 'asc')
-        ->get();
-
-        /**  Уменьш. тест **/
-
-        $view_income_desc = DB::table('employee_balance_logs')
-        ->where('employee_id', '=', $employee_id)
-        ->where('type', '=', 'Начисление')
-        ->orderBy('created_at', 'desc')
-        ->get();
-
-        $view_payout_desc = DB::table('employee_balance_logs')
-        ->where('employee_id', '=', $employee_id)
-        ->where('type', '=', 'Выплата')
-        ->orderBy('created_at', 'desc')
-        ->get();
-
-        $view_fine_desc = DB::table('employee_balance_logs')
-        ->where('employee_id', '=', $employee_id)
-        ->where('type', '=', 'Штраф')
-        ->orderBy('created_at', 'desc')
-        ->get();
-
-        $view_coffee_desc = DB::table('employee_balance_logs')
-        ->where('employee_id', '=', $employee_id)
-        ->where('type', '=', 'Кофе')
-        ->orderBy('created_at', 'desc')
-        ->get();
-
+        //desc
+        $all_logs_desc = $all_logs = DB::table('employee_balance_logs')->where('employee_id', '=', $employee_id)->orderBy('created_at', 'desc')->get();
+        
+        // задаём англ типы
+        foreach($all_logs_desc as $all_logs_desc_entry){
+            if($all_logs_desc_entry->type == 'Начисление'){
+                $all_logs_desc_entry->eng_type = 'income';
+            } else if ($all_logs_desc_entry->type == 'Выплата'){
+                $all_logs_desc_entry->eng_type = 'payout';
+            } else if ($all_logs_desc_entry->type == 'Штраф'){
+                $all_logs_desc_entry->eng_type = 'fine';
+            } else if ($all_logs_desc_entry->type == 'Кофе'){
+                $all_logs_desc_entry->eng_type = 'coffee';
+            }
+        }
+        
         return view('employee.finance_history',
         [
-            'view_fine' => $view_fine,
-            'view_coffee' => $view_coffee,
-            'view_payout' =>  $view_payout,
-            'view_income' =>  $view_income,
-            'view_fine_desc' => $view_fine_desc,
-            'view_coffee_desc' => $view_coffee_desc,
-            'view_payout_desc' =>  $view_payout_desc,
-            'view_income_desc' =>  $view_income_desc,
-            'all_logs' => $all_logs
+            'all_logs' => $all_logs,
+            'all_logs_asc' => $all_logs_asc,
+            'all_logs_desc' => $all_logs_desc
         ]);
     }
 
@@ -195,6 +176,40 @@ class Employee_Dashboard_Controller extends Controller
             // 'view_income' =>  $view_income,
             // 'all_logs' => $all_logs
         ]);
+    }
+
+    /***** КАЛЕНДАРЬ *****/
+
+    public function test_late($employee_id){
+
+        //dd($employee_id);
+
+        $employee = DB::table('employees')->where('id', $employee_id)->first();
+
+        $employee_lateness = new Task;
+        $employee_lateness->name = $employee->general_name;
+        $employee_lateness->employee_id = $employee->id;
+        $employee_lateness->description = 'Отсутствовал';
+        $employee_lateness->task_date = date('Y-m-d');
+        $employee_lateness->save();
+
+        return back();
+    }
+
+    public function test_ontime($employee_id){
+
+        //dd($employee_id);
+
+        $employee = DB::table('employees')->where('id', $employee_id)->first();
+
+        $employee_lateness = new Task;
+        $employee_lateness->name = $employee->general_name;
+        $employee_lateness->employee_id = $employee->id;
+        $employee_lateness->description = 'Присутствовал';
+        $employee_lateness->task_date = date('Y-m-d');
+        $employee_lateness->save();
+
+        return back();
     }
 
 

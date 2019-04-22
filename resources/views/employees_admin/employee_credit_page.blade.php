@@ -59,6 +59,14 @@
     <hr>
     {{-- История начислений (последние 10) --}}
     <h4>История начислений (последние 10 операций)</h4>
+    {{-- График Начислений --}}
+            <div v-if="payout_graph">
+                Тест график
+                <div style="max-width:600px; max-height: 400px;">
+                    {!! $chart->container() !!}
+                    {!! $chart->script() !!}
+                </div>
+            </div>
     <table class="table">
         <thead>
             <th>Сумма</th>
@@ -77,5 +85,6 @@
             @endforeach
         </tbody>
     </table>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script> -->
 
 @endsection

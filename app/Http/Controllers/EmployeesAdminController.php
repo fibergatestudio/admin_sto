@@ -22,8 +22,11 @@ use App\Employees_logs;
 use App\Employee_balance;
 use App\Employees_notes_logs;
 use App\Deleted_notes;
+use App\Car_wash;
 use \Crypt;
 use Redirect;
+
+use App\Charts\FinancesChart;
 
 class EmployeesAdminController extends Controller
 {
@@ -292,57 +295,42 @@ class EmployeesAdminController extends Controller
 
         /* Общая таблица */
         $all_logs = DB::table('employee_balance_logs')->where('employee_id', '=', $employee_id)->get();
+        
+        //asc
+        $all_logs_asc = $all_logs = DB::table('employee_balance_logs')->where('employee_id', '=', $employee_id)->orderBy('created_at', 'asc')->get();
+        
+        // задаём англ типы
+        foreach($all_logs_asc as $all_logs_asc_entry){
+            if($all_logs_asc_entry->type == 'Начисление'){
+                $all_logs_asc_entry->eng_type = 'income';
+            } else if ($all_logs_asc_entry->type == 'Выплата'){
+                $all_logs_asc_entry->eng_type = 'payout';
+            } else if ($all_logs_asc_entry->type == 'Штраф'){
+                $all_logs_asc_entry->eng_type = 'fine';
+            } else if ($all_logs_asc_entry->type == 'Кофе'){
+                $all_logs_asc_entry->eng_type = 'coffee';
+            }
+        }
 
-            $view_income = DB::table('employee_balance_logs')
-            ->where('employee_id', '=', $employee_id)
-            ->where('type', '=', 'Начисление')
-            ->orderBy('created_at', 'asc')
-            ->get();
+        //$all_logs_desc = $all_logs = DB::table('employee_balance_logs')->where('employee_id', '=', $employee_id)->orderBy('created_at', 'asc')->get();
 
-            $view_payout = DB::table('employee_balance_logs')
-            ->where('employee_id', '=', $employee_id)
-            ->where('type', '=', 'Выплата')
-            ->orderBy('created_at', 'asc')
-            ->get();
+        //desc
+        $all_logs_desc = $all_logs = DB::table('employee_balance_logs')->where('employee_id', '=', $employee_id)->orderBy('created_at', 'desc')->get();
+        
+        // задаём англ типы
+        foreach($all_logs_desc as $all_logs_desc_entry){
+            if($all_logs_desc_entry->type == 'Начисление'){
+                $all_logs_desc_entry->eng_type = 'income';
+            } else if ($all_logs_desc_entry->type == 'Выплата'){
+                $all_logs_desc_entry->eng_type = 'payout';
+            } else if ($all_logs_desc_entry->type == 'Штраф'){
+                $all_logs_desc_entry->eng_type = 'fine';
+            } else if ($all_logs_desc_entry->type == 'Кофе'){
+                $all_logs_desc_entry->eng_type = 'coffee';
+            }
+        }
 
-            $view_fine = DB::table('employee_balance_logs')
-            ->where('employee_id', '=', $employee_id)
-            ->where('type', '=', 'Штраф')
-            ->orderBy('created_at', 'asc')
-            ->get();
-
-            $view_coffee = DB::table('employee_balance_logs')
-            ->where('employee_id', '=', $employee_id)
-            ->where('type', '=', 'Кофе')
-            ->orderBy('created_at', 'asc')
-            ->get();
-
-            /**  Уменьш. тест **/
-
-            $view_income_desc = DB::table('employee_balance_logs')
-            ->where('employee_id', '=', $employee_id)
-            ->where('type', '=', 'Начисление')
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-            $view_payout_desc = DB::table('employee_balance_logs')
-            ->where('employee_id', '=', $employee_id)
-            ->where('type', '=', 'Выплата')
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-            $view_fine_desc = DB::table('employee_balance_logs')
-            ->where('employee_id', '=', $employee_id)
-            ->where('type', '=', 'Штраф')
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-            $view_coffee_desc = DB::table('employee_balance_logs')
-            ->where('employee_id', '=', $employee_id)
-            ->where('type', '=', 'Кофе')
-            ->orderBy('created_at', 'desc')
-            ->get();
-
+        
         return view('employees_admin.employee_finances_admin',
         [
              'employee' => $employee,
@@ -351,15 +339,9 @@ class EmployeesAdminController extends Controller
              'balance_logs' => $balance_logs,
              'payout_logs' => $payout_logs,
              'test' => $assign,
-             'view_fine' => $view_fine,
-             'view_coffee' => $view_coffee,
-             'view_payout' =>  $view_payout,
-             'view_income' =>  $view_income,
-             'view_fine_desc' => $view_fine_desc,
-             'view_coffee_desc' => $view_coffee_desc,
-             'view_payout_desc' =>  $view_payout_desc,
-             'view_income_desc' =>  $view_income_desc,
-             'all_logs' => $all_logs
+             'all_logs' => $all_logs,
+             'all_logs_asc' => $all_logs_asc, // тестовый аррей
+             'all_logs_desc' => $all_logs_desc
 
         ]);
     }
@@ -593,7 +575,49 @@ class EmployeesAdminController extends Controller
                 ['action', '=', 'deposit']
             ])->orderBy('created_at', 'desc')->limit(10)->get();
 
-        return view('employees_admin.employee_credit_page', ['employee' => $employee, 'balance' => $balance ]);
+
+        $employee_deposit_sums =  Employee_balance_logs::where(
+            [
+
+                ['employee_id', $employee_id],
+                ['action', '=', 'deposit']
+
+            ])->orderBy('created_at', 'desc')->pluck('amount')->toArray();
+        
+        $employee_deposit_count =  Employee_balance_logs::where(
+            [
+
+                ['employee_id', $employee_id],
+                ['action', '=', 'deposit']
+
+            ])->orderBy('created_at', 'asc')->get()->pluck('id');
+
+        //$employee_payout_count = 
+
+        //$employee_payout_sums = 
+
+        $chart = new FinancesChart;
+        //$chart->labels([1,2,3,4,5,6,7]);
+        $chart->labels(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday','Saturday', 'Sunday']);
+        $chart->dataset('График Начислений', 'bar', $employee_deposit_sums);
+        //$chart->groupByMonth(date('Y'), true);
+        //$chart->month('January');
+
+        // $users = User::where(DB::raw("(DATE_FORMAT(created_at,'%Y'))"),date('Y'))
+    	// 			->get();
+        // $chart = FinancesChart::database($users, 'bar', 'highcharts')
+		// 	      ->title("Monthly new Register Users")
+		// 	      ->elementLabel("Total Users")
+		// 	      ->dimensions(1000, 500)
+		// 	      ->responsive(false)
+		// 	      ->groupByMonth(date('Y'), true);
+
+        return view('employees_admin.employee_credit_page',
+            [
+                'employee' => $employee, 
+                'balance' => $balance,
+                'chart' => $chart
+            ]);
     }
 
 
@@ -699,10 +723,39 @@ class EmployeesAdminController extends Controller
 
             ])->orderBy('created_at', 'desc')->get();
 
+        // Графики
+
+        $employee_payout_sums =  Employee_balance_logs::where(
+            [
+
+                ['employee_id', $employee_id],
+                ['action', '=', 'payout'],
+                ['reason', '=', 'Ручная выплата']
+
+            ])->orderBy('created_at', 'desc')->pluck('amount')->toArray();
+        
+        $employee_payout_count =  Employee_balance_logs::where(
+            [
+
+                ['employee_id', $employee_id],
+                ['action', '=', 'payout'],
+                ['reason', '=', 'Ручная выплата']
+
+            ])->orderBy('created_at', 'asc')->get()->pluck('id');
+        //dd($employee_payout_count);
+
+        //dd($employee_payout_sums);
+
+        $chart = new FinancesChart;
+        $chart->labels($employee_payout_count);
+        $chart->dataset('График Выплат', 'line', $employee_payout_sums);
+
+
         return view('employees_admin.employee_payout_page',
         [
             'employee' => $employee,
-            'employee_payout' => $employee_payout
+            'employee_payout' => $employee_payout,
+            'chart' => $chart
         ]);
     }
 
@@ -782,14 +835,43 @@ class EmployeesAdminController extends Controller
         $fines_history = Employee_balance_logs::where(
             [
                 ['employee_id', $employee_id],
-                ['action', '=', 'payout']
+                ['action', '=', 'payout'],
+                ['reason', '=', 'Применение штрафа']
             ])->orderBy('created_at', 'desc')->get();
+
+
+        $employee_fines_sums =  Employee_balance_logs::where(
+            [
+
+                ['employee_id', $employee_id],
+                ['action', '=', 'payout'],
+                ['reason', '=', 'Применение штрафа']
+
+            ])->orderBy('created_at', 'desc')->pluck('amount')->toArray();
+        
+        $employee_fines_count =  Employee_balance_logs::where(
+            [
+
+                ['employee_id', $employee_id],
+                ['action', '=', 'payout'],
+                ['reason', '=', 'Применение штрафа']
+
+            ])->orderBy('created_at', 'asc')->get()->pluck('id');
+        //dd($employee_payout_count);
+
+        //dd($employee_payout_sums);
+
+        $chart = new FinancesChart;
+        $chart->labels($employee_fines_count);
+        $chart->dataset('График Штрафов', 'line', $employee_fines_sums);
+
 
         return view('employees_admin.employee_fines_admin',
             [
                 'employee' => $employee,
                 'fines' => $fines,
-                'fines_history' => $fines_history
+                'fines_history' => $fines_history,
+                'chart' => $chart
             ]
         );
 
@@ -855,7 +937,7 @@ class EmployeesAdminController extends Controller
                 . "$new_balance";
 
                 Telegram::sendMessage([
-                    'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+                    'chat_id' => '-1001204206841.0',
                     'parse_mode' => 'HTML',
                     'text' => $text
                 ]);
@@ -934,7 +1016,40 @@ class EmployeesAdminController extends Controller
         $employee = Employee::find($employee_id);
         // Получаем данные о последних 10 операциях выдачи жетонов по этому сотруднику
         $token_logs = Coffee_token_log::where('employee_id', $employee_id)->orderBy('created_at', 'desc')->get();
-        return view('employees_admin.employee_coffee_tokens', ['employee' => $employee, 'token_logs' => $token_logs]);
+
+
+        $employee_coffee_sums =  Employee_balance_logs::where(
+            [
+
+                ['employee_id', $employee_id],
+                ['action', '=', 'payout'],
+                ['reason', '=', 'Списание за выдачу жетонов кофе']
+
+            ])->orderBy('created_at', 'desc')->pluck('amount')->toArray();
+        
+        $employee_coffee_count =  Employee_balance_logs::where(
+            [
+
+                ['employee_id', $employee_id],
+                ['action', '=', 'payout'],
+                ['reason', '=', 'Списание за выдачу жетонов кофе']
+
+            ])->orderBy('created_at', 'asc')->get()->pluck('id');
+        //dd($employee_payout_count);
+
+        //dd($employee_payout_sums);
+
+        $chart = new FinancesChart;
+        $chart->labels($employee_coffee_count);
+        $chart->dataset('График Выплат', 'line', $employee_coffee_sums);
+
+
+        return view('employees_admin.employee_coffee_tokens', 
+            [
+            'employee' => $employee,
+            'token_logs' => $token_logs,
+            'chart' => $chart
+            ]);
     }
 
     /* Выдать жетон на кофе */
@@ -1044,10 +1159,35 @@ class EmployeesAdminController extends Controller
 
     public function admin_wash_index(){
 
+        $car_wash_table = DB::table('car_wash')->get();
+
 
         return view('admin.wash.admin_wash_index',[
+
+            'car_wash_table' => $car_wash_table
             
         ]);
+    }
+
+    public function admin_wash_post(Request $request){
+
+        $car_wash = new Car_wash();
+
+        $car_wash->car_model = $request->car_model;
+        $car_wash->car_number = $request->car_number;
+        $car_wash->trailer_number = $request->trailer_number;
+        $car_wash->firm_name = $request->firm_name;
+        $car_wash->payment_method = $request->payment_method;
+
+        $wash_services_implode = implode(', ', $request->wash_services);
+        $car_wash->wash_services = $wash_services_implode;
+        //dd($wash_services_implode);
+        $car_wash->payment_sum = $request->payment_sum;
+        $car_wash->box_number = $request->box_number;
+        $car_wash->save();
+
+
+        return back();
     }
 
     /*

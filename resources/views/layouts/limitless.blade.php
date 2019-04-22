@@ -225,6 +225,7 @@
                 @yield('content')
 
 			</div>
+
 			<!-- /content area -->
 
 
@@ -253,6 +254,7 @@
 </body>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/js/bootstrap-colorpicker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>
 <script>
 	$('#cp2').colorpicker();
 </script>

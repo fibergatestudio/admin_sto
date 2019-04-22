@@ -117,9 +117,11 @@ return [
     */
     'commands'                     => [
         Telegram\Bot\Commands\HelpCommand::class,
-        App\Http\Commands\StartCommand::class,
-        //Vendor\Project\Commands\StartCommand::class,
-        //Vendor\Project\Commands\StartCommand::class,
+        // Новые тест-комманды
+        App\Http\TelegramCommands\StartCommand::class, //Тест-заготовка
+        App\Http\TelegramCommands\WhoCommand::class, // Команда /who
+        App\Http\TelegramCommands\AbsentCommand::class, // Команда /absent
+        App\Http\TelegramCommands\PresentCommand::class, // Команда /present
     ],
 
     /*

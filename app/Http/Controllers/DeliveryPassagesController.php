@@ -14,6 +14,8 @@ use App\Employee_balance_logs;
 use Telegram\Bot\Laravel\Facades\Telegram;
 use DB;
 
+use App\Task; // Календарь
+
 class DeliveryPassagesController extends Controller
 {
 
@@ -365,6 +367,15 @@ class DeliveryPassagesController extends Controller
 
                 $new_passage->save();
 
+                /* Добавление записи в календарь (Опоздание\Отсутствие) */
+                /* Тест */
+                $employee_lateness = new Task;
+                $employee_lateness->name = $employee_name;
+                $employee_lateness->employee_id = $passage_user_id;
+                $employee_lateness->description = 'Присутствовал';
+                $employee_lateness->task_date = date('Y-m-d');
+                $employee_lateness->save();
+
 
                 /* ----------------------Создать тестового сотрудника----------------------- */
 
@@ -483,6 +494,15 @@ class DeliveryPassagesController extends Controller
                     /* Тип? Тест */
                     $fine_to_employee_log_entry->type = '';
                     $fine_to_employee_log_entry->save();
+
+                    /* Добавление записи в календарь (Опоздание\Отсутствие) */
+                    /* Тест */
+                    $employee_lateness = new Task;
+                    $employee_lateness->name = $employee_name;
+                    $employee_lateness->employee_id = $passage_user_id;
+                    $employee_lateness->description = 'Отсутствовал';
+                    $employee_lateness->task_date = date('Y-m-d');
+                    $employee_lateness->save();
 
                     /* Оповещения для телеграма */
                     $text = "<b>Произошло опоздание сотрудника!</b>\n"
