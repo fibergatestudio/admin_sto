@@ -670,7 +670,7 @@ class EmployeesAdminController extends Controller
                     . "$new_balance";
 
                     Telegram::sendMessage([
-                        'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+                        'chat_id' => '-1001204206841.0',
                         'parse_mode' => 'HTML',
                         'text' => $text
                     ]);
@@ -785,7 +785,7 @@ class EmployeesAdminController extends Controller
         . "$new_balance";
 
        Telegram::sendMessage([
-           'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+           'chat_id' => '-1001204206841.0',
            'parse_mode' => 'HTML',
            'text' => $text
        ]);

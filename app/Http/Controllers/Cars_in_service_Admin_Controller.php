@@ -32,7 +32,7 @@ class Cars_in_service_Admin_Controller extends Controller
         $cars_in_service =
             DB::table('cars_in_service')
                 ->join('clients', 'cars_in_service.owner_client_id', '=', 'clients.id')
-                ->select('cars_in_service.*', 'clients.general_name as client_name')
+                ->select('cars_in_service.*', 'clients.fio as client_name')
                 ->get();
 
         return view('admin.cars_in_service.cars_in_service_Index', ['cars' => $cars_in_service]);

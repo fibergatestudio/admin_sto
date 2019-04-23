@@ -184,11 +184,11 @@ class Employee_Dashboard_Controller extends Controller
 
         //dd($employee_id);
 
-        $employee = DB::table('employees')->where('id', $employee_id)->first();
+        $employee = DB::table('employees')->where('user_id', $employee_id)->first();
 
         $employee_lateness = new Task;
         $employee_lateness->name = $employee->general_name;
-        $employee_lateness->employee_id = $employee->id;
+        $employee_lateness->employee_id = $employee->user_id;
         $employee_lateness->description = 'Отсутствовал';
         $employee_lateness->task_date = date('Y-m-d');
         $employee_lateness->save();
@@ -200,11 +200,13 @@ class Employee_Dashboard_Controller extends Controller
 
         //dd($employee_id);
 
-        $employee = DB::table('employees')->where('id', $employee_id)->first();
+        $employee = DB::table('employees')->where('user_id', $employee_id)->first();
+
+        //dd($employee);
 
         $employee_lateness = new Task;
         $employee_lateness->name = $employee->general_name;
-        $employee_lateness->employee_id = $employee->id;
+        $employee_lateness->employee_id = $employee->user_id;
         $employee_lateness->description = 'Присутствовал';
         $employee_lateness->task_date = date('Y-m-d');
         $employee_lateness->save();
