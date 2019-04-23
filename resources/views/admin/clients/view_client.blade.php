@@ -57,13 +57,60 @@
 
     <h3>Машины клиента:</h3>
 
+    <table class="table">
+        <thead>
+            <tr>
+                <th>№</th>
+                <th>Дата</th>
+                <th>Модель/марка</th>
+                <th>Год</th>
+                <th>Рег номер</th>
+                <th>VIN</th>
+                <th>Цвет</th>
+                <th></th> {{-- Кнопки управления --}}
+            </tr>
+        </thead>
+
+        <tbody>
         @foreach($cars as $car)
-        <p>
-            <a href="{{ url('admin/cars_in_service/view/'.$car->id) }}">
-                {{ $car->general_name }}
-            </a>
-        </p>
+            <tr>
+                {{-- Номер Наряда --}}
+                <td>{{ $car->id }}</td>
+
+                {{-- Дата --}}
+                <td>{{ $car->created_at }}</td>
+                
+                {{-- Название машины --}}
+                <td>{{ $car->general_name }}</td>
+
+                {{-- Год --}}
+                <td>{{ $car->release_year }}</td>
+                
+                {{-- Рег номер --}}
+                <td>{{ $car->reg_number }}</td>
+
+                {{-- VIN --}}
+                <td>{{ $car->vin_number }}</td>
+
+                {{-- Цвет --}}
+                <td>@if (!empty($car->car_color ))
+                <i style="width:35px; height:35px; display:flex;background-color:{{ $car->car_color }}; border: 2px solid rgb(97, 97, 97);"></i>
+                @else
+                null
+                @endif
+                </td>
+                {{-- Кнопка подробнее --}}
+                <td>
+                    <a href="{{ url('admin/cars_in_service/view/'.$car->id) }}">
+                        <div class="btn btn-secondary">
+                            Подробнее
+                        </div>
+                    </a>
+                </td>
+            </tr>
         @endforeach
+        </tbody>
+    </table>
 
 
     {{-- Добавить машину клиента --}}
