@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use App\Workzone;
 use App\Workzone_logs;
 use App\User;
+use App\Work_direction;
 
 
 class Workzones_Admin_Controller extends Controller
@@ -23,7 +24,8 @@ class Workzones_Admin_Controller extends Controller
 
     /* Добавление рабочего поста : страница */
     public function add_workzone(){
-        return view('admin.workzones.add_workzone');
+        $work_directions = Work_direction::all();
+        return view('admin.workzones.add_workzone', ['work_directions' => $work_directions]);
     }
 
     /* Добавление рабочего поста : действие */
@@ -62,11 +64,13 @@ class Workzones_Admin_Controller extends Controller
      /* Редактирование информации о рабочем посте*/
     public function edit_workzone($workzone_id){
 
+        $work_directions = Work_direction::all();
         $workzone = DB::table('workzones')->where('id','=', $workzone_id)->first();
 
         return view('admin.workzones.edit_workzone',[
             'workzones_id'=>$workzone_id,
-            'workzone' => $workzone
+            'workzone' => $workzone,
+            'work_directions' => $work_directions
         ]);
 
     }

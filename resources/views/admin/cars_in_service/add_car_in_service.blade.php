@@ -117,8 +117,10 @@
 
                     {{-- Рабочая зона (тест) --}}
                     <div class="form-group col-md-4">
-                        <label>Рабочая зона</label>
-                        <input type="text" name="workzone" id="enginecapacity" class="form-control" required>
+                        <label>Рабочая зона</label><br>
+                            @foreach ($workzones as $wz )
+                            <input type="checkbox" name="workzone[]" value="{{ $wz->id }}"> {{ $wz->general_name }}<br> 
+                            @endforeach
                     </div>
 
                 </div>
@@ -281,12 +283,10 @@
 
                     {{-- Рабочая зона (тест) --}}
                     <div class="form-group col-md-4">
-                        <label>Рабочая зона</label>
-                        <select name="workzone" id="categories" class="form-control">
+                        <label>Рабочая зона</label><br>
                             @foreach ($workzones as $wz )
-                            <option value="{{ $wz->id}}">{{ $wz->general_name }}</option>               
+                            <input type="checkbox" name="workzone[]" value="{{ $wz->id }}"> {{ $wz->general_name }}<br> 
                             @endforeach
-                        </select>
                     </div>
                 </div>
                 

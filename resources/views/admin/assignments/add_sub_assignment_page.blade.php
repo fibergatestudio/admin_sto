@@ -38,6 +38,7 @@
                 <option value="Рихтовка">Рихтовка</option>
                 <option value="Покраска">Покраска</option>
                 <option value="Детэйлинг">Детэйлинг</option>
+                <option value="Малярка">Малярка</option>
             </select>
         </div>
 

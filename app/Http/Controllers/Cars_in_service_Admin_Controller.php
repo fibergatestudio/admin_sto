@@ -99,7 +99,8 @@ class Cars_in_service_Admin_Controller extends Controller
         $new_car_in_service->vin_number = $request->vin_number;
         $new_car_in_service->engine_capacity = $request->engine_capacity;
         $new_car_in_service->car_color = $request->car_color; //Добавление цвета авто
-        $new_car_in_service->workzone = $request->workzone; //Добавление рабочей зоны (тест)
+        //$new_car_in_service->workzone = $request->workzone; //Добавление рабочей зоны (тест)
+        $new_car_in_service->workzone = json_encode($request->input('workzone'));
         $new_car_in_service->save();
 
         /* - Добавдение создания машины в логи - */

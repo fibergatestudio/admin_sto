@@ -8,7 +8,7 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    Страница нарядов 
+    Страница нарядов
     <!-- <a href="{{ url('admin/add_client') }}">
         <div class="btn btn-success">
             Добавить наряд
@@ -46,7 +46,7 @@
                         </a>
                       </div>
                     </div>
-                        
+
                     </div>
                 </div>{{-- /modal-content --}}
             </div>{{-- /modal-dialog --}}
@@ -99,13 +99,13 @@
 
                 {{-- Дата --}}
                 <td>{{ beautify_date($assignment->date_of_creation) }}</td>
-                
+
                 {{-- Название машины --}}
                 <td>{{ $assignment->car_name }}</td>
 
                 {{-- Год --}}
                 <td>{{ $assignment->release_year }}</td>
-                
+
                 {{-- Рег номер --}}
                 <td>{{ $assignment->reg_number }}</td>
 
@@ -114,14 +114,23 @@
 
                 {{-- Цвет --}}
                 <td>@if (!empty($assignment->car_color ))
-                <i style="width:35px; height:35px; display:flex;background-color:{{ $assignment->car_color }}; border: 2px solid rgb(97, 97, 97);"></i>
-                @else
-                null
+                <i style="width:35px; height:35px; display:flex;background-color:{{ $assignment->car_color }};"></i>
                 @endif
                 </td>
 
                 {{-- Рабочии зоны --}}
-                <td style="background-color: {{ $assignment->workzone_color }}; color: white;">{{ $assignment->workzone_name }}</td>
+                <td style="color: white;">
+                  <?php $workzone = json_decode($assignment->workzone); ?>
+                  @if ($workzone)
+                  @for($i=0; $i < count($workzone); $i++)
+                  @foreach($workzone_data as $work_data)
+                  @if ($work_data->id == $workzone[$i])
+                  <p style="background-color: {{ $work_data->workzone_color }};">{{ $work_data->general_name }}</p>
+                  @endif
+                  @endforeach
+                  @endfor
+                  @endif
+                </td>
 
                 {{-- Кнопка подробнее --}}
                 <td>
@@ -136,7 +145,7 @@
         </tbody>
     </table>
     <hr>
-    
+
     * Добавление наряда будет осуществляться из карточки машины (вкладка "Клиенты" или "Машины в сервисе")
 
 
@@ -169,8 +178,8 @@
      });
 
      $.ajax({
-       type: "POST", 
-       dataType: "json", 
+       type: "POST",
+       dataType: "json",
        url: "{{ url('/admin/assignments/assignments_index') }}",
        data: {
          order:order,
