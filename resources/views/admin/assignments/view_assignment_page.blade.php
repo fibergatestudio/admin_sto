@@ -50,7 +50,7 @@
 <button type="button" class="btn btn-primary" style="margin-left: 10px">Поиск</button>
 <!-- Вызов попапа Добавление наряда -->
 <button type="button" class="btn btn-primary" style="margin-left: 10px" data-toggle="modal" data-target="#addAssignment">Добавить наряд</button>
-<button type="button" class="btn btn-primary" style="margin-left: 10px">Внутренний наряд</button>
+<button type="button" class="btn btn-primary" style="margin-left: 10px">Клиентский наряд</button>
 <button type="button" class="btn btn-primary" style="margin-left: 10px">Скачать</button>
 <button type="button" onclick="readMore()" class="btn" style="margin-left: 10px">Подробнее</button>
 
@@ -147,7 +147,7 @@
 
 @section('content')
     {{-- Статическая информация по наряду --}}
-<!--     <table id="read-more" class="table" style="display: none;">
+<table id="read-more" class="table" style="display: none;">
   <thead>
     <tr>
       <th>Клиент</th>
@@ -169,7 +169,7 @@
 <hr>
 
 {{-- Зональные наряды --}}
-<h3>Текущие зональные наряды:</h3>
+<!-- <h3>Текущие зональные наряды:</h3>
 <table id="table" class="table">
   <thead>
     <tr>
