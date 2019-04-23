@@ -129,8 +129,8 @@
         </form>
         <hr>
         {{-- Вернуться в карточку клиента --}}
-        <a href="{{ url('/admin/clients/view_client/'.$client->id) }}">
-            <div class="btn btn-secondary">
+        <a href="{{ url('/admin/clients/view_client/'.$client->id) }}" title="На страницу клиента">
+            <div class="btn btn-danger">
                 Вернуться
             </div>
         </a>
@@ -151,8 +151,15 @@
         {{-- и если база клиентов не пустая--}}
         @if(!empty($clients))
 <div id="test">
+        {{-- Вернуться на страницу Машины в сервисе --}}
+                <a href="{{ url('/admin/cars_in_service/index') }}" title="На страницу Машины в сервисе">
+                    <div class="btn btn-danger">
+                        Вернуться
+                    </div>
+                </a>
         {{-- Форма добавления машины с выбором клиента --}}
         <h2>Форма добавления авто</h2>
+        
         <form action="{{ url('admin/cars_in_service/add') }}" method="POST" enctype="multipart/form-data">
             @csrf
             
@@ -290,12 +297,7 @@
                     Добавить авто
                 </button>
 
-                {{-- Вернуться в карточку клиента --}}
-                <a href="{{ url('/admin/cars_in_service/index') }}">
-                    <div class="btn btn-secondary">
-                        Вернуться
-                    </div>
-                </a>
+                
 
                 
             </form>

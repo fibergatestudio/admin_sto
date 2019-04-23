@@ -13,7 +13,7 @@
             <div class="card-header">
                 <h3 class="mb-0">История Финансов:</h3>
             </div>
-            
+
             <div class="row">
                 <div class="col">
                     <div class="custom-control">
@@ -67,7 +67,7 @@
                         <th>Статус</th>
                     </tr>
                 </thead>
-                <tbody v-if="!sort" id="tablecontents">         
+                <tbody v-if="!sort" id="tablecontents">
                     @foreach($all_logs_asc as $all_logs_asc_entry)
                         <tr v-if="{{ $all_logs_asc_entry->eng_type }}">
                                 <td>
@@ -89,7 +89,7 @@
                                     {{ $all_logs_asc_entry->status }}
                                 </td>
                             </tr>
-                    @endforeach         
+                    @endforeach
                 </tbody>
                 <tbody v-if="sort" id="tablecontents">
                 @foreach($all_logs_desc as $all_logs_desc_entry)
@@ -113,7 +113,7 @@
                                     {{ $all_logs_desc_entry->status }}
                                 </td>
                             </tr>
-                    @endforeach         
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -132,7 +132,7 @@
             test: 'admin',
             sort: false
         }
-    
+
     });
 </script>
 

@@ -363,9 +363,9 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
     // ...
 
 /****** Наряды: Администратор ******/
-Route::get('/admin/assignments_index', 'Assignments_Admin_Controller@assignments_index')->middleware('can:admin_rights');
+Route::get('/admin/assignments/assignments_index', 'Assignments_Admin_Controller@assignments_index')->middleware('can:admin_rights');
 /* Обновление (перестановка) елементов таблицы */
-Route::post('/admin/assignments_index', 'Assignments_Admin_Controller@updateMainOrder')->middleware('can:admin_rights');
+Route::post('/admin/assignments/assignments_index', 'Assignments_Admin_Controller@updateMainOrder')->middleware('can:admin_rights');
 
 /****** Страница общей рентабельности: Администратор ******/
 Route::get('/admin/profitability/profitability_index', 'Assignments_Admin_Controller@profitability_index')->middleware('can:admin_rights');
@@ -588,7 +588,7 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
              Route::get('/employee/manage_assignment/{assignment_id}/assignment_archive', 'Employee_Dashboard_Controller@assignment_archive');
 
     /* Страница управления ЗОНАЛЬНЫМ нарядом  */
-    Route::get('/employee/manage_assignment/{sub_assignment_id}/management', 'Employee_Dashboard_Controller@manage_zonal_assignment');
+    Route::get('/employee/assignments/manage_assignment/{sub_assignment_id}/management', 'Employee_Dashboard_Controller@manage_zonal_assignment');
 
         /* Изменить время зонального наряда : POST */
         Route::post('/employee/manage_assignment/{sub_assignment_id}/management/update_zonal_assignment_time', 'Employee_Dashboard_Controller@update_zonal_assignment_time');

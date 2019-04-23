@@ -143,7 +143,11 @@
 <!-- Скрипты для таблиц -->
 <script type="text/javascript">
  $(function () {
-   $("#table").DataTable();
+   $("#table").DataTable({
+      "language":{
+          "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Russian.json",
+      }
+   });
 
    $( "#tablecontents" ).sortable({
      items: "tr",
@@ -167,7 +171,7 @@
      $.ajax({
        type: "POST", 
        dataType: "json", 
-       url: "{{ url('/admin/assignments_index') }}",
+       url: "{{ url('/admin/assignments/assignments_index') }}",
        data: {
          order:order,
          _token: '{{csrf_token()}}'

@@ -2,16 +2,13 @@
 
 @section('page_name')
     Завершенные заказы
+    {{-- Возврат : кнопка --}}
+    <a href="{{ url('employee/orders/index') }}" class="btn btn-info">Вернуться в заказы</a>       
 @endsection
 
 @section('content')
 
-        <div class="row">
-            {{-- Возврат : кнопка --}}
-            <div class="col-2">
-                <a href="{{ url('employee/orders/index') }}" class="btn btn-info">Вернуться в заказы</a>
-            </div>             
-        </div>
+       
         <hr>
     {{-- Выводим заказы --}}
     

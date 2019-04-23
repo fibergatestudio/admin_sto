@@ -2,12 +2,18 @@
 
 @section('page_name')
     Страница машины: {{ $car->general_name }}
+    {{-- Вернуться на страницу Машины в сервисе --}}
+                <a href="{{ url('/admin/cars_in_service/index') }}" title="На страницу Машины в сервисе">
+                    <div class="btn btn-danger">
+                        Вернуться
+                    </div>
+                </a>
 @endsection
 
 @section('content')
     {{-- Клиент-владелец : ссылка --}}
     <p>Клиент-владелец: 
-        <a href="{{ url('admin/view_client/'.$client->id) }}">
+        <a href="{{ url('admin/clients/view_client/'.$client->id) }}">
             {{ $client->general_name }}
         </a>
     

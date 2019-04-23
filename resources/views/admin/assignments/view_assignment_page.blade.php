@@ -101,7 +101,7 @@
     </div>
   </form>
 </div>
-<a href="{{ url('/admin/assignments_index') }}">
+<a href="{{ url('/admin/assignments/assignments_index') }}">
         <div class="btn btn-danger">
             Вернуться
         </div>
@@ -778,7 +778,11 @@
 <!-- Скрипты для таблиц -->
  <script type="text/javascript">
  $(function () {
-   $("#table").DataTable();
+   $("#table").DataTable({
+      "language":{
+          "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Russian.json",
+      }
+   });
 
    $( "#tablecontents" ).sortable({
      items: "tr",

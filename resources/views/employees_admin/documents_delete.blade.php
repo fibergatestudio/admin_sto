@@ -2,6 +2,7 @@
 
 @section('page_name')
     Страница удаления документов сотрудника
+     <a class="btn btn-danger" href="{{ url('/documents/'.$employee_id) }}" title="Страница Документы сотрудника">Вернуться</a>
 @endsection
 
 @section('content')
@@ -18,7 +19,7 @@
 
             {{-- Путь к файлу --}}
             <input type="hidden" name="path_to_file" value="{{ $image }}">
-        
+
             <button type="submit" class="btn btn-danger">
                 Х
             </button>

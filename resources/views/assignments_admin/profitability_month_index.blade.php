@@ -9,6 +9,12 @@
 
 @section('page_name')
     Страница месячной рентабельности
+    {{-- Вернуться : кнопка --}}
+    <a href="{{ url('/admin/profitability/profitability_index') }}">
+        <div class="btn btn-danger">
+            Вернуться
+        </div>
+    </a>
 @endsection
 
 @section('content')   
@@ -282,12 +288,7 @@
     </table>
     <h4 id="total">Итого: {{ $sum }} лей</h4>
     <hr>
-    {{-- Вернуться : кнопка --}}
-    <a href="{{ url('/admin/profitability/profitability_index') }}">
-        <div class="btn btn-danger">
-            Вернуться
-        </div>
-    </a>
+    
     <script type="text/javascript">
         var rootSite = '<?=URL::to('/')?>';
         function showProfitability(){

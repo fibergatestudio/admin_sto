@@ -2,13 +2,14 @@
 
 @section('page_name')
     Документы сотрудника - {{$employee->general_name}}
+    <a href="{{ url('/supervisor/view_employees') }}" class="btn btn-danger" title="Страница Сотрудники">Вернуться</a>
 @endsection
 
 @section('content')
     <div class="row">
-        <div class="row">    
+        <div class="row">
             {{-- Цикл вывода документов --}}
-            
+
             @foreach($images as $image)
 
                 <div class="col-lg-2 col-md-3 col-xs-6 thumb">
@@ -21,7 +22,7 @@
                     </a>
                 </div>
             @endforeach
-        </div>    
+        </div>
         {{-- Модальное окно для вывода лайтбокса --}}
         <div class="modal fade" id="image-gallery" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -46,18 +47,18 @@
                 </div>
             </div>
         </div>
-        {{-- Конец модального окна для вывода лайтбокса --}}    
+        {{-- Конец модального окна для вывода лайтбокса --}}
     </div>
-     {{-- Документы : переход на страницу загрузки --}}   
+     {{-- Документы : переход на страницу загрузки --}}
     <a class="btn btn-light" href="{{ url('/supervisor/manage_employee_status/'. $employee->id .'/add_documents') }}">Добавить документ</a>
-     
-    {{-- Удаление документов : переход на страницу --}}              
+
+    {{-- Удаление документов : переход на страницу --}}
     <a class="btn btn-secondary" href="{{ url('/supervisor/manage_employee_status/'. $employee->id .'/documents_delete') }}">Удалить документ</a>
 
     <hr>
     <a href="{{ url('/supervisor/manage_employee_status/'. $employee->id .'/employee_edit') }}" class="btn btn-danger">Вернуться</a>
 
-       
+
 @endsection
 
 @section('custom_scripts')

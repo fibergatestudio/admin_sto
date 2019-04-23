@@ -2,6 +2,12 @@
 
 @section('page_name')
 Мои активные наряды
+{{-- Архив нарядов : переход --}}
+    <a href="{{ url('employee/assignments/my_assignments_archive') }}">
+        <div class="btn btn-secondary">
+            Архив моих нарядов
+        </div>
+    </a>
 @endsection
 
 @section('content')
@@ -26,10 +32,5 @@
     </table>
     <hr>
     
-    {{-- Архив нарядов : переход --}}
-    <a href="{{ url('employee/assignments/my_assignments_archive') }}">
-        <div class="btn btn-secondary">
-            Архив моих нарядов
-        </div>
-    </a>
+    
 @endsection

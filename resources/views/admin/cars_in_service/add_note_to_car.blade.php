@@ -2,6 +2,12 @@
 
 @section('page_name')
     Добавить примечание к авто
+    {{-- Вернуться : кнопка --}}
+    <a href="{{ url('admin/cars_in_service/view/'.$car->id) }}" title="На страницу машины">
+        <div class="btn btn-danger">
+            Вернуться
+        </div>
+    </a>
 @endsection
 
 @section('content')
@@ -25,10 +31,5 @@
 
 
     <hr>
-    {{-- Вернуться : кнопка --}}
-    <a href="{{ url('admin/cars_in_service/view/'.$car->id) }}">
-        <div class="btn btn-danger">
-            Вернуться
-        </div>
-    </a>
+    
 @endsection

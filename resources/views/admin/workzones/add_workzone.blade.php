@@ -2,6 +2,12 @@
 
 @section('page_name')
     Добавление нового рабочего поста
+     {{-- Вернуться на страницу всех постов --}}
+    <a href="{{ url('admin/workzones/index') }}" title="Страница всех постов">
+        <div class="btn btn-danger">
+            Вернуться
+        </div>
+    </a>
 @endsection
 
 
@@ -55,12 +61,7 @@
     </form>
     <hr>
 
-    {{-- Вернуться на страницу всех постов --}}
-    <a href="{{ url('admin/workzones/index') }}">
-        <div class="btn btn-danger">
-            Вернуться
-        </div>
-    </a>
+   
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/js/bootstrap-colorpicker.min.js"></script>
     <script>

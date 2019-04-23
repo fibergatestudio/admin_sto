@@ -2,6 +2,12 @@
 
 @section('page_name')
 Рабочие зоны
+{{-- Добавить пост: переход --}}
+<a href="{{ url('admin/workzones/add') }}">
+    <div class="btn btn-primary">
+        Добавить рабочий пост
+    </div>
+</a>
 @endsection
 
 @section('content')
@@ -78,10 +84,5 @@
 </div>
 @endforeach -->
 <hr>
-{{-- Добавить пост: переход --}}
-<a href="{{ url('admin/workzones/add') }}">
-    <div class="btn btn-primary">
-        Добавить рабочий пост
-    </div>
-</a>
+
 @endsection

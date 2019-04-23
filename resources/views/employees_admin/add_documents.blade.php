@@ -2,6 +2,7 @@
 
 @section('page_name')
 Добавление документов
+<a href="{{ url('/supervisor/view_employees') }}" class="btn btn-danger" title="Страница Сотрудники">Вернуться</a>
 @endsection
 
 @section('content')
@@ -16,7 +17,7 @@
         {{ $employee->general_name}}
     </div>
     <div class="row">
-        
+
         <div>
             <input type="file" name="scan">
         </div>

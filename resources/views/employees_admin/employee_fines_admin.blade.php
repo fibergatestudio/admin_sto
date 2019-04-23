@@ -2,6 +2,13 @@
 
 @section('page_name')
 Штрафы сотрудника: {{ $employee->general_name }}
+<a href="{{ url('supervisor/employee_finances/'.$employee->id) }}">
+    <div class="btn btn-danger">Вернуться</div>
+</a>
+<div class="btn btn-primary" data-toggle="modal" data-target="#addFineModal">Добавить штраф вручную</div>
+<div class="btn btn-secondary" data-toggle="modal" data-target="#fineHistory">История штрафов</div>
+
+
 @endsection
 
 @section('content')
@@ -19,7 +26,7 @@
                             Применить
                         </div>
                     </a>
-                    <br>                  
+                    <br>
                     {{-- Отменить штраф --}}
                     <a onclick="return do_check();" href="{{ url('/supervisor/employee_fines/quash_fine/'.$fine->id) }}">
                         <div class="btn btn-primary" style="margin-top: 10px">
@@ -65,7 +72,7 @@
                     <div class="modal-body">
                         {{-- ID сотрудника --}}
                         <input type="hidden" name="employee_id" value="{{ $employee->id }}">
-                        
+
                         {{-- Размер штрафа --}}
                         <div class="form-group">
                             <label>Размер штрафа</label>
@@ -77,9 +84,9 @@
                             <label>Причина наложения штрафа</label>
                             <input type="text" class="form-control" name="fine_reason" placeholder="Причина наложения штрафа">
                         </div>
-                        
+
                         <b>* После добавления штраф попадёт на рассмотрение, где его нужно будет подтвердить</b>
-                        
+
                     </div>{{-- / MODAL BODY --}}
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Добавить</button>

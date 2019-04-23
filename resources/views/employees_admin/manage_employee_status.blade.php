@@ -2,6 +2,12 @@
 
 @section('page_name')
 Управление статусом сотрудника: <b>{{ $employee->general_name }}</b>
+{{-- Вернуться в прошлое меню --}}
+    <a href="{{ url('/supervisor/view_employees') }}" title="Страница Сотрудники">
+        <div class="btn btn-danger">
+            Вернуться
+        </div>
+    </a>
 @endsection
 
 @section('content')
@@ -26,11 +32,6 @@
     </form>
 
     <hr>
-    {{-- Вернуться в прошлое меню --}}
-    <a href="{{ url('/supervisor/view_employees') }}">
-        <div class="btn btn-danger">
-            Вернуться
-        </div>
-    </a>
+    
 
 @endsection

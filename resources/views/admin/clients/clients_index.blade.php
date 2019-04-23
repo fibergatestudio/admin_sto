@@ -2,7 +2,12 @@
 
 @section('page_name')
     Список клиентов 
-    
+    <a href="{{ url('admin/clients/add_client') }}">
+        <div class="btn btn-primary">
+            Добавить клиента
+        </div>
+    </a>
+    <hr>
       <input type="text" name="search" id="search" class="form-control" placeholder="Поиск клиента" />
     
 @endsection
@@ -34,11 +39,7 @@
         <br>
     @endforeach -->
     <hr>
-    <a href="{{ url('admin/clients/add_client') }}">
-        <div class="btn btn-primary">
-            Добавить клиента
-        </div>
-    </a>
+    
 
     <script>
         $(document).ready(function(){

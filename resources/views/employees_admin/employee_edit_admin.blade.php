@@ -31,7 +31,7 @@
         </div>
     </div>
 
-    
+
 @endsection
 
 @section('content')
@@ -123,7 +123,7 @@
                         <input type="date" name="birthday" value="{{ $employee->birthday }}" class="form-control">
                     </div>
 
-                    
+
                     <div class="form-group col-md-4">
                         <label>Баланс</label>
                         <input type="number" name="balance" value="{{ $employee->balance }}" class="form-control">
@@ -168,7 +168,7 @@
                     </div>
 
                     <div class="form-group col-md-2">
-                        <label>Фиксированная плата</label> 
+                        <label>Фиксированная плата</label>
                         <input type="checkbox" name="fixed_charge" value="fixed" @if($employee->fixed_charge == 'fixed') checked @endif class="form-control">
                     </div>
 
@@ -185,13 +185,13 @@
                         <label>Место дислокации (р.зона)</label>
                         <select name="workzone" id="categories" class="form-control">
                             @foreach ($workzones as $wz )
-                            <option value="{{ $wz->id}}">{{ $wz->general_name }}</option>               
+                            <option value="{{ $wz->id}}">{{ $wz->general_name }}</option>
                             @endforeach
                         </select>
                     </div>
 
                 </div>
-                
+
                 <hr>
 
                 <div class="form-row">
@@ -225,7 +225,7 @@
 
             </form>
             <hr>
-            <a href="{{ url('/supervisor/view_employees') }}" class="btn btn-danger">Вернуться</a>
+
 
 {{-- Как узнать Телеграм ID : Форма и модальное окно --}}
     <form method="POST">

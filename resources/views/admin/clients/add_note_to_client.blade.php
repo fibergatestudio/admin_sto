@@ -2,6 +2,12 @@
 
 @section('page_name')
     Добавить примечание к клиенту - "<span style="size: 30px; color: #339900;"><b><em> {{ $client->general_name }} </b></em></span>"
+ {{-- Вернуться : кнопка --}}
+ <a href="{{ url('admin/clients/view_client/'.$client->id) }}" title="На страницу клиента">
+        <div class="btn btn-danger">
+            Вернуться
+        </div>
+    </a>
 @endsection
 
 @section('content')
@@ -24,10 +30,5 @@
 
 
     <hr>
-    {{-- Вернуться : кнопка --}}
-    <a href="{{ url('admin/clients/view_client/'.$client->id) }}">
-        <div class="btn btn-danger">
-            Вернуться
-        </div>
-    </a>
+   
 @endsection
