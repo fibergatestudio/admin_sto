@@ -689,7 +689,7 @@ class Assignments_Admin_Controller extends Controller
                 .  $new_income_entry->description;
     
                 Telegram::sendMessage([
-                'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+                'chat_id' => '-1001204206841.0',
                 'parse_mode' => 'HTML',
                 'text' => $text
                 ]);
