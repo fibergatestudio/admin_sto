@@ -10,7 +10,7 @@
         <h2>Добавить машину клиента: {{ $client->fio }}</h2>
 <div id="markmodel">
         {{-- Форма добавления машины для клиента --}}
-        <form action="{{ url('admin/cars_in_service/add') }}" method="POST">
+        <form action="{{ url('admin/cars_in_service/add') }}" method="POST" enctype="multipart/form-data">
             @csrf
             {{-- ID клиента --}}
             <input type="hidden" name="client_id" value="{{ $client->id }}">
