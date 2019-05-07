@@ -1161,10 +1161,21 @@ class EmployeesAdminController extends Controller
 
         $car_wash_table = DB::table('car_wash')->get();
 
+        $car_wash_sum_cash = DB::table('car_wash')->where('payment_method', 'Наличный')->sum('payment_sum'); //Наличные
+        $car_wash_sum_non_cash = DB::table('car_wash')->where('payment_method', 'Безналичный')->sum('payment_sum'); //БезНаличные
+        $car_wash_sum_terminal = DB::table('car_wash')->where('payment_method', 'Терминал')->sum('payment_sum'); //Терминал
+        $car_wash_sum_total = DB::table('car_wash')->sum('payment_sum'); //Всего всего
+
+
+
 
         return view('admin.wash.admin_wash_index',[
 
-            'car_wash_table' => $car_wash_table
+            'car_wash_table' => $car_wash_table,
+            'car_wash_sum_cash' => $car_wash_sum_non_cash,
+            'car_wash_sum_non_cash' => $car_wash_sum_non_cash,
+            'car_wash_sum_terminal' => $car_wash_sum_terminal,
+            'car_wash_sum_total' => $car_wash_sum_total,
             
         ]);
     }
@@ -1188,6 +1199,44 @@ class EmployeesAdminController extends Controller
 
 
         return back();
+    }
+
+    public function admin_wash_report(){
+
+
+        return view('admin.wash.admin_wash_report');
+    }
+
+    public function wash_select_date(){
+
+
+        return view('admin.wash.admin_wash_select_date');
+    }
+
+    public function wash_select_year($year){
+
+        return view('admin.wash.admin_wash_select_month',[
+            'year' => $year,
+        ]);
+    }
+    
+    public function wash_select_month($year, $month){
+
+
+        return view('admin.wash.admin_wash_select_day',[
+            'year' => $year,
+            'month' => $month
+        ]);
+    }
+    
+    public function wash_select_day($year, $month, $day){
+
+
+        return view('admin.wash.admin_wash_report_result',[
+            'year' => $year,
+            'month' => $month,
+            'day' => $day
+        ]);
     }
 
     /*

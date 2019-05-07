@@ -2,6 +2,8 @@
 
 @section('page_name')
     Учёт мойки
+        <a href="{{ url('/admin/wash/report') }}"><button class="btn btn-primary">Отчет</button></a>
+        <a href="{{ url('/admin/wash/select_date') }}"><button class="btn btn-primary">Выбрать дату</button></a>
 @endsection
 
 @section('content')
@@ -104,41 +106,6 @@
             <div class="card-header">
                 <h3 class="mb-0">Учёт мойки, Таблица:</h3>
             </div>
-            
-            <!-- <div class="row">
-                <div class="col">
-                    <div class="custom-control">
-                        <label>Фильтры типа: </label>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" value="1" class="custom-control-input" id="check1" v-model="income">
-                        <label class="custom-control-label" for="check1">Начисления</label>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" value="2" class="custom-control-input" id="check2" v-model="payout">
-                        <label class="custom-control-label" for="check2">Выплаты</label>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" value="3" class="custom-control-input" id="check3" v-model="fine">
-                        <label class="custom-control-label" for="check3">Штрафы</label>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" value="4" class="custom-control-input" id="check4" v-model="coffee">
-                        <label class="custom-control-label" for="check4">Кофе</label>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="btn btn-info">Сорт.Старые</div>
-                </div>
-            </div> -->
         </form>
         
             <hr>
@@ -187,10 +154,37 @@
                             {{ $car_wash->box_number }}
                         </td>
                     </tr>
-                    @endforeach    
+                    @endforeach
+                    <tr>
+                        <th>Всего наличные</th>
+                        <th>{{ $car_wash_sum_cash }}</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr> 
+                    <tr>
+                        <th>Всего безналичные</th>
+                        <th>{{ $car_wash_sum_non_cash }}</th>
+                    </tr> 
+                    <tr>
+                        <th>Всего терминал</th>
+                        <th>{{ $car_wash_sum_terminal }}</th>
+                    </tr> 
+                    <tr>
+                        <th>Всего</th>
+                        <th>{{ $car_wash_sum_total }}</th>
+                    </tr> 
             </tbody>
             </table>
         </div>
+        <hr>
+        <div class="form-group text-center">
+            <button class="btn btn-primary">Закрыть кассу</button>
+        </div> 
     </div>
 </div>
 

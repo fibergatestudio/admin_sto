@@ -284,6 +284,17 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
     Route::get('/admin/wash', 'EmployeesAdminController@admin_wash_index');
         /* Добавления машины в мойку */
         Route::post('/admin/wash_post', 'EmployeesAdminController@admin_wash_post');
+    /* Страница Отчета Мойки */
+    Route::get('/admin/wash/report', 'EmployeesAdminController@admin_wash_report');
+
+    /* Страница Выбора даты Мойки */
+    Route::get('/admin/wash/select_date/', 'EmployeesAdminController@wash_select_date');
+    /* Страница Выбора даты Мойки (ГОД) */
+    Route::get('/admin/wash/select_date/{year}', 'EmployeesAdminController@wash_select_year');
+    /* Страница Выбора даты Мойки (Месяц) */
+    Route::get('/admin/wash/select_date/{year}/{month}', 'EmployeesAdminController@wash_select_month');
+    /* Страница Выбора даты Мойки (ДЕНЬ) */
+    Route::get('/admin/wash/select_date/{year}/{month}/{day}', 'EmployeesAdminController@wash_select_day');
 
 
 
