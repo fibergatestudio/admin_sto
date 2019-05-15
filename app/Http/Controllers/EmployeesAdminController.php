@@ -23,6 +23,13 @@ use App\Employee_balance;
 use App\Employees_notes_logs;
 use App\Deleted_notes;
 use App\Car_wash;
+use App\Car_wash_assignments;
+use App\Car_wash_clients;
+use App\Car_wash_print_settings;
+use App\Car_wash_complete_work;
+
+
+
 use \Crypt;
 use Redirect;
 
@@ -34,8 +41,14 @@ class EmployeesAdminController extends Controller
     public function view_employees(){
         $employee_data = Employee::where('status', 'active')->get();
 
+        $employee_wash = Employee::where('status', 'active')->where('position', 'Washer')->get();
 
-        return view('employees_admin.employees_admin_index', ['employee_data' => $employee_data]);
+
+        return view('employees_admin.employees_admin_index', 
+        [
+            'employee_data' => $employee_data,
+            'employee_wash' => $employee_wash
+        ]);
 
     }
 
@@ -1154,28 +1167,238 @@ class EmployeesAdminController extends Controller
     }
 
     /* 
+    ********** Наряды Мойка *************
+    */
+
+
+    public function admin_wash_assignments_index(){
+
+        $car_wash = DB::table('car_wash_assignments')
+        ->join('car_wash_clients', 'car_wash_assignments.client_id', '=', 'car_wash_clients.id')
+        ->select(
+            'car_wash_assignments.*',
+            'car_wash_clients.name AS car_wash_client_name'
+        )
+        ->get();
+
+        $wash_clients = DB::table('car_wash_clients')->get();
+
+        return view('admin.wash.wash_assignments.admin_wash_assignments',
+            [
+                'car_wash' => $car_wash,
+                'wash_clients' => $wash_clients
+            ]);
+    }
+
+    public function admin_wash_assignment($id){
+
+        $car_wash_assignment = DB::table('car_wash_assignments')->where('id', $id)->first();
+        //dd($car_wash_assignment);
+
+        $client_id = $car_wash_assignment->client_id;
+        $print_settings_id = $car_wash_assignment->print_settings_id;
+
+        $client_settings = DB::table('car_wash_clients')->where('id', $client_id)->first();
+        $print_settings = DB::table('car_wash_print_settings')->where('id', $print_settings_id)->first();
+
+        $complete_work = DB::table('car_wash_complete_work')->where('assignment_id', $id)->get();
+
+        return view('admin.wash.wash_assignments.admin_wash_assignments_edit',
+            [
+                    'id' => $id,
+                    'client_id' => $client_id,
+                    'print_settings_id' => $print_settings_id,
+                    'client_settings' => $client_settings,
+                    'print_settings' => $print_settings,
+                    'complete_work' => $complete_work
+            ]);
+    }
+
+    //Поиск нарядов мойки
+    public function admin_wash_assignments_search(Request $request){
+
+        $wash_client_id = $request->wash_client_id;
+        //dd($wash_client_id);
+
+        $car_wash_result = DB::table('car_wash_assignments')->where('client_id', $wash_client_id)
+        ->join('car_wash_clients', 'car_wash_assignments.client_id', '=', 'car_wash_clients.id')
+        ->select(
+            'car_wash_assignments.*',
+            'car_wash_clients.name AS car_wash_client_name'
+        )
+        ->get();
+
+        return view('admin.wash.wash_assignments.admin_wash_assignments_search_result',
+            [
+                'wash_client_id' => $wash_client_id,
+                'car_wash_result' => $car_wash_result
+
+            ]);
+    }
+
+
+    public function admin_wash_create_assignment_index(){
+
+        return view('admin.wash.wash_assignments.admin_wash_create_assignment_index');
+    }
+
+    public function admin_wash_create_assignment(Request $request){
+
+        $wash_client = new Car_wash_clients();
+        $wash_client->name = $request->name;
+        $wash_client->phone = $request->phone;
+        $wash_client->client_type = $request->client_type;
+        $wash_client->firm_name = $request->firm_name;
+        $wash_client->bank_name = $request->bank_name;
+        $wash_client->bank_code = $request->bank_code;
+        $wash_client->legal_address = $request->legal_address;
+        $wash_client->bank_account = $request->bank_account;
+        $wash_client->fiscal_code = $request->fiscal_code;
+        $wash_client->VAT_code = $request->VAT_code;
+        $wash_client->save();
+
+        $wash_print_settings = new Car_wash_print_settings();
+        $wash_print_settings->save();
+
+
+        $wash_assignment = new Car_wash_assignments();
+        $wash_assignment->client_id = $wash_client->id;
+        $wash_assignment->print_settings_id = $wash_print_settings->id;
+        $wash_assignment->save();
+
+        $car_wash = DB::table('car_wash_assignments')
+        ->join('car_wash_clients', 'car_wash_assignments.client_id', '=', 'car_wash_clients.id')
+        ->select(
+            'car_wash_assignments.*',
+            'car_wash_clients.name AS car_wash_client_name'
+        )
+        ->get();
+
+
+
+        return view('admin.wash.wash_assignments.admin_wash_assignments',
+        [
+            'car_wash' => $car_wash,
+        ]);
+    }
+
+    public function admin_wash_save_complete_work(Request $request){
+
+        $assignment_id = $request->assignment_id;
+
+        $wash_complete = new Car_wash_complete_work();
+        $wash_complete->assignment_id = $assignment_id;
+        $wash_complete->date = $request->date;
+        $wash_complete->brand = $request->brand;
+        $wash_complete->reg_number = $request->reg_number;
+        $wash_complete->amount = $request->amount;
+        $wash_complete->price = $request->price;
+        $wash_complete->sum = $request->sum;
+        $wash_complete->save();
+
+        // $wash_assignment = DB::table('car_wash_assignments')->where('id', $assignment_id)->first();
+
+        // //dd($wash_assignment);
+        // $id_to_add = $wash_complete->id;
+        // $current_ids = $wash_assignment->wash_id;
+
+        // $array_implode = implode(',', array_merge($id_to_add, $current_ids));
+        // dd($array_implode);
+        
+
+
+        return back();
+    }
+
+    public function admin_wash_delete_complete_work($work_id){
+
+        Car_wash_complete_work::find($work_id)->delete();
+
+        return back();
+    }
+
+    public function admin_wash_save_client_info(Request $request){
+
+
+
+        $client_id = $request->client_id;
+
+        //$wash_client = DB::table('car_wash_client')->where('id', $client_id)
+
+        DB::table('car_wash_clients')
+        ->where('id', '=', $client_id)
+        ->update([
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'client_type' => $request->client_type,
+            'firm_name' => $request->firm_name,
+            'bank_name' => $request->bank_name,
+            'bank_code' => $request->bank_code,
+            'legal_address' => $request->legal_address,
+            'bank_account' => $request->bank_account,
+            'fiscal_code' => $request->fiscal_code,
+            'VAT_code' => $request->VAT_code
+            ]);
+
+        return back();
+    }
+    public function admin_wash_save_print_settings(Request $request){
+
+
+        $print_settings_id = $request->print_settings_id;
+
+        DB::table('car_wash_print_settings')
+        ->where('id', '=', $print_settings_id)
+        ->update([
+            'assignment_number' => $request->assignment_number,
+            'doc_type' => $request->doc_type,
+            'doc_for' => $request->doc_for,
+            'doc_date' => $request->doc_date,
+            'VAT' => $request->VAT,
+            'show_wash_date' => $request->show_wash_date,
+            'note' => $request->note,
+            'show_logo' => $request->show_logo,
+            'invoice' => $request->invoice,
+            'invoice_status' => $request->invoice_status
+            ]);
+
+
+        return back();
+    }
+
+    /* 
     ********** Учёт мойки *************
     */
 
     public function admin_wash_index(){
 
-        $car_wash_table = DB::table('car_wash')->get();
+        $year = date('Y');
+        $month = date('m');
+        $day = date('d');
 
-        $car_wash_sum_cash = DB::table('car_wash')->where('payment_method', 'Наличный')->sum('payment_sum'); //Наличные
-        $car_wash_sum_non_cash = DB::table('car_wash')->where('payment_method', 'Безналичный')->sum('payment_sum'); //БезНаличные
-        $car_wash_sum_terminal = DB::table('car_wash')->where('payment_method', 'Терминал')->sum('payment_sum'); //Терминал
-        $car_wash_sum_total = DB::table('car_wash')->sum('payment_sum'); //Всего всего
+        $date_arr = array($year, $month, $day);
 
+        $date = implode('-', $date_arr );
 
+        $car_wash_table = DB::table('car_wash')->where('date', $date)->get();
 
+        $car_wash_sum_cash = DB::table('car_wash')->where('payment_method', 'Наличный')->where('date', $date)->sum('payment_sum'); //Наличные
+        $car_wash_sum_non_cash = DB::table('car_wash')->where('payment_method', 'Безналичный')->where('date', $date)->sum('payment_sum'); //БезНаличные
+        $car_wash_sum_terminal = DB::table('car_wash')->where('payment_method', 'Терминал')->where('date', $date)->sum('payment_sum'); //Терминал
+        $car_wash_sum_total = DB::table('car_wash')->where('date', $date)->sum('payment_sum'); //Всего всего
+
+        $wash_worker = DB::table('employees')->where('position', 'Washer')->get();
 
         return view('admin.wash.admin_wash_index',[
-
+            'year' => $year,
+            'month' => $month,
+            'day' => $day,
             'car_wash_table' => $car_wash_table,
             'car_wash_sum_cash' => $car_wash_sum_non_cash,
             'car_wash_sum_non_cash' => $car_wash_sum_non_cash,
             'car_wash_sum_terminal' => $car_wash_sum_terminal,
             'car_wash_sum_total' => $car_wash_sum_total,
+            'wash_worker' => $wash_worker,
             
         ]);
     }
@@ -1195,32 +1418,41 @@ class EmployeesAdminController extends Controller
         //dd($wash_services_implode);
         $car_wash->payment_sum = $request->payment_sum;
         $car_wash->box_number = $request->box_number;
+
+        $year = $request->year;
+        $month = $request->month;
+        $day = $request->day;
+
+        $date_arr = array($year, $month, $day);
+
+        $date = implode('-', $date_arr );
+
+        //dd($date);
+
+        $car_wash->date = $date;
+        $car_wash->status = "Opened";
         $car_wash->save();
 
 
         return back();
     }
 
-    public function admin_wash_report(){
+    /* ВЫБОР ДАТЫ МОЙКИ */
+
+    public function wash_select_year(){
 
 
-        return view('admin.wash.admin_wash_report');
+        return view('admin.wash.admin_wash_select_year');
     }
 
-    public function wash_select_date(){
-
-
-        return view('admin.wash.admin_wash_select_date');
-    }
-
-    public function wash_select_year($year){
+    public function wash_select_month($year){
 
         return view('admin.wash.admin_wash_select_month',[
             'year' => $year,
         ]);
     }
     
-    public function wash_select_month($year, $month){
+    public function wash_select_day($year, $month){
 
 
         return view('admin.wash.admin_wash_select_day',[
@@ -1229,13 +1461,93 @@ class EmployeesAdminController extends Controller
         ]);
     }
     
-    public function wash_select_day($year, $month, $day){
+    public function wash_select_result($year, $month, $day){
 
 
-        return view('admin.wash.admin_wash_report_result',[
+        $date_arr = array($year, $month, $day);
+
+        $date = implode('-', $date_arr );
+
+        $car_wash_table = DB::table('car_wash')->where('date', $date)->get();
+
+        $car_wash_sum_cash = DB::table('car_wash')->where('payment_method', 'Наличный')->where('date', $date)->sum('payment_sum'); //Наличные
+        $car_wash_sum_non_cash = DB::table('car_wash')->where('payment_method', 'Безналичный')->where('date', $date)->sum('payment_sum'); //БезНаличные
+        $car_wash_sum_terminal = DB::table('car_wash')->where('payment_method', 'Терминал')->where('date', $date)->sum('payment_sum'); //Терминал
+        $car_wash_sum_total = DB::table('car_wash')->where('date', $date)->sum('payment_sum'); //Всего всего
+
+
+        $wash_worker = DB::table('employees')->where('position', 'Washer')->get();
+
+
+        return view('admin.wash.admin_wash_index',[
             'year' => $year,
             'month' => $month,
-            'day' => $day
+            'day' => $day,
+            'car_wash_table' => $car_wash_table,
+            'car_wash_sum_cash' => $car_wash_sum_non_cash,
+            'car_wash_sum_non_cash' => $car_wash_sum_non_cash,
+            'car_wash_sum_terminal' => $car_wash_sum_terminal,
+            'car_wash_sum_total' => $car_wash_sum_total,
+            'wash_worker' => $wash_worker,
+        ]);
+    }
+
+
+    //Закрытие Кассы
+    public function admin_wash_close_cashbox($year, $month, $day){
+
+        $date_arr = array($year, $month, $day);
+        $date = implode('-', $date_arr );
+
+        $cashbox_date = DB::table('car_wash')->where('date', $date)->first();
+
+        if ($cashbox_date->status == "Opened"){
+            DB::table('car_wash')
+            ->where('date', '=', $date)
+            ->update(['status' => 'Closed']);
+        } else {
+            
+        }
+
+       //dd($cashbox_date);
+
+        return back();
+
+    }
+
+    /* ОТЧЕТ МОЙКИ */
+
+    public function wash_report_select_year(){
+
+        return view('admin.wash.report.admin_report_select_year');
+    }
+    public function wash_report_select_month($year){
+
+        return view('admin.wash.report.admin_report_select_month',[
+            'year' => $year
+        ]);
+    }
+    public function wash_report_select_day($year, $month){
+
+        return view('admin.wash.report.admin_report_select_day',[
+            'year' => $year,
+            'month' => $month
+        ]);
+    }
+    public function wash_report_select_result($year, $month, $day){
+
+        $date_arr = array($year, $month, $day);
+
+        $date = implode('-', $date_arr );
+
+        $car_wash_report_table = DB::table('car_wash')->where('date', $date)->where('status', 'Closed')->get();
+
+        
+        return view('admin.wash.report.admin_report_select_result',[
+            'year' => $year,
+            'month' => $month,
+            'day' => $day,
+            'car_wash_report_table' => $car_wash_report_table
         ]);
     }
 

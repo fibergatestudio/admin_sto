@@ -23,6 +23,8 @@ class CreateCarWashTable extends Migration
             $table->string('wash_services')->nullable();
             $table->string('payment_sum')->nullable();
             $table->string('box_number')->nullable();
+            $table->string('date')->nullable();
+            $table->string('status')->nullabe();
             $table->timestamps();
         });
     }

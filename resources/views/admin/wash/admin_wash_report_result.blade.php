@@ -11,6 +11,7 @@
     {{ $year }}
     {{ $month }}
     {{ $day }}
+    
     </div>
 </div>
 @endsection

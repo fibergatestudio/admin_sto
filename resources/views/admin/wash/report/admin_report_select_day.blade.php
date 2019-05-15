@@ -2,7 +2,7 @@
 
 @section('page_name')
     Отчет мойки
-    <a href="{{ url()->previous() }}"><button class="btn btn-warning">Назад</button></a>
+    <a href="{{ url('/admin/wash/report/'.$year) }}"><button class="btn btn-warning">Назад</button></a>
 @endsection
 
 @section('content')
@@ -19,7 +19,7 @@ for ($i = 0; $i < $d; $i++)
     {
         $today = strtotime(date("Y-m-d"));
         $date = strtotime($year . "-" . $month . "-" . ($i + 1));
-        $url = "/admin/wash/select_date/$year/$month/".($i + 1)."";
+        $url = "/admin/wash/report/$year/$month/".($i + 1)."";
         if ($today === $date)
         {
             echo '<div class="btn bg-success col-md-3">';
@@ -27,13 +27,14 @@ for ($i = 0; $i < $d; $i++)
             echo (($i + 1));
             echo '</a>';
             echo "</div>";
+        } else {
+            $day=strftime("%A", $date);
+            echo '<div class="btn col-md-3">';
+            echo '<a href="'.$url.'">';
+            echo (($i + 1));
+            echo '</a>';
+            echo "</div>";
         }
-        $day=strftime("%A", $date);
-        echo '<div class="btn col-md-3">';
-        echo '<a href="'.$url.'">';
-        echo (($i + 1));
-        echo '</a>';
-        echo "</div>";
     }
     echo "</div>";
 

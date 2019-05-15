@@ -8,9 +8,15 @@
 
 @section('content')
 <div class="form-row">
+    <b>Текущая дата: {{ $year }} {{ $month }} {{ $day }}</b><br>
     <div class="card card-outline-secondary col-md-12">
         <form action="{{ url('/admin/wash_post') }}" method="POST">
         @csrf
+
+            <input type="hidden" value="{{ $year }}" name="year">
+            <input type="hidden" value="{{ $month }}" name="month">
+            <input type="hidden" value="{{ $day }}" name="day">
+
             <div class="form-group">
                 <div class="card-header">
                     <!-- <h3 class="mb-0">Учёт мойки:</h3> -->
@@ -183,8 +189,42 @@
         </div>
         <hr>
         <div class="form-group text-center">
-            <button class="btn btn-primary">Закрыть кассу</button>
-        </div> 
+            <a href="{{ url('/admin/wash/select_date/'.$year.'/'.$month.'/'.$day.'/close_cashbox') }}"><button class="btn btn-primary">Закрыть кассу</button></a>
+        </div>
+    </div>
+    <div class="card card-outline-secondary col-md-12">
+        <div class="form-group">
+            <div class="card-header">
+                <h3 class="mb-0">Зачислить работникам</h3>
+                <table id="table" class="table">
+                <thead>
+                    <tr>
+                        <th>Работник</th>
+                        <th>Зарплата</th>
+                        <th>На выкуп</th>
+                        <th>Фирма</th>
+                        <th>Выкуплено</th>
+                        <th>Обед</th>
+                    </tr>
+                </thead>
+                <tbody >
+                @foreach ($wash_worker as $worker)
+                    <tr>
+                        <td>{{ $worker->general_name }}</td>
+                        <td>{{ $worker->standard_shift_wage }}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+            </div>
+            <div class="form-group text-center">
+                <button class="btn btn-primary">Зачислить</button>
+            </div>
+        </div>
     </div>
 </div>
 

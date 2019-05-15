@@ -277,6 +277,30 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
         /* удалить рабочую зону */
  Route::get('admin/workzones/delete/{workzone_id}', 'Workzones_Admin_Controller@delete_workzone')->middleware('can:admin_rights');
 
+/**** Наряды Мойка : Админ ****/
+
+    /* Страница Наряды Мойки */
+    Route::get('/admin/wash_assignments', 'EmployeesAdminController@admin_wash_assignments_index');
+
+        /* Поиск по Нарядам */
+        Route::post('/admin/wash_assignments/search/', 'EmployeesAdminController@admin_wash_assignments_search');
+
+        /* Создать наряд (Страница) */
+        Route::get('/admin/wash_assignments/create_assignment_index', 'EmployeesAdminController@admin_wash_create_assignment_index');
+            /*Создать наряд (POST) */
+            Route::post('/admin/wash_assignments/create_assignment', 'EmployeesAdminController@admin_wash_create_assignment');
+        /* Страница Наряда Мойки */
+        Route::get('/admin/wash_assignments/{id}', 'EmployeesAdminController@admin_wash_assignment');
+
+        /* Сохранить информацию о Выполненой работе */
+        Route::post('/admin/wash_assignments/id/save_complete_work', 'EmployeesAdminController@admin_wash_save_complete_work');
+            /* Удалить Выполненую работу */ 
+            Route::get('/admin/wash_assignments/id/delete_complete_work/{work_id}', 'EmployeesAdminController@admin_wash_delete_complete_work');
+        /* Сохранить информацию клиент */
+        Route::post('/admin/wash_assignments/id/save_client_info', 'EmployeesAdminController@admin_wash_save_client_info');
+        /* Сохранить настройки печати */
+        Route::post('/admin/wash_assignments/id/save_print_settings', 'EmployeesAdminController@admin_wash_save_print_settings');
+
 
 /**** Учет Мойки : Админ ****/
 
@@ -284,17 +308,30 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
     Route::get('/admin/wash', 'EmployeesAdminController@admin_wash_index');
         /* Добавления машины в мойку */
         Route::post('/admin/wash_post', 'EmployeesAdminController@admin_wash_post');
-    /* Страница Отчета Мойки */
-    Route::get('/admin/wash/report', 'EmployeesAdminController@admin_wash_report');
 
+
+    /* ВЫБОР ДАТЫ МОЙКИ */
     /* Страница Выбора даты Мойки */
-    Route::get('/admin/wash/select_date/', 'EmployeesAdminController@wash_select_date');
+    Route::get('/admin/wash/select_date/', 'EmployeesAdminController@wash_select_year');
     /* Страница Выбора даты Мойки (ГОД) */
-    Route::get('/admin/wash/select_date/{year}', 'EmployeesAdminController@wash_select_year');
+    Route::get('/admin/wash/select_date/{year}', 'EmployeesAdminController@wash_select_month');
     /* Страница Выбора даты Мойки (Месяц) */
-    Route::get('/admin/wash/select_date/{year}/{month}', 'EmployeesAdminController@wash_select_month');
+    Route::get('/admin/wash/select_date/{year}/{month}', 'EmployeesAdminController@wash_select_day');
     /* Страница Выбора даты Мойки (ДЕНЬ) */
-    Route::get('/admin/wash/select_date/{year}/{month}/{day}', 'EmployeesAdminController@wash_select_day');
+    Route::get('/admin/wash/select_date/{year}/{month}/{day}', 'EmployeesAdminController@wash_select_result');
+        /* Закрыть Кассу */
+        Route::get('/admin/wash/select_date/{year}/{month}/{day}/close_cashbox', 'EmployeesAdminController@admin_wash_close_cashbox');
+
+    /* ОТЧЕТ МОЙКИ */
+    /* Страница Выбора даты Мойки (ГОД) */
+    Route::get('/admin/wash/report/', 'EmployeesAdminController@wash_report_select_year');
+    /* Страница Выбора даты Мойки (МЕСЯЦ) */
+    Route::get('/admin/wash/report/{year}', 'EmployeesAdminController@wash_report_select_month');
+    /* Страница Выбора даты Мойки (ДЕНЬ) */
+    Route::get('/admin/wash/report/{year}/{month}', 'EmployeesAdminController@wash_report_select_day');
+    /* Страница Выбора даты Мойки (ДЕНЬ) */
+    Route::get('/admin/wash/report/{year}/{month}/{day}', 'EmployeesAdminController@wash_report_select_result');
+
 
 
 
@@ -446,7 +483,7 @@ Route::post('/admin/profitability/profitability_index/month', 'Assignments_Admin
     /* Удаление фотографий : Страница */
     Route::get('/admin/assignments/{assignment_id}/delete_photos_page', 'Assignments_Admin_Controller@delete_photos_page');
 
-    /* Настройка печати : Страница */
+    /* Настройка печати : Страница */ 
     Route::get('/admin/assignments/{assignment_id}/print_settings', 'Assignments_Admin_Controller@print_settings_page');
 
         /* Удаление фотографий : POST */

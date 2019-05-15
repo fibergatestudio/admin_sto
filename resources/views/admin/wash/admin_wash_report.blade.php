@@ -5,6 +5,7 @@
     <a href="{{ url('/admin/wash') }}"><button class="btn btn-warning">Назад</button></a>
 @endsection
 
+
 @section('content')
 <div class="form-row">
     <div class="card card-outline-secondary col-md-12">
@@ -12,7 +13,6 @@
             <div class="card-header">
                 <h3 class="mb-0">Учёт мойки, Таблица:</h3>
             </div>
-        </form>
         
             <hr>
             <table id="table" class="table">

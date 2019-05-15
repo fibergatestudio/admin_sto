@@ -62,6 +62,16 @@
 						</li>
 
 						<li class="nav-item">
+							<a href="{{ url('/admin/wash_assignments') }}" class="nav-link {{ request()->is('admin/wash_assignments') ? 'active' : ''}}">
+
+								<i class="icon-fan"></i>
+								<span>
+									Наряды Мойка
+								</span>
+							</a>
+						</li>
+
+						<li class="nav-item">
 							<a href="{{ url('/admin/wash') }}" class="nav-link {{ request()->is('admin/wash') ? 'active' : ''}}">
 
 								<i class="icon-fan"></i>
