@@ -1,0 +1,18 @@
+thead.export-data > tr, tfoot.export-data td, tr.export-note > td{
+	background: #c2b1e3;
+	text-align: center;
+	vertical-align: middle;
+}
+tbody.export-data > tr > td, td.export-txt {
+	text-align: center;
+}
+.export-data tr > td, .export-line > td, tr.export-note, tr.export-note-txt > td {
+    border: 1px solid #000000;
+}
+tr > td.export-total:first-child{
+	text-align: right;
+}
+tr > td.export-total:last-child{
+	border: 1px solid #000000;
+	text-align: right;
+}

@@ -36,6 +36,8 @@ use App\Month_profitability;
 use App\Work_direction;
 use App\New_sub_assignment;
 
+use Excel;
+
 class Assignments_Admin_Controller extends Controller
 {
 
@@ -47,6 +49,7 @@ class Assignments_Admin_Controller extends Controller
             DB::table('assignments')
                 ->join('employees', 'assignments.responsible_employee_id', '=', 'employees.id')
                 ->join('cars_in_service', 'assignments.car_id', '=', 'cars_in_service.id')
+                ->join('new_sub_assignments', 'assignments.id', '=', 'new_sub_assignments.assignment_id')
                 ->orderBy('order','ASC')
                 ->select(
                         'assignments.*',
@@ -56,12 +59,565 @@ class Assignments_Admin_Controller extends Controller
                         'cars_in_service.release_year AS release_year',
                         'cars_in_service.reg_number AS reg_number',
                         'cars_in_service.car_color AS car_color',
-                        'cars_in_service.workzone AS workzone'
+                        'new_sub_assignments.d_table_workzone AS assignment_workzone'
                     )
+                ->where('new_sub_assignments.work_row_index', '<>', null)
                 ->get();
-        $workzone_data = DB::table('workzones')->get();       
-//echo '<pre>'.print_r($assignments_data,true).'</pre>';
+        $workzone_data = DB::table('workzones')->get();
+
+        //echo '<pre>'.print_r($assignments_data,true).'</pre>';
+
+        // Собираем зональные наряды в массив
+        $temp_arr_obj = [];
+        $temp_arr_workzone = [];
+        $temp_id = $assignments_data[0]->order;
+        $i = 0;
+        
+        for ( ;$i < count($assignments_data); $i++) { 
+            if ($temp_id == $assignments_data[$i]->order) {
+                $temp_arr_workzone[] = $assignments_data[$i]->assignment_workzone;
+            }
+            else{
+                $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                $temp_id = $assignments_data[$i]->order;
+                $temp_arr_workzone = [];
+                $temp_arr_workzone[] = $assignments_data[$i]->assignment_workzone;
+            }                
+        }
+
+        $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+        $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+
+        $assignments_data = $temp_arr_obj;
+      
+        //echo '<pre>'.print_r($assignments_data,true).'</pre>';
         return view('assignments_admin.assignments_admin_index', ['assignments' => $assignments_data, 'workzone_data' => $workzone_data]);
+    }
+
+
+    // Excel
+    public function exportExcel($doc_name){
+
+        switch ($doc_name) {
+            case 'invoice_for_payment':
+            Excel::create('New file', function($excel) {
+                $excel->sheet('New sheet', function($sheet) {
+                    $sheet->loadView('templates_for_excel.invoice_for_payment', array('assignments' => Assignment::all()))->setStyle(array(
+                        'font' => array(
+                            'name'      =>  'Calibri',
+                            'size'      =>  8,
+                        )
+                    ));
+                });
+            })->download('xls');
+                break;
+
+            case 'work_order':
+            Excel::create('New file', function($excel) {
+                $excel->sheet('New sheet', function($sheet) {
+                    $sheet->loadView('templates_for_excel.work_order', array('assignments' => Assignment::all()))->setStyle(array(
+                        'font' => array(
+                            'name'      =>  'Calibri',
+                            'size'      =>  8,
+                        )
+                    ));
+                });
+            })->download('xls');
+                break;
+
+            case 'invoice':
+            Excel::create('New file', function($excel) {
+                $excel->sheet('New sheet', function($sheet) {
+                    $sheet->loadView('templates_for_excel.invoice', array('assignments' => Assignment::all()))->setStyle(array(
+                        'font' => array(
+                            'name'      =>  'Calibri',
+                            'size'      =>  8,
+                        )
+                    ));
+                });
+            })->download('xls');
+                break;
+            
+            case 'inner_outfit':
+            Excel::create('New file', function($excel) {
+                $excel->sheet('New sheet', function($sheet) {
+                    $sheet->loadView('templates_for_excel.inner_outfit', array('assignments' => Assignment::all()))->setStyle(array(
+                        'font' => array(
+                            'name'      =>  'Calibri',
+                            'size'      =>  8,
+                        )
+                    ));
+                });
+            })->download('xls');
+                break;
+
+            case 'tax_invoice':
+            Excel::create('New file', function($excel) {
+                $excel->sheet('New sheet', function($sheet) {
+                    $sheet->loadView('templates_for_excel.tax_invoice', array('assignments' => Assignment::all()))->setStyle(array(
+                        'font' => array(
+                            'name'      =>  'Calibri',
+                            'size'      =>  8,
+                        )
+                    ));
+                });
+            })->download('xls');
+                break;
+            
+            default:
+                return false;
+                break;
+        }
+       
+    }
+
+    
+    /* Поиск нарядов */
+    public function search_assignment(Request $request){
+        /* Получаем всю нужную информацию по нарядам */
+        $assignments_data =
+            DB::table('assignments')
+                ->join('employees', 'assignments.responsible_employee_id', '=', 'employees.id')
+                ->join('cars_in_service', 'assignments.car_id', '=', 'cars_in_service.id')
+                ->join('new_sub_assignments', 'assignments.id', '=', 'new_sub_assignments.assignment_id')
+                ->orderBy('order','ASC')
+                ->select(
+                        'assignments.*',
+                        'employees.general_name AS employee_name',
+                        'cars_in_service.general_name AS car_name',
+                        'cars_in_service.vin_number AS vin_number',
+                        'cars_in_service.release_year AS release_year',
+                        'cars_in_service.reg_number AS reg_number',
+                        'cars_in_service.car_color AS car_color',
+                        'cars_in_service.engine_capacity AS engine_capacity',
+                        'cars_in_service.fuel_type AS fuel_type',
+                        'new_sub_assignments.d_table_workzone AS assignment_workzone'
+                    )
+                ->where('new_sub_assignments.work_row_index', '<>', null)
+                ->get();
+        $workzone_data = DB::table('workzones')->get();
+
+        // Собираем зональные наряды в массив и фильтруем наряды согласно поиску 
+        $temp_arr_obj = [];
+        $temp_arr_workzone = [];
+        $temp_id = $assignments_data[0]->order;
+        $i = 0;
+        
+        for ( ;$i < count($assignments_data); $i++) { 
+            if ($temp_id == $assignments_data[$i]->order) {
+                $temp_arr_workzone[] = $assignments_data[$i]->assignment_workzone;
+            }
+            else{
+                if ($request->reg_number) {
+                    if ($assignments_data[$i-1]->reg_number === $request->reg_number) {
+                        $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                        $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                    }
+                }
+                elseif ($request->vin_number) {
+                    if ($assignments_data[$i-1]->vin_number === $request->vin_number) {
+                        $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                        $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                    }
+                }
+                elseif ($request->num_assignment) {
+                    if ($assignments_data[$i-1]->id === $request->num_assignment) {
+                        $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                        $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                    }
+                }
+                elseif ($request->car_brand) {
+                    if ($request->car_model) {
+                        if (stristr($assignments_data[$i-1]->car_name, $request->car_brand.' '.$request->car_model) !== FALSE) {
+                            if ($request->release_year) {
+                                if ($request->release_year == $assignments_data[$i-1]->release_year) {
+                                    if ($request->engine_capacity) {
+                                        if ($request->engine_capacity == $assignments_data[$i-1]->engine_capacity) {
+                                            if ($request->fuel_type) {
+                                                if ($assignments_data[$i-1]->fuel_type === $request->fuel_type) {
+                                                    $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                                    $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                                }
+                                            }
+                                            else{
+                                                $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                                $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                            }                                            
+                                        }
+                                    }
+                                    else{
+                                        if ($request->fuel_type) {
+                                            if ($assignments_data[$i-1]->fuel_type === $request->fuel_type) {
+                                                $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                                $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                            }
+                                        }
+                                        else{
+                                            $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                            $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                        }
+                                    }
+                                }
+                            }
+                            else{
+                                if ($request->engine_capacity) {
+                                    if ($request->engine_capacity == $assignments_data[$i-1]->engine_capacity) {
+                                        if ($request->fuel_type) {
+                                            if ($assignments_data[$i-1]->fuel_type === $request->fuel_type) {
+                                                $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                                $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                            }
+                                        }
+                                        else{
+                                            $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                            $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                        }                                            
+                                    }
+                                }
+                                else{
+                                    if ($request->fuel_type) {
+                                        if ($assignments_data[$i-1]->fuel_type === $request->fuel_type) {
+                                            $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                            $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                        }
+                                    }
+                                    else{
+                                        $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                        $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                    }
+                                }
+                            }
+                        }
+                    }                    
+                    else{
+                        if (stristr($assignments_data[$i-1]->car_name, $request->car_brand) !== FALSE) {
+                            if ($request->release_year) {
+                                if ($request->release_year == $assignments_data[$i-1]->release_year) {
+                                    if ($request->engine_capacity) {
+                                        if ($request->engine_capacity == $assignments_data[$i-1]->engine_capacity) {
+                                            if ($request->fuel_type) {
+                                                if ($assignments_data[$i-1]->fuel_type === $request->fuel_type) {
+                                                    $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                                    $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                                }
+                                            }
+                                            else{
+                                                $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                                $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                            }                                            
+                                        }
+                                    }
+                                    else{
+                                        if ($request->fuel_type) {
+                                            if ($assignments_data[$i-1]->fuel_type === $request->fuel_type) {
+                                                $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                                $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                            }
+                                        }
+                                        else{
+                                            $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                            $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                        }
+                                    }
+                                }
+                            }
+                            else{
+                                if ($request->engine_capacity) {
+                                    if ($request->engine_capacity == $assignments_data[$i-1]->engine_capacity) {
+                                        if ($request->fuel_type) {
+                                            if ($assignments_data[$i-1]->fuel_type === $request->fuel_type) {
+                                                $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                                $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                            }
+                                        }
+                                        else{
+                                            $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                            $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                        }                                            
+                                    }
+                                }
+                                else{
+                                    if ($request->fuel_type) {
+                                        if ($assignments_data[$i-1]->fuel_type === $request->fuel_type) {
+                                            $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                            $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                        }
+                                    }
+                                    else{
+                                        $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                        $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                    }
+                                }
+                            }
+                        }
+                    }                                        
+                }
+                elseif ($request->release_year) {
+                    if ($request->release_year == $assignments_data[$i-1]->release_year) {
+                        if ($request->engine_capacity) {
+                            if ($request->engine_capacity == $assignments_data[$i-1]->engine_capacity) {
+                                if ($request->fuel_type) {
+                                    if ($assignments_data[$i-1]->fuel_type === $request->fuel_type) {
+                                        $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                        $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                    }
+                                }
+                                else{
+                                    $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                    $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                }                                            
+                            }
+                        }
+                        else{
+                            if ($request->fuel_type) {
+                                if ($assignments_data[$i-1]->fuel_type === $request->fuel_type) {
+                                    $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                    $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                }
+                            }
+                            else{
+                                $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                            }
+                        }
+                    }
+                }
+                elseif ($request->engine_capacity) {
+                    if ($request->engine_capacity == $assignments_data[$i-1]->engine_capacity) {
+                        if ($request->fuel_type) {
+                            if ($assignments_data[$i-1]->fuel_type === $request->fuel_type) {
+                                $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                            }
+                        }
+                        else{
+                            $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                            $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                        }                                            
+                    }
+                }
+                elseif ($request->fuel_type) {
+                    if ($assignments_data[$i-1]->fuel_type === $request->fuel_type) {
+                        $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                        $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                    }
+                }
+                else{
+                    $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                    $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                }
+                
+                $temp_id = $assignments_data[$i]->order;
+                $temp_arr_workzone = [];
+                $temp_arr_workzone[] = $assignments_data[$i]->assignment_workzone;
+            }                
+        }
+
+        if ($request->reg_number) {
+            if ($assignments_data[$i-1]->reg_number === $request->reg_number) {
+                $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+            }
+        }
+        elseif ($request->vin_number) {
+            if ($assignments_data[$i-1]->vin_number === $request->vin_number) {
+                $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+            }
+        }
+        elseif ($request->num_assignment) {
+            if ($assignments_data[$i-1]->id === $request->num_assignment) {
+                $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+            }
+        }
+        elseif ($request->car_brand) {
+            if ($request->car_model) {
+                if (stristr($assignments_data[$i-1]->car_name, $request->car_brand.' '.$request->car_model) !== FALSE) {
+                    if ($request->release_year) {
+                        if ($request->release_year == $assignments_data[$i-1]->release_year) {
+                            if ($request->engine_capacity) {
+                                if ($request->engine_capacity == $assignments_data[$i-1]->engine_capacity) {
+                                    if ($request->fuel_type) {
+                                        if ($assignments_data[$i-1]->fuel_type === $request->fuel_type) {
+                                            $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                            $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                        }
+                                    }
+                                    else{
+                                        $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                        $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                    }                                            
+                                }
+                            }
+                            else{
+                                if ($request->fuel_type) {
+                                    if ($assignments_data[$i-1]->fuel_type === $request->fuel_type) {
+                                        $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                        $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                    }
+                                }
+                                else{
+                                    $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                    $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                }
+                            }
+                        }
+                    }
+                    else{
+                        if ($request->engine_capacity) {
+                            if ($request->engine_capacity == $assignments_data[$i-1]->engine_capacity) {
+                                if ($request->fuel_type) {
+                                    if ($assignments_data[$i-1]->fuel_type === $request->fuel_type) {
+                                        $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                        $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                    }
+                                }
+                                else{
+                                    $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                    $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                }                                            
+                            }
+                        }
+                        else{
+                            if ($request->fuel_type) {
+                                if ($assignments_data[$i-1]->fuel_type === $request->fuel_type) {
+                                    $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                    $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                }
+                            }
+                            else{
+                                $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                            }
+                        }
+                    }
+                }
+            }                    
+            else{
+                if (stristr($assignments_data[$i-1]->car_name, $request->car_brand) !== FALSE) {
+                    if ($request->release_year) {
+                        if ($request->release_year == $assignments_data[$i-1]->release_year) {
+                            if ($request->engine_capacity) {
+                                if ($request->engine_capacity == $assignments_data[$i-1]->engine_capacity) {
+                                    if ($request->fuel_type) {
+                                        if ($assignments_data[$i-1]->fuel_type === $request->fuel_type) {
+                                            $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                            $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                        }
+                                    }
+                                    else{
+                                        $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                        $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                    }                                            
+                                }
+                            }
+                            else{
+                                if ($request->fuel_type) {
+                                    if ($assignments_data[$i-1]->fuel_type === $request->fuel_type) {
+                                        $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                        $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                    }
+                                }
+                                else{
+                                    $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                    $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                }
+                            }
+                        }
+                    }
+                    else{
+                        if ($request->engine_capacity) {
+                            if ($request->engine_capacity == $assignments_data[$i-1]->engine_capacity) {
+                                if ($request->fuel_type) {
+                                    if ($assignments_data[$i-1]->fuel_type === $request->fuel_type) {
+                                        $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                        $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                    }
+                                }
+                                else{
+                                    $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                    $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                }                                            
+                            }
+                        }
+                        else{
+                            if ($request->fuel_type) {
+                                if ($assignments_data[$i-1]->fuel_type === $request->fuel_type) {
+                                    $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                    $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                                }
+                            }
+                            else{
+                                $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                            }
+                        }
+                    }
+                }
+            }                                        
+        }
+        elseif ($request->release_year) {
+            if ($request->release_year == $assignments_data[$i-1]->release_year) {
+                if ($request->engine_capacity) {
+                    if ($request->engine_capacity == $assignments_data[$i-1]->engine_capacity) {
+                        if ($request->fuel_type) {
+                            if ($assignments_data[$i-1]->fuel_type === $request->fuel_type) {
+                                $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                                $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                            }
+                        }
+                        else{
+                            $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                            $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                        }                                            
+                    }
+                }
+                else{
+                    if ($request->fuel_type) {
+                        if ($assignments_data[$i-1]->fuel_type === $request->fuel_type) {
+                            $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                            $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                        }
+                    }
+                    else{
+                        $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                        $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                    }
+                }
+            }
+        }
+        elseif ($request->engine_capacity) {
+            if ($request->engine_capacity == $assignments_data[$i-1]->engine_capacity) {
+                if ($request->fuel_type) {
+                    if ($assignments_data[$i-1]->fuel_type === $request->fuel_type) {
+                        $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                        $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                    }
+                }
+                else{
+                    $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                    $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                }                                            
+            }
+        }
+        elseif ($request->fuel_type) {
+            if ($assignments_data[$i-1]->fuel_type === $request->fuel_type) {
+                $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+            }
+        }
+        else{
+            $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+            $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+        }
+
+        $assignments_data = $temp_arr_obj;
+      
+        /*echo '<pre>'.print_r($assignments_data,true).'</pre>';
+        die();*/
+        return view('assignments_admin.assignments_admin_search', ['assignments' => $assignments_data, 'workzone_data' => $workzone_data]);
     }
 
     /* Добавления наряда: страница с формой */
@@ -92,6 +648,9 @@ class Assignments_Admin_Controller extends Controller
         $assignment_description = $request->assignment_description;
         $car_id = $request->car_id;
 
+        // Получаем кол-во нарядов
+        $total_assignments = Assignment::count();
+
         /* Информация о клиенте и его машине для телеграма */
         $client = Client::get_client_by_car_id($car_id);
         $car = Cars_in_service::find($car_id);
@@ -103,6 +662,7 @@ class Assignments_Admin_Controller extends Controller
         $new_assignment->car_id = $car_id;
         $new_assignment->date_of_creation = date('Y-m-d');
         $new_assignment->status = 'active';
+        $new_assignment->order = $total_assignments + 1;
         /* TEST confirmed */
         $new_assignment->confirmed = 'unconfirmed';
         /* end TEST confirmed */
@@ -426,8 +986,38 @@ class Assignments_Admin_Controller extends Controller
     /* Добавление нового зонального наряда : POST */
     public function add_new_sub_assignment_post(Request $request){
 
+        /* Удаление нового зонального наряда : POST */
+        if (!empty($request->valueRow) AND substr($request->valueRow, 2, 3) !== '000') {
+            // Получаем данные из запроса
+            $row_index = $request->valueRow;
+            $assignment_id = $request->assignmentId;        
+
+            DB::table('new_sub_assignments')
+            ->where([
+                ['assignment_id','=', $assignment_id],
+                ['work_row_index','=', $row_index]
+            ])
+            ->delete();
+
+            DB::table('new_sub_assignments')
+            ->where([
+                ['assignment_id','=', $assignment_id],
+                ['spares_row_index','=', $row_index]
+            ])
+            ->delete();
+
+            DB::table('assignments_expenses')
+            ->where([
+                ['assignment_id','=', $assignment_id],
+                ['description','=', $row_index]
+            ])
+            ->delete();
+            
+            return $row_index;
+        }
+        
         /* Получаем данные из запроса */
-        $sub_assignment_arr = $request->valueArr;
+        $sub_assignment_arr = $request->valueArr;       
         
         $temp_arr = [];
         for ($i=0; $i < count($sub_assignment_arr); $i++) {
@@ -438,12 +1028,14 @@ class Assignments_Admin_Controller extends Controller
 
         $is_post_work_row = null;
         $is_post_spares_row = null;
+        $row_index = null;
 
         if (isset($temp_arr['work_row_index'])) {
             $is_post_work_row = New_sub_assignment::where([
                 ['assignment_id','=', $temp_arr['assignment_id']],
                 ['work_row_index','=', $temp_arr['work_row_index']]
             ])->first();
+            $row_index = $temp_arr['work_row_index'];
         }
         
         if (isset($temp_arr['spares_row_index'])) {
@@ -451,11 +1043,18 @@ class Assignments_Admin_Controller extends Controller
                 ['assignment_id','=', $temp_arr['assignment_id']],
                 ['spares_row_index','=', $temp_arr['spares_row_index']]
             ])->first();
-        }        
+            $row_index = $temp_arr['spares_row_index'];
+        }
+        
+        $assignment_expenses = Assignments_expense::where([
+                ['assignment_id','=', $temp_arr['assignment_id']],
+                ['description','=', $row_index]
+        ])->first();
 
         /* Создание нового зонального наряда */
         if (!$is_post_work_row AND isset($temp_arr['work_row_index'])) {
             $sub_assignment = new New_sub_assignment();
+            $sub_assignment_expenses = new Assignments_expense();
             $sub_assignment->assignment_id = $temp_arr['assignment_id'];
             $sub_assignment->d_table_work_direction = $temp_arr['d_table_work_direction'];
             $sub_assignment->number_sub_assignment = $temp_arr['number_sub_assignment'];
@@ -471,10 +1070,17 @@ class Assignments_Admin_Controller extends Controller
             $sub_assignment->work_sum_row = $temp_arr['d_table_quantity']*$temp_arr['d_table_price'];           
             $sub_assignment->work_is_locked = $temp_arr['work_is_locked'];            
             $sub_assignment->status = 'active';
+            $sub_assignment_expenses->amount = ($sub_assignment->work_sum_row) ? $sub_assignment->work_sum_row : 0;
+            $sub_assignment_expenses->assignment_id = $temp_arr['assignment_id'];
+            $sub_assignment_expenses->basis = 'Зарплата сотруднику';
+            $sub_assignment_expenses->description = $temp_arr['work_row_index'];
+            $sub_assignment_expenses->currency = $temp_arr['d_table_currency'];
             $sub_assignment->save();
+            $sub_assignment_expenses->save();
         }
         elseif (!$is_post_spares_row AND isset($temp_arr['spares_row_index'])) {
             $sub_assignment = new New_sub_assignment();
+            $sub_assignment_expenses = new Assignments_expense();
             $sub_assignment->assignment_id = $temp_arr['assignment_id'];
             $sub_assignment->d_table_work_direction = $temp_arr['d_table_work_direction'];
             $sub_assignment->number_sub_assignment = $temp_arr['number_sub_assignment'];
@@ -488,7 +1094,13 @@ class Assignments_Admin_Controller extends Controller
             $sub_assignment->spares_sum_row = $temp_arr['d_table_spares_quantity']*$temp_arr['d_table_spares_price'];
             $sub_assignment->spares_is_locked = $temp_arr['spares_is_locked'];
             $sub_assignment->status = 'active';
+            $sub_assignment_expenses->amount = ($sub_assignment->spares_sum_row) ? $sub_assignment->spares_sum_row : 0;
+            $sub_assignment_expenses->assignment_id = $temp_arr['assignment_id'];
+            $sub_assignment_expenses->basis = 'Расходы на запчасти';
+            $sub_assignment_expenses->description = $temp_arr['spares_row_index'];
+            $sub_assignment_expenses->currency = $temp_arr['d_table_spares_currency'];
             $sub_assignment->save();
+            $sub_assignment_expenses->save();
         }
         /* Обновление нового зонального наряда */
         elseif($is_post_work_row){
@@ -502,7 +1114,21 @@ class Assignments_Admin_Controller extends Controller
             $is_post_work_row->d_table_price = $temp_arr['d_table_price'];
             $is_post_work_row->d_table_currency = $temp_arr['d_table_currency'];
             $is_post_work_row->work_sum_row = $temp_arr['d_table_quantity']*$temp_arr['d_table_price'];            
-            $is_post_work_row->work_is_locked = $temp_arr['work_is_locked'];            
+            $is_post_work_row->work_is_locked = $temp_arr['work_is_locked'];
+            if ($assignment_expenses) {
+                $assignment_expenses->amount = ($is_post_work_row->work_sum_row) ? $is_post_work_row->work_sum_row : 0;
+                $assignment_expenses->currency = $temp_arr['d_table_currency'];
+                $assignment_expenses->save();
+            }
+            else{
+                $sub_assignment_expenses = new Assignments_expense();
+                $sub_assignment_expenses->amount = ($is_post_work_row->work_sum_row) ? $is_post_work_row->work_sum_row : 0;
+                $sub_assignment_expenses->assignment_id = $temp_arr['assignment_id'];
+                $sub_assignment_expenses->basis = 'Зарплата сотруднику';
+                $sub_assignment_expenses->description = $temp_arr['work_row_index'];
+                $sub_assignment_expenses->currency = $temp_arr['d_table_currency'];
+                $sub_assignment_expenses->save();
+            }                        
             $is_post_work_row->save();
         }
         elseif ($is_post_spares_row) {
@@ -515,6 +1141,20 @@ class Assignments_Admin_Controller extends Controller
             $is_post_spares_row->d_table_spares_currency = $temp_arr['d_table_spares_currency'];
             $is_post_spares_row->spares_sum_row = $temp_arr['d_table_spares_quantity']*$temp_arr['d_table_spares_price'];
             $is_post_spares_row->spares_is_locked = $temp_arr['spares_is_locked'];
+            if ($assignment_expenses) {
+                $assignment_expenses->amount = ($is_post_spares_row->spares_sum_row) ? $is_post_spares_row->spares_sum_row : 0;
+                $assignment_expenses->currency = $temp_arr['d_table_spares_currency'];
+                $assignment_expenses->save();
+            }
+            else{
+                $sub_assignment_expenses = new Assignments_expense();
+                $sub_assignment_expenses->amount = ($is_post_spares_row->spares_sum_row) ? $is_post_spares_row->spares_sum_row : 0;
+                $sub_assignment_expenses->assignment_id = $temp_arr['assignment_id'];
+                $sub_assignment_expenses->basis = 'Расходы на запчасти';
+                $sub_assignment_expenses->description = $temp_arr['spares_row_index'];
+                $sub_assignment_expenses->currency = $temp_arr['d_table_spares_currency'];
+                $sub_assignment_expenses->save();
+            }            
             $is_post_spares_row->save();
         }
 

@@ -387,6 +387,9 @@ Route::post('/admin/profitability/profitability_index/month', 'Assignments_Admin
         /* Добавление наряда на изначально выбранную машину : POST */
         Route::post('/admin/assignments/add', 'Assignments_Admin_Controller@add_assignment_page_post');
 
+    /* Excel */
+    Route::get('admin/assignments/view/export/{doc_name}', 'Assignments_Admin_Controller@exportExcel')->name('exportExcelView');
+
     /* Просмотр наряда : страница */
     Route::get('admin/assignments/view/{assignment_id}', 'Assignments_Admin_Controller@view_assignment');
     /* Обновление (перестановка) елементов таблицы */
@@ -442,6 +445,10 @@ Route::post('/admin/profitability/profitability_index/month', 'Assignments_Admin
         Route::post('/admin/assignments/delete_photo_from_assignment', 'Assignments_Admin_Controller@delete_photos_post');
 
     /* АДМИН УПРАВЛЕНИЕ НАРЯДАМИ
+
+    /* Админ поиск наряда : POST */
+    Route::post('/admin/assignments/search_assignment', 'Assignments_Admin_Controller@search_assignment');
+    
     /* Админ страница управления одним нарядом */
     Route::get('/admin/manage_assignment/{assignment_id}', 'Assignments_Admin_Controller@manage_assignment');
 
