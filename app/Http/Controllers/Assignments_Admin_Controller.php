@@ -65,32 +65,34 @@ class Assignments_Admin_Controller extends Controller
                 ->get();
         $workzone_data = DB::table('workzones')->get();
 
-        //echo '<pre>'.print_r($assignments_data,true).'</pre>';
+        /*echo '<pre>'.print_r($assignments_data,true).'</pre>';
+        var_dump(empty($assignments_data));*/
 
         // Собираем зональные наряды в массив
-        $temp_arr_obj = [];
-        $temp_arr_workzone = [];
-        $temp_id = $assignments_data[0]->order;
-        $i = 0;
-        
-        for ( ;$i < count($assignments_data); $i++) { 
-            if ($temp_id == $assignments_data[$i]->order) {
-                $temp_arr_workzone[] = $assignments_data[$i]->assignment_workzone;
+        if($assignments_data->count()){
+            $temp_arr_obj = [];
+            $temp_arr_workzone = [];
+            $temp_id = $assignments_data[0]->order;
+            $i = 0;
+
+            for ( ;$i < count($assignments_data); $i++) { 
+                if ($temp_id == $assignments_data[$i]->order) {
+                    $temp_arr_workzone[] = $assignments_data[$i]->assignment_workzone;
+                }
+                else{
+                    $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                    $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                    $temp_id = $assignments_data[$i]->order;
+                    $temp_arr_workzone = [];
+                    $temp_arr_workzone[] = $assignments_data[$i]->assignment_workzone;
+                }                
             }
-            else{
-                $temp_arr_obj[$i-1] = $assignments_data[$i-1];
-                $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
-                $temp_id = $assignments_data[$i]->order;
-                $temp_arr_workzone = [];
-                $temp_arr_workzone[] = $assignments_data[$i]->assignment_workzone;
-            }                
+
+            $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+            $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+
+            $assignments_data = $temp_arr_obj;
         }
-
-        $temp_arr_obj[$i-1] = $assignments_data[$i-1];
-        $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
-
-        $assignments_data = $temp_arr_obj;
-      
         //echo '<pre>'.print_r($assignments_data,true).'</pre>';
         return view('assignments_admin.assignments_admin_index', ['assignments' => $assignments_data, 'workzone_data' => $workzone_data]);
     }
