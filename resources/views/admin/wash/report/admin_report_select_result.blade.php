@@ -3,6 +3,9 @@
 @section('page_name')
     Отчет мойки
     <a href="{{ url('/admin/wash/report/'.$year.'/'.$month) }}"><button class="btn btn-warning">Назад</button></a>
+    <a href="{{ url('/admin/wash/report/') }}"><button class="btn btn-primary">Изменить Год</button></a>
+    <a href="{{ url('/admin/wash/report/'.$year) }}"><button class="btn btn-primary">Изменить Месяц</button></a>
+    <a href="{{ url('/admin/wash/report/'.$year.'/'.$month) }}"><button class="btn btn-primary">Изменить День</button></a>
 @endsection
 
 @section('content')

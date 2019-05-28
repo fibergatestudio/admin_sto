@@ -22,6 +22,7 @@ class CreateCarWashCompleteWorkTable extends Migration
             $table->string('amount')->nullable();
             $table->string('price')->nullable();
             $table->string('sum')->nullable();
+            $table->string('lock')->default('locked')->nullable();
             $table->timestamps();
         });
     }

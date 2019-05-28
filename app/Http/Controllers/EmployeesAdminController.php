@@ -27,7 +27,9 @@ use App\Car_wash_assignments;
 use App\Car_wash_clients;
 use App\Car_wash_print_settings;
 use App\Car_wash_complete_work;
-
+//На скачивание EXCEL
+use App\Exports\AssignOrder;
+use Maatwebsite\Excel\Facades\Excel;
 
 
 use \Crypt;
@@ -120,6 +122,8 @@ class EmployeesAdminController extends Controller
         $create_employee_log_entry->type = '';
         $create_employee_log_entry->save();
 
+        $workzones = DB::table('workzones')->get();
+
 
         /* Вернуться ко списку сотрудников
         return redirect()->route('view_employees'); */
@@ -128,6 +132,7 @@ class EmployeesAdminController extends Controller
         return view('employees_admin.employee_edit_admin',
         [
             'employee' => $employee,
+            'workzones' => $workzones
         ]);
     }
 
@@ -1274,11 +1279,13 @@ class EmployeesAdminController extends Controller
         )
         ->get();
 
-
+        $wash_clients = DB::table('car_wash_clients')->get();
 
         return view('admin.wash.wash_assignments.admin_wash_assignments',
         [
             'car_wash' => $car_wash,
+            'wash_clients' => $wash_clients
+            
         ]);
     }
 
@@ -1306,6 +1313,28 @@ class EmployeesAdminController extends Controller
         // dd($array_implode);
         
 
+
+        return back();
+    }
+
+    public function admin_wash_assignment_set_lock($id){
+
+        DB::table('car_wash_complete_work')
+        ->where('id', '=', $id)
+        ->update([
+            'lock' => 'locked'
+         ]);
+
+        return back();
+    }
+
+    public function admin_wash_assignment_unset_lock($id){
+
+        DB::table('car_wash_complete_work')
+        ->where('id', '=', $id)
+        ->update([
+            'lock' => 'unlocked'
+         ]);
 
         return back();
     }
@@ -1365,6 +1394,17 @@ class EmployeesAdminController extends Controller
 
         return back();
     }
+    /* Скачать */
+
+    public function export_assign_order($id) 
+    {
+
+        //return Excel::download(new AssignOrder, 'orders.xlsx');
+        return Excel::download(new AssignOrder($id), 'orders.xlsx');
+
+
+    }
+
 
     /* 
     ********** Учёт мойки *************

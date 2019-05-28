@@ -291,6 +291,13 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
             Route::post('/admin/wash_assignments/create_assignment', 'EmployeesAdminController@admin_wash_create_assignment');
         /* Страница Наряда Мойки */
         Route::get('/admin/wash_assignments/{id}', 'EmployeesAdminController@admin_wash_assignment');
+            /* Скачать */
+            Route::get('/admin/wash_assignments/{id}/assign_order_download', 'EmployeesAdminController@export_assign_order');
+
+        /* Заблокировать (Замок) */
+        Route::get('/admin/wash_assignments/{id}/set_lock', 'EmployeesAdminController@admin_wash_assignment_set_lock');
+        /* Разаблокировать (Замок) */
+        Route::get('/admin/wash_assignments/{id}/unset_lock', 'EmployeesAdminController@admin_wash_assignment_unset_lock');
 
         /* Сохранить информацию о Выполненой работе */
         Route::post('/admin/wash_assignments/id/save_complete_work', 'EmployeesAdminController@admin_wash_save_complete_work');

@@ -3,14 +3,26 @@
 @section('page_name')
     <div class="row">
         Наряд Мойка #{{ $id }}
-        <div class="dropdown">
-            <a href="{{ url()->previous() }}"><button class="btn btn-warning">Назад</button></a>
-            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Скачать
-            <ul class="dropdown-menu">
-                <li><a href="#">Заказ на наряд</a></li>
-                <li><a href="#">Счет на оплату</a></li>
-                <li><a href="#">Инвойс</a></li>
-                <li><a href="#">Накладная</a></li>
+        <a href="{{ url()->previous() }}"><button class="btn btn-warning">Назад</button></a>
+        <div class="dropdown"> 
+            <a class="dropdown-toggle btn btn-primary" style="margin-left: -2px;" data-toggle="dropdown" href="#">Скачать</a>
+            <ul class="dropdown-menu"  role="menu" aria-labelledby="dropdownMenu">
+                <li> 
+                    <a tabindex="-1" class="btn" href="#">Заказ на наряд</a>
+                </li>
+                <li class="divider"></li>
+                <li> 
+                    <a tabindex="-1" class="btn" href="#">Счет на оплату</a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a tabindex="-1" class="btn" href="#">Инвойс</a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a tabindex="-1" class="btn" href="#">Накладная</a>
+                </li>
+                <li class="divider"></li>
             </ul>
         </div>
     </div>
@@ -55,7 +67,11 @@
                                 <td> <input class="form-control" value="{{ $work->sum }}" disabled/></td>
                                 <td>
                                     <a href="{{ url('/admin/wash_assignments/id/delete_complete_work/'.$work->id) }}"><button class="btn btn-warning">X</button></a>
-
+                                    @if ($work->lock == 'locked')
+                                    <a href="{{ url('/admin/wash_assignments/'. $id .'/unset_lock') }}"><button class="btn btn-warning"><i class="icon-lock2"></i></button></a>
+                                    @elseif ($work->lock == 'unlocked')
+                                    <a href="{{ url('/admin/wash_assignments/'. $id .'/set_lock') }}"><button class="btn btn-warning"><i class="icon-unlocked2"></i></button></a>
+                                    @endif
                                 </td>
                             </tr>
                     @endforeach

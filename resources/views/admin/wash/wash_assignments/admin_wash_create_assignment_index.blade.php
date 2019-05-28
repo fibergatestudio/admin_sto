@@ -87,7 +87,7 @@
                             </div> -->
                             <hr>
                             <div class="form-row col-md-12">
-                                <button type="submit" class="btn btn-primary">Сохранить</button>
+                                <button type="submit" class="btn btn-primary">Добавить</button>
                             </div>
                         </div>
                         </form>

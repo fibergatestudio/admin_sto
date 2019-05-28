@@ -3,6 +3,8 @@
 @section('page_name')
     Отчет мойки
     <a href="{{ url()->previous() }}"><button class="btn btn-warning">Назад</button></a>
+    <a href="{{ url('/admin/wash/select_date') }}"><button class="btn btn-primary">Изменить Год</button></a>
+    <a href="{{ url('/admin/wash/select_date/'.$year) }}"><button class="btn btn-primary">Изменить Месяц</button></a>
 @endsection
 
 @section('content')

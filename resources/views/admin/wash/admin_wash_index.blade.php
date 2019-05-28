@@ -2,7 +2,7 @@
 
 @section('page_name')
     Учёт мойки
-        <a href="{{ url('/admin/wash/report') }}"><button class="btn btn-primary">Отчет</button></a>
+        <a href="{{ url('/admin/wash/report/'.$year.'/'.$month.'/'.$day) }}"><button class="btn btn-primary">Отчет</button></a>
         <a href="{{ url('/admin/wash/select_date') }}"><button class="btn btn-primary">Выбрать дату</button></a>
 @endsection
 
@@ -30,12 +30,12 @@
 
                     <div class="form-group col-md-3">
                         <label>Номер</label>
-                        <input type="number" name="car_number" class="form-control" required>
+                        <input type="text" name="car_number" class="form-control" required>
                     </div>
 
                     <div class="form-group col-md-3">
                         <label>Номер прицепа</label>
-                        <input type="number" name="trailer_number" class="form-control" required>
+                        <input type="text" name="trailer_number" class="form-control" required>
                     </div>
                     <div class="form-group col-md-3">
                         <label>Фирма</label>
