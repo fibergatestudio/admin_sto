@@ -89,7 +89,14 @@
                     {{-- Тип топлива --}}
                     <div class="form-group col-md-4">
                         <label>Тип топлива</label>
-                        <input type="text" name="fuel_type" id="fueltype" class="form-control" required>
+                        <select name="fuel_type" id="fueltype" class="form-control" required>
+                            <option value="Дизель">Дизель</option>
+                            <option value="Гибрид">Гибрид</option>
+                            <option value="Бензин">Бензин</option>
+                            <option value="Природный газ">Природный газ</option>
+                            <option value="Сжиженный газ">Сжиженный газ</option>
+                            <option value="Электрический">Электрический</option>
+                        </select>
                     </div>
 
                     {{-- Цвет --}}
@@ -112,15 +119,7 @@
                     {{-- Обьем мотора --}}
                     <div class="form-group col-md-4">
                         <label>Объем мотора</label>
-                        <input type="text" name="engine_capacity" id="enginecapacity" class="form-control" required>
-                    </div>
-
-                    {{-- Рабочая зона (тест) --}}
-                    <div class="form-group col-md-4">
-                        <label>Рабочая зона</label><br>
-                            @foreach ($workzones as $wz )
-                            <input type="checkbox" name="workzone[]" value="{{ $wz->id }}"> {{ $wz->general_name }}<br> 
-                            @endforeach
+                        <input type="text" min="0" max="10" step="0.1" name="engine_capacity" id="enginecapacity" class="form-control" required>
                     </div>
 
                 </div>
@@ -255,7 +254,14 @@
                     {{-- Тип топлива --}}
                     <div class="form-group col-md-4">
                         <label>Тип топлива</label>
-                        <input type="text" name="fuel_type" id="fueltype" class="form-control" required>
+                        <select name="fuel_type" id="fueltype" class="form-control" required>
+                            <option value="Дизель">Дизель</option>
+                            <option value="Гибрид">Гибрид</option>
+                            <option value="Бензин">Бензин</option>
+                            <option value="Природный газ">Природный газ</option>
+                            <option value="Сжиженный газ">Сжиженный газ</option>
+                            <option value="Электрический">Электрический</option>
+                        </select>
                     </div>
 
                     {{-- Цвет --}}
@@ -281,13 +287,6 @@
                         <input type="number" min="0" max="10" step="0.1" name="engine_capacity" id="enginecapacity" class="form-control" required>
                     </div>
 
-                    {{-- Рабочая зона (тест) --}}
-                    <div class="form-group col-md-4">
-                        <label>Рабочая зона</label><br>
-                            @foreach ($workzones as $wz )
-                            <input type="checkbox" name="workzone[]" value="{{ $wz->id }}"> {{ $wz->general_name }}<br> 
-                            @endforeach
-                    </div>
                 </div>
                 
                 
