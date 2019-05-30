@@ -3,6 +3,32 @@
 @section('page_name')
 Наряд: {{ $assignment->description }}
 
+<style type="text/css">
+  #download_xls{
+    display: none; 
+    position: absolute; 
+    right: 0;
+    top: 70px; 
+    margin: 5px; 
+    width: 150px;
+    z-index: 100;
+  }
+  button.download-xls{
+    position: absolute; 
+    right: 0;
+  }
+</style>
+
+<select class="form-control" id="download_xls">
+  <option value="">Выбрать</option>
+  <option value="work_order">Заказ-наряд</option>
+  <option value="invoice_for_payment">Счет на оплату</option>
+  <option value="invoice">Инвойс</option>
+  <option value="tax_invoice">Накладная</option>
+  <option value="inner_outfit">Внутренний наряд</option>
+</select>
+<button type="button" onclick="downloadXls()" class="btn btn-primary download-xls" style="margin: 10px">Скачать</button>
+
 <!-- Modal -->
 <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <form action="{{ url('/admin/assignments/change_name') }}" method="POST">
@@ -38,44 +64,26 @@
 
 
 <div style="margin-top: 10px">
-  <button type="button" onclick="readMore()" class="btn" style="margin-left: 10px">Подробнее</button>
+  <button type="button" onclick="readMore()" class="btn" style="margin: 10px">Подробнее</button>
   <a href="{{ url('/admin/assignments/assignments_index') }}">
           <span class="btn btn-danger">
               Вернуться
           </span>
   </a>
   <!-- Button trigger modal -->
-  <button type="button" class="btn btn-light" data-toggle="modal" data-target="#exampleModal1" style="margin-left: 10px">
+  <button type="button" class="btn btn-light" data-toggle="modal" data-target="#exampleModal1" style="margin: 10px">
     Изменить название
   </button>
   <!-- Вызов попапа принятия аванса --> 
-  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#prepaidModal1" style="margin-left: 10px">
+  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#prepaidModal1" style="margin: 10px">
       Принять аванс
   </button>
 
-  <button type="button" class="btn btn-primary" onclick="calculationProfitability()" style="margin-left: 10px">Таблица рассчета рентабельности</button>
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#searchModal1" style="margin-left: 10px">Поиск</button>
+  <button type="button" class="btn btn-primary" onclick="calculationProfitability()" style="margin: 10px">Таблица рассчета рентабельности</button>
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#searchModal1" style="margin: 10px">Поиск</button>
   <!-- Вызов попапа Добавление наряда -->
-  <button type="button" class="btn btn-primary" style="margin-left: 10px" data-toggle="modal" data-target="#addAssignment">Добавить наряд</button>
-  <button type="button" class="btn btn-primary" style="margin-left: 10px">Клиентский наряд</button>
-  <style type="text/css">
-    #download_xls{
-      display: none; 
-      position: absolute; 
-      right: 0; 
-      margin: 5px; 
-      width: 150px;
-    }
-  </style>
-  <select class="form-control" id="download_xls">
-    <option value="">Выбрать</option>
-    <option value="work_order">Заказ-наряд</option>
-    <option value="invoice_for_payment">Счет на оплату</option>
-    <option value="invoice">Инвойс</option>
-    <option value="tax_invoice">Накладная</option>
-    <option value="inner_outfit">Внутренний наряд</option>
-  </select>
-  <button type="button" onclick="downloadXls()" class="btn btn-primary" style="margin-left: 10px">Скачать</button>
+  <button type="button" class="btn btn-primary" style="margin: 10px" data-toggle="modal" data-target="#addAssignment">Добавить наряд</button>
+  <button type="button" class="btn btn-primary" style="margin: 10px">Клиентский наряд</button>
 
 </div>
 
