@@ -2907,7 +2907,8 @@ $.get( "{{ url ('admin/cars_in_service/api_brands') }} ", function(data) {
 </script>
 
 <script type="text/javascript">
-var excelLink = "{{ url('admin/assignments/view/export') }}";  
+var excelLink = "{{ url('admin/assignments/view/export') }}";
+var assignmentId = "{{ $assignment->id }}";  
   // Скачивание XLS
   function downloadXls() {
     $('#download_xls').toggle();
@@ -2915,7 +2916,7 @@ var excelLink = "{{ url('admin/assignments/view/export') }}";
 
   $('#download_xls').change(function() {
     const docName = $(this).val();
-    if (docName !== '') document.location.href = excelLink + '/' + docName;
+    if (docName !== '') document.location.href = excelLink + '/' + docName + '/' + assignmentId;
   });
 
 </script>
