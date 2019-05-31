@@ -357,7 +357,24 @@ class Assignments_Admin_Controller extends Controller
 
     
     // Генератор Excel
-    public function exportExcel($doc_name){
+    public function exportExcel($doc_name, $assignment_id){
+
+        $assignment_data =
+            DB::table('assignments')
+                ->join('cars_in_service', 'assignments.car_id', '=', 'cars_in_service.id')
+                ->join('new_sub_assignments', 'assignments.id', '=', 'new_sub_assignments.assignment_id')
+                ->select(
+                        'assignments.date_of_creation',
+                        'cars_in_service.general_name AS car_name',
+                        'cars_in_service.vin_number AS vin_number',
+                        'cars_in_service.release_year AS release_year',
+                        'cars_in_service.reg_number AS reg_number',
+                        'new_sub_assignments.*'
+                    )
+                ->where('assignments.id', '=', $assignment_id)
+                ->get();
+
+        $car_data = DB::table('car_model_list')->select('brand', 'model')->where('general_name', '=', $assignment_data[0]->car_name)->get();
 
         $files = scandir('excel');
         foreach ($files as $value) {
@@ -367,8 +384,9 @@ class Assignments_Admin_Controller extends Controller
         }
 
         $GLOBALS['test'] = $this->sum_translate(3456.38);
-        //echo '<pre>'.print_r($gt,true).'</pre>';
-        //var_dump($gt);       
+        //echo '<pre>'.print_r($assignment_data,true).'</pre>';
+        //var_dump($gt);
+        //die();       
 
         $GLOBALS['doc_name'] = $doc_name;
         $GLOBALS['invoice'] = 'AAD9238437';
