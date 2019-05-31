@@ -1263,6 +1263,11 @@ class EmployeesAdminController extends Controller
         $wash_client->save();
 
         $wash_print_settings = new Car_wash_print_settings();
+
+        $current_date = date('Y-m-d');
+        //dd($current_date);
+
+        $wash_print_settings->doc_date = $current_date;
         $wash_print_settings->save();
 
 
