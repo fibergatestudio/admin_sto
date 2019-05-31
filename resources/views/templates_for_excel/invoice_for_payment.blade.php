@@ -215,7 +215,7 @@
   <tfoot class="export-data">
     <tr>
       <td colspan="21" style="text-align: left;"><h6>Total</h6></td>
-      <td colspan="3"><h5>{{'4053.58'}}</h5></td>
+      <td colspan="3"><h5>{{'0405358'}}</h5></td>
       <td colspan="3"><h5>{{'0405358'}}</h5></td>
       <td colspan="3"><h5>{{'0405358'}}</h5></td>
     </tr>
@@ -224,7 +224,7 @@
     <td height="3"></td>
   </tr>
   <tr>
-    <td colspan="27" class="export-total"><h6>Suma fară TVA ( MDL ) </h6></td>
+    <td colspan="27" class="export-total"><h6>Suma fară TVA ( MDL )</h6></td>
     <td colspan="3" class="export-total"><h5>{{'0405358'}}</h5></td>
   </tr>
   <tr>
