@@ -351,6 +351,9 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
         /* Добавить клиента: POST запрос */
         Route::post('admin/clients/add_client', 'Clients_Admin_Controller@add_client_post')->middleware('can:admin_rights');
 
+        /* Обновить клиента: POST запрос */
+        Route::post('admin/clients/update_client/{client_id}', 'Clients_Admin_Controller@update_client_post')->middleware('can:admin_rights');
+
     /* Просмотр клиента: страница */
     Route::get('admin/clients/view_client/{client_id}', 'Clients_Admin_Controller@single_client_view')->name('admin_view_client')->middleware('can:admin_rights');
 
@@ -395,6 +398,9 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
 
         /* Добавление машины : POST */
         Route::post('admin/cars_in_service/add', 'Cars_in_service_Admin_Controller@add_car_post')->middleware('can:admin_rights');
+
+        /* Изменение машины : POST */
+        Route::post('admin/cars_in_service/update/{car_id}', 'Cars_in_service_Admin_Controller@update_car_post')->middleware('can:admin_rights');
 
     /* Одна машина : страница */
     Route::get('admin/cars_in_service/view/{car_id}', 'Cars_in_service_Admin_Controller@single_car_view')->middleware('can:admin_rights');
@@ -443,7 +449,7 @@ Route::post('/admin/profitability/profitability_index/month', 'Assignments_Admin
         Route::post('/admin/assignments/add', 'Assignments_Admin_Controller@add_assignment_page_post');
 
     /* Excel */
-    Route::get('admin/assignments/view/export/{doc_name}', 'Assignments_Admin_Controller@exportExcel')->name('exportExcelView');
+    Route::get('admin/assignments/view/export/{doc_name}/{assignment_id}', 'Assignments_Admin_Controller@exportExcel')->name('exportExcelView');
 
     /* Просмотр наряда : страница */
     Route::get('admin/assignments/view/{assignment_id}', 'Assignments_Admin_Controller@view_assignment');

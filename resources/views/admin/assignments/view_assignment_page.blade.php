@@ -19,6 +19,9 @@
   }
 </style>
 
+<div id="appVue">
+
+
 <select class="form-control" id="download_xls">
   <option value="">Выбрать</option>
   <option value="work_order">Заказ-наряд</option>
@@ -228,6 +231,7 @@
       </div>
     </div>
   </form>
+
 </div>
 
 
@@ -2224,118 +2228,276 @@
       <hr/>
 
     </div><!--Конец  dynamic-7//-->
-
-
-    <hr>
-    {{-- Фотографии : вывод --}}
-    <h3>Фотографии:</h3>
-    <div class="row">
-
-      <div class="col-sm-4">
-
-        {{-- Цикл вывода фотографий --}}
-        <p>Принятая машина:</p>
-        @foreach($accepted_image_urls as $image_url)
-        <div class="col-lg-2 col-md-3 col-xs-6 thumb">
-          <a href="{{ Storage::url($image_url) }}" target="_blank">
-            <img class="img-thumbnail"
-            src="{{ Storage::url($image_url) }}"
-            alt="Another alt text">
-          </a>
-        </div>
-        @endforeach
-
-      </div>{{-- /row --}}
-
-      <div class="col-sm-4">
-
-        {{-- Цикл вывода фотографий --}}
-        <p>Процесс ремонта:</p>
-        @foreach($repair_image_urls as $image_url)
-        <div class="col-lg-2 col-md-3 col-xs-6 thumb">
-          <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title=""
-          data-image="{{ Storage::url($image_url) }}"
-          data-target="#image-gallery">
-          <img class="img-thumbnail"
-          src="{{ Storage::url($image_url) }}"
-          alt="Another alt text">
-        </a>
-      </div>
-      @endforeach
-
-    </div>{{-- /row --}}
-
-    <div class="col-sm-4">
-
-      {{-- Цикл вывода фотографий --}}
-      <p>Выдача готовой:</p>
-      @foreach($finished_image_urls as $image_url)
-      <div class="col-lg-2 col-md-3 col-xs-6 thumb">
-        <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title=""
-        data-image="{{ Storage::url($image_url) }}"
-        data-target="#image-gallery">
-        <img class="img-thumbnail"
-        src="{{ Storage::url($image_url) }}"
-        alt="Another alt text">
-      </a>
-    </div>
-    @endforeach
-
-    </div>{{-- /row --}}
-
-    {{-- Модальное окно для вывода лайтбокса --}}
-    <div class="modal fade" id="image-gallery" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title" id="image-gallery-title"></h4>
-            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <center>
-              <img id="image-gallery-image" class="img-responsive" src="">
-            </center>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-light float-left" id="show-previous-image"><=
-            </button>
-
-            <button type="button" id="show-next-image" class="btn btn-light float-right">=>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    {{-- Конец модального окна для вывода лайтбокса --}}
-    </div>
-    {{-- Конец вывод фотографий --}}
-
-    {{-- Фотографии : переход на страницу загрузки --}}
-    <a href="{{ url('/admin/assignments/'.$assignment->id.'/add_photo_page') }}">
-      <div class="btn btn-light">
-        К загрузке фотографий
-      </div>
-    </a>
-
-    {{-- Удаление фотографий : переход на страницу --}}
-    <a href="{{ url('/admin/assignments/'.$assignment->id.'/delete_photos_page') }}">
-      <div class="btn btn-dark">
-        К удалению фотографий
-      </div>
-    </a><br>
-    <br>
-
     
   </div><!-- txt_1 Наряд-->
   
 
   <div id="txt_2">
-      <p>Информация автомобиля</p>
-  </div>
+      
+      <h3>Информация автомобиля: {{ $assignment->car_name }}</h3>
+
+      {{-- Форма изменения машины для клиента --}}
+        <form action="{{ url('admin/cars_in_service/update/'.$assignment->car_id) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            {{-- ID клиента --}}
+            <input type="hidden" name="client_id" value="{{ $assignment->client_id }}">
+            {{-- Название машины --}}
+            <input type="hidden" name="car_general_name" :value="mark+' '+model">
+
+            <div class="form-row">
+
+                {{-- Модель и марка --}}
+                {{-- Марка : от неё будут подтягивать подсказки . Используется Typeahead --}}
+                <div class="form-group col-md-6">
+                    <label>Марка машины</label>
+                    <p class="btn btn-light form-control" id="pCarBrandInf" onclick="brandInfo()" style="text-align: left;">{{ $assignment->car_brand }}</p>
+                    <input v-model.lazy="mark" name="car_brand" id="carBrandInf" class="form-control typeahead" required style="display: none;">
+                </div>
+
+                {{-- Модель : подтягивается с базы --}}
+                {{-- ... --}}
+                <div class="form-group col-md-6">
+                    <label>Модель машины</label>
+                    <p class="btn btn-light form-control" id="pCarModelInf" onclick="modelInfo()" style="text-align: left;">{{ $assignment->car_model }}</p>
+                    <select v-model.lazy="model" id="carModelInf" name="car_model" class="form-control" required style="display: none;">
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="form-row">                    
+
+                {{-- Пробег --}}
+                {{-- Километры --}}
+                <div class="form-group col-md-6">
+                    {{-- ... --}}
+                    <label>Пробег в километрах</label>
+                    <input type="number" name="mileage_km" class="form-control" min="0" id="mileageKM" step="any" value="{{ $assignment->car_mileage_km }}" required>
+                </div>
+
+                {{-- Мили --}}
+                <div class="form-group col-md-6"> 
+                    <label>Пробег в милях</label>
+                    <input type="number" name="mileage_miles" class="form-control" min="0" id="mileageMiles" step="any" required>
+                </div>
+
+            </div>
+            
+            <div class="form-row">                 
+
+                {{-- Скрипт на автоматический пересчёт - внизу, в секции custom_scripts --}}
+
+                {{-- Новые поля --}}
+                {{-- Год выпуска --}}
+                <div class="form-group col-md-6">
+                    <label>Год выпуска</label>
+                    <input type="number" min="1900" max="2099" step="1" value="2019" name="release_year" id="releaseyear" class="form-control typeahead" value="{{ $assignment->car_year }}" required>
+                </div>
+                {{-- Цвет --}}
+                <div class="form-group col-md-6">
+                    <label>Цвет</label>
+                    <div id="cp2" class="input-group colorpicker-component"> 
+                        <span class="input-group-addon"><i style="width:35px; height:35px; display:flex; border: 2px solid rgb(97, 97, 97);"></i></span> 
+                        <input type="text" name="car_color" value="{{ $assignment->car_color }}" class="form-control"/> 
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">  
+                {{-- Регистрационный номер --}}
+                <div class="form-group col-md-6">
+                    <label>Регистрационный номер</label>
+                    <input type="text" name="reg_number" id="regnumber" class="form-control" value="{{ $assignment->car_reg_number }}" required>
+                </div>
+
+                {{-- Тип топлива --}}
+                <div class="form-group col-md-6">
+                    <label>Тип топлива</label>
+                    <select name="fuel_type" id="fueltype" class="form-control" required>
+                        <option <?=($assignment->car_fuel_type === 'Дизель')?'selected':''?> value="Дизель">Дизель</option>
+                        <option <?=($assignment->car_fuel_type === 'Гибрид')?'selected':''?> value="Гибрид">Гибрид</option>
+                        <option <?=($assignment->car_fuel_type === 'Бензин')?'selected':''?> value="Бензин">Бензин</option>
+                        <option <?=($assignment->car_fuel_type === 'Природный газ')?'selected':''?> value="Природный газ">Природный газ</option>
+                        <option <?=($assignment->car_fuel_type === 'Сжиженный газ')?'selected':''?> value="Сжиженный газ">Сжиженный газ</option>
+                        <option <?=($assignment->car_fuel_type === 'Электрический')?'selected':''?> value="Электрический">Электрический</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="form-row">  
+                {{-- VIN --}}
+                <div class="form-group col-md-6">
+                    <label>VIN</label>
+                    <input type="text" name="vin_number" id="vinnumber" class="form-control" value="{{ $assignment->car_vin_number }}" required>
+                </div>
+
+                {{-- Обьем мотора --}}
+                <div class="form-group col-md-6">
+                    <label>Объем мотора</label>
+                    <input type="number" min="0" max="10" step="0.1" name="engine_capacity" id="enginecapacity" class="form-control" value="{{ $assignment->car_engine_capacity }}" required>
+                </div>
+
+            </div>
+            
+            <button id="new-car" type="submit" class="btn btn-primary">
+                Сохранить
+            </button>
+        </form>
+
+
+        <hr>
+        {{-- Фотографии : вывод --}}
+        <h3>Фотографии:</h3>
+        <div class="row">
+
+          <div class="col-sm-4">
+
+            {{-- Цикл вывода фотографий --}}
+            <p>Принятая машина:</p>
+            @foreach($accepted_image_urls as $image_url)
+            <div class="col-lg-2 col-md-3 col-xs-6 thumb">
+              <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title=""
+              data-image="{{ Storage::url($image_url) }}"
+              data-target="#image-gallery">
+                <img class="img-thumbnail"
+                src="{{ Storage::url($image_url) }}"
+                alt="Another alt text">
+              </a>
+            </div>
+            @endforeach
+
+          </div>{{-- /row --}}
+
+          <div class="col-sm-4">
+
+            {{-- Цикл вывода фотографий --}}
+            <p>Процесс ремонта:</p>
+            @foreach($repair_image_urls as $image_url)
+            <div class="col-lg-2 col-md-3 col-xs-6 thumb">
+              <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title=""
+              data-image="{{ Storage::url($image_url) }}"
+              data-target="#image-gallery">
+              <img class="img-thumbnail"
+              src="{{ Storage::url($image_url) }}"
+              alt="Another alt text">
+              </a>
+            </div>
+            @endforeach
+
+          </div>{{-- /row --}}
+
+          <div class="col-sm-4">
+
+            {{-- Цикл вывода фотографий --}}
+            <p>Выдача готовой:</p>
+            @foreach($finished_image_urls as $image_url)
+            <div class="col-lg-2 col-md-3 col-xs-6 thumb">
+              <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title=""
+              data-image="{{ Storage::url($image_url) }}"
+              data-target="#image-gallery">
+              <img class="img-thumbnail"
+              src="{{ Storage::url($image_url) }}"
+              alt="Another alt text">
+              </a>
+            </div>
+            @endforeach
+
+          </div>{{-- /row --}}
+
+          {{-- Модальное окно для вывода лайтбокса --}}
+          <div class="modal fade" id="image-gallery" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="image-gallery-title"></h4>
+                  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <center>
+                    <img id="image-gallery-image" class="img-responsive" src="">
+                  </center>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-light float-left" id="show-previous-image"><=
+                  </button>
+
+                  <button type="button" id="show-next-image" class="btn btn-light float-right">=>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          {{-- Конец модального окна для вывода лайтбокса --}}
+        </div>
+        {{-- Конец вывод фотографий --}}
+
+        {{-- Фотографии : переход на страницу загрузки --}}
+        <a href="{{ url('/admin/assignments/'.$assignment->id.'/add_photo_page') }}">
+          <div class="btn btn-light">
+            К загрузке фотографий
+          </div>
+        </a>
+
+        {{-- Удаление фотографий : переход на страницу --}}
+        <a href="{{ url('/admin/assignments/'.$assignment->id.'/delete_photos_page') }}">
+          <div class="btn btn-dark">
+            К удалению фотографий
+          </div>
+        </a><br>
+        <br>
+
+  </div><!-- txt_2 Информация автомобиля-->
+
+  
   <div id="txt_3">
-      <p>Информация клиента</p>
-  </div>
+      
+      <h3>Информация клиента: {{ $assignment->client_fio }}</h3>
+
+      <form action="{{ url('admin/clients/update_client/'.$assignment->client_id) }}" method="POST">
+        @csrf
+        
+        <div class="form-row">
+          <div class="form-group col-md-6">
+              <label>Имя</label>
+              <input class="form-control" type="name" name="name" value="{{ $assignment->client_name }}" required>
+          </div>
+          <div class="form-group col-md-6">
+              <label>Фамилия</label>
+              <input class="form-control" type="text" name="surname" value="{{ $assignment->client_surname }}" required>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group col-md-6">
+              <label>Организация</label>
+              <input class="form-control" type="text" name="organization" value="{{ $assignment->client_organization }}">
+          </div>
+          <div class="form-group col-md-6">
+              <label>Телефон</label>
+              <input class="form-control" type="number" name="phone" value="{{ $assignment->client_phone }}" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+              <label>Баланс</label>
+              <input class="form-control" type="number" name="balance" value="{{ $assignment->client_balance }}">
+          </div>
+          <div class="form-group col-md-6">
+              <label>Скидка</label>
+              <input class="form-control" type="number" name="discount" value="{{ $assignment->client_discount }}">
+          </div>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">
+            Сохранить
+        </button>
+
+    </form>
+  
+  </div><!-- txt_2 Информация клиента-->
   <div id="txt_4">
       <p>Доходная часть</p>
   </div>
@@ -2347,10 +2509,24 @@
 </div><!-- tabs-menu -->
 
 
+</div><!-- appVue -->
+
 @endsection
 
-
 @section('custom_scripts')
+
+<script>
+          var appVue = new Vue({
+              el: '#appVue',
+              data: {
+                  mark2: '',
+                  model2: '',
+                  mark: '',
+                  model: ''
+              }
+          
+          });
+</script>
 
 <script type="text/javascript">
 
@@ -2813,6 +2989,11 @@ $("#mileageKM").change(function(){
     $("#mileageMiles").val(Math.round(currentKilometers/milesToKilometers));
 });
 
+if ($("#mileageKM").val()) {
+  var currentKilometers = $("#mileageKM").val();
+  $("#mileageMiles").val(Math.round(currentKilometers/milesToKilometers));
+}
+
 {{-- При вводе миль --}}
 $("#mileageMiles").change(function(){
     {{-- Получаем текущие мили --}}
@@ -2825,31 +3006,85 @@ $("#mileageMiles").change(function(){
 
 {{-- Подтягиваем список моделей по бренду --}}
 
+var brandVal = "{{ $assignment->car_brand }}";
+var modelVal = "{{ $assignment->car_model }}";
+
+function brandInfo() {
+    $('#carBrandInf').css('display', 'block').val(brandVal);
+    var urlToFetch = "{{ url('admin/cars_in_service/api_models/') }}"+"/"+brandVal;
+    $.get(urlToFetch, function(data){
+            $("#carModelInf").empty();
+            var modelsArray = JSON.parse(data);
+            for(var modelIteration in modelsArray){
+                $("#carModelInf").append('<option value="'+modelsArray[modelIteration]+'">'+modelsArray[modelIteration]+'</option>');
+            }
+    });
+    $('#pCarBrandInf').css('display', 'none');
+}  
+
+function modelInfo() {
+    $('#carModelInf').css('display', 'block');
+    var urlToFetch = "{{ url('admin/cars_in_service/api_models/') }}"+"/"+brandVal;
+    $.get(urlToFetch, function(data){
+            $("#carModelInf").empty();
+            var modelsArray = JSON.parse(data);
+            for(var modelIteration in modelsArray){
+                $("#carModelInf").append('<option value="'+modelsArray[modelIteration]+'">'+modelsArray[modelIteration]+'</option>');
+            }
+    });
+    $('#pCarModelInf').css('display', 'none');
+} 
+    
     {{-- При изменении значения бренда --}}
     $("#carBrand").change(function(){
         {{-- Получаем название бренда и подтягиваем по API список моделей --}}
         var brandName = $("#carBrand").val();
-        //console.log(brandName);
-        var urlToFetch = "{{ url('admin/cars_in_service/api_models/') }}"+"/"+brandName;
-        //console.log(urlToFetch)
+        var urlToFetch = "{{ url('admin/cars_in_service/api_models/') }}"+"/"+brandName;      
         $.get(urlToFetch, function(data){
-            {{-- При успехе --}}
-            //console.log('success');
-            //console.log(data);
-            {{-- Очищаем select --}}
             $("#carModel").empty();
-            {{-- Подставляем новые модели--}}
             var modelsArray = JSON.parse(data);
-            //console.log(modelsArray);
             for(var modelIteration in modelsArray){
-                //console.log(modelsArray[modelIteration]);
                 $("#carModel").append('<option value="'+modelsArray[modelIteration]+'">'+modelsArray[modelIteration]+'</option>');
             }
-        }
-        
-        );{{-- /.get --}}
+        });    
+    }); 
+
+
+    $("#carBrandInf").change(function(){
+        var brandName = $("#carBrandInf").val();
+        var urlToFetch = "{{ url('admin/cars_in_service/api_models/') }}"+"/"+brandName;
+        $('#pCarBrandInf').text(brandName);       
+        $(this).css('display', 'none');
+        $('#pCarBrandInf').css('display', 'block');
+        brandVal = brandName;
+        $.get(urlToFetch, function(data){
+            $("#carModelInf").empty();
+            var modelsArray = JSON.parse(data);
+            for(var modelIteration in modelsArray){
+                $("#carModelInf").append('<option value="'+modelsArray[modelIteration]+'">'+modelsArray[modelIteration]+'</option>');
+            }
+        });    
+    });
     
-    }); {{-- /carBrand.change--}}
+    
+    $("#new-car").click(function(event){
+      event.preventDefault();
+      
+      var brandName = $('#carBrandInf').val();
+      var modelName = $('#carModelInf').val();
+      
+      if (!modelName) {
+        modelName = modelVal;
+        $('[name="car_model"]').val(modelName);
+      }
+      if (!brandName) {
+        brandName = brandVal;
+        $('[name="car_brand"]').val(brandName);
+      }
+
+      $('[name="car_general_name"]').val(brandName+' '+modelName);
+      $(this).parent().submit();
+    });
 
 {{-- Конец работы с моделями--}}
 
@@ -2907,7 +3142,8 @@ $.get( "{{ url ('admin/cars_in_service/api_brands') }} ", function(data) {
 </script>
 
 <script type="text/javascript">
-var excelLink = "{{ url('admin/assignments/view/export') }}";  
+var excelLink = "{{ url('admin/assignments/view/export') }}";
+var assignmentId = "{{ $assignment->id }}";  
   // Скачивание XLS
   function downloadXls() {
     $('#download_xls').toggle();
@@ -2915,7 +3151,10 @@ var excelLink = "{{ url('admin/assignments/view/export') }}";
 
   $('#download_xls').change(function() {
     const docName = $(this).val();
-    if (docName !== '') document.location.href = excelLink + '/' + docName;
+    if (docName !== '') {
+      //console.log(excelLink + '/' + docName + '/' + assignmentId);
+      document.location.href = excelLink + '/' + docName + '/' + assignmentId;
+    }
   });
 
 </script>

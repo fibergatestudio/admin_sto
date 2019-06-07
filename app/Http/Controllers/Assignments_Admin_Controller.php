@@ -38,6 +38,7 @@ use App\New_sub_assignment;
 
 use Excel;
 use PHPExcel_Worksheet_Drawing;
+use PHPExcel_Style_NumberFormat;
 
 class Assignments_Admin_Controller extends Controller
 {
@@ -357,7 +358,7 @@ class Assignments_Admin_Controller extends Controller
 
     
     // Генератор Excel
-    public function exportExcel($doc_name){
+    public function exportExcel($doc_name, $assignment_id){
 
         $files = scandir('excel');
         foreach ($files as $value) {
@@ -366,13 +367,157 @@ class Assignments_Admin_Controller extends Controller
             }
         }
 
-        $GLOBALS['test'] = $this->sum_translate(3456.38);
-        //echo '<pre>'.print_r($gt,true).'</pre>';
-        //var_dump($gt);       
+        $assignment_data =
+            DB::table('assignments')
+                ->join('cars_in_service', 'assignments.car_id', '=', 'cars_in_service.id')
+                ->join('new_sub_assignments', 'assignments.id', '=', 'new_sub_assignments.assignment_id')
+                ->select(
+                        'assignments.date_of_creation',
+                        'cars_in_service.general_name AS car_name',
+                        'cars_in_service.vin_number AS vin_number',
+                        'cars_in_service.release_year AS release_year',
+                        'cars_in_service.reg_number AS reg_number',
+                        'cars_in_service.mileage_km AS mileage_km',
+                        'new_sub_assignments.*'
+                    )
+                ->where('assignments.id', '=', $assignment_id)
+                ->get();
 
+        $car_data = DB::table('car_model_list')->select('brand', 'model')->where('general_name', '=', $assignment_data[0]->car_name)->get();
+        $currency = DB::table('exchange_rates')->select('usd', 'eur')->get();
+        if ($assignment_data->count() == 0 OR $car_data->count() == 0) {
+            return 'Нет данных для файла !';
+        }
+        
+        //Создаем массив для форматирования чисел в формат "0,00"
+        $arr_format_for_payment = array('R24:AD24' => '0.00');
+        $arr_format_work_order = array('R31:AD31' => '0.00');
+        $arr_format_invoice = array('U31:AD31' => '0.00');
+        $index = 0;
+        
+        switch ($doc_name) {
+            case 'invoice_for_payment':                
+                foreach ($arr_format_for_payment as $key => $value) {
+                    $index = (int)substr($key, 1, 2);
+                }
+                break;
+            
+            case 'work_order':
+                foreach ($arr_format_work_order as $key => $value) {
+                    $index = (int)substr($key, 1, 2);
+                }
+                break;
+
+            case 'invoice':
+                foreach ($arr_format_invoice as $key => $value) {
+                    $index = (int)substr($key, 1, 2);
+                }
+                break;
+            
+            default:                
+                break;
+        }
+                    
+        // Подсчитываем сумму в работах
+        $sum_work = 0;
+        foreach($assignment_data as $assignment){
+            if(!empty($assignment->work_row_index)){
+                $index++;
+                $arr_format_for_payment['R'.$index.':AD'.$index] = '0.00';
+                $arr_format_work_order['R'.$index.':AD'.$index] = '0.00';
+                $arr_format_invoice['U'.$index.':AD'.$index] = '0.00';
+                
+                $coefficient = 1;
+                if ($assignment->d_table_currency === 'USD') {
+                    $coefficient = $currency[0]->usd;
+                }
+                elseif ($assignment->d_table_currency === 'EUR') {
+                    $coefficient = $currency[0]->eur;
+                }
+                $sum_work += round(((int)$assignment->work_sum_row/$coefficient),2);
+            }
+        }
+        
+        $index += 4;
+        
+        // Подсчитываем сумму в запчастях
+        $sum_spares = 0; 
+        foreach($assignment_data as $assignment) {
+            if(!empty($assignment->spares_row_index)) {
+                $index++;
+                $arr_format_for_payment['R'.$index.':AD'.$index] = '0.00';
+                $arr_format_work_order['R'.$index.':AD'.$index] = '0.00';
+                $arr_format_invoice['U'.$index.':AD'.$index] = '0.00';
+                
+                $coefficient_2 = 1;
+                if ($assignment->d_table_spares_currency === 'USD') {
+                    $coefficient_2 = $currency[0]->usd;
+                }
+                elseif ($assignment->d_table_spares_currency === 'EUR') {
+                    $coefficient_2 = $currency[0]->eur;
+                }
+                $sum_spares += round(((int)$assignment->spares_sum_row/$coefficient_2),2);
+            }
+        }
+
+        $index++;
+        $arr_format_for_payment['R'.$index.':AD'.$index] = '0.00';
+        $arr_format_work_order['R'.$index.':AD'.$index] = '0.00';
+        $arr_format_invoice['U'.$index.':AD'.$index] = '0.00';
+
+        for ($i=0; $i < 3; $i++) { 
+            $index += 2;
+            $arr_format_for_payment['R'.$index.':AD'.$index] = '0.00';
+            $arr_format_work_order['R'.$index.':AD'.$index] = '0.00';
+            $arr_format_invoice['U'.$index.':AD'.$index] = '0.00';
+        }
+        
         $GLOBALS['doc_name'] = $doc_name;
+        $GLOBALS['total_in_words'] = $this->sum_translate($sum_work + $sum_spares);
+        $GLOBALS['currency'] = $currency;
+        $GLOBALS['assignment_data'] = $assignment_data;
+        $GLOBALS['car_data'] = $car_data;        
+
+        switch ($doc_name) {
+            case 'invoice_for_payment':
+                $GLOBALS['format_data'] = $arr_format_for_payment;
+                break;
+            
+            case 'work_order':
+                $GLOBALS['format_data'] = $arr_format_work_order;
+                break;
+            
+            case 'invoice':
+                $GLOBALS['format_data'] = $arr_format_invoice;
+                break;
+            
+            default:
+                $GLOBALS['format_data'] = [];
+                break;
+        }
+
+        /*echo '<pre>'.print_r($arr_format_invoice,true).'</pre>';
+        die();*/
+
+        // Накладная
+        $array_month = ['Ianuarie','Februarie','Martie','Aprilie','Mai','Iunie','Iulie','August','Septembrie','Octombrie','Noiembrie','Decembrie'];
+        $arr_date = explode('-', date("Y-m-d"));
+        $string_date = $arr_date[2].' '.$array_month[(int)$arr_date[1]-1].' '.$arr_date[0];
+                
         $GLOBALS['invoice'] = 'AAD9238437';
-        $GLOBALS['date'] = date("Y-m-d");
+        $GLOBALS['string_date'] = $string_date;
+        $GLOBALS['currently'] = '';
+        $GLOBALS['legal_address'] = '';
+        $GLOBALS['iban'] = '';
+        $GLOBALS['bank'] = '';
+        $GLOBALS['swift'] = '';
+        $GLOBALS['fiscal_code'] = '';
+        $GLOBALS['vat'] = '';
+        $GLOBALS['act_number'] = '';
+        $GLOBALS['document_date'] = date("Y.m.d");
+        $GLOBALS['amount_without_vat'] = $sum_work + $sum_spares;
+        $GLOBALS['amount_vat'] = ($sum_work + $sum_spares)/5;
+        $GLOBALS['total_amount'] = $sum_work + $sum_spares + $GLOBALS['amount_vat'];
         
         if($GLOBALS['invoice'] !== "")
         {
@@ -383,12 +528,13 @@ class Assignments_Admin_Controller extends Controller
             
             Excel::create('New file', function($excel) {
                 $excel->sheet('New sheet', function($sheet) {
-                    $sheet->loadView('templates_for_excel.'.$GLOBALS['doc_name'], array('assignments' => Assignment::all()))->setStyle(array(
+
+                    $sheet->loadView('templates_for_excel.'.$GLOBALS['doc_name'], array('assignment_data' => $GLOBALS['assignment_data'], 'car_data' => $GLOBALS['car_data'], 'currency' => $GLOBALS['currency'], 'total_in_words' => $GLOBALS['total_in_words']))->setStyle(array(
                         'font' => array(
                             'name'      =>  'Calibri',
                             'size'      =>  8,
                         )
-                    ));
+                    ))->setColumnFormat($GLOBALS['format_data']);
                 });
             })->download('xls');
         
@@ -410,14 +556,31 @@ class Assignments_Admin_Controller extends Controller
                     $objDrawing->setWorksheet($sheet);                    
                                     
                 })
-                ->setCellValueByColumnAndRow(10, 12, $GLOBALS['date'])
-                ->setCellValueByColumnAndRow(0, 32, $GLOBALS['test'])
+                ->setCellValueByColumnAndRow(10, 12, $GLOBALS['invoice'])
+                ->setCellValueByColumnAndRow(4, 16, $GLOBALS['string_date'])
+                ->setCellValueByColumnAndRow(12, 16, $GLOBALS['string_date'])
+                ->setCellValueByColumnAndRow(4, 21, ($GLOBALS['currently'].", ".$GLOBALS['legal_address'].", c/d ".$GLOBALS['iban'].", ".$GLOBALS['bank'].", ".$GLOBALS['swift']))
+                ->setCellValueByColumnAndRow(41, 21, $GLOBALS['fiscal_code']." / ".$GLOBALS['vat'])
+                ->setCellValueByColumnAndRow(24, 23, "Act nr. ".$GLOBALS['act_number']." din ".$GLOBALS['document_date'])
+                ->setCellValueByColumnAndRow(0, 32, "Servicii de reparatie auto conform ACT")
+                ->setCellValueByColumnAndRow(9, 32, "serv.")
+                ->setCellValueByColumnAndRow(12, 32, "1,00")
+                ->setCellValueByColumnAndRow(15, 32, $GLOBALS['amount_without_vat'])
+                ->setCellValueByColumnAndRow(17, 32, $GLOBALS['amount_without_vat'])
+                ->setCellValueByColumnAndRow(19, 32, "20%")
+                ->setCellValueByColumnAndRow(21, 32, $GLOBALS['amount_vat'])
+                ->setCellValueByColumnAndRow(23, 32, $GLOBALS['total_amount'])
+                ->setCellValueByColumnAndRow(17, 71, $GLOBALS['amount_without_vat'])
+                ->setCellValueByColumnAndRow(21, 71, $GLOBALS['amount_vat'])
+                ->setCellValueByColumnAndRow(23, 71, $GLOBALS['total_amount'])
+                ->setCellValueByColumnAndRow(17, 72, $GLOBALS['amount_without_vat'])
+                ->setCellValueByColumnAndRow(21, 72, $GLOBALS['amount_vat'])
+                ->setCellValueByColumnAndRow(23, 72, $GLOBALS['total_amount'])
                 ;           
 
             }) -> download('xls');
         
         }
-
            
     }
 
@@ -957,11 +1120,25 @@ class Assignments_Admin_Controller extends Controller
         /* Получаем дополнительную информацию по нарядам */
         /* Имя клиента */
         $assignment->client_name = $assignment->get_client_name();
+        /* Id клиента */
+        $assignment->client_id = $assignment->get_client_id();
+        $client = Client::find($assignment->client_id);
+        $assignment->client_organization = $client->organization;
+        $assignment->client_fio = $client->fio;
+        $assignment->client_surname = $client->surname;
+        $assignment->client_phone = $client->phone;
+        $assignment->client_balance = $client->balance;
+        $assignment->client_discount = $client->discount;
         /* Авто */
         $assignment->car_name = $assignment->get_car_name();
-        /* Год авто */
+        $assignment->car_brand = $assignment->get_car_brand();
+        $assignment->car_model = $assignment->get_car_model();
+        $assignment->car_mileage_km = $assignment->get_car_mileage_km();
+        $assignment->car_fuel_type = $assignment->get_car_fuel_type();
+        $assignment->car_engine_capacity = $assignment->get_car_engine_capacity();
+        $assignment->car_vin_number = $assignment->get_car_vin_number();
+        $assignment->car_color = $assignment->get_car_color();
         $assignment->car_year = $assignment->get_car_year();
-        /* Рег. номер авто */
         $assignment->car_reg_number = $assignment->get_car_reg_number();
 
                 /* Доход/расход/работы */

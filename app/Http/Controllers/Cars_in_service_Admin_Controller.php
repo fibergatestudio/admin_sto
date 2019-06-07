@@ -93,7 +93,10 @@ class Cars_in_service_Admin_Controller extends Controller
         $new_car_in_service->fuel_type = $request->fuel_type;
         $new_car_in_service->vin_number = $request->vin_number;
         $new_car_in_service->engine_capacity = $request->engine_capacity;
-        $new_car_in_service->car_color = $request->car_color; //Добавление цвета авто
+        $new_car_in_service->car_color = $request->car_color;
+        $new_car_in_service->mileage_km = $request->mileage_km;
+        $new_car_in_service->car_brand = $request->car_brand;
+        $new_car_in_service->car_model = $request->car_model;
         $new_car_in_service->save();
 
         /* - Добавдение создания машины в логи - */
@@ -120,6 +123,61 @@ class Cars_in_service_Admin_Controller extends Controller
         $author_name = $author->general_name;
 
         $create_car_in_service_log_entry->text = 'Создана машина - '.$car_name. ' | клиента - '.$client_name. ' | автор - '.$author_name;   //текст лога о создании машины(название) клиента(имя) от автора(имя)
+        /* Тип? Тест */
+        $create_car_in_service_log_entry->type = '';
+        $create_car_in_service_log_entry->save();
+
+        //$request->document->store('public1'); //Заливка файла
+
+        if(!empty($request->document)){
+            $request->document->store('public1');
+        }
+
+        /* И перенаправить на страницу клиента */
+        return redirect()->route('admin_view_client', ['client_id' => $request->client_id]);
+    }
+
+    /* Изменение машины : POST */
+    public function update_car_post(Request $request, $car_id){
+
+        $new_car_in_service = Cars_in_service::find($car_id);
+
+        $new_car_in_service->general_name = $request->car_general_name;
+        $new_car_in_service->release_year = $request->release_year;
+        $new_car_in_service->reg_number = $request->reg_number;
+        $new_car_in_service->fuel_type = $request->fuel_type;
+        $new_car_in_service->vin_number = $request->vin_number;
+        $new_car_in_service->car_color = $request->car_color;
+        $new_car_in_service->engine_capacity = $request->engine_capacity;
+        $new_car_in_service->mileage_km = $request->mileage_km;
+        $new_car_in_service->car_brand = $request->car_brand;
+        $new_car_in_service->car_model = $request->car_model;
+        $new_car_in_service->save();
+
+        /* - Добавдение об обновлении машины в логи - */
+        $create_car_in_service_log_entry = new Cars_logs();
+        $create_car_in_service_log_entry->car_id = $new_car_in_service->id;  //id машины
+        //$create_car_in_service_log_entry->client_id = $request->client_id;  //id клиента
+        $create_car_in_service_log_entry->author_id = Auth::user()->id;  //id автора
+
+        //$create_car_in_service_log_entry->save();
+
+        /* - Название машины  - */
+        $car_id = $create_car_in_service_log_entry->car_id;
+        $car = Cars_in_service::find($car_id);
+        $car_name = $request->car_general_name;
+
+        /* - Имя клиента - */
+        $client_id = $new_car_in_service->owner_client_id;
+        $client = Client::find($client_id);
+        $client_name = $client->fio;
+
+        /* - Имя автора - */
+        $author_id = $create_car_in_service_log_entry->author_id;
+        $author = User::find($author_id);
+        $author_name = $author->general_name;
+
+        $create_car_in_service_log_entry->text = 'Обновлена машина - '.$car_name. ' | клиента - '.$client_name. ' | автор - '.$author_name;   //текст лога о создании машины(название) клиента(имя) от автора(имя)
         /* Тип? Тест */
         $create_car_in_service_log_entry->type = '';
         $create_car_in_service_log_entry->save();

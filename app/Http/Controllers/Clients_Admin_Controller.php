@@ -45,6 +45,7 @@ class Clients_Admin_Controller extends Controller
         $fio = $name.' '.$surname;
 
         $new_client->general_name = $name;
+        $new_client->surname = $request->surname;
         //Новые поля в добавлении клиента
         $new_client->fio = $fio;
         $new_client->organization = $request->organization;
@@ -74,6 +75,48 @@ class Clients_Admin_Controller extends Controller
 
         // Если клиент был добавлен успешно, то предлагаем добавить машину клиента
         return view('admin.clients.add_client_success_page', ['client' => $new_client]);
+    }
+
+
+    /* Обновить клиента: обработка POST запроса */
+    public function update_client_post(Request $request, $client_id){
+
+        $new_client = Client::find($client_id);
+
+        $name = $request->name;
+        $surname = $request->surname;
+        $fio = $name.' '.$surname;
+        $new_client->general_name = $name;
+        $new_client->surname = $request->surname;
+        $new_client->fio = $fio;
+        $new_client->organization = $request->organization;
+        $new_client->phone = $request->phone;
+        $new_client->balance = $request->balance;
+        $new_client->discount = $request->discount;
+        
+        $new_client->save();
+
+        /* - Добавление в логи Обновление клиента -*/
+        $create_client_log_entry = new Clients_logs();
+        $create_client_log_entry->client_id = $new_client->id;
+        $create_client_log_entry->author_id = Auth::user()->id;
+
+
+        /* - Имя клиента -*/
+        $client_id = $create_client_log_entry->client_id;
+        $client = Client::find($client_id);
+        $client_name = $client->fio;
+        /* - Имя автора - */
+        $author_id = $create_client_log_entry->author_id;
+        $author = User::find($author_id);
+        $author_name = $author->general_name;
+
+        $create_client_log_entry->text = 'Обновление клиента - '.$client_name. ' | автор - '.$author_name;  //текст лога о создании клиента(имя), автором(имя)
+        /* Тип? Тест */
+        $create_client_log_entry->type = '';
+        $create_client_log_entry->save();
+
+        return redirect('admin/clients/view_client/'.$client_id);
     }
 
     /* Просмотр клиента : страница */
