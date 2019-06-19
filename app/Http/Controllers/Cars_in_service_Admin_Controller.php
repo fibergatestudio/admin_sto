@@ -17,6 +17,7 @@ use App\Assignment;
 use App\Car_model_list;
 use App\Cars_logs;
 use App\Cars_notes_logs;
+use App\Fuel_type;
 
 //TEST NOTE DELETE
 use App\Deleted_notes;
@@ -43,11 +44,16 @@ class Cars_in_service_Admin_Controller extends Controller
         if(!empty($client_id)){
             $client = Client::find($client_id);
 
-            return view('admin.cars_in_service.add_car_in_service', ['client' => $client]);
+            $fuel_type = DB::table('fuel_type')->get();
+
+            return view('admin.cars_in_service.add_car_in_service', ['client' => $client, 'fuel_type' => $fuel_type]);
         } else {
         /* Если клиент не указан */
             $clients = Client::orderByDesc('created_at')->get();
-            return view('admin.cars_in_service.add_car_in_service', ['client' => '', 'clients' => $clients]);
+
+            $fuel_type = DB::table('fuel_type')->get();
+
+            return view('admin.cars_in_service.add_car_in_service', ['client' => '', 'clients' => $clients, 'fuel_type' => $fuel_type]);
         }
     }
 
@@ -87,6 +93,8 @@ class Cars_in_service_Admin_Controller extends Controller
         // $new_car_in_service->general_name = $damp[1];
 
         $new_car_in_service->general_name = $request->car_general_name;
+
+        //dd($request->car_general_name);
         $new_car_in_service->owner_client_id = $request->client_id;
         $new_car_in_service->release_year = $request->release_year;
         $new_car_in_service->reg_number = $request->reg_number;
@@ -132,6 +140,47 @@ class Cars_in_service_Admin_Controller extends Controller
 
         /* И перенаправить на страницу клиента */
         return redirect()->route('admin_view_client', ['client_id' => $request->client_id]);
+    }
+
+    public function add_car_fuel(){
+
+
+        // $fuel_array = (
+        //     array(array('fuel_name' => 'Бензин')
+        //     array(array('fuel_name' => 'Дизель'),
+            // array('fuel_name' => 'Hybrid (Бензин)',
+            // array('fuel_name' => 'Hybrid (Дизель)',
+            // array('fuel_name' => 'Plug-in Hybrid (Бензин)',
+            // array('fuel_name' => 'Plug-in Hybrid (Дизель)',
+            // array('fuel_name' => 'Газ (Пропан) / Бензин',
+            // array('fuel_name' => 'Газ (Метан) / Бензин',
+            // array('fuel_name' => 'Газ (Пропан)',
+            // array('fuel_name' => 'Газ (Метан)',
+            // array('fuel_name' => 'Электро',
+        // );
+
+        //dd($fuel_array);
+
+        DB::table('fuel_type')
+            ->insert(array(
+                array('fuel_name' => 'Бензин'),
+                array('fuel_name' => 'Дизель'),
+                array('fuel_name' => 'Hybrid (Бензин)'),
+                array('fuel_name' => 'Hybrid (Дизель)'),
+                array('fuel_name' => 'Plug-in Hybrid (Бензин)'),
+                array('fuel_name' => 'Plug-in Hybrid (Дизель)'),
+                array('fuel_name' => 'Газ (Пропан) / Бензин'),
+                array('fuel_name' => 'Газ (Метан) / Бензин'),
+                array('fuel_name' => 'Газ (Пропан)'),
+                array('fuel_name' => 'Газ (Метан)'),
+                array('fuel_name' => 'Электро'),
+            ));
+
+        // $fuel = new Fuel_type();
+        // $fuel->fuel_name = '';
+        // $fuel->save();
+
+        return back();
     }
 
     /* Страница машины : просмотр */

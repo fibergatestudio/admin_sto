@@ -27,6 +27,7 @@ use App\Car_wash_assignments;
 use App\Car_wash_clients;
 use App\Car_wash_print_settings;
 use App\Car_wash_complete_work;
+use App\Fuel_type;
 //На скачивание EXCEL
 use App\Exports\AssignOrder;
 use Maatwebsite\Excel\Facades\Excel;
@@ -128,6 +129,21 @@ class EmployeesAdminController extends Controller
         /* Вернуться ко списку сотрудников
         return redirect()->route('view_employees'); */
 
+        //Проверка создавать ли счет
+        $employee_invoice = $request->invoice;
+
+        
+        if(empty($employee_invoice)){
+
+            //Не создавать
+
+        } else {
+
+            //Создавать
+
+        }
+
+
         /* Переход на страницу редактирования работника (согласно замечаниям)*/
         return view('employees_admin.employee_edit_admin',
         [
@@ -135,6 +151,7 @@ class EmployeesAdminController extends Controller
             'workzones' => $workzones
         ]);
     }
+
 
     /* Страница статусов сотрудника */
     public function manage_employee_status($employee_id){
@@ -1434,6 +1451,8 @@ class EmployeesAdminController extends Controller
 
         $wash_worker = DB::table('employees')->where('position', 'Washer')->get();
 
+        $firm_list = DB::table('firm_list')->get();
+
         return view('admin.wash.admin_wash_index',[
             'year' => $year,
             'month' => $month,
@@ -1444,6 +1463,7 @@ class EmployeesAdminController extends Controller
             'car_wash_sum_terminal' => $car_wash_sum_terminal,
             'car_wash_sum_total' => $car_wash_sum_total,
             'wash_worker' => $wash_worker,
+            'firm_list' => $firm_list
             
         ]);
     }
@@ -1472,7 +1492,7 @@ class EmployeesAdminController extends Controller
 
         $date = implode('-', $date_arr );
 
-        //dd($date);
+        //dd($request->payment_method);
 
         $car_wash->date = $date;
         $car_wash->status = "Opened";

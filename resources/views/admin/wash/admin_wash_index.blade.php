@@ -39,18 +39,42 @@
                     </div>
                     <div class="form-group col-md-3">
                         <label>Фирма</label>
-                        <input type="text" name="firm_name" class="form-control" required>
+                        <!-- <input type="text" name="firm_name" class="form-control" required> -->
+                        <select class="form-control" name="firm_name" required>
+                            <option>--Выберите Фирму--</option>
+                        @foreach ($firm_list as $firm)
+                            <option>{{ $firm->firm_name }}</option>
+                        @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="form-row col-md-12">  
                     <div class="form-group col-md-3">
                         <label>Метод оплаты</label>
-                        <select class="form-control" name="payment_method" required>
+                        <div class="row">
+                            <div class="p-1">
+                                <input type="radio" id="huey" name="payment_method" value="Наличный"
+                                        checked>
+                                <label for="huey">Наличный</label>
+                            </div>
+
+                            <div class="p-1">
+                                <input type="radio" id="dewey" name="payment_method" value="Безналичный">
+                                <label for="dewey">Безналичный</label>
+                            </div>
+
+                            <div class="p-1">
+                                <input type="radio" id="louie" name="payment_method" value="Терминал">
+                                <label for="louie">Терминал</label>
+                            </div>
+                        </div>
+
+                        <!-- <select class="form-control" name="payment_method" required>
                             <option>--Выберите метод оплаты--</option>
                             <option>Наличный</option>
                             <option>Безналичный</option>
                             <option>Терминал</option>
-                        </select>
+                        </select> -->
                     </div>
 
                     <div class="form-group col-md-1">
@@ -62,10 +86,10 @@
                             <input type="checkbox" name="wash_services[]" value="Внутрянка" class="custom-control-input" id="check2" v-model="fine">
                             <label class="custom-control-label" for="check2">Внутрянка</label>
                         </div>
-                        <div class="custom-control custom-checkbox">
+                        <!-- <div class="custom-control custom-checkbox">
                             <input type="checkbox" name="wash_services[]" value="Наружка без сушки" class="custom-control-input" id="check3" v-model="fine">
                             <label class="custom-control-label" for="check3">Наружка без сушки</label>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="form-group col-md-1">
                         <div class="custom-control custom-checkbox">
@@ -76,15 +100,23 @@
                             <input type="checkbox" name="wash_services[]" value="Радиатор" class="custom-control-input" id="check5" v-model="fine">
                             <label class="custom-control-label" for="check5">Радиатор</label>
                         </div>
+                        <!-- <div class="custom-control custom-checkbox">
+                            <input type="checkbox" name="wash_services[]" value="Нет талона" class="custom-control-input" id="check6" v-model="fine">
+                            <label class="custom-control-label" for="check6">Нет талона</label>
+                        </div> -->
+                    </div>
+                    <div class="form-group col-md-1">
+                        <!-- <div class="custom-control custom-checkbox">
+                            <input type="checkbox" name="wash_services[]" value="Терминал" class="custom-control-input" id="check7" v-model="fine">
+                            <label class="custom-control-label" for="check7">Терминал</label>
+                        </div> -->
                         <div class="custom-control custom-checkbox">
                             <input type="checkbox" name="wash_services[]" value="Нет талона" class="custom-control-input" id="check6" v-model="fine">
                             <label class="custom-control-label" for="check6">Нет талона</label>
                         </div>
-                    </div>
-                    <div class="form-group col-md-1">
                         <div class="custom-control custom-checkbox">
-                            <input type="checkbox" name="wash_services[]" value="Терминал" class="custom-control-input" id="check7" v-model="fine">
-                            <label class="custom-control-label" for="check7">Терминал</label>
+                            <input type="checkbox" name="wash_services[]" value="Наружка без сушки" class="custom-control-input" id="check3" v-model="fine">
+                            <label class="custom-control-label" for="check3">Наружка без сушки</label>
                         </div>
                     </div>
                     <div class="form-group col-md-3">

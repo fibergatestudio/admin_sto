@@ -354,6 +354,9 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
     /* Просмотр клиента: страница */
     Route::get('admin/clients/view_client/{client_id}', 'Clients_Admin_Controller@single_client_view')->name('admin_view_client')->middleware('can:admin_rights');
 
+        /* Редактировать данные о машине */
+        Route::post('admin/clients/view_client/{client_id}/{car_id}', 'Clients_Admin_Controller@single_client_view_edit_car')->name('admin_view_client')->middleware('can:admin_rights');
+
 
     /*Добавить примечание о клиенте : страница*/
     Route::get('/admin/clients/add_note_to_client/{client_id}', 'Clients_Admin_Controller@add_note_to_client_page');
@@ -395,6 +398,9 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
 
         /* Добавление машины : POST */
         Route::post('admin/cars_in_service/add', 'Cars_in_service_Admin_Controller@add_car_post')->middleware('can:admin_rights');
+
+            /* добавление топлива в базу */
+            Route::get('admin/cars_in_service/add_fuel', 'Cars_in_service_Admin_Controller@add_car_fuel')->middleware('can:admin_rights');
 
     /* Одна машина : страница */
     Route::get('admin/cars_in_service/view/{car_id}', 'Cars_in_service_Admin_Controller@single_car_view')->middleware('can:admin_rights');

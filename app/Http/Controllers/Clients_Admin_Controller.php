@@ -29,26 +29,34 @@ class Clients_Admin_Controller extends Controller
 
     /* Добавить клиента: страница */
     public function add_client_page(){
-        return view('admin.clients.add_client_page');
+
+        $clients = DB::table('clients')->get();
+
+        return view('admin.clients.add_client_page',[
+            'clients' => $clients
+        ]);
     }
 
     /* Добавить клиента: обработка POST запроса */
     public function add_client_post(Request $request){
 
         //$user_id = Auth::user()->id;
-        //dd($user_id);
+        //dd($request->name);
+        
 
         $new_client = new Client();
 
         $name = $request->name;
-        $surname = $request->surname;
-        $fio = $name.' '.$surname;
+        // $surname = $request->surname;
+        // $fio = $name.' '.$surname;
+        $fio = $request->fio;
 
         $new_client->general_name = $name;
         //Новые поля в добавлении клиента
-        $new_client->fio = $fio;
+        $new_client->fio = $name;
         $new_client->organization = $request->organization;
         $new_client->phone = $request->phone;
+        $new_client->referral = $request->referral;
 
         $new_client->save();
 
@@ -71,6 +79,21 @@ class Clients_Admin_Controller extends Controller
         /* Тип? Тест */
         $create_client_log_entry->type = '';
         $create_client_log_entry->save();
+
+        /* Добавление Примечания во время создания */
+
+        if(empty($request->client_note)){
+
+        } else {
+
+            $create_note = new Clients_notes();
+            $create_note->client_id = $new_client->id;
+            $create_note->author_id = Auth::user()->id;
+            $create_note->text = $request->client_note;    
+            $create_note->type = '';
+            $create_note->save();
+
+        }
 
         // Если клиент был добавлен успешно, то предлагаем добавить машину клиента
         return view('admin.clients.add_client_success_page', ['client' => $new_client]);
@@ -222,12 +245,39 @@ class Clients_Admin_Controller extends Controller
             $client_note->author_name = User::find($client_note->author_id)->general_name;
         }
 
+        $fuel_type = DB::table('fuel_type')->get();
+        //dd($fuel_type);
+
         return view('admin.clients.view_client', [
             'client' => $client,
             'cars' => $client_cars,
-            'client_notes' => $client_notes
+            'client_notes' => $client_notes,
+            'fuel_type' => $fuel_type
         ]);
     }
+
+    public function single_client_view_edit_car(Request $request){
+
+        $id = $request->id;
+        $general_name = $request->general_name;
+        $release_year = $request->release_year;
+        $reg_number = $request->reg_number;
+        $fuel_type = $request->fuel_type;
+        $vin_number = $request->vin_number;
+
+        DB::table('cars_in_service')->where('id', $id)
+        ->update([
+            'general_name' => $general_name,
+            'release_year' => $release_year,
+            'reg_number' => $reg_number,
+            'fuel_type' => $fuel_type,
+            'vin_number' => $vin_number
+         ]);
+
+
+        return back();
+    }
+
     /* Живой поиск клиента*/
     public function search(Request $request){
 

@@ -41,6 +41,12 @@
             <input type="password" name="password" class="form-control" required>
         </div>
 
+        {{-- Создавать счет? --}}
+        <div class="form-group">
+            <label>Создавать счет?</label>
+            <input type="checkbox" name="invoice" class="form-control" required>
+        </div>
+
         <button class="btn btn-primary">Добавить</button>
     </form>
     <hr>
