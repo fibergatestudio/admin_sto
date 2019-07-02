@@ -19,9 +19,6 @@
   }
 </style>
 
-<div id="appVue">
-
-
 <select class="form-control" id="download_xls">
   <option value="">Выбрать</option>
   <option value="work_order">Заказ-наряд</option>
@@ -146,6 +143,84 @@
   </form>
 </div>
 
+
+<!-- Модальное окно  Добавление наряда-->
+<div style="margin:0;"class="modal fade modal-dialog" id="addAssignment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Добавление наряда</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            <div class="row">
+              <div class="col-lg-6">
+                <a href="{{ url('admin/clients/add_client') }}">
+                    <div class="btn btn-large btn-primary">
+                        Новый клиент
+                    </div>
+                </a>
+              </div>
+              <div class="col-lg-6">
+                <a href="{{ url('admin/cars_in_service/index') }}">
+                    <div class="btn btn-large btn-info">
+                        Существующий
+                    </div>
+                </a>
+              </div>
+            </div>
+
+            </div>
+        </div>{{-- /modal-content --}}
+    </div>{{-- /modal-dialog --}}
+</div>{{-- /modal fade --}}
+
+@endsection
+
+
+@section('content')
+
+<style type="text/css">
+.content { padding: 0; }
+#table-calculation-profitability { padding: 1.25rem 1.25rem; }
+.tabs-menu { width: 100%; padding: 0px; margin: 0 auto; }
+.tabs-menu>input { display:none; }
+.tabs-menu>div {
+    display: none;
+    padding: 12px;
+    border: 1px solid #C0C0C0;    
+}
+.tabs-menu>label {
+    display: inline-block;
+    padding: 7px;
+    margin: 0 -5px -1px 0;
+    text-align: center;
+    color: #666666;
+    border: 1px solid #C0C0C0;
+    background: #E0E0E0;
+    cursor: pointer;
+    width: 20.11%;
+}
+.tabs-menu>input:checked + label {
+    color: #000000;
+    border: 1px solid #C0C0C0;
+    border-bottom: 1px solid #f2f2f2;
+    background: #f2f2f2;
+}
+#tab_1:checked ~ #txt_1,
+#tab_2:checked ~ #txt_2,
+#tab_3:checked ~ #txt_3,
+#tab_4:checked ~ #txt_4, 
+#tab_5:checked ~ #txt_5{ display: block; }
+</style>
+
+
+<div id="appVue">
+
+
 <!-- Модальное окно поиска наряда -->
 <div class="modal fade" id="searchModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <form action="{{ url('/admin/assignments/search_assignment') }}" method="POST">
@@ -197,21 +272,25 @@
 
             {{-- Обьем мотора --}}
             <div class="form-group">
-                <label>Объем мотора</label>
-                <input type="number" min="0" max="10" step="0.1" name="engine_capacity" id="enginecapacity" class="form-control">
+                <label>Объем двигателя</label>
+                <input type="number" min="0" max="20000" step="1" name="engine_capacity" id="enginecapacity" class="form-control">
             </div>
 
             {{-- Тип топлива --}}
             <div class="form-group">
                 <label>Тип топлива</label>
                 <select name="fuel_type" id="fueltype" class="form-control">
-                  <option value="" selected>Выберите</option>
-                  <option value="Дизель">Дизель</option>
-                  <option value="Гибрид">Гибрид</option>
                   <option value="Бензин">Бензин</option>
-                  <option value="Природный газ">Природный газ</option>
-                  <option value="Сжиженный газ">Сжиженный газ</option>
-                  <option value="Электрический">Электрический</option>
+                  <option value="Дизель">Дизель</option>
+                  <option value="Hybrid (Бензин)">Hybrid (Бензин)</option>
+                  <option value="Hybrid (Дизель)">Hybrid (Дизель)</option>
+                  <option value="Plug-in Hybrid (Бензин)">Plug-in Hybrid (Бензин)</option>
+                  <option value="Plug-in Hybrid (Дизель)">Plug-in Hybrid (Дизель)</option>
+                  <option value="Газ (Пропан) / Бензин">Газ (Пропан) / Бензин</option>
+                  <option value="Газ (Метан) / Бензин">Газ (Метан) / Бензин</option>
+                  <option value="Газ (Пропан)">Газ (Пропан)</option>
+                  <option value="Газ (Метан)">Газ (Метан)</option>
+                  <option value="Электро">Электро</option>
                 </select>
             </div>
 
@@ -233,81 +312,7 @@
   </form>
 
 </div>
-
-
-<!-- Модальное окно  Добавление наряда-->
-<div style="margin:0;"class="modal fade modal-dialog" id="addAssignment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Добавление наряда</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-
-            <div class="row">
-              <div class="col-lg-6">
-                <a href="{{ url('admin/clients/add_client') }}">
-                    <div class="btn btn-large btn-primary">
-                        Новый клиент
-                    </div>
-                </a>
-              </div>
-              <div class="col-lg-6">
-                <a href="{{ url('admin/cars_in_service/add') }}">
-                    <div class="btn btn-large btn-info">
-                        Существующий
-                    </div>
-                </a>
-              </div>
-            </div>
-
-            </div>
-        </div>{{-- /modal-content --}}
-    </div>{{-- /modal-dialog --}}
-</div>{{-- /modal fade --}}
-
-@endsection
-
-
-@section('content')
-
-
-<style type="text/css">
-.content { padding: 0; }
-#table-calculation-profitability { padding: 1.25rem 1.25rem; }
-.tabs-menu { width: 100%; padding: 0px; margin: 0 auto; }
-.tabs-menu>input { display:none; }
-.tabs-menu>div {
-    display: none;
-    padding: 12px;
-    border: 1px solid #C0C0C0;    
-}
-.tabs-menu>label {
-    display: inline-block;
-    padding: 7px;
-    margin: 0 -5px -1px 0;
-    text-align: center;
-    color: #666666;
-    border: 1px solid #C0C0C0;
-    background: #E0E0E0;
-    cursor: pointer;
-    width: 20.11%;
-}
-.tabs-menu>input:checked + label {
-    color: #000000;
-    border: 1px solid #C0C0C0;
-    border-bottom: 1px solid #f2f2f2;
-    background: #f2f2f2;
-}
-#tab_1:checked ~ #txt_1,
-#tab_2:checked ~ #txt_2,
-#tab_3:checked ~ #txt_3,
-#tab_4:checked ~ #txt_4, 
-#tab_5:checked ~ #txt_5{ display: block; }
-</style>
+<!-- Конец Модальное окно поиска наряда -->
 
 
     {{-- Статическая информация по наряду --}}
@@ -2264,24 +2269,6 @@
                 </div>
 
             </div>
-
-            <div class="form-row">                    
-
-                {{-- Пробег --}}
-                {{-- Километры --}}
-                <div class="form-group col-md-6">
-                    {{-- ... --}}
-                    <label>Пробег в километрах</label>
-                    <input type="number" name="mileage_km" class="form-control" min="0" id="mileageKM" step="any" value="{{ $assignment->car_mileage_km }}" required>
-                </div>
-
-                {{-- Мили --}}
-                <div class="form-group col-md-6"> 
-                    <label>Пробег в милях</label>
-                    <input type="number" name="mileage_miles" class="form-control" min="0" id="mileageMiles" step="any" required>
-                </div>
-
-            </div>
             
             <div class="form-row">                 
 
@@ -2289,54 +2276,77 @@
 
                 {{-- Новые поля --}}
                 {{-- Год выпуска --}}
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-4">
                     <label>Год выпуска</label>
                     <input type="number" min="1900" max="2099" step="1" value="2019" name="release_year" id="releaseyear" class="form-control typeahead" value="{{ $assignment->car_year }}" required>
                 </div>
+
+                {{-- Тип топлива --}}
+                <div class="form-group col-md-4">
+                    <label>Тип топлива</label>                    
+                    <select name="fuel_type" id="fueltype" class="form-control" required>
+                        <option <?=($assignment->car_fuel_type === 'Бензин')?'selected':''?> value="Бензин">Бензин</option>
+                        <option <?=($assignment->car_fuel_type === 'Дизель')?'selected':''?> value="Дизель">Дизель</option>
+                        <option <?=($assignment->car_fuel_type === 'Hybrid (Бензин)')?'selected':''?> value="Hybrid (Бензин)">Hybrid (Бензин)</option>
+                        <option <?=($assignment->car_fuel_type === 'Hybrid (Дизель)')?'selected':''?> value="Hybrid (Дизель)">Hybrid (Дизель)</option>
+                        <option <?=($assignment->car_fuel_type === 'Plug-in Hybrid (Бензин)')?'selected':''?> value="Plug-in Hybrid (Бензин)">Plug-in Hybrid (Бензин)</option>
+                        <option <?=($assignment->car_fuel_type === 'Plug-in Hybrid (Дизель)')?'selected':''?> value="Plug-in Hybrid (Дизель)">Plug-in Hybrid (Дизель)</option>
+                        <option <?=($assignment->car_fuel_type === 'Газ (Пропан) / Бензин')?'selected':''?> value="Газ (Пропан) / Бензин">Газ (Пропан) / Бензин</option>
+                        <option <?=($assignment->car_fuel_type === 'Газ (Метан) / Бензин')?'selected':''?> value="Газ (Метан) / Бензин">Газ (Метан) / Бензин</option>
+                        <option <?=($assignment->car_fuel_type === 'Газ (Пропан)')?'selected':''?> value="Газ (Пропан)">Газ (Пропан)</option>
+                        <option <?=($assignment->car_fuel_type === 'Газ (Метан)')?'selected':''?> value="Газ (Метан)">Газ (Метан)</option>
+                        <option <?=($assignment->car_fuel_type === 'Электро')?'selected':''?> value="Электро">Электро</option>
+                    </select>
+                </div>
+
+                {{-- Обьем мотора --}}
+                <div class="form-group col-md-4">
+                    <label>Объем двигателя</label>
+                    <input type="number" min="0" max="20000" step="1" name="engine_capacity" id="enginecapacity" class="form-control" value="{{ $assignment->car_engine_capacity }}" required>
+                </div>
+                
+            </div>
+
+            <div class="form-row">
+
                 {{-- Цвет --}}
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-4">
                     <label>Цвет</label>
                     <div id="cp2" class="input-group colorpicker-component"> 
                         <span class="input-group-addon"><i style="width:35px; height:35px; display:flex; border: 2px solid rgb(97, 97, 97);"></i></span> 
                         <input type="text" name="car_color" value="{{ $assignment->car_color }}" class="form-control"/> 
                     </div>
                 </div>
+
+                {{-- Пробег --}}
+                {{-- Километры --}}
+                <div class="form-group col-md-4">
+                    {{-- ... --}}
+                    <label>Пробег в километрах</label>
+                    <input type="number" name="mileage_km" class="form-control" min="0" id="mileageKM" step="any" value="{{ $assignment->car_mileage_km }}" required>
+                </div>
+
+                {{-- Мили --}}
+                <div class="form-group col-md-4"> 
+                    <label>Пробег в милях</label>
+                    <input type="number" name="mileage_miles" class="form-control" min="0" id="mileageMiles" step="any" required>
+                </div>                                  
+              
             </div>
 
-            <div class="form-row">  
+            <div class="form-row">
+
                 {{-- Регистрационный номер --}}
                 <div class="form-group col-md-6">
                     <label>Регистрационный номер</label>
                     <input type="text" name="reg_number" id="regnumber" class="form-control" value="{{ $assignment->car_reg_number }}" required>
-                </div>
-
-                {{-- Тип топлива --}}
-                <div class="form-group col-md-6">
-                    <label>Тип топлива</label>
-                    <select name="fuel_type" id="fueltype" class="form-control" required>
-                        <option <?=($assignment->car_fuel_type === 'Дизель')?'selected':''?> value="Дизель">Дизель</option>
-                        <option <?=($assignment->car_fuel_type === 'Гибрид')?'selected':''?> value="Гибрид">Гибрид</option>
-                        <option <?=($assignment->car_fuel_type === 'Бензин')?'selected':''?> value="Бензин">Бензин</option>
-                        <option <?=($assignment->car_fuel_type === 'Природный газ')?'selected':''?> value="Природный газ">Природный газ</option>
-                        <option <?=($assignment->car_fuel_type === 'Сжиженный газ')?'selected':''?> value="Сжиженный газ">Сжиженный газ</option>
-                        <option <?=($assignment->car_fuel_type === 'Электрический')?'selected':''?> value="Электрический">Электрический</option>
-                    </select>
-                </div>
-
-            </div>
-
-            <div class="form-row">  
+                </div>  
+                
                 {{-- VIN --}}
                 <div class="form-group col-md-6">
                     <label>VIN</label>
                     <input type="text" name="vin_number" id="vinnumber" class="form-control" value="{{ $assignment->car_vin_number }}" required>
-                </div>
-
-                {{-- Обьем мотора --}}
-                <div class="form-group col-md-6">
-                    <label>Объем мотора</label>
-                    <input type="number" min="0" max="10" step="0.1" name="engine_capacity" id="enginecapacity" class="form-control" value="{{ $assignment->car_engine_capacity }}" required>
-                </div>
+                </div>                
 
             </div>
             
