@@ -30,6 +30,10 @@
                 </td>
 
                 <td>
+                    Баланс: {{ $employee->balance }}
+                </td>
+
+                <td>
                     <a href="{{ url('/supervisor/employee_finances/'.$employee->id) }}">
                         <div class="btn btn-primary">
                             Финансы сотрудника

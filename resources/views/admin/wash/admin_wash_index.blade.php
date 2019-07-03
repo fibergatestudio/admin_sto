@@ -42,8 +42,9 @@
                         <!-- <input type="text" name="firm_name" class="form-control" required> -->
                         <select class="form-control" name="firm_name" required>
                             <option>--Выберите Фирму--</option>
-                        @foreach ($firm_list as $firm)
-                            <option>{{ $firm->firm_name }}</option>
+                        @foreach ($clients_list as $client)
+                            <option>{{ $client->general_name }}</option>
+
                         @endforeach
                         </select>
                     </div>

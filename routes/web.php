@@ -546,6 +546,9 @@ Route::get('/admin/cars/index', 'Cars_Admin_Controller@cars_index')->middleware(
 /* Главная страница */
 Route::get('/admin/supply_orders/index', 'Supply_orders_Admin_Controller@supply_orders_index')->middleware('can:admin_rights');
 
+  /* Управление заказом : Выполнить */
+  Route::post('/admin/supply_orders/{supply_order_id}/order_completed_action', 'Supply_orders_Admin_Controller@admin_order_completed_action')->middleware('can:admin_rights');
+
 /* Добавить заказ */
 Route::get('/admin/supply_orders/new', 'Supply_orders_Admin_Controller@new_supply_order')->middleware('can:admin_rights');
 
@@ -755,6 +758,8 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
 
     /* Активные заказы : список */
     Route::get('/supply_officer/all_orders/list', 'Supply_officer_Controller@all_orders')->middleware('can:supply_officer_rights');
+        /* Применить изменения заказа */
+        Route::post('/supply_officer/all_orders/list/apply_order_edit', 'Supply_officer_Controller@apply_order_edit')->middleware('can:supply_officer_rights');
 
     /* Выполненные заказы : список */
     Route::get('/supply_officer/completed_orders', 'Supply_officer_Controller@completed_orders')->middleware('can:supply_officer_rights');

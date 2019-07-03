@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Supply_order;
 use App\Supply_order_item;
+use DB;
+use Auth;
 
 class Supply_officer_Controller extends Controller
 {
@@ -32,12 +34,34 @@ class Supply_officer_Controller extends Controller
             /*Товар по данному заказу*/ 
             $supply_order->items = $supply_order->get_order_items();
         }
+
+        $employees = DB::table('employees')->get();
         
         /* Возвращаем представление с данными */
         return view('supply_officer.all_orders',
             [
-                'supply_orders' => $supply_orders
+                'supply_orders' => $supply_orders,
+                'employees' => $employees
             ]);
+    }
+
+    /* Применить изменения ордера */
+    public function apply_order_edit(Request $request){
+
+        $order_id = $request->order_id;
+        $payment_method = $request->payment_method;
+        $order_price = $request->order_price;
+        $given_to = $request->given_to;
+
+        DB::table('supply_orders')
+        ->where('id', '=', $order_id)
+        ->update([
+            'payment_method' => $payment_method,
+            'order_price' => $order_price,
+            'given_to' => $given_to
+        ]);
+
+        return back();
     }
 
     /*** Выполненные заказы : список ***/
@@ -108,6 +132,31 @@ class Supply_officer_Controller extends Controller
         $order = Supply_order::find($order_id);
         $order->set_to_completed();
         $order->save();
+
+
+        $payment_method = $request->payment_method;
+        $remove_amount = $request->order_price;
+        //Если оплата наличными - убрать снять со счета снабженца сумму
+        if($payment_method = "Наличные"){
+            //..
+
+            $supply_user_id = Auth::user()->id;
+
+            $user_wallet = DB::table('employees')->where('id', $supply_user_id)->first();
+
+            $wallet = $user_wallet->balance;
+
+            $new_amount = $wallet - $remove_amount;
+
+            //dd($new_amount);
+
+            DB::table('employees')
+            ->where('id', $supply_user_id)
+            ->update([
+                'balance' => $new_amount
+            ]);
+
+        }
 
         /* Редирект на страницу выполненных заказов */
         return redirect('supply_officer/completed_orders');

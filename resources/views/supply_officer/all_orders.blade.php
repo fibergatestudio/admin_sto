@@ -17,6 +17,10 @@
                 <th>Кол-во товара</th>
                 <th>Комментарий</th>
                 <th></th>{{-- Кнопки управления --}}
+                <th>Стоимость</th>
+                <th>Способ Оплаты</th>
+                <th>Кому Выдал</th>
+                <th></th>{{-- Кнопки управления --}}
             </tr>
         </thead>
         <tbody>
@@ -55,13 +59,66 @@
                             </div>
                         </a>
                     </td>
+
+                <form class="form" action="{{ url('/supply_officer/all_orders/list/apply_order_edit') }}" method="POST">
+                    @csrf
+
+                    {{-- Счётчик количества вхождений --}}
+                    <input type="hidden" id="counter" name="order_id" value="{{ $supply_order->id }}">
+
+                    <td>
+                        {{ $supply_order->order_price }}
+                        <input type="text" class="form-control" name="order_price" value="{{ $supply_order->order_price }}"> </input>
+                    </td>
+
+                    <td>
+                        {{ $supply_order->payment_method }}
+                        <select class="form-control" name="payment_method">
+                        
+                            <option>Выберите</option>
+                            <option>Наличные</option>
+                            <option>Счет-фактура</option>
+                            <option>По перечислению</option>
+                        </select>
+                    </td>
+
+                    <td>
+                        {{ $supply_order->given_to }}
+
+                        <select class="form-control" name="given_to">
+                        
+                        <option>Выберите</option>
+                        @foreach ($employees as $emp)
+                            <option value="{{ $emp->id }}">{{ $emp->general_name }}</option>
+                        @endforeach
+
+                        </select>
+                    </td>
+
+                    <td> 
+                    <button type="submit" class="btn btn-success">Применить</button>
+                    </form>
+                    <form method="POST" action="{{ url('supply_officer/order_completed_action') }}">
+                        @csrf
+                        {{-- ID выполненного заказа --}}
+                        <input type="hidden" name="order_id" value="{{ $supply_order->id }}">
+
+                        <input type="hidden" name="order_price" value="{{ $supply_order->order_price }}">
+                        <input type="hidden" name="payment_method" value="{{ $supply_order->payment_method }}">
+
+                        <button type="submit" class="btn btn-success">
+                            Исполнено
+                        </button>
+                    </form>
+                    </td>
                 </tr>            
         </tbody>
     </table>
     <div>
+        <hr>
         <span>Подробности заказа</span>
     </div>
-    <table class="table" >
+    <table class="table bg-white" >
         <thead>
             <tr>
                 <th>Название товара</th>
@@ -69,7 +126,7 @@
                 <th>Срочность</th>                
             </tr>
         </thead>
-        <tbody> 
+        <tbody class=""> 
             @foreach($supply_order->items as $supply_order->item)
                 <tr>
                     <td >

@@ -1452,6 +1452,7 @@ class EmployeesAdminController extends Controller
         $wash_worker = DB::table('employees')->where('position', 'Washer')->get();
 
         $firm_list = DB::table('firm_list')->get();
+        $clients_list = DB::table('clients')->get();
 
         return view('admin.wash.admin_wash_index',[
             'year' => $year,
@@ -1463,7 +1464,8 @@ class EmployeesAdminController extends Controller
             'car_wash_sum_terminal' => $car_wash_sum_terminal,
             'car_wash_sum_total' => $car_wash_sum_total,
             'wash_worker' => $wash_worker,
-            'firm_list' => $firm_list
+            'firm_list' => $firm_list,
+            'clients_list' => $clients_list
             
         ]);
     }

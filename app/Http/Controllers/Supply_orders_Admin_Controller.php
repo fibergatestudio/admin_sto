@@ -91,7 +91,8 @@ class Supply_orders_Admin_Controller extends Controller
         .  $request->order_comment;
 
         Telegram::sendMessage([
-            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+            //'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+            'chat_id' => '-1001204206841.0',
             'parse_mode' => 'HTML',
             'text' => $text
         ]);
@@ -224,6 +225,21 @@ class Supply_orders_Admin_Controller extends Controller
         }
 
         return redirect('/admin/supply_orders/index');
+    }
+
+    public function admin_order_completed_action($supply_order_id){
+
+        //dd($supply_order_id);
+
+        /* Получаем данные по заказу */
+        //$order_id = $request->order_id;
+
+        /* Меняем статус на "выполнено" */
+        $order = Supply_order::find($supply_order_id);
+        $order->set_to_completed();
+        $order->save();
+
+        return back();
     }
 
 
