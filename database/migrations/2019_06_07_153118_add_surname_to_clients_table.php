@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class ChangeColumnEngineCapacityInCarsInServiceTable extends Migration
+class AddSurnameToClientsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class ChangeColumnEngineCapacityInCarsInServiceTable extends Migration
      */
     public function up()
     {
-        Schema::table('cars_in_service', function (Blueprint $table) {
-            $table->dropColumn('engine_capacity');            
+        Schema::table('clients', function (Blueprint $table) {
+            $table->string('surname')->nullable();
         });
     }
 
@@ -25,7 +25,7 @@ class ChangeColumnEngineCapacityInCarsInServiceTable extends Migration
      */
     public function down()
     {
-        Schema::table('cars_in_service', function (Blueprint $table) {
+        Schema::table('clients', function (Blueprint $table) {
             //
         });
     }

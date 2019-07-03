@@ -50,7 +50,7 @@
 
                 </div>
 
-                <div class="form-row">                    
+                <div class="form-row">
 
                     {{-- Новые поля --}}
                     {{-- Год выпуска --}}
@@ -85,28 +85,28 @@
 
 
                 </div>
-                
-                <div class="form-row">  
+
+                <div class="form-row">
 
                     {{-- Цвет --}}
                     <div class="form-group col-md-4">
                         <label>Цвет</label>
-                        <div id="cp2" class="input-group colorpicker-component"> 
-                            <span class="input-group-addon"><i style="width:35px; height:35px; display:flex; border: 2px solid rgb(97, 97, 97);"></i></span> 
-                            <input type="text" name="car_color" value="Цвет не задан" class="form-control" placeholder="Цвет не задан" required/> 
+                        <div id="cp2" class="input-group colorpicker-component">
+                            <span class="input-group-addon"><i style="width:35px; height:35px; display:flex; border: 2px solid rgb(97, 97, 97);"></i></span>
+                            <input type="text" name="car_color" value="Цвет не задан" class="form-control" placeholder="Цвет не задан" required/>
                         </div>
                     </div>
 
 
                     {{-- Мили --}}
-                    <div class="form-group col-md-4"> 
+                    <div class="form-group col-md-4">
                         <label>Пробег в милях</label>
                         <input type="number" name="mileage_miles" class="form-control" min="0" id="mileageMiles" step="any" required>
                     </div>
 
                     {{-- Скрипт на автоматический пересчёт - внизу, в секции custom_scripts --}}
 
-                    
+
                     {{-- Пробег --}}
                     {{-- Километры --}}
                     <div class="form-group col-md-4">
@@ -117,7 +117,7 @@
 
                 </div>
 
-                <div class="form-row">  
+                <div class="form-row">
                     {{-- Регистрационный номер --}}
                     <div class="form-group col-md-6">
                         <label>Регистрационный номер</label>
@@ -130,9 +130,14 @@
                         <input type="text" name="vin_number" id="vinnumber" class="form-control" required>
                     </div>
 
+                    {{-- Обьем мотора --}}
+                    <div class="form-group col-md-4">
+                        <label>Объем мотора</label>
+                        <input type="number" min="0" max="20000" step="1" name="engine_capacity" id="enginecapacity" class="form-control" required>
+                    </div>
 
                 </div>
-            
+
             <button type="submit" class="btn btn-primary">
                 Сохранить
             </button>
@@ -152,7 +157,7 @@
                     mark: '',
                     model: ''
                 }
-            
+
             });
         </script>
 </div>
@@ -173,10 +178,10 @@
             </a>
             <a href="{{ url('admin/cars_in_service/add_fuel') }}"><div class="btn btn-danger">Добавить типы топлива (тест)</div></a>
         </div>
-        
+
         <form action="{{ url('admin/cars_in_service/add') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            
+
                 {{-- Выбор клиента --}}
                 <div class="form-group">
                     <label>Выберите клиента</label>
@@ -189,7 +194,7 @@
                 </div>
 
                 <p>Если вашего клиента нет в списке, пожалуйста, добавьте сначала нового клиента. Это можно сделать, нажав на вот эту кнопку:
-                    
+
                 </p>
                 {{-- Добавить клиента : переход на страницу --}}
                 <a href="{{ url('admin/clients/add_client') }}">
@@ -198,7 +203,7 @@
                     </div>
                 </a>
                 <hr>
-                
+
                 {{-- Прикрепить документ --}}
                 <div class="form-group">
                     <label>Прикрепить документ</label>
@@ -229,7 +234,7 @@
 
                 </div>
 
-                <div class="form-row">                    
+                <div class="form-row">
 
                     {{-- Новые поля --}}
                     {{-- Год выпуска --}}
@@ -264,28 +269,28 @@
 
 
                 </div>
-                
-                <div class="form-row">  
+
+                <div class="form-row">
 
                     {{-- Цвет --}}
                     <div class="form-group col-md-4">
                         <label>Цвет</label>
-                        <div id="cp2" class="input-group colorpicker-component"> 
-                            <span class="input-group-addon"><i style="width:35px; height:35px; display:flex; border: 2px solid rgb(97, 97, 97);"></i></span> 
-                            <input type="text" name="car_color" value="Цвет не задан" class="form-control" placeholder="Цвет не задан" required/> 
+                        <div id="cp2" class="input-group colorpicker-component">
+                            <span class="input-group-addon"><i style="width:35px; height:35px; display:flex; border: 2px solid rgb(97, 97, 97);"></i></span>
+                            <input type="text" name="car_color" value="Цвет не задан" class="form-control" placeholder="Цвет не задан" required/>
                         </div>
                     </div>
 
 
                     {{-- Мили --}}
-                    <div class="form-group col-md-4"> 
+                    <div class="form-group col-md-4">
                         <label>Пробег в милях</label>
                         <input type="number" name="mileage_miles" class="form-control" min="0" id="mileageMiles" step="any" required>
                     </div>
 
                     {{-- Скрипт на автоматический пересчёт - внизу, в секции custom_scripts --}}
 
-                    
+
                     {{-- Пробег --}}
                     {{-- Километры --}}
                     <div class="form-group col-md-4">
@@ -296,7 +301,7 @@
 
                 </div>
 
-                <div class="form-row">  
+                <div class="form-row">
                     {{-- Регистрационный номер --}}
                     <div class="form-group col-md-6">
                         <label>Регистрационный номер</label>
@@ -309,24 +314,29 @@
                         <input type="text" name="vin_number" id="vinnumber" class="form-control" required>
                     </div>
 
+                    {{-- Обьем мотора --}}
+                    <div class="form-group col-md-4">
+                        <label>Объем мотора</label>
+                        <input type="number" min="0" max="20000" step="1" name="engine_capacity" id="enginecapacity" class="form-control" required>
+                    </div>
 
                 </div>
 
-                <!-- <div class="form-row">  
+                <!-- <div class="form-row">
 
 
                 </div> -->
-                
-                
+
+
 
 
                 <button type="submit" class="btn btn-success">
                     Добавить авто
                 </button>
 
-                
 
-                
+
+
             </form>
 
             <script>
@@ -336,7 +346,7 @@
                         mark2: '',
                         model2: ''
                     }
-                
+
                 });
             </script>
     </div>
@@ -353,8 +363,8 @@
         @endif {{-- Конец условия проверки пустая ли база клиентов--}}
 
     @endif
-    
-    
+
+
 @endsection
 
 @section('custom_scripts')
@@ -408,9 +418,9 @@ $("#mileageMiles").change(function(){
                 $("#carModel").append('<option value="'+modelsArray[modelIteration]+'">'+modelsArray[modelIteration]+'</option>');
             }
         }
-        
+
         );{{-- /.get --}}
-    
+
     }); {{-- /carBrand.change--}}
 
 {{-- Конец работы с моделями--}}
@@ -441,7 +451,7 @@ var substringMatcher = function(strs) {
 };
 
 $.get( "{{ url ('admin/cars_in_service/api_brands') }} ", function(data) {
-  
+
   var states = JSON.parse(data);
   console.log(states);
 

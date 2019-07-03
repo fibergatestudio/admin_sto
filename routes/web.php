@@ -301,7 +301,7 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
 
         /* Сохранить информацию о Выполненой работе */
         Route::post('/admin/wash_assignments/id/save_complete_work', 'EmployeesAdminController@admin_wash_save_complete_work');
-            /* Удалить Выполненую работу */ 
+            /* Удалить Выполненую работу */
             Route::get('/admin/wash_assignments/id/delete_complete_work/{work_id}', 'EmployeesAdminController@admin_wash_delete_complete_work');
         /* Сохранить информацию клиент */
         Route::post('/admin/wash_assignments/id/save_client_info', 'EmployeesAdminController@admin_wash_save_client_info');
@@ -351,6 +351,9 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
         /* Добавить клиента: POST запрос */
         Route::post('admin/clients/add_client', 'Clients_Admin_Controller@add_client_post')->middleware('can:admin_rights');
 
+        /* Обновить клиента: POST запрос */
+        Route::post('admin/clients/update_client/{client_id}', 'Clients_Admin_Controller@update_client_post')->middleware('can:admin_rights');
+
     /* Просмотр клиента: страница */
     Route::get('admin/clients/view_client/{client_id}', 'Clients_Admin_Controller@single_client_view')->name('admin_view_client')->middleware('can:admin_rights');
 
@@ -399,8 +402,8 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
         /* Добавление машины : POST */
         Route::post('admin/cars_in_service/add', 'Cars_in_service_Admin_Controller@add_car_post')->middleware('can:admin_rights');
 
-            /* добавление топлива в базу */
-            Route::get('admin/cars_in_service/add_fuel', 'Cars_in_service_Admin_Controller@add_car_fuel')->middleware('can:admin_rights');
+        /* Изменение машины : POST */
+        Route::post('admin/cars_in_service/update/{car_id}', 'Cars_in_service_Admin_Controller@update_car_post')->middleware('can:admin_rights');
 
     /* Одна машина : страница */
     Route::get('admin/cars_in_service/view/{car_id}', 'Cars_in_service_Admin_Controller@single_car_view')->middleware('can:admin_rights');
@@ -499,7 +502,7 @@ Route::post('/admin/profitability/profitability_index/month', 'Assignments_Admin
     /* Удаление фотографий : Страница */
     Route::get('/admin/assignments/{assignment_id}/delete_photos_page', 'Assignments_Admin_Controller@delete_photos_page');
 
-    /* Настройка печати : Страница */ 
+    /* Настройка печати : Страница */
     Route::get('/admin/assignments/{assignment_id}/print_settings', 'Assignments_Admin_Controller@print_settings_page');
 
         /* Удаление фотографий : POST */
@@ -509,7 +512,7 @@ Route::post('/admin/profitability/profitability_index/month', 'Assignments_Admin
 
     /* Админ поиск наряда : POST */
     Route::post('/admin/assignments/search_assignment', 'Assignments_Admin_Controller@search_assignment');
-    
+
     /* Админ страница управления одним нарядом */
     Route::get('/admin/manage_assignment/{assignment_id}', 'Assignments_Admin_Controller@manage_assignment');
 
@@ -610,7 +613,7 @@ Route::get('/admin/supply_orders/archive', 'Supply_orders_Admin_Controller@archi
 Route::get('/admin/employees_logs', 'Logs_Admin_Controller@employees_logs');  //страница логов по сотрдуникам
 Route::get('/admin/clients_logs', 'Logs_Admin_Controller@clients_logs');  //страница логов по клиентам
 Route::get('/admin/cars_in_service_logs', 'Logs_Admin_Controller@cars_in_service_logs');  //страница логов по авто
-Route::get('/admin/finances_logs', 'Logs_Admin_Controller@finances_logs'); //страница логов по финансам 
+Route::get('/admin/finances_logs', 'Logs_Admin_Controller@finances_logs'); //страница логов по финансам
 
 /****************************************/
 /********** РАБОТНИК : секция **********/
@@ -623,7 +626,7 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
 
 /**** История Финансов ****/
     /* Страница финансов */
-    Route::get('/employee/finance/finance_history', 'Employee_Dashboard_Controller@finance_history'); 
+    Route::get('/employee/finance/finance_history', 'Employee_Dashboard_Controller@finance_history');
 
     /* Применить фильтр */
     Route::post('/employee/finance/finance_history/filter', 'Employee_Dashboard_Controller@finance_history');
@@ -634,7 +637,7 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
     Route::get('/employee/calendar/{employee_id}/test_late', 'Employee_Dashboard_Controller@test_late');
     Route::get('/employee/calendar/{employee_id}/test_ontime', 'Employee_Dashboard_Controller@test_ontime');
     Route::get('/employee/calendar_edit', 'TasksController@edit');
-    //Route::get('/employee/calendar', 'TasksController'); 
+    //Route::get('/employee/calendar', 'TasksController');
 
 /**** Наряды : работник ****/
     /* Мои наряды */

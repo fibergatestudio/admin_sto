@@ -5,16 +5,16 @@
 
 <style type="text/css">
   #download_xls{
-    display: none; 
-    position: absolute; 
+    display: none;
+    position: absolute;
     right: 0;
-    top: 70px; 
-    margin: 5px; 
+    top: 70px;
+    margin: 5px;
     width: 150px;
     z-index: 100;
   }
   button.download-xls{
-    position: absolute; 
+    position: absolute;
     right: 0;
   }
 </style>
@@ -74,7 +74,7 @@
   <button type="button" class="btn btn-light" data-toggle="modal" data-target="#exampleModal1" style="margin: 10px">
     Изменить название
   </button>
-  <!-- Вызов попапа принятия аванса --> 
+  <!-- Вызов попапа принятия аванса -->
   <button type="button" class="btn btn-success" data-toggle="modal" data-target="#prepaidModal1" style="margin: 10px">
       Принять аванс
   </button>
@@ -143,6 +143,84 @@
   </form>
 </div>
 
+
+<!-- Модальное окно  Добавление наряда-->
+<div style="margin:0;"class="modal fade modal-dialog" id="addAssignment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Добавление наряда</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            <div class="row">
+              <div class="col-lg-6">
+                <a href="{{ url('admin/clients/add_client') }}">
+                    <div class="btn btn-large btn-primary">
+                        Новый клиент
+                    </div>
+                </a>
+              </div>
+              <div class="col-lg-6">
+                <a href="{{ url('admin/cars_in_service/index') }}">
+                    <div class="btn btn-large btn-info">
+                        Существующий
+                    </div>
+                </a>
+              </div>
+            </div>
+
+            </div>
+        </div>{{-- /modal-content --}}
+    </div>{{-- /modal-dialog --}}
+</div>{{-- /modal fade --}}
+
+@endsection
+
+
+@section('content')
+
+<style type="text/css">
+.content { padding: 0; }
+#table-calculation-profitability { padding: 1.25rem 1.25rem; }
+.tabs-menu { width: 100%; padding: 0px; margin: 0 auto; }
+.tabs-menu>input { display:none; }
+.tabs-menu>div {
+    display: none;
+    padding: 12px;
+    border: 1px solid #C0C0C0;
+}
+.tabs-menu>label {
+    display: inline-block;
+    padding: 7px;
+    margin: 0 -5px -1px 0;
+    text-align: center;
+    color: #666666;
+    border: 1px solid #C0C0C0;
+    background: #E0E0E0;
+    cursor: pointer;
+    width: 20.11%;
+}
+.tabs-menu>input:checked + label {
+    color: #000000;
+    border: 1px solid #C0C0C0;
+    border-bottom: 1px solid #f2f2f2;
+    background: #f2f2f2;
+}
+#tab_1:checked ~ #txt_1,
+#tab_2:checked ~ #txt_2,
+#tab_3:checked ~ #txt_3,
+#tab_4:checked ~ #txt_4,
+#tab_5:checked ~ #txt_5{ display: block; }
+</style>
+
+
+<div id="appVue">
+
+
 <!-- Модальное окно поиска наряда -->
 <div class="modal fade" id="searchModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <form action="{{ url('/admin/assignments/search_assignment') }}" method="POST">
@@ -184,7 +262,7 @@
             <div class="form-group">
                 <label>Регистрационный номер</label>
                 <input type="text" name="reg_number" id="regnumber" class="form-control">
-            </div>                    
+            </div>
 
             {{-- VIN --}}
             <div class="form-group">
@@ -194,21 +272,25 @@
 
             {{-- Обьем мотора --}}
             <div class="form-group">
-                <label>Объем мотора</label>
-                <input type="number" min="0" max="10" step="0.1" name="engine_capacity" id="enginecapacity" class="form-control">
+                <label>Объем двигателя</label>
+                <input type="number" min="0" max="20000" step="1" name="engine_capacity" id="enginecapacity" class="form-control">
             </div>
 
             {{-- Тип топлива --}}
             <div class="form-group">
                 <label>Тип топлива</label>
                 <select name="fuel_type" id="fueltype" class="form-control">
-                  <option value="" selected>Выберите</option>
-                  <option value="Дизель">Дизель</option>
-                  <option value="Гибрид">Гибрид</option>
                   <option value="Бензин">Бензин</option>
-                  <option value="Природный газ">Природный газ</option>
-                  <option value="Сжиженный газ">Сжиженный газ</option>
-                  <option value="Электрический">Электрический</option>
+                  <option value="Дизель">Дизель</option>
+                  <option value="Hybrid (Бензин)">Hybrid (Бензин)</option>
+                  <option value="Hybrid (Дизель)">Hybrid (Дизель)</option>
+                  <option value="Plug-in Hybrid (Бензин)">Plug-in Hybrid (Бензин)</option>
+                  <option value="Plug-in Hybrid (Дизель)">Plug-in Hybrid (Дизель)</option>
+                  <option value="Газ (Пропан) / Бензин">Газ (Пропан) / Бензин</option>
+                  <option value="Газ (Метан) / Бензин">Газ (Метан) / Бензин</option>
+                  <option value="Газ (Пропан)">Газ (Пропан)</option>
+                  <option value="Газ (Метан)">Газ (Метан)</option>
+                  <option value="Электро">Электро</option>
                 </select>
             </div>
 
@@ -228,82 +310,9 @@
       </div>
     </div>
   </form>
+
 </div>
-
-
-<!-- Модальное окно  Добавление наряда-->
-<div style="margin:0;"class="modal fade modal-dialog" id="addAssignment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Добавление наряда</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-
-            <div class="row">
-              <div class="col-lg-6">
-                <a href="{{ url('admin/clients/add_client') }}">
-                    <div class="btn btn-large btn-primary">
-                        Новый клиент
-                    </div>
-                </a>
-              </div>
-              <div class="col-lg-6">
-                <a href="{{ url('admin/cars_in_service/add') }}">
-                    <div class="btn btn-large btn-info">
-                        Существующий
-                    </div>
-                </a>
-              </div>
-            </div>
-
-            </div>
-        </div>{{-- /modal-content --}}
-    </div>{{-- /modal-dialog --}}
-</div>{{-- /modal fade --}}
-
-@endsection
-
-
-@section('content')
-
-
-<style type="text/css">
-.content { padding: 0; }
-#table-calculation-profitability { padding: 1.25rem 1.25rem; }
-.tabs-menu { width: 100%; padding: 0px; margin: 0 auto; }
-.tabs-menu>input { display:none; }
-.tabs-menu>div {
-    display: none;
-    padding: 12px;
-    border: 1px solid #C0C0C0;    
-}
-.tabs-menu>label {
-    display: inline-block;
-    padding: 7px;
-    margin: 0 -5px -1px 0;
-    text-align: center;
-    color: #666666;
-    border: 1px solid #C0C0C0;
-    background: #E0E0E0;
-    cursor: pointer;
-    width: 20.11%;
-}
-.tabs-menu>input:checked + label {
-    color: #000000;
-    border: 1px solid #C0C0C0;
-    border-bottom: 1px solid #f2f2f2;
-    background: #f2f2f2;
-}
-#tab_1:checked ~ #txt_1,
-#tab_2:checked ~ #txt_2,
-#tab_3:checked ~ #txt_3,
-#tab_4:checked ~ #txt_4, 
-#tab_5:checked ~ #txt_5{ display: block; }
-</style>
+<!-- Конец Модальное окно поиска наряда -->
 
 
     {{-- Статическая информация по наряду --}}
@@ -493,7 +502,7 @@
 
 
 <div class="tabs-menu">
-  
+
 
   <input type="radio" name="inset" value="" id="tab_1" checked>
   <label for="tab_1">Наряд</label>
@@ -512,7 +521,7 @@
 
   <div id="txt_1">
 
-    
+
     {{-- Добавить новый зональный наряд : Переход --}}
     <!-- <a href="{{ url('admin/assignments/add_sub_assignment/'.$assignment->id) }}">
         <div class="btn btn-light">
@@ -798,7 +807,7 @@
               </thead>
               <tbody id="dynamic-{{ substr($new_sub_assignment->spares_row_index, 0, 1) }}-2">
 
-              @endif              
+              @endif
 
                   <tr style="background-color: {{ ($new_sub_assignment->spares_is_locked == 'active') ? '#4dffff' : 'transparent' }} ;" data-tr-row="{{ $new_sub_assignment->spares_row_index }}">
                       <td>
@@ -2225,132 +2234,309 @@
 
     </div><!--Конец  dynamic-7//-->
 
-
-    <hr>
-    {{-- Фотографии : вывод --}}
-    <h3>Фотографии:</h3>
-    <div class="row">
-
-      <div class="col-sm-4">
-
-        {{-- Цикл вывода фотографий --}}
-        <p>Принятая машина:</p>
-        @foreach($accepted_image_urls as $image_url)
-        <div class="col-lg-2 col-md-3 col-xs-6 thumb">
-          <a href="{{ Storage::url($image_url) }}" target="_blank">
-            <img class="img-thumbnail"
-            src="{{ Storage::url($image_url) }}"
-            alt="Another alt text">
-          </a>
-        </div>
-        @endforeach
-
-      </div>{{-- /row --}}
-
-      <div class="col-sm-4">
-
-        {{-- Цикл вывода фотографий --}}
-        <p>Процесс ремонта:</p>
-        @foreach($repair_image_urls as $image_url)
-        <div class="col-lg-2 col-md-3 col-xs-6 thumb">
-          <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title=""
-          data-image="{{ Storage::url($image_url) }}"
-          data-target="#image-gallery">
-          <img class="img-thumbnail"
-          src="{{ Storage::url($image_url) }}"
-          alt="Another alt text">
-        </a>
-      </div>
-      @endforeach
-
-    </div>{{-- /row --}}
-
-    <div class="col-sm-4">
-
-      {{-- Цикл вывода фотографий --}}
-      <p>Выдача готовой:</p>
-      @foreach($finished_image_urls as $image_url)
-      <div class="col-lg-2 col-md-3 col-xs-6 thumb">
-        <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title=""
-        data-image="{{ Storage::url($image_url) }}"
-        data-target="#image-gallery">
-        <img class="img-thumbnail"
-        src="{{ Storage::url($image_url) }}"
-        alt="Another alt text">
-      </a>
-    </div>
-    @endforeach
-
-    </div>{{-- /row --}}
-
-    {{-- Модальное окно для вывода лайтбокса --}}
-    <div class="modal fade" id="image-gallery" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title" id="image-gallery-title"></h4>
-            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <center>
-              <img id="image-gallery-image" class="img-responsive" src="">
-            </center>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-light float-left" id="show-previous-image"><=
-            </button>
-
-            <button type="button" id="show-next-image" class="btn btn-light float-right">=>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    {{-- Конец модального окна для вывода лайтбокса --}}
-    </div>
-    {{-- Конец вывод фотографий --}}
-
-    {{-- Фотографии : переход на страницу загрузки --}}
-    <a href="{{ url('/admin/assignments/'.$assignment->id.'/add_photo_page') }}">
-      <div class="btn btn-light">
-        К загрузке фотографий
-      </div>
-    </a>
-
-    {{-- Удаление фотографий : переход на страницу --}}
-    <a href="{{ url('/admin/assignments/'.$assignment->id.'/delete_photos_page') }}">
-      <div class="btn btn-dark">
-        К удалению фотографий
-      </div>
-    </a><br>
-    <br>
-
-    
   </div><!-- txt_1 Наряд-->
-  
+
 
   <div id="txt_2">
-      <p>Информация автомобиля</p>
-  </div>
+
+      <h3>Информация автомобиля: {{ $assignment->car_name }}</h3>
+
+      {{-- Форма изменения машины для клиента --}}
+        <form action="{{ url('admin/cars_in_service/update/'.$assignment->car_id) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            {{-- ID клиента --}}
+            <input type="hidden" name="client_id" value="{{ $assignment->client_id }}">
+            {{-- Название машины --}}
+            <input type="hidden" name="car_general_name" :value="mark+' '+model">
+
+            <div class="form-row">
+
+                {{-- Модель и марка --}}
+                {{-- Марка : от неё будут подтягивать подсказки . Используется Typeahead --}}
+                <div class="form-group col-md-6">
+                    <label>Марка машины</label>
+                    <p class="btn btn-light form-control" id="pCarBrandInf" onclick="brandInfo()" style="text-align: left;">{{ $assignment->car_brand }}</p>
+                    <input v-model.lazy="mark" name="car_brand" id="carBrandInf" class="form-control typeahead" required style="display: none;">
+                </div>
+
+                {{-- Модель : подтягивается с базы --}}
+                {{-- ... --}}
+                <div class="form-group col-md-6">
+                    <label>Модель машины</label>
+                    <p class="btn btn-light form-control" id="pCarModelInf" onclick="modelInfo()" style="text-align: left;">{{ $assignment->car_model }}</p>
+                    <select v-model.lazy="model" id="carModelInf" name="car_model" class="form-control" required style="display: none;">
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="form-row">
+
+                {{-- Скрипт на автоматический пересчёт - внизу, в секции custom_scripts --}}
+
+                {{-- Новые поля --}}
+                {{-- Год выпуска --}}
+                <div class="form-group col-md-4">
+                    <label>Год выпуска</label>
+                    <input type="number" min="1900" max="2099" step="1" value="2019" name="release_year" id="releaseyear" class="form-control typeahead" value="{{ $assignment->car_year }}" required>
+                </div>
+
+                {{-- Тип топлива --}}
+                <div class="form-group col-md-4">
+                    <label>Тип топлива</label>
+                    <select name="fuel_type" id="fueltype" class="form-control" required>
+                        <option <?=($assignment->car_fuel_type === 'Бензин')?'selected':''?> value="Бензин">Бензин</option>
+                        <option <?=($assignment->car_fuel_type === 'Дизель')?'selected':''?> value="Дизель">Дизель</option>
+                        <option <?=($assignment->car_fuel_type === 'Hybrid (Бензин)')?'selected':''?> value="Hybrid (Бензин)">Hybrid (Бензин)</option>
+                        <option <?=($assignment->car_fuel_type === 'Hybrid (Дизель)')?'selected':''?> value="Hybrid (Дизель)">Hybrid (Дизель)</option>
+                        <option <?=($assignment->car_fuel_type === 'Plug-in Hybrid (Бензин)')?'selected':''?> value="Plug-in Hybrid (Бензин)">Plug-in Hybrid (Бензин)</option>
+                        <option <?=($assignment->car_fuel_type === 'Plug-in Hybrid (Дизель)')?'selected':''?> value="Plug-in Hybrid (Дизель)">Plug-in Hybrid (Дизель)</option>
+                        <option <?=($assignment->car_fuel_type === 'Газ (Пропан) / Бензин')?'selected':''?> value="Газ (Пропан) / Бензин">Газ (Пропан) / Бензин</option>
+                        <option <?=($assignment->car_fuel_type === 'Газ (Метан) / Бензин')?'selected':''?> value="Газ (Метан) / Бензин">Газ (Метан) / Бензин</option>
+                        <option <?=($assignment->car_fuel_type === 'Газ (Пропан)')?'selected':''?> value="Газ (Пропан)">Газ (Пропан)</option>
+                        <option <?=($assignment->car_fuel_type === 'Газ (Метан)')?'selected':''?> value="Газ (Метан)">Газ (Метан)</option>
+                        <option <?=($assignment->car_fuel_type === 'Электро')?'selected':''?> value="Электро">Электро</option>
+                    </select>
+                </div>
+
+                {{-- Обьем мотора --}}
+                <div class="form-group col-md-4">
+                    <label>Объем двигателя</label>
+                    <input type="number" min="0" max="20000" step="1" name="engine_capacity" id="enginecapacity" class="form-control" value="{{ $assignment->car_engine_capacity }}" required>
+                </div>
+
+            </div>
+
+            <div class="form-row">
+
+                {{-- Цвет --}}
+                <div class="form-group col-md-4">
+                    <label>Цвет</label>
+                    <div id="cp2" class="input-group colorpicker-component">
+                        <span class="input-group-addon"><i style="width:35px; height:35px; display:flex; border: 2px solid rgb(97, 97, 97);"></i></span>
+                        <input type="text" name="car_color" value="{{ $assignment->car_color }}" class="form-control"/>
+                    </div>
+                </div>
+
+                {{-- Пробег --}}
+                {{-- Километры --}}
+                <div class="form-group col-md-4">
+                    {{-- ... --}}
+                    <label>Пробег в километрах</label>
+                    <input type="number" name="mileage_km" class="form-control" min="0" id="mileageKM" step="any" value="{{ $assignment->car_mileage_km }}" required>
+                </div>
+
+                {{-- Мили --}}
+                <div class="form-group col-md-4">
+                    <label>Пробег в милях</label>
+                    <input type="number" name="mileage_miles" class="form-control" min="0" id="mileageMiles" step="any" required>
+                </div>
+
+            </div>
+
+            <div class="form-row">
+
+                {{-- Регистрационный номер --}}
+                <div class="form-group col-md-6">
+                    <label>Регистрационный номер</label>
+                    <input type="text" name="reg_number" id="regnumber" class="form-control" value="{{ $assignment->car_reg_number }}" required>
+                </div>
+
+                {{-- VIN --}}
+                <div class="form-group col-md-6">
+                    <label>VIN</label>
+                    <input type="text" name="vin_number" id="vinnumber" class="form-control" value="{{ $assignment->car_vin_number }}" required>
+                </div>
+
+            </div>
+
+            <button id="new-car" type="submit" class="btn btn-primary">
+                Сохранить
+            </button>
+        </form>
+
+
+        <hr>
+        {{-- Фотографии : вывод --}}
+        <h3>Фотографии:</h3>
+        <div class="row">
+
+          <div class="col-sm-4">
+
+            {{-- Цикл вывода фотографий --}}
+            <p>Принятая машина:</p>
+            @foreach($accepted_image_urls as $image_url)
+            <div class="col-lg-2 col-md-3 col-xs-6 thumb">
+              <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title=""
+              data-image="{{ Storage::url($image_url) }}"
+              data-target="#image-gallery">
+                <img class="img-thumbnail"
+                src="{{ Storage::url($image_url) }}"
+                alt="Another alt text">
+              </a>
+            </div>
+            @endforeach
+
+          </div>{{-- /row --}}
+
+          <div class="col-sm-4">
+
+            {{-- Цикл вывода фотографий --}}
+            <p>Процесс ремонта:</p>
+            @foreach($repair_image_urls as $image_url)
+            <div class="col-lg-2 col-md-3 col-xs-6 thumb">
+              <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title=""
+              data-image="{{ Storage::url($image_url) }}"
+              data-target="#image-gallery">
+              <img class="img-thumbnail"
+              src="{{ Storage::url($image_url) }}"
+              alt="Another alt text">
+              </a>
+            </div>
+            @endforeach
+
+          </div>{{-- /row --}}
+
+          <div class="col-sm-4">
+
+            {{-- Цикл вывода фотографий --}}
+            <p>Выдача готовой:</p>
+            @foreach($finished_image_urls as $image_url)
+            <div class="col-lg-2 col-md-3 col-xs-6 thumb">
+              <a class="thumbnail" href="#" data-image-id="" data-toggle="modal" data-title=""
+              data-image="{{ Storage::url($image_url) }}"
+              data-target="#image-gallery">
+              <img class="img-thumbnail"
+              src="{{ Storage::url($image_url) }}"
+              alt="Another alt text">
+              </a>
+            </div>
+            @endforeach
+
+          </div>{{-- /row --}}
+
+          {{-- Модальное окно для вывода лайтбокса --}}
+          <div class="modal fade" id="image-gallery" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="image-gallery-title"></h4>
+                  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <center>
+                    <img id="image-gallery-image" class="img-responsive" src="">
+                  </center>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-light float-left" id="show-previous-image"><=
+                  </button>
+
+                  <button type="button" id="show-next-image" class="btn btn-light float-right">=>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          {{-- Конец модального окна для вывода лайтбокса --}}
+        </div>
+        {{-- Конец вывод фотографий --}}
+
+        {{-- Фотографии : переход на страницу загрузки --}}
+        <a href="{{ url('/admin/assignments/'.$assignment->id.'/add_photo_page') }}">
+          <div class="btn btn-light">
+            К загрузке фотографий
+          </div>
+        </a>
+
+        {{-- Удаление фотографий : переход на страницу --}}
+        <a href="{{ url('/admin/assignments/'.$assignment->id.'/delete_photos_page') }}">
+          <div class="btn btn-dark">
+            К удалению фотографий
+          </div>
+        </a><br>
+        <br>
+
+  </div><!-- txt_2 Информация автомобиля-->
+
+
   <div id="txt_3">
-      <p>Информация клиента</p>
-  </div>
+
+      <h3>Информация клиента: {{ $assignment->client_fio }}</h3>
+
+      <form action="{{ url('admin/clients/update_client/'.$assignment->client_id) }}" method="POST">
+        @csrf
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+              <label>Имя</label>
+              <input class="form-control" type="name" name="name" value="{{ $assignment->client_name }}" required>
+          </div>
+          <div class="form-group col-md-6">
+              <label>Фамилия</label>
+              <input class="form-control" type="text" name="surname" value="{{ $assignment->client_surname }}" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+              <label>Организация</label>
+              <input class="form-control" type="text" name="organization" value="{{ $assignment->client_organization }}">
+          </div>
+          <div class="form-group col-md-6">
+              <label>Телефон</label>
+              <input class="form-control" type="number" name="phone" value="{{ $assignment->client_phone }}" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-6">
+              <label>Баланс</label>
+              <input class="form-control" type="number" name="balance" value="{{ $assignment->client_balance }}">
+          </div>
+          <div class="form-group col-md-6">
+              <label>Скидка</label>
+              <input class="form-control" type="number" name="discount" value="{{ $assignment->client_discount }}">
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Сохранить
+        </button>
+
+    </form>
+
+  </div><!-- txt_2 Информация клиента-->
   <div id="txt_4">
       <p>Доходная часть</p>
   </div>
   <div id="txt_5">
       <p>Настройки печати</p>
-  </div>  
+  </div>
 
 
 </div><!-- tabs-menu -->
 
 
+</div><!-- appVue -->
+
 @endsection
 
-
 @section('custom_scripts')
+
+<script>
+          var appVue = new Vue({
+              el: '#appVue',
+              data: {
+                  mark2: '',
+                  model2: '',
+                  mark: '',
+                  model: ''
+              }
+
+          });
+</script>
 
 <script type="text/javascript">
 
@@ -2398,7 +2584,7 @@ var DynamicTable = (function (GLOB) {
         };
         var _addRow = function (before, tBody) {
             var newNode = _correctNames(_rowTpl.cloneNode(true));
-            tBody.insertBefore(newNode, before.nextSibling);            
+            tBody.insertBefore(newNode, before.nextSibling);
 
             //Изменяем индексы в строках таблицы
             var attrValStr = $(before).attr('data-tr-row').slice(0, -3);
@@ -2440,7 +2626,7 @@ var DynamicTable = (function (GLOB) {
                 error: function (msg) {
                   alert('Строку нельзя удалить !');
                 }
-              });              
+              });
             }
         };
         _correctNames(tBody.rows[0]);
@@ -2813,6 +2999,11 @@ $("#mileageKM").change(function(){
     $("#mileageMiles").val(Math.round(currentKilometers/milesToKilometers));
 });
 
+if ($("#mileageKM").val()) {
+  var currentKilometers = $("#mileageKM").val();
+  $("#mileageMiles").val(Math.round(currentKilometers/milesToKilometers));
+}
+
 {{-- При вводе миль --}}
 $("#mileageMiles").change(function(){
     {{-- Получаем текущие мили --}}
@@ -2825,31 +3016,85 @@ $("#mileageMiles").change(function(){
 
 {{-- Подтягиваем список моделей по бренду --}}
 
+var brandVal = "{{ $assignment->car_brand }}";
+var modelVal = "{{ $assignment->car_model }}";
+
+function brandInfo() {
+    $('#carBrandInf').css('display', 'block').val(brandVal);
+    var urlToFetch = "{{ url('admin/cars_in_service/api_models/') }}"+"/"+brandVal;
+    $.get(urlToFetch, function(data){
+            $("#carModelInf").empty();
+            var modelsArray = JSON.parse(data);
+            for(var modelIteration in modelsArray){
+                $("#carModelInf").append('<option value="'+modelsArray[modelIteration]+'">'+modelsArray[modelIteration]+'</option>');
+            }
+    });
+    $('#pCarBrandInf').css('display', 'none');
+}
+
+function modelInfo() {
+    $('#carModelInf').css('display', 'block');
+    var urlToFetch = "{{ url('admin/cars_in_service/api_models/') }}"+"/"+brandVal;
+    $.get(urlToFetch, function(data){
+            $("#carModelInf").empty();
+            var modelsArray = JSON.parse(data);
+            for(var modelIteration in modelsArray){
+                $("#carModelInf").append('<option value="'+modelsArray[modelIteration]+'">'+modelsArray[modelIteration]+'</option>');
+            }
+    });
+    $('#pCarModelInf').css('display', 'none');
+}
+
     {{-- При изменении значения бренда --}}
     $("#carBrand").change(function(){
         {{-- Получаем название бренда и подтягиваем по API список моделей --}}
         var brandName = $("#carBrand").val();
-        //console.log(brandName);
         var urlToFetch = "{{ url('admin/cars_in_service/api_models/') }}"+"/"+brandName;
-        //console.log(urlToFetch)
         $.get(urlToFetch, function(data){
-            {{-- При успехе --}}
-            //console.log('success');
-            //console.log(data);
-            {{-- Очищаем select --}}
             $("#carModel").empty();
-            {{-- Подставляем новые модели--}}
             var modelsArray = JSON.parse(data);
-            //console.log(modelsArray);
             for(var modelIteration in modelsArray){
-                //console.log(modelsArray[modelIteration]);
                 $("#carModel").append('<option value="'+modelsArray[modelIteration]+'">'+modelsArray[modelIteration]+'</option>');
             }
-        }
-        
-        );{{-- /.get --}}
-    
-    }); {{-- /carBrand.change--}}
+        });
+    });
+
+
+    $("#carBrandInf").change(function(){
+        var brandName = $("#carBrandInf").val();
+        var urlToFetch = "{{ url('admin/cars_in_service/api_models/') }}"+"/"+brandName;
+        $('#pCarBrandInf').text(brandName);
+        $(this).css('display', 'none');
+        $('#pCarBrandInf').css('display', 'block');
+        brandVal = brandName;
+        $.get(urlToFetch, function(data){
+            $("#carModelInf").empty();
+            var modelsArray = JSON.parse(data);
+            for(var modelIteration in modelsArray){
+                $("#carModelInf").append('<option value="'+modelsArray[modelIteration]+'">'+modelsArray[modelIteration]+'</option>');
+            }
+        });
+    });
+
+
+    $("#new-car").click(function(event){
+      event.preventDefault();
+
+      var brandName = $('#carBrandInf').val();
+      var modelName = $('#carModelInf').val();
+
+      if (!modelName) {
+        modelName = modelVal;
+        $('[name="car_model"]').val(modelName);
+      }
+      if (!brandName) {
+        brandName = brandVal;
+        $('[name="car_brand"]').val(brandName);
+      }
+
+      $('[name="car_general_name"]').val(brandName+' '+modelName);
+      $(this).parent().submit();
+    });
 
 {{-- Конец работы с моделями--}}
 
@@ -2879,7 +3124,7 @@ var substringMatcher = function(strs) {
 };
 
 $.get( "{{ url ('admin/cars_in_service/api_brands') }} ", function(data) {
-  
+
   var states = JSON.parse(data);
   //console.log(states);
 
@@ -2908,7 +3153,7 @@ $.get( "{{ url ('admin/cars_in_service/api_brands') }} ", function(data) {
 
 <script type="text/javascript">
 var excelLink = "{{ url('admin/assignments/view/export') }}";
-var assignmentId = "{{ $assignment->id }}";  
+var assignmentId = "{{ $assignment->id }}";
   // Скачивание XLS
   function downloadXls() {
     $('#download_xls').toggle();
@@ -2916,7 +3161,10 @@ var assignmentId = "{{ $assignment->id }}";
 
   $('#download_xls').change(function() {
     const docName = $(this).val();
-    if (docName !== '') document.location.href = excelLink + '/' + docName + '/' + assignmentId;
+    if (docName !== '') {
+      //console.log(excelLink + '/' + docName + '/' + assignmentId);
+      document.location.href = excelLink + '/' + docName + '/' + assignmentId;
+    }
   });
 
 </script>

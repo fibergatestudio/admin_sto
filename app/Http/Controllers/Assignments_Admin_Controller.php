@@ -38,10 +38,11 @@ use App\New_sub_assignment;
 
 use Excel;
 use PHPExcel_Worksheet_Drawing;
+use PHPExcel_Style_NumberFormat;
 
 class Assignments_Admin_Controller extends Controller
 {
-    
+
     /* Отображения списка всех нарядов */
     public function assignments_index(){
         /* Получаем всю нужную информацию по нарядам */
@@ -75,7 +76,7 @@ class Assignments_Admin_Controller extends Controller
             $temp_id = $assignments_data[0]->order;
             $i = 0;
 
-            for ( ;$i < count($assignments_data); $i++) { 
+            for ( ;$i < count($assignments_data); $i++) {
                 if ($temp_id == $assignments_data[$i]->order) {
                     $temp_arr_workzone[] = $assignments_data[$i]->assignment_workzone;
                 }
@@ -85,7 +86,7 @@ class Assignments_Admin_Controller extends Controller
                     $temp_id = $assignments_data[$i]->order;
                     $temp_arr_workzone = [];
                     $temp_arr_workzone[] = $assignments_data[$i]->assignment_workzone;
-                }                
+                }
             }
 
             $temp_arr_obj[$i-1] = $assignments_data[$i-1];
@@ -210,7 +211,7 @@ class Assignments_Admin_Controller extends Controller
         } else {
             $text_height = 0;
         }
-        
+
         for ( $i=1; $i <= strlen($code_string); $i++ ){
             $code_length = $code_length + (integer)(substr($code_string,($i-1),1));
             }
@@ -241,7 +242,7 @@ class Assignments_Admin_Controller extends Controller
                 imagefilledrectangle( $image, 0, $location*$SizeFactor, $img_width, $cur_size*$SizeFactor, ($position % 2 == 0 ? $white : $black) );
             $location = $cur_size;
         }
-        
+
         // Draw barcode to the screen or save in a file
             $image_name = "barcode_".$text.".png";
             imagepng($image,"excel/".$image_name);
@@ -331,21 +332,21 @@ class Assignments_Admin_Controller extends Controller
         $str.=' '.$this->num2word($kop,array('bani', 'bani', 'bani'));
 
         return mb_strtoupper(mb_substr($str,0,1,'utf-8'),'utf-8').
-        mb_substr($str,1,mb_strlen($str,'utf-8'),'utf-8'); 
+        mb_substr($str,1,mb_strlen($str,'utf-8'),'utf-8');
     }
-     
+
     /**
      * Склоняем словоформу
      */
     public function num2word($n,$words) {
         return ($words[($n=($n=$n%100)>19?($n%10):$n)==1?0 : (($n>1&&$n<=4)?1:2)]);
-    } 
+    }
 
     //  Сумма прописью на румынском
     public function sum_translate($sum){
         $sum_arr = explode('.', $sum);
         $temp_arr = explode('lei', $this->num_to_str($sum_arr[0]));
-        $text = $this->gtranslate($temp_arr[0], 'ru', 'ro');       
+        $text = $this->gtranslate($temp_arr[0], 'ru', 'ro');
         if (!empty($sum_arr[1])) {
             $text = $text.' lei '.$sum_arr[1].' '.'bani';
         }
@@ -355,9 +356,16 @@ class Assignments_Admin_Controller extends Controller
         return $text;
     }
 
-    
+
     // Генератор Excel
     public function exportExcel($doc_name, $assignment_id){
+
+        $files = scandir('excel');
+        foreach ($files as $value) {
+            if(stripos($value, 'barcode') !== false){
+                unlink("excel/".$value);
+            }
+        }
 
         $assignment_data =
             DB::table('assignments')
@@ -369,54 +377,174 @@ class Assignments_Admin_Controller extends Controller
                         'cars_in_service.vin_number AS vin_number',
                         'cars_in_service.release_year AS release_year',
                         'cars_in_service.reg_number AS reg_number',
+                        'cars_in_service.mileage_km AS mileage_km',
                         'new_sub_assignments.*'
                     )
                 ->where('assignments.id', '=', $assignment_id)
                 ->get();
 
         $car_data = DB::table('car_model_list')->select('brand', 'model')->where('general_name', '=', $assignment_data[0]->car_name)->get();
+        $currency = DB::table('exchange_rates')->select('usd', 'eur')->get();
+        if ($assignment_data->count() == 0 OR $car_data->count() == 0) {
+            return 'Нет данных для файла !';
+        }
 
-        $files = scandir('excel');
-        foreach ($files as $value) {
-            if(stripos($value, 'barcode') !== false){
-                unlink("excel/".$value);
+        //Создаем массив для форматирования чисел в формат "0,00"
+        $arr_format_for_payment = array('R24:AD24' => '0.00');
+        $arr_format_work_order = array('R31:AD31' => '0.00');
+        $arr_format_invoice = array('U31:AD31' => '0.00');
+        $index = 0;
+
+        switch ($doc_name) {
+            case 'invoice_for_payment':
+                foreach ($arr_format_for_payment as $key => $value) {
+                    $index = (int)substr($key, 1, 2);
+                }
+                break;
+
+            case 'work_order':
+                foreach ($arr_format_work_order as $key => $value) {
+                    $index = (int)substr($key, 1, 2);
+                }
+                break;
+
+            case 'invoice':
+                foreach ($arr_format_invoice as $key => $value) {
+                    $index = (int)substr($key, 1, 2);
+                }
+                break;
+
+            default:
+                break;
+        }
+
+        // Подсчитываем сумму в работах
+        $sum_work = 0;
+        foreach($assignment_data as $assignment){
+            if(!empty($assignment->work_row_index)){
+                $index++;
+                $arr_format_for_payment['R'.$index.':AD'.$index] = '0.00';
+                $arr_format_work_order['R'.$index.':AD'.$index] = '0.00';
+                $arr_format_invoice['U'.$index.':AD'.$index] = '0.00';
+
+                $coefficient = 1;
+                if ($assignment->d_table_currency === 'USD') {
+                    $coefficient = $currency[0]->usd;
+                }
+                elseif ($assignment->d_table_currency === 'EUR') {
+                    $coefficient = $currency[0]->eur;
+                }
+                $sum_work += round(((int)$assignment->work_sum_row/$coefficient),2);
             }
         }
 
-        $GLOBALS['test'] = $this->sum_translate(3456.38);
-        //echo '<pre>'.print_r($assignment_data,true).'</pre>';
-        //var_dump($gt);
-        //die();       
+        $index += 4;
+
+        // Подсчитываем сумму в запчастях
+        $sum_spares = 0;
+        foreach($assignment_data as $assignment) {
+            if(!empty($assignment->spares_row_index)) {
+                $index++;
+                $arr_format_for_payment['R'.$index.':AD'.$index] = '0.00';
+                $arr_format_work_order['R'.$index.':AD'.$index] = '0.00';
+                $arr_format_invoice['U'.$index.':AD'.$index] = '0.00';
+
+                $coefficient_2 = 1;
+                if ($assignment->d_table_spares_currency === 'USD') {
+                    $coefficient_2 = $currency[0]->usd;
+                }
+                elseif ($assignment->d_table_spares_currency === 'EUR') {
+                    $coefficient_2 = $currency[0]->eur;
+                }
+                $sum_spares += round(((int)$assignment->spares_sum_row/$coefficient_2),2);
+            }
+        }
+
+        $index++;
+        $arr_format_for_payment['R'.$index.':AD'.$index] = '0.00';
+        $arr_format_work_order['R'.$index.':AD'.$index] = '0.00';
+        $arr_format_invoice['U'.$index.':AD'.$index] = '0.00';
+
+        for ($i=0; $i < 3; $i++) {
+            $index += 2;
+            $arr_format_for_payment['R'.$index.':AD'.$index] = '0.00';
+            $arr_format_work_order['R'.$index.':AD'.$index] = '0.00';
+            $arr_format_invoice['U'.$index.':AD'.$index] = '0.00';
+        }
 
         $GLOBALS['doc_name'] = $doc_name;
+        $GLOBALS['total_in_words'] = $this->sum_translate($sum_work + $sum_spares);
+        $GLOBALS['currency'] = $currency;
+        $GLOBALS['assignment_data'] = $assignment_data;
+        $GLOBALS['car_data'] = $car_data;
+
+        switch ($doc_name) {
+            case 'invoice_for_payment':
+                $GLOBALS['format_data'] = $arr_format_for_payment;
+                break;
+
+            case 'work_order':
+                $GLOBALS['format_data'] = $arr_format_work_order;
+                break;
+
+            case 'invoice':
+                $GLOBALS['format_data'] = $arr_format_invoice;
+                break;
+
+            default:
+                $GLOBALS['format_data'] = [];
+                break;
+        }
+
+        /*echo '<pre>'.print_r($arr_format_invoice,true).'</pre>';
+        die();*/
+
+        // Накладная
+        $array_month = ['Ianuarie','Februarie','Martie','Aprilie','Mai','Iunie','Iulie','August','Septembrie','Octombrie','Noiembrie','Decembrie'];
+        $arr_date = explode('-', date("Y-m-d"));
+        $string_date = $arr_date[2].' '.$array_month[(int)$arr_date[1]-1].' '.$arr_date[0];
+
         $GLOBALS['invoice'] = 'AAD9238437';
-        $GLOBALS['date'] = date("Y-m-d");
-        
+        $GLOBALS['string_date'] = $string_date;
+        $GLOBALS['currently'] = '';
+        $GLOBALS['legal_address'] = '';
+        $GLOBALS['iban'] = '';
+        $GLOBALS['bank'] = '';
+        $GLOBALS['swift'] = '';
+        $GLOBALS['fiscal_code'] = '';
+        $GLOBALS['vat'] = '';
+        $GLOBALS['act_number'] = '';
+        $GLOBALS['document_date'] = date("Y.m.d");
+        $GLOBALS['amount_without_vat'] = $sum_work + $sum_spares;
+        $GLOBALS['amount_vat'] = ($sum_work + $sum_spares)/5;
+        $GLOBALS['total_amount'] = $sum_work + $sum_spares + $GLOBALS['amount_vat'];
+
         if($GLOBALS['invoice'] !== "")
         {
             $this->barcode($GLOBALS['invoice']);
         }
 
         if ($doc_name !== 'tax_invoice') {
-            
+
             Excel::create('New file', function($excel) {
                 $excel->sheet('New sheet', function($sheet) {
-                    $sheet->loadView('templates_for_excel.'.$GLOBALS['doc_name'], array('assignments' => Assignment::all()))->setStyle(array(
+
+                    $sheet->loadView('templates_for_excel.'.$GLOBALS['doc_name'], array('assignment_data' => $GLOBALS['assignment_data'], 'car_data' => $GLOBALS['car_data'], 'currency' => $GLOBALS['currency'], 'total_in_words' => $GLOBALS['total_in_words']))->setStyle(array(
                         'font' => array(
                             'name'      =>  'Calibri',
                             'size'      =>  8,
                         )
-                    ));
+                    ))->setColumnFormat($GLOBALS['format_data']);
                 });
             })->download('xls');
-        
+
         }
         else{
 
             Excel::load('excel/example.xls', function($excel)
-            {                               
+            {
                 $excel->sheet('TDSheet', function($sheet) {
-                    
+
                     $objDrawing = new PHPExcel_Worksheet_Drawing;
                     $objDrawing->setPath(public_path('excel/logo-sto.png'));
                     $objDrawing->setCoordinates('A1');
@@ -425,21 +553,38 @@ class Assignments_Admin_Controller extends Controller
                     $objDrawing = new PHPExcel_Worksheet_Drawing;
                     $objDrawing->setPath(public_path('excel/barcode_'.$GLOBALS['invoice'].'.png'));
                     $objDrawing->setCoordinates('R10');
-                    $objDrawing->setWorksheet($sheet);                    
-                                    
+                    $objDrawing->setWorksheet($sheet);
+
                 })
-                ->setCellValueByColumnAndRow(10, 12, $GLOBALS['date'])
-                ->setCellValueByColumnAndRow(0, 32, $GLOBALS['test'])
-                ;           
+                ->setCellValueByColumnAndRow(10, 12, $GLOBALS['invoice'])
+                ->setCellValueByColumnAndRow(4, 16, $GLOBALS['string_date'])
+                ->setCellValueByColumnAndRow(12, 16, $GLOBALS['string_date'])
+                ->setCellValueByColumnAndRow(4, 21, ($GLOBALS['currently'].", ".$GLOBALS['legal_address'].", c/d ".$GLOBALS['iban'].", ".$GLOBALS['bank'].", ".$GLOBALS['swift']))
+                ->setCellValueByColumnAndRow(41, 21, $GLOBALS['fiscal_code']." / ".$GLOBALS['vat'])
+                ->setCellValueByColumnAndRow(24, 23, "Act nr. ".$GLOBALS['act_number']." din ".$GLOBALS['document_date'])
+                ->setCellValueByColumnAndRow(0, 32, "Servicii de reparatie auto conform ACT")
+                ->setCellValueByColumnAndRow(9, 32, "serv.")
+                ->setCellValueByColumnAndRow(12, 32, "1,00")
+                ->setCellValueByColumnAndRow(15, 32, $GLOBALS['amount_without_vat'])
+                ->setCellValueByColumnAndRow(17, 32, $GLOBALS['amount_without_vat'])
+                ->setCellValueByColumnAndRow(19, 32, "20%")
+                ->setCellValueByColumnAndRow(21, 32, $GLOBALS['amount_vat'])
+                ->setCellValueByColumnAndRow(23, 32, $GLOBALS['total_amount'])
+                ->setCellValueByColumnAndRow(17, 71, $GLOBALS['amount_without_vat'])
+                ->setCellValueByColumnAndRow(21, 71, $GLOBALS['amount_vat'])
+                ->setCellValueByColumnAndRow(23, 71, $GLOBALS['total_amount'])
+                ->setCellValueByColumnAndRow(17, 72, $GLOBALS['amount_without_vat'])
+                ->setCellValueByColumnAndRow(21, 72, $GLOBALS['amount_vat'])
+                ->setCellValueByColumnAndRow(23, 72, $GLOBALS['total_amount'])
+                ;
 
             }) -> download('xls');
-        
+
         }
 
-           
     }
 
-    
+
     /* Поиск нарядов */
     public function search_assignment(Request $request){
         /* Получаем всю нужную информацию по нарядам */
@@ -465,13 +610,13 @@ class Assignments_Admin_Controller extends Controller
                 ->get();
         $workzone_data = DB::table('workzones')->get();
 
-        // Собираем зональные наряды в массив и фильтруем наряды согласно поиску 
+        // Собираем зональные наряды в массив и фильтруем наряды согласно поиску
         $temp_arr_obj = [];
         $temp_arr_workzone = [];
         $temp_id = $assignments_data[0]->order;
         $i = 0;
-        
-        for ( ;$i < count($assignments_data); $i++) { 
+
+        for ( ;$i < count($assignments_data); $i++) {
             if ($temp_id == $assignments_data[$i]->order) {
                 $temp_arr_workzone[] = $assignments_data[$i]->assignment_workzone;
             }
@@ -510,7 +655,7 @@ class Assignments_Admin_Controller extends Controller
                                             else{
                                                 $temp_arr_obj[$i-1] = $assignments_data[$i-1];
                                                 $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
-                                            }                                            
+                                            }
                                         }
                                     }
                                     else{
@@ -539,7 +684,7 @@ class Assignments_Admin_Controller extends Controller
                                         else{
                                             $temp_arr_obj[$i-1] = $assignments_data[$i-1];
                                             $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
-                                        }                                            
+                                        }
                                     }
                                 }
                                 else{
@@ -556,7 +701,7 @@ class Assignments_Admin_Controller extends Controller
                                 }
                             }
                         }
-                    }                    
+                    }
                     else{
                         if (stristr($assignments_data[$i-1]->car_name, $request->car_brand) !== FALSE) {
                             if ($request->release_year) {
@@ -572,7 +717,7 @@ class Assignments_Admin_Controller extends Controller
                                             else{
                                                 $temp_arr_obj[$i-1] = $assignments_data[$i-1];
                                                 $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
-                                            }                                            
+                                            }
                                         }
                                     }
                                     else{
@@ -601,7 +746,7 @@ class Assignments_Admin_Controller extends Controller
                                         else{
                                             $temp_arr_obj[$i-1] = $assignments_data[$i-1];
                                             $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
-                                        }                                            
+                                        }
                                     }
                                 }
                                 else{
@@ -618,7 +763,7 @@ class Assignments_Admin_Controller extends Controller
                                 }
                             }
                         }
-                    }                                        
+                    }
                 }
                 elseif ($request->release_year) {
                     if ($request->release_year == $assignments_data[$i-1]->release_year) {
@@ -633,7 +778,7 @@ class Assignments_Admin_Controller extends Controller
                                 else{
                                     $temp_arr_obj[$i-1] = $assignments_data[$i-1];
                                     $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
-                                }                                            
+                                }
                             }
                         }
                         else{
@@ -661,7 +806,7 @@ class Assignments_Admin_Controller extends Controller
                         else{
                             $temp_arr_obj[$i-1] = $assignments_data[$i-1];
                             $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
-                        }                                            
+                        }
                     }
                 }
                 elseif ($request->fuel_type) {
@@ -674,11 +819,11 @@ class Assignments_Admin_Controller extends Controller
                     $temp_arr_obj[$i-1] = $assignments_data[$i-1];
                     $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
                 }
-                
+
                 $temp_id = $assignments_data[$i]->order;
                 $temp_arr_workzone = [];
                 $temp_arr_workzone[] = $assignments_data[$i]->assignment_workzone;
-            }                
+            }
         }
 
         if ($request->reg_number) {
@@ -715,7 +860,7 @@ class Assignments_Admin_Controller extends Controller
                                     else{
                                         $temp_arr_obj[$i-1] = $assignments_data[$i-1];
                                         $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
-                                    }                                            
+                                    }
                                 }
                             }
                             else{
@@ -744,7 +889,7 @@ class Assignments_Admin_Controller extends Controller
                                 else{
                                     $temp_arr_obj[$i-1] = $assignments_data[$i-1];
                                     $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
-                                }                                            
+                                }
                             }
                         }
                         else{
@@ -761,7 +906,7 @@ class Assignments_Admin_Controller extends Controller
                         }
                     }
                 }
-            }                    
+            }
             else{
                 if (stristr($assignments_data[$i-1]->car_name, $request->car_brand) !== FALSE) {
                     if ($request->release_year) {
@@ -777,7 +922,7 @@ class Assignments_Admin_Controller extends Controller
                                     else{
                                         $temp_arr_obj[$i-1] = $assignments_data[$i-1];
                                         $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
-                                    }                                            
+                                    }
                                 }
                             }
                             else{
@@ -806,7 +951,7 @@ class Assignments_Admin_Controller extends Controller
                                 else{
                                     $temp_arr_obj[$i-1] = $assignments_data[$i-1];
                                     $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
-                                }                                            
+                                }
                             }
                         }
                         else{
@@ -823,7 +968,7 @@ class Assignments_Admin_Controller extends Controller
                         }
                     }
                 }
-            }                                        
+            }
         }
         elseif ($request->release_year) {
             if ($request->release_year == $assignments_data[$i-1]->release_year) {
@@ -838,7 +983,7 @@ class Assignments_Admin_Controller extends Controller
                         else{
                             $temp_arr_obj[$i-1] = $assignments_data[$i-1];
                             $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
-                        }                                            
+                        }
                     }
                 }
                 else{
@@ -866,7 +1011,7 @@ class Assignments_Admin_Controller extends Controller
                 else{
                     $temp_arr_obj[$i-1] = $assignments_data[$i-1];
                     $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
-                }                                            
+                }
             }
         }
         elseif ($request->fuel_type) {
@@ -881,7 +1026,7 @@ class Assignments_Admin_Controller extends Controller
         }
 
         $assignments_data = $temp_arr_obj;
-      
+
         /*echo '<pre>'.print_r($assignments_data,true).'</pre>';
         die();*/
         return view('assignments_admin.assignments_admin_search', ['assignments' => $assignments_data, 'workzone_data' => $workzone_data]);
@@ -889,15 +1034,15 @@ class Assignments_Admin_Controller extends Controller
 
     /* Добавления наряда: страница с формой */
     public function add_assignment_page($car_id){
-        
+
         $client = Client::get_client_by_car_id($car_id);
-        
+
         /* Собираем информация по сотрудникам, которых можно указать как ответственных */
         $employees = Employee::where('status', 'active')->get();
 
         /* Информация о машине */
         $car = Cars_in_service::find($car_id);
-        
+
         return view(
             'admin.assignments.add_assignment_page',
             [
@@ -907,7 +1052,7 @@ class Assignments_Admin_Controller extends Controller
             ]
         );
     }
-    
+
     /* Добавления наряда: страница обработки POST данных*/
     public function add_assignment_page_post(Request $request){
         /* Получаем данные из запроса */
@@ -961,7 +1106,7 @@ class Assignments_Admin_Controller extends Controller
         } else {
 
         }
-        
+
 
         /* Возвращаемся на страницу нарядов по авто */
         return redirect('admin/cars_in_service/view/'.$car_id);
@@ -975,11 +1120,25 @@ class Assignments_Admin_Controller extends Controller
         /* Получаем дополнительную информацию по нарядам */
         /* Имя клиента */
         $assignment->client_name = $assignment->get_client_name();
+        /* Id клиента */
+        $assignment->client_id = $assignment->get_client_id();
+        $client = Client::find($assignment->client_id);
+        $assignment->client_organization = $client->organization;
+        $assignment->client_fio = $client->fio;
+        $assignment->client_surname = $client->surname;
+        $assignment->client_phone = $client->phone;
+        $assignment->client_balance = $client->balance;
+        $assignment->client_discount = $client->discount;
         /* Авто */
         $assignment->car_name = $assignment->get_car_name();
-        /* Год авто */
+        $assignment->car_brand = $assignment->get_car_brand();
+        $assignment->car_model = $assignment->get_car_model();
+        $assignment->car_mileage_km = $assignment->get_car_mileage_km();
+        $assignment->car_fuel_type = $assignment->get_car_fuel_type();
+        $assignment->car_engine_capacity = $assignment->get_car_engine_capacity();
+        $assignment->car_vin_number = $assignment->get_car_vin_number();
+        $assignment->car_color = $assignment->get_car_color();
         $assignment->car_year = $assignment->get_car_year();
-        /* Рег. номер авто */
         $assignment->car_reg_number = $assignment->get_car_reg_number();
 
                 /* Доход/расход/работы */
@@ -1022,7 +1181,7 @@ class Assignments_Admin_Controller extends Controller
                 $assignment_work = Assignments_completed_works::where('assignment_id', $assignment_id)->get();
 
         /* Получаем список зональных нарядов */
-        $sub_assignments = 
+        $sub_assignments =
             DB::table('sub_assignments')
             ->where('assignment_id', $assignment_id)
             ->join('workzones', 'sub_assignments.workzone_id', '=', 'workzones.id')
@@ -1035,7 +1194,7 @@ class Assignments_Admin_Controller extends Controller
         foreach($sub_assignments as $sub_assignment){
             /* Название рабочей зоны */
             $sub_assignment->workzone_name = Workzone::find($sub_assignment->workzone_id)->general_name;
-            
+
             /* Имя ответственного работника */
             $sub_assignment->responsible_employee = Employee::find($sub_assignment->responsible_employee_id)->general_name;
         }
@@ -1057,7 +1216,7 @@ class Assignments_Admin_Controller extends Controller
         foreach(Storage::files('public/'.$assignment_id.'/repair') as $file){
              $repair_images[] = $file;
         }
-        
+
         /* Получаем список картинок по наряду */
         $finished_images = [];
         foreach(Storage::files('public/'.$assignment_id.'/finished') as $file){
@@ -1097,30 +1256,30 @@ class Assignments_Admin_Controller extends Controller
         ])->get();
         // Получаем рабочие направления
         $work_directions = DB::table('work_directions')->get();
-        
+
         // Получаем новые зональные наряды
         $new_sub_assignments_arr = [];
-        
+
         foreach ($work_directions as $value) {
             $temp_arr = [];
-            
+
             $new_sub_work_assignments = New_sub_assignment::where([
                     ['assignment_id','=' ,$assignment_id],
                     ['work_row_index','!=' ,null],
                     ['d_table_work_direction','=' ,$value->name],
                 ])->get();
             $temp_arr[] = $new_sub_work_assignments;
-            
+
             $new_sub_spares_assignments = New_sub_assignment::where([
                     ['assignment_id','=' ,$assignment_id],
                     ['spares_row_index','!=' ,null],
                     ['d_table_work_direction','=' ,$value->name],
                 ])->get();
             $temp_arr[] = $new_sub_spares_assignments;
-            
+
             $new_sub_assignments_arr[$value->id] = $temp_arr;
         }
-        
+
         $currency_arr = ['MDL','USD','EUR'];
 
         /* Возвращаем представление */
@@ -1135,8 +1294,8 @@ class Assignments_Admin_Controller extends Controller
                 'assignment_income' => $assignment_income,
                 'zonal_assignment_income' => $zonal_assignment_income,
                 'assignment_expense' => $assignment_expense,
-                'zonal_assignment_income' => $zonal_assignment_income, 
-                'zonal_assignment_expense' => $zonal_assignment_expense, 
+                'zonal_assignment_income' => $zonal_assignment_income,
+                'zonal_assignment_expense' => $zonal_assignment_expense,
                 'assignment_work' => $assignment_work,
                 'usd' => $usd,
                 'eur' => $eur,
@@ -1197,7 +1356,7 @@ class Assignments_Admin_Controller extends Controller
         $assignment = Assignment::find($assignment_id);
         $assignment->description = $new_name;
         $assignment->save();
-        
+
         /* Возвращаемся на страницу наряда */
         return back();
     }
@@ -1223,7 +1382,7 @@ class Assignments_Admin_Controller extends Controller
 
     /* Добавление зонального наряда : POST */
     public function add_sub_assignment_post(Request $request){
-        
+
         /* Получаем данные из запроса */
         $main_assignment_id = $request->assignment_id; // ID "родительского" наряда
         $sub_assignment_name = $request->name; // Название зонального наряда
@@ -1233,7 +1392,7 @@ class Assignments_Admin_Controller extends Controller
 
         $start_time = $request->start_time;
         $end_time = $request->end_time;
-        
+
         /* Создание нового зонального наряда */
         $sub_assignment = new Sub_assignment();
         $sub_assignment->assignment_id = $main_assignment_id;
@@ -1249,7 +1408,7 @@ class Assignments_Admin_Controller extends Controller
         /* Возвращаемся на страницу */
         return redirect('/admin/assignments/view/'.$main_assignment_id);
     }
-    
+
     /* Добавление нового зонального наряда : POST */
     public function add_new_sub_assignment_post(Request $request){
 
@@ -1257,7 +1416,7 @@ class Assignments_Admin_Controller extends Controller
         if (!empty($request->valueRow) AND substr($request->valueRow, 2, 3) !== '000') {
             // Получаем данные из запроса
             $row_index = $request->valueRow;
-            $assignment_id = $request->assignmentId;        
+            $assignment_id = $request->assignmentId;
 
             DB::table('new_sub_assignments')
             ->where([
@@ -1279,18 +1438,18 @@ class Assignments_Admin_Controller extends Controller
                 ['description','=', $row_index]
             ])
             ->delete();
-            
+
             return $row_index;
         }
-        
+
         /* Получаем данные из запроса */
-        $sub_assignment_arr = $request->valueArr;       
-        
+        $sub_assignment_arr = $request->valueArr;
+
         $temp_arr = [];
         for ($i=0; $i < count($sub_assignment_arr); $i++) {
         foreach ($sub_assignment_arr[$i] as $key => $value) {
                 $temp_arr[$key] = $value;
-            } 
+            }
         }
 
         $is_post_work_row = null;
@@ -1304,7 +1463,7 @@ class Assignments_Admin_Controller extends Controller
             ])->first();
             $row_index = $temp_arr['work_row_index'];
         }
-        
+
         if (isset($temp_arr['spares_row_index'])) {
             $is_post_spares_row = New_sub_assignment::where([
                 ['assignment_id','=', $temp_arr['assignment_id']],
@@ -1312,7 +1471,7 @@ class Assignments_Admin_Controller extends Controller
             ])->first();
             $row_index = $temp_arr['spares_row_index'];
         }
-        
+
         $assignment_expenses = Assignments_expense::where([
                 ['assignment_id','=', $temp_arr['assignment_id']],
                 ['description','=', $row_index]
@@ -1334,8 +1493,8 @@ class Assignments_Admin_Controller extends Controller
             $sub_assignment->d_table_quantity = $temp_arr['d_table_quantity'];
             $sub_assignment->d_table_price = $temp_arr['d_table_price'];
             $sub_assignment->d_table_currency = $temp_arr['d_table_currency'];
-            $sub_assignment->work_sum_row = $temp_arr['d_table_quantity']*$temp_arr['d_table_price'];           
-            $sub_assignment->work_is_locked = $temp_arr['work_is_locked'];            
+            $sub_assignment->work_sum_row = $temp_arr['d_table_quantity']*$temp_arr['d_table_price'];
+            $sub_assignment->work_is_locked = $temp_arr['work_is_locked'];
             $sub_assignment->status = 'active';
             $sub_assignment_expenses->amount = ($sub_assignment->work_sum_row) ? $sub_assignment->work_sum_row : 0;
             $sub_assignment_expenses->assignment_id = $temp_arr['assignment_id'];
@@ -1380,7 +1539,7 @@ class Assignments_Admin_Controller extends Controller
             $is_post_work_row->d_table_quantity = $temp_arr['d_table_quantity'];
             $is_post_work_row->d_table_price = $temp_arr['d_table_price'];
             $is_post_work_row->d_table_currency = $temp_arr['d_table_currency'];
-            $is_post_work_row->work_sum_row = $temp_arr['d_table_quantity']*$temp_arr['d_table_price'];            
+            $is_post_work_row->work_sum_row = $temp_arr['d_table_quantity']*$temp_arr['d_table_price'];
             $is_post_work_row->work_is_locked = $temp_arr['work_is_locked'];
             if ($assignment_expenses) {
                 $assignment_expenses->amount = ($is_post_work_row->work_sum_row) ? $is_post_work_row->work_sum_row : 0;
@@ -1395,7 +1554,7 @@ class Assignments_Admin_Controller extends Controller
                 $sub_assignment_expenses->description = $temp_arr['work_row_index'];
                 $sub_assignment_expenses->currency = $temp_arr['d_table_currency'];
                 $sub_assignment_expenses->save();
-            }                        
+            }
             $is_post_work_row->save();
         }
         elseif ($is_post_spares_row) {
@@ -1421,7 +1580,7 @@ class Assignments_Admin_Controller extends Controller
                 $sub_assignment_expenses->description = $temp_arr['spares_row_index'];
                 $sub_assignment_expenses->currency = $temp_arr['d_table_spares_currency'];
                 $sub_assignment_expenses->save();
-            }            
+            }
             $is_post_spares_row->save();
         }
 
@@ -1432,7 +1591,7 @@ class Assignments_Admin_Controller extends Controller
     public function add_photo_to_assignment_page($assignment_id){
         /* Получаем текущий наряд, к которому будут добавляться фото */
         $assignment = Assignment::find($assignment_id);
-        
+
         /* Отображаем представление */
         return view('admin.assignments.add_photo_to_assignment_page', ['assignment' => $assignment]);
     }
@@ -1445,7 +1604,7 @@ class Assignments_Admin_Controller extends Controller
 
         /* Сохраняем фото */
         $request->test->store('public/'.$assignment_id);
-        
+
         /* Возвращаемся на страницу авто */
         return redirect('admin/assignments/view/'.$assignment_id);
     }
@@ -1458,7 +1617,7 @@ class Assignments_Admin_Controller extends Controller
 
         /* Сохраняем фото */
         $request->accepted_photo->store('public/'.$assignment_id.'/accepted');
-        
+
         /* Возвращаемся на страницу авто */
         return redirect('admin/assignments/view/'.$assignment_id);
     }
@@ -1471,7 +1630,7 @@ class Assignments_Admin_Controller extends Controller
 
         /* Сохраняем фото */
         $request->repair_photo->store('public/'.$assignment_id.'/repair');
-        
+
         /* Возвращаемся на страницу авто */
         return redirect('admin/assignments/view/'.$assignment_id);
     }
@@ -1484,7 +1643,7 @@ class Assignments_Admin_Controller extends Controller
 
         /* Сохраняем фото */
         $request->finished_photo->store('public/'.$assignment_id.'/finished');
-        
+
         /* Возвращаемся на страницу авто */
         return redirect('admin/assignments/view/'.$assignment_id);
     }
@@ -1508,15 +1667,15 @@ class Assignments_Admin_Controller extends Controller
         foreach(Storage::files('public/'.$assignment_id.'/repair') as $file){
                 $repair_images[] = $file;
         }
-        
+
         /* Получаем список фото выдачи готовых машин по наряду */
         $finished_images = [];
         foreach(Storage::files('public/'.$assignment_id.'/finished') as $file){
                 $finished_images[] = $file;
         }
-        
+
         /* Вывести страницу */
-        return view('admin.assignments.delete_photos_from_assignment_page', 
+        return view('admin.assignments.delete_photos_from_assignment_page',
         [
             'images' => $images,
             'accepted_image_urls'=> $accepted_images,
@@ -1530,7 +1689,7 @@ class Assignments_Admin_Controller extends Controller
     public function delete_photos_post(Request $request){
         /* Удалить фото */
         Storage::delete($request->path_to_file);
-        
+
         /* Вернуться на страницу удаления фотографий */
         return redirect('admin/assignments/'.$request->assignment_id.'/delete_photos_page');
     }
@@ -1544,24 +1703,24 @@ class Assignments_Admin_Controller extends Controller
 
     public function assignment_management($sub_assignment_id){
 
-        $sub_assignment = Sub_assignment::find($sub_assignment_id); 
-        $assignment = Assignment::find($sub_assignment->assignment_id); 
-        
+        $sub_assignment = Sub_assignment::find($sub_assignment_id);
+        $assignment = Assignment::find($sub_assignment->assignment_id);
+
         // .. Собираем информацию по наряду
-        
+
         /* Получаем доходную часть */
         $zonal_assignment_income = Zonal_assignments_income::where('sub_assignment_id', $sub_assignment_id)->get();
         /* Получаем расходную часть */
         $zonal_assignment_expense = Zonal_assignments_expense::where('sub_assignment_id', $sub_assignment_id)->get();
         /* Получаем выполненые работы */
         $zonal_assignment_work = Zonal_assignments_completed_works::where('sub_assignment_id', $sub_assignment_id)->get();
-    
+
         return view('admin.assignments.assignment_management',
         [
             'assignment' =>  $assignment,
             'sub_assignment' => $sub_assignment,
-            'zonal_assignment_income' => $zonal_assignment_income, 
-            'zonal_assignment_expense' => $zonal_assignment_expense, 
+            'zonal_assignment_income' => $zonal_assignment_income,
+            'zonal_assignment_expense' => $zonal_assignment_expense,
             'zonal_assignment_work' => $zonal_assignment_work
         ]);
     }
@@ -1581,9 +1740,9 @@ class Assignments_Admin_Controller extends Controller
             /* Проверка оповещенияй (включено ли) */
             $user_id = Auth::user()->id;
             $notification_check = DB::table('user_options')->where('id','=', $user_id)->first();
-    
+
             if($notification_check->tg_income_notification == 1){
-    
+
                 /* Оповещения для телеграма */
                 $text = "У вас новый доход!\n"
                 . "<b>ID Наряда: </b>\n"
@@ -1594,19 +1753,19 @@ class Assignments_Admin_Controller extends Controller
                 . "$new_income_entry->basis\n"
                 . "<b>Описание: </b>\n"
                 .  $new_income_entry->description;
-    
+
                 Telegram::sendMessage([
                 'chat_id' => '-1001204206841.0',
                 'parse_mode' => 'HTML',
                 'text' => $text
                 ]);
-    
+
             } else {
-    
+
             }
-    
-            
-    
+
+
+
             /* Возвращаемся обратно на страницу наряда */
             return back();
         }
@@ -1647,8 +1806,8 @@ class Assignments_Admin_Controller extends Controller
             } else {
 
             }
-    
-    
+
+
             /* Возвращаемся обратно на страницу наряда */
             return back();
         }
@@ -1657,12 +1816,12 @@ class Assignments_Admin_Controller extends Controller
             /* Создаём новое вхождение по выполненым работам и вносим туда информацию */
             $new_works_entry = new Assignments_completed_works();
             $new_works_entry->assignment_id = $request->assignment_id; /* Идентификатор наряда */
-            $new_works_entry->basis = $request->basis; 
-            $new_works_entry->description = $request->description; 
+            $new_works_entry->basis = $request->basis;
+            $new_works_entry->description = $request->description;
             $new_works_entry->status = 'unconfirmed';
             $new_works_entry->save();
-    
-    
+
+
             /* Возвращаемся обратно на страницу наряда */
             return back();
         }
@@ -1680,9 +1839,9 @@ class Assignments_Admin_Controller extends Controller
          /* Проверка оповещенияй (включено ли) */
          $user_id = Auth::user()->id;
          $notification_check = DB::table('user_options')->where('id','=', $user_id)->first();
- 
+
          if($notification_check->tg_income_notification == 1){
- 
+
              /* Оповещения для телеграма */
              $text = "У вас новый зональный доход!\n"
              . "<b>ID Наряда: </b>\n"
@@ -1693,15 +1852,15 @@ class Assignments_Admin_Controller extends Controller
              . "$new_zonal_income_entry->zonal_basis\n"
              . "<b>Описание: </b>\n"
              .  $new_zonal_income_entry->zonal_description;
- 
+
              Telegram::sendMessage([
              'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
              'parse_mode' => 'HTML',
              'text' => $text
              ]);
- 
+
          } else {
- 
+
          }
 
         /* Возвращаемся обратно на страницу наряда */
@@ -1796,7 +1955,7 @@ class Assignments_Admin_Controller extends Controller
         //$eur_to_mdl = $rates->exchange('EUR', 1, 'MDL');
 
 
-        /* Получаем всю нужную информацию по нарядам */        
+        /* Получаем всю нужную информацию по нарядам */
         /* Получаем зональную доходную часть */
         $zonal_assignment_income = Zonal_assignments_income::all();
         /* Получаем зональную расходную часть */
@@ -1832,7 +1991,7 @@ class Assignments_Admin_Controller extends Controller
 
     /* Курс валют */
     public function add_exchange_rates(Request $request){
-        /* Устанавливаем курс валют */        
+        /* Устанавливаем курс валют */
         if (DB::table('exchange_rates')->select('usd')->get()->count() > 0) {
                 DB::table('exchange_rates')
                 ->update(['usd' => $request->usd_currency, 'eur' => $request->eur_currency]);
@@ -1847,7 +2006,7 @@ class Assignments_Admin_Controller extends Controller
 
     /* Отображение месячной рентабельности*/
     public function profitability_month_index(){
-        /* Получаем всю нужную информацию по нарядам */        
+        /* Получаем всю нужную информацию по нарядам */
         /* Получаем зональную доходную часть */
         $zonal_assignment_income = Zonal_assignments_income::all();
         /* Получаем зональную расходную часть */
@@ -1874,7 +2033,7 @@ class Assignments_Admin_Controller extends Controller
         $garbage_removal = 0;
         $other_expenses = 0;
         $date = date("Y-m-d");
-        
+
         /* Получаем последнюю запись в таблице расходов */
         $month_profitability = Month_profitability::latest()->first();
 
@@ -1887,7 +2046,7 @@ class Assignments_Admin_Controller extends Controller
             $garbage_removal = $month_profitability->garbage_removal;
             $other_expenses = $month_profitability->other_expenses;
             $date = $month_profitability->date;
-        }        
+        }
 
         $start_date = $date;
         $end_date = $date;
@@ -1916,7 +2075,7 @@ class Assignments_Admin_Controller extends Controller
 
     /* Отображение месячной рентабельности с заданной датой*/
     public function profitability_month_show($start_date, $end_date){
-        /* Получаем всю нужную информацию по нарядам */        
+        /* Получаем всю нужную информацию по нарядам */
         /* Получаем зональную доходную часть */
         $zonal_assignment_income = Zonal_assignments_income::all();
         /* Получаем зональную расходную часть */
@@ -1973,8 +2132,8 @@ class Assignments_Admin_Controller extends Controller
         else{
             foreach($profitability_months as $value) {
                 if ( strtotime(substr($value->date,0,-3).'-01') >= strtotime($start_date_new) AND strtotime(substr($value->date,0,-3).'-01') <= strtotime($end_date_new) ) {
-                    
-                    $month_profitability = Month_profitability::find($value->id);                                       
+
+                    $month_profitability = Month_profitability::find($value->id);
                     $rental_price += $month_profitability->rental_price;
                     $electricity += $month_profitability->electricity;
                     $water_supply += $month_profitability->water_supply;
@@ -1986,7 +2145,7 @@ class Assignments_Admin_Controller extends Controller
                 }
             }
         }
-        
+
         return view('assignments_admin.profitability_month_index',
         [
             'zonal_assignment_income' => $zonal_assignment_income,
@@ -2006,11 +2165,11 @@ class Assignments_Admin_Controller extends Controller
             'end_date' => $end_date,
             'date_arr' => $date_arr,
         ]);
-    }       
+    }
 
     /* Отображение месячной рентабельности со свежими данными*/
     public function profitability_month(Request $request){
-        /* Получаем всю нужную информацию по нарядам */        
+        /* Получаем всю нужную информацию по нарядам */
         /* Получаем зональную доходную часть */
         $zonal_assignment_income = Zonal_assignments_income::all();
         /* Получаем зональную расходную часть */
@@ -2059,10 +2218,10 @@ class Assignments_Admin_Controller extends Controller
                     $month_profitability->other_expenses = $request->other_expenses;
                 }
                 $month_profitability->save();
-                
+
                 $rental_price = $month_profitability->rental_price;
                 $electricity = $month_profitability->electricity;
-                $water_supply = $month_profitability->water_supply;                
+                $water_supply = $month_profitability->water_supply;
                 $gas = $month_profitability->gas;
                 $cleaning = $month_profitability->cleaning;
                 $garbage_removal = $month_profitability->garbage_removal;
@@ -2117,6 +2276,6 @@ class Assignments_Admin_Controller extends Controller
             'end_date' => $end_date,
             'date_arr' => $date_arr,
         ]);
-    }    
+    }
 
 }

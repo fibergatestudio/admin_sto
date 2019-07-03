@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddColumnEngineCapacityInCarsInServiceTable extends Migration
+class AddBrandAndModelToCarsInServiceTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,8 @@ class AddColumnEngineCapacityInCarsInServiceTable extends Migration
     public function up()
     {
         Schema::table('cars_in_service', function (Blueprint $table) {
-            $table->decimal('engine_capacity',2,1)->nullable();
+            $table->string('car_brand')->nullable();
+            $table->string('car_model')->nullable();
         });
     }
 

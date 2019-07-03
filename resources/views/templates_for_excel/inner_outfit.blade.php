@@ -32,22 +32,22 @@
     <td><h5>Автомобиль</h5></td>
   </tr>
   <tr>
-    <td colspan="4"><h6>Марка:</h6></td>
-    <td colspan="11">{{'Honda'}}</td>
-    <td colspan="4"><h6>Год:</h6></td>
-    <td colspan="11">{{''}}</td>
+    <td colspan="4" style="font-weight: bold;">Марка:</td>
+    <td colspan="11">{{ $car_data[0]->brand }}</td>
+    <td colspan="4" style="font-weight: bold;">Год:</td>
+    <td colspan="11">{{ $assignment_data[0]->release_year }}</td>
   </tr>
   <tr>
-    <td colspan="4"><h6>Модель:</h6></td>
-    <td colspan="11">{{'Civic'}}</td>
-    <td colspan="4"><h6>VIN:</h6></td>
-    <td colspan="11">{{'19XFC1F79GE209458'}}</td>
+    <td colspan="4" style="font-weight: bold;">Модель:</td>
+    <td colspan="11">{{ $car_data[0]->model }}</td>
+    <td colspan="4" style="font-weight: bold;">VIN:</td>
+    <td colspan="11">{{ $assignment_data[0]->vin_number }}</td>
   </tr>
   <tr>
-    <td colspan="4"><h6>Рег. номер:</h6></td>
-    <td colspan="11">{{''}}</td>
-    <td colspan="4"><h6>Пробег:</h6></td>
-    <td colspan="11">{{''}}</td>
+    <td colspan="4" style="font-weight: bold;">Рег. номер:</td>
+    <td colspan="11">{{ $assignment_data[0]->reg_number }}</td>
+    <td colspan="4" style="font-weight: bold;">Пробег:</td>
+    <td colspan="11">{{ $assignment_data[0]->mileage_km }}</td>
   </tr>
   <tr>
     <td height="5"></td>
@@ -68,22 +68,23 @@
   </tr>
   <thead class="export-data">
     <tr height="20">
-      <td colspan="6"><h6>Работник</h6></td>
-      <td colspan="9"><h6>Наименование работ</h6></td>
-      <td colspan="5"><h6>Срок выполнения</h6></td>
-      <td colspan="5"><h6>Роспись работника</h6></td>
-      <td colspan="5"><h6>Проверил работу</h6></td>
+      <td colspan="6" style="font-weight: bold;">Работник</td>
+      <td colspan="9" style="font-weight: bold;">Наименование работ</td>
+      <td colspan="5" style="font-weight: bold;">Срок выполнения</td>
+      <td colspan="5" style="font-weight: bold;">Роспись работника</td>
+      <td colspan="5" style="font-weight: bold;">Проверил работу</td>
     </tr>
   </thead>    
   <tbody class="export-data">
-  @foreach($assignments as $assignment)
+  @foreach($assignment_data as $assignment)
+  @if(!empty($assignment->work_row_index))
     <tr height="30">
 
         {{-- Работник --}}
         <td colspan="6"></td>
 
         {{-- Наименование работ --}}
-        <td colspan="9" style="vertical-align: middle; text-align: left;">{{ 'Демонтаж-Монтаж - АВТО (1 шт.)' }}</td>
+        <td colspan="9" style="vertical-align: middle; text-align: left;">{{ $assignment->d_table_list_completed_works.' - '.$assignment->d_table_work_direction.' ('.$assignment->d_table_quantity.' шт.)' }}</td>
 
         {{-- Срок выполнения --}}
         <td colspan="5"></td>
@@ -95,6 +96,7 @@
         <td colspan="5"></td>
 
     </tr>
+  @endif  
   @endforeach           
   </tbody>
 </table>
