@@ -1436,7 +1436,9 @@ class EmployeesAdminController extends Controller
 
         $year = date('Y');
         $month = date('m');
-        $day = date('d');
+        $day = date('j');
+
+        //dd($day);
 
         $date_arr = array($year, $month, $day);
 
@@ -1454,6 +1456,20 @@ class EmployeesAdminController extends Controller
         $firm_list = DB::table('firm_list')->get();
         $clients_list = DB::table('clients')->get();
 
+        $cashbox = DB::table('car_wash')->where('date', $date)->first();
+
+        $wash_box = DB::table('car_wash')->where('date', $date)->get();
+        $first_box = DB::table('car_wash')->where('date', $date)->where('box_number', '1')->first();
+        $second_box = DB::table('car_wash')->where('date', $date)->where('box_number', '2')->first();
+
+        $enrolled = DB::table('car_wash')->where('date', $date)->first();
+
+        if(!empty($enrolled)){
+            $enrolled_check = $enrolled->enrolled;
+        } else {
+            $enrolled_check = "";
+        }
+
         return view('admin.wash.admin_wash_index',[
             'year' => $year,
             'month' => $month,
@@ -1465,7 +1481,12 @@ class EmployeesAdminController extends Controller
             'car_wash_sum_total' => $car_wash_sum_total,
             'wash_worker' => $wash_worker,
             'firm_list' => $firm_list,
-            'clients_list' => $clients_list
+            'clients_list' => $clients_list,
+            'cashbox' => $cashbox,
+            'wash_box' => $wash_box,
+            'first_box' => $first_box,
+            'second_box' => $second_box,
+            'enrolled_check' => $enrolled_check
             
         ]);
     }
@@ -1483,7 +1504,16 @@ class EmployeesAdminController extends Controller
         $wash_services_implode = implode(', ', $request->wash_services);
         $car_wash->wash_services = $wash_services_implode;
         //dd($wash_services_implode);
-        $car_wash->payment_sum = $request->payment_sum;
+
+        //Расчет суммы со скидкой
+        $clients = DB::table('clients')->where('id', $car_wash->firm_name)->first();
+        $discount = $clients->discount;
+
+        $sum_with_discount = $request->payment_sum - ($request->payment_sum * ($discount / 100));
+
+        $car_wash->payment_sum = $sum_with_discount;
+        //Конец расчета
+
         $car_wash->box_number = $request->box_number;
 
         $year = $request->year;
@@ -1545,6 +1575,24 @@ class EmployeesAdminController extends Controller
 
         $wash_worker = DB::table('employees')->where('position', 'Washer')->get();
 
+        $firm_list = DB::table('firm_list')->get();
+        $clients_list = DB::table('clients')->get();
+
+        $cashbox = DB::table('car_wash')->where('date', $date)->first();
+
+        $wash_box = DB::table('car_wash')->where('date', $date)->get();
+        $first_box = DB::table('car_wash')->where('date', $date)->where('box_number', '1')->first();
+        $second_box = DB::table('car_wash')->where('date', $date)->where('box_number', '2')->first();
+        //$wash_box_count = $wash_box->count();
+        $enrolled = DB::table('car_wash')->where('date', $date)->first();
+        //$enrolled_check = $enrolled->enrolled;
+
+        if(!empty($enrolled)){
+            $enrolled_check = $enrolled->enrolled;
+        } else {
+            $enrolled_check = "";
+        }
+
 
         return view('admin.wash.admin_wash_index',[
             'year' => $year,
@@ -1556,12 +1604,24 @@ class EmployeesAdminController extends Controller
             'car_wash_sum_terminal' => $car_wash_sum_terminal,
             'car_wash_sum_total' => $car_wash_sum_total,
             'wash_worker' => $wash_worker,
+            'firm_list' => $firm_list,
+            'clients_list' => $clients_list,
+            'cashbox' => $cashbox,
+            'first_box' => $first_box,
+            'second_box' => $second_box,
+            'enrolled_check' => $enrolled_check
         ]);
     }
 
 
     //Закрытие Кассы
-    public function admin_wash_close_cashbox($year, $month, $day){
+    public function admin_wash_close_cashbox(Request $request){
+
+        $year = $request->year;
+        $month = $request->month;
+        $day = $request->day;
+
+        //dd($year,$month,$day);
 
         $date_arr = array($year, $month, $day);
         $date = implode('-', $date_arr );
@@ -1576,10 +1636,80 @@ class EmployeesAdminController extends Controller
             
         }
 
+        $admin_id = Auth::user()->id;
+        $admin_info = DB::table('employees')->where('user_id', $admin_id)->first();
+        $admin_wallet = $admin_info->balance;
+
+        $new_balance = $admin_wallet + $request->sum_total;
+
+        //dd($admin_wallet, $request->sum_total);
+
+        DB::table('employees')->where('user_id', $admin_id)
+        ->update([
+            'balance' => $new_balance,
+        ]);
+
        //dd($cashbox_date);
 
         return back();
 
+    }
+    
+    public function admin_wash_employee_payment(Request $request){
+
+        $year = $request->year;
+        $month = $request->month;
+        $day = $request->day;
+
+        $date_arr = array($year, $month, $day);
+        $date = implode('-', $date_arr );
+
+        //dd($date);
+
+        $washers = DB::table('employees')->where('position', 'Washer')->get();
+        $washers_count = $washers->count();
+
+        // for($i = 1; $i <= $washers_count; $i++){
+
+        //     $washer = DB::table('employees')->where('position', 'Washer')->first();
+        //     $balance = $washers[$i]->balance;
+        //     dd($balance);
+
+        // }
+
+        $wash_payment = 100;
+        $percentage = 30;
+        $percent_30 = ($percentage / 100) * $request->sum_total;
+
+        //dd($percent_30, $washers_count);
+
+        foreach ($washers as $washer){
+
+            $washer_balance = $washer->balance;
+            $washer_new_balance = $washer_balance + $percent_30;
+
+            DB::table('employees')->where('id', $washer->id)
+            ->update([
+                'balance' => $washer_new_balance,
+            ]);
+
+            //dd($washer_new_balance);
+
+        }
+
+        //change enrolled
+        $wash = DB::table('car_wash')->where('date', $date)->get();
+
+        foreach ($wash as $wash){
+
+            DB::table('car_wash')->where('id', $wash->id)
+            ->update([
+                'enrolled' => 'yes',
+            ]);
+        }
+
+
+        return back();
     }
 
     /* ОТЧЕТ МОЙКИ */

@@ -12,6 +12,8 @@ use App\Supply_order;
 use App\Supply_order_item;
 use App\Supply_order_log;
 
+use DB;
+
 class Supply_orders_Admin_Controller extends Controller
 {
     /* Главная страница со списком заказов */

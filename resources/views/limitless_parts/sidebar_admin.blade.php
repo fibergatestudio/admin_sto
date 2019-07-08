@@ -99,11 +99,19 @@
 							</a>
 						</li>
 
-                                                <li class="nav-item">
+						<li class="nav-item">
 							<a href="{{ url('admin/clients/clients_index') }}" class="nav-link {{ request()->is('admin/clients/*') ? 'active' : ''}}">
 								<i class="icon-users2"></i>
 								<span>
 									Клиенты
+								</span>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="{{ url('admin/firms/firms_index') }}" class="nav-link {{ request()->is('admin/firms/*') ? 'active' : ''}}">
+								<i class="icon-firm"></i>
+								<span>
+									Фирмы
 								</span>
 							</a>
 						</li>

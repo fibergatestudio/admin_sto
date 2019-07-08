@@ -68,7 +68,7 @@
 
                     <td>
                         {{ $supply_order->order_price }}
-                        <input type="text" class="form-control" name="order_price" value="{{ $supply_order->order_price }}"> </input>
+                        <input type="text" class="form-control" name="order_price" value="{{ $supply_order->order_price }}" required> </input>
                     </td>
 
                     <td>
@@ -98,6 +98,7 @@
                     <td> 
                     <button type="submit" class="btn btn-success">Применить</button>
                     </form>
+                    @if(!empty($supply_order->order_price))
                     <form method="POST" action="{{ url('supply_officer/order_completed_action') }}">
                         @csrf
                         {{-- ID выполненного заказа --}}
@@ -110,6 +111,7 @@
                             Исполнено
                         </button>
                     </form>
+                    @endif
                     </td>
                 </tr>            
         </tbody>

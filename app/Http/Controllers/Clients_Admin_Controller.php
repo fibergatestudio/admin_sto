@@ -15,6 +15,7 @@ use App\Clients_logs;
 use App\Clients_notes_logs;
 use App\Deleted_notes;
 use App\Cars_in_service_logs;
+use App\Firm_list;
 
 
 
@@ -52,7 +53,7 @@ class Clients_Admin_Controller extends Controller
         $fio = $request->fio;
 
         $new_client->general_name = $name;
-        $new_client->surname = $request->surname;
+        //$new_client->surname = $request->surname;
         //Новые поля в добавлении клиента
         $new_client->fio = $name;
         $new_client->organization = $request->organization;
@@ -95,6 +96,14 @@ class Clients_Admin_Controller extends Controller
             $create_note->save();
 
         }
+
+
+        //Создание фирмы под клиента со скидкой
+        $firm = new Firm_list();
+        $firm->firm_name = $name;
+        $firm->firm_discount = "5%";
+        $firm->save();
+
 
         // Если клиент был добавлен успешно, то предлагаем добавить машину клиента
         return view('admin.clients.add_client_success_page', ['client' => $new_client]);

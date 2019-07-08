@@ -11,7 +11,7 @@
 <div class="form-row">
     <div class="card card-outline-secondary col-md-12">
 
-    <?php
+<?php
 $d=cal_days_in_month(CAL_GREGORIAN,$month,$year);
 echo "There was $d days in $month 2019.";
 ?>
@@ -19,7 +19,7 @@ echo "There was $d days in $month 2019.";
 echo '<div class="row">';
 for ($i = 0; $i < $d; $i++)
     {
-        $today = strtotime(date("Y-m-d"));
+        $today = strtotime(date("Y-m-j"));
         $date = strtotime($year . "-" . $month . "-" . ($i + 1));
         $url = "/admin/wash/select_date/$year/$month/".($i + 1)."";
         if ($today === $date)

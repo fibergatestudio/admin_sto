@@ -328,6 +328,8 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
     Route::get('/admin/wash/select_date/{year}/{month}/{day}', 'EmployeesAdminController@wash_select_result');
         /* Закрыть Кассу */
         Route::get('/admin/wash/select_date/{year}/{month}/{day}/close_cashbox', 'EmployeesAdminController@admin_wash_close_cashbox');
+        /* Зачислить работникам */
+        Route::get('/admin/wash/select_date/{year}/{month}/{day}/employee_payment', 'EmployeesAdminController@admin_wash_employee_payment');
 
     /* ОТЧЕТ МОЙКИ */
     /* Страница Выбора даты Мойки (ГОД) */
@@ -383,7 +385,10 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
     Route::get('/clients/search', 'Clients_Admin_Controller@search')->name('clients_search')->middleware('can:admin_rights');
 
 
-
+/****** Фирмы: Администратор ******/
+Route::get('admin/firms/firms_index', 'Firms_Admin_Controller@firms_index')->middleware('can:admin_rights');
+    /* Добавить фирму */
+    Route::post('admin/firms/firms_index/add_firm', 'Firms_Admin_Controller@add_firm')->middleware('can:admin_rights');
 
 /****** Машины на обслуживании: Администратор ******/
 

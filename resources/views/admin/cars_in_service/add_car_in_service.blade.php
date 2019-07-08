@@ -264,7 +264,7 @@
                     {{-- Обьем мотора --}}
                     <div class="form-group col-md-4">
                         <label>Объем мотора</label>
-                        <input type="number" min="0" max="10" step="0.1" name="engine_capacity" id="enginecapacity" class="form-control" required>
+                        <input type="number" min="0" max="20000" step="1" name="engine_capacity" id="enginecapacity" class="form-control" required>
                     </div>
 
 
@@ -312,12 +312,6 @@
                     <div class="form-group col-md-6">
                         <label>VIN</label>
                         <input type="text" name="vin_number" id="vinnumber" class="form-control" required>
-                    </div>
-
-                    {{-- Обьем мотора --}}
-                    <div class="form-group col-md-4">
-                        <label>Объем мотора</label>
-                        <input type="number" min="0" max="20000" step="1" name="engine_capacity" id="enginecapacity" class="form-control" required>
                     </div>
 
                 </div>

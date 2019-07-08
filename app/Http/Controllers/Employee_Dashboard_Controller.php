@@ -656,6 +656,7 @@ class Employee_Dashboard_Controller extends Controller
     /* Страница со списком заказов */
     public function employee_orders_index(){
 
+        $curr_user_id = Auth::user()->id;
         /* Получаем из базы данные обо всех активных заказах на поставку */
         $supply_orders = Supply_order::where('status', 'active')->where('creator_id', Auth::user()->id)->get();
         
@@ -677,7 +678,8 @@ class Employee_Dashboard_Controller extends Controller
         /* Возвращаем представление с данными */
         return view('employee.orders.employee_orders_index',
             [
-                'supply_orders' => $supply_orders,                
+                'supply_orders' => $supply_orders,
+                'curr_user_id' => $curr_user_id                
             ]);
     }
     
@@ -741,10 +743,11 @@ class Employee_Dashboard_Controller extends Controller
              .  $item_urgency;
  
              Telegram::sendMessage([
-             'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+            'chat_id' => '-1001204206841.0',
              'parse_mode' => 'HTML',
              'text' => $text
              ]);
+
  
          } else {
  

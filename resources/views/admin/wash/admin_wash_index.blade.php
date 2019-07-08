@@ -43,7 +43,7 @@
                         <select class="form-control" name="firm_name" required>
                             <option>--Выберите Фирму--</option>
                         @foreach ($clients_list as $client)
-                            <option>{{ $client->general_name }}</option>
+                            <option value="{{ $client->id }}">{{ $client->general_name }}</option>
 
                         @endforeach
                         </select>
@@ -127,9 +127,21 @@
                     <div class="form-group col-md-3">
                         <label>Бокс</label>
                         <select name="box_number" class="form-control" required>
-                            <option>--Выберите номер бокса--</option>
-                            <option>1</option>
-                            <option>2</option>
+                            @if(!empty($first_box))
+
+                            @else
+                                <option value="1">№1</option>
+                            @endif
+
+                            @if(!empty($second_box))
+
+                            @else
+                                <option value="2">№2</option>
+                            @endif
+
+                            @if(!empty($first_box) && !empty($second_box))
+                            <option>Нет Свободных Боксов</option>
+                            @endif
                         </select>
                     </div>
                 </div>
@@ -187,7 +199,7 @@
                             {{ $car_wash->wash_services }}
                         </td>
                         <td>
-                            {{ $car_wash->payment_sum }}
+                           {{ $car_wash->payment_sum }}
                         </td>
                         <td>
                             {{ $car_wash->box_number }}
@@ -221,14 +233,25 @@
             </table>
         </div>
         <hr>
-        <div class="form-group text-center">
-            <a href="{{ url('/admin/wash/select_date/'.$year.'/'.$month.'/'.$day.'/close_cashbox') }}"><button class="btn btn-primary">Закрыть кассу</button></a>
-        </div>
+        @if(!empty($cashbox))
+            @if( $cashbox->status == "Closed")
+                <button type="submit" class="btn btn-warning" disabled>Касса Закрыта!</button>
+            @else
+            <div class="form-group text-center">
+                <form action="{{ url('/admin/wash/select_date/'.$year.'/'.$month.'/'.$day.'/close_cashbox') }}" method="GET">
+                @csrf
+                    <input type="hidden" name="sum_total" value="{{ $car_wash_sum_total }}">
+
+                    <button type="submit" class="btn btn-primary">Закрыть кассу</button>
+                </form>
+            </div>
+            @endif
+        @endif
     </div>
     <div class="card card-outline-secondary col-md-12">
         <div class="form-group">
             <div class="card-header">
-                <h3 class="mb-0">Зачислить работникам</h3>
+                <h3 class="mb-0">Зачислить работникам</h3> 
                 <table id="table" class="table">
                 <thead>
                     <tr>
@@ -255,7 +278,16 @@
             </table>
             </div>
             <div class="form-group text-center">
-                <button class="btn btn-primary">Зачислить</button>
+            @if(empty ($enrolled_check))
+                <form action="{{ url('/admin/wash/select_date/'.$year.'/'.$month.'/'.$day.'/employee_payment') }}" method="GET">
+
+                    <input type="hidden" name="sum_total" value="{{ $car_wash_sum_total }}">
+
+                    <button type="submit" class="btn btn-primary">Зачислить</button>
+                </form>
+            @elseif($enrolled_check == 'yes')
+                <button type="submit" class="btn btn-warning" disabled>Уже Зачислено</button>
+            @endif
             </div>
         </div>
     </div>
