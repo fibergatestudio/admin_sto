@@ -146,19 +146,19 @@
                                     <input class="form-control" name="car_number" type="text">
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            <!-- <div class="form-group row">
                                 <label class="col-lg-3 col-form-label form-control-label">Услуги</label>
                                 <div class="col-lg-9">
                                     <div class="form-check form-check-inline custom-checkbox">
-                                        <input class="custom-control-input" name="record_services[]" type="checkbox" id="inlineCheckbox1" value="Полировка">
+                                        <input class="custom-control-input" name="" type="checkbox" id="inlineCheckbox1" value="Полировка">
                                         <label class="custom-control-label" for="inlineCheckbox1">Полировка</label>
                                     </div>
                                     <div class="form-check form-check-inline custom-checkbox">
-                                        <input class="custom-control-input" name="record_services[]" type="checkbox" id="inlineCheckbox2" value="Развал-схождение">
+                                        <input class="custom-control-input" name="" type="checkbox" id="inlineCheckbox2" value="Развал-схождение">
                                         <label class="custom-control-label" for="inlineCheckbox2">Развал-схождение</label>
                                     </div>
                                     <div class="form-check form-check-inline custom-checkbox">
-                                        <input class="custom-control-input" name="record_services[]" type="checkbox" id="inlineCheckbox3" value="Шиномонтаж">
+                                        <input class="custom-control-input" name="" type="checkbox" id="inlineCheckbox3" value="Шиномонтаж">
                                         <label class="custom-control-label" for="inlineCheckbox3">Шиномонтаж</label>
                                     </div>
                                     <button class="btn btn-info" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
@@ -172,21 +172,58 @@
                                         <div class="collapse" id="collapseExample">
                                             <div class="card card-body">
                                                 <div class="form-check form-check-inline custom-checkbox">
-                                                    <input class="custom-control-input" name="record_services[]" type="checkbox" id="inlineCheckbox4" value="Химчистка">
+                                                    <input class="custom-control-input" name="record_services" type="checkbox" id="inlineCheckbox4" value="Химчистка">
                                                     <label class="custom-control-label" for="inlineCheckbox4">Химчистка</label>
                                                 </div>
                                             </div>
                                         </div>
                                 </div>
+                            </div> -->
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label form-control-label">Услуги(new)</label>
+                                <div class="col-lg-8">
+                                    <select class="form-control" name="record_services" type="number">
+                                    @foreach ($services as $service)
+                                        <option value="{{ $service->service }}">{{ $service->service }}</option>
+                                    @endforeach
+                                        <option value="Полировка">Полировка</option>
+                                        <option value="Развал-схождение">Развал-схождение</option>
+                                        <option value="Шиномонтаж">Шиномонтаж</option>
+                                        <option value="Химчистка">Химчистка</option>
+                                    </select>
+                                </div>
+                                <div class="col-lg-1">
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addServiceModal">+</button>
+                                </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-lg-3 col-form-label form-control-label">Дата записи</label>
+                                <label class="col-lg-3 col-form-label form-control-label">Дата записи от</label>
                                 <div class="col-lg-5">
-                                    <input class="form-control" name="record_date" type="date"  value="2019-02-12" min="2019-01-01" max="2019-12-31">
+                                    <input class="form-control" name="start" type="date"  value="2019-02-12" min="2019-01-01" max="2019-12-31">
                                 </div>
                                 <label class="col-lg-1 col-form-label form-control-label">Время</label>
                                 <div class="col-lg-3" style="display: flex;">
-                                    <input class="form-control" name="record_time" type="time" required>
+                                    <input class="form-control" name="record_time_from" type="time" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label form-control-label">Дата записи до</label>
+                                <div class="col-lg-5">
+                                    <input class="form-control" name="end" type="date"  value="2019-02-12" min="2019-01-01" max="2019-12-31">
+                                </div>
+                                <label class="col-lg-1 col-form-label form-control-label">Время</label>
+                                <div class="col-lg-3" style="display: flex;">
+                                    <input class="form-control" name="record_time_to" type="time" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label form-control-label">Рабочий</label>
+                                <div class="col-lg-9">
+                                    <select class="form-control" name="employee" type="number">
+                                    @foreach($employees as $employee)
+                                        <option value="{{ $employee->id }}">{{ $employee->general_name }}</option>
+                                    @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -206,6 +243,94 @@
     </div>
 </div>
 </form>
+
+<!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addServiceModal">
+        Добавить заход денег
+    </button> -->
+
+    {{-- Добавить заход денег : Форма и модальное окно --}}
+    <form action="{{ url('/records/add_service') }}" method="POST">
+        @csrf
+
+        <div class="modal fade" id="addServiceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Добавить услугу</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+
+                            {{-- Основание --}}
+                            <div class="form-group">
+                                <label>Название услуги</label>
+                                <input type="text" name="service_name" class="form-control" required>
+                            </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                        <button type="submit" class="btn btn-primary">Добавить</button>
+                    </div>
+                </div>{{-- /modal-content --}}
+            </div>{{-- /modal-dialog --}}
+        </div>{{-- /modal fade --}}
+    </form>
+
+<!--Календарь -->
+
+<style>
+
+.fc-sun { background-color:lightgray;  }
+.fc-event-container { background-color:lightgreen; }
+
+</style>
+
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.css' />
+
+<div style="display: table-footer-group;" class="col-lg-7 bg-white card card-outline-secondary p-3">
+    <div id='calendar'></div>
+</div>
+
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.js'></script>
+<script>
+    $(document).ready(function() {
+        // page is now ready, initialize the calendar...
+        $('#calendar').fullCalendar({
+            firstDay: 1,
+            monthNames: ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],
+            monthNamesShort: ['Янв.','Фев.','Март','Апр.','Май','οюнь','οюль','Авг.','Сент.','Окт.','Ноя.','Дек.'],
+            dayNames: ["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"],
+            dayNamesShort: ["ВС","ПН","ВТ","СР","ЧТ","ПТ","СБ"],
+            defaultView: 'month',
+            buttonText: {
+                    prev: "Пред. месяц",
+                    next: "След. месяц",
+                    prevYear: "&nbsp;&lt;&lt;&nbsp;",
+                    nextYear: "&nbsp;&gt;&gt;&nbsp;",
+                    today: "Сегодня",
+                    month: "Месяц",
+                    week: "Неделя",
+                    day: "День"
+                },
+            displayEventTime: false,
+            events : [
+                @foreach($calendar as $task)
+                {
+                    title : '{{ $task->description }}',
+                    start : '{{ $task->start }}',
+                    end : '{{ $task->end }}',
+                    //url : '{{ url('/employee/calendar_edit', $task->id) }}'
+                },
+                @endforeach
+            ]
+        })
+    });
+</script>
 
 @endsection
 

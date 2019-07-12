@@ -278,7 +278,7 @@
             </table>
             </div>
             <div class="form-group text-center">
-            @if(empty ($enrolled_check))
+            @if($enrolled_check == 'no')
                 <form action="{{ url('/admin/wash/select_date/'.$year.'/'.$month.'/'.$day.'/employee_payment') }}" method="GET">
 
                     <input type="hidden" name="sum_total" value="{{ $car_wash_sum_total }}">

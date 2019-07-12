@@ -1466,6 +1466,8 @@ class EmployeesAdminController extends Controller
 
         if(!empty($enrolled)){
             $enrolled_check = $enrolled->enrolled;
+
+            //dd($enrolled_check);
         } else {
             $enrolled_check = "";
         }
@@ -1638,17 +1640,21 @@ class EmployeesAdminController extends Controller
 
         $admin_id = Auth::user()->id;
         $admin_info = DB::table('employees')->where('user_id', $admin_id)->first();
-        $admin_wallet = $admin_info->balance;
 
-        $new_balance = $admin_wallet + $request->sum_total;
+        if($admin_info != null){
 
-        //dd($admin_wallet, $request->sum_total);
+            $admin_wallet = $admin_info->balance;
 
-        DB::table('employees')->where('user_id', $admin_id)
-        ->update([
-            'balance' => $new_balance,
-        ]);
+            $new_balance = $admin_wallet + $request->sum_total;
+    
+    
+            DB::table('employees')->where('user_id', $admin_id)
+            ->update([
+                'balance' => $new_balance,
+            ]);
+    
 
+        }
        //dd($cashbox_date);
 
         return back();

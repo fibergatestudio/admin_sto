@@ -124,6 +124,8 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
         Route::get('/records/{record_id}/edit_page', 'RecordsController@edit_record_page');
             /* Редактировать запись (Применить изменения) */
             Route::get('/records/{record_id}/apply_edit', 'RecordsController@edit_record_page');
+        /* Добавить услугу */
+        Route::post('/records/add_service', 'RecordsController@add_service')->middleware('can:admin_rights');
         /* Добавить запись */
         Route::post('/add_record', 'RecordsController@add_record')->middleware('can:admin_rights');
         /* Подтвердить запись */

@@ -53,6 +53,7 @@
                 {
                     title : '{{ $task->description }}',
                     start : '{{ $task->task_date }}',
+                    end : '{{ $task->description }}',
                     //url : '{{ url('/employee/calendar_edit', $task->id) }}'
                 },
                 @endforeach

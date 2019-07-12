@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use App\Records;
+use App\Records_calendar;
+use App\Records_services;
 
 use Illuminate\Support\Facades\DB;
 
@@ -12,6 +14,10 @@ class RecordsController extends Controller
 {
     /* Вывод вьюхи */
     public function records_index(){
+
+        $calendar = DB::table('records_calendar')->get();
+        $employees = DB::table('employees')->get();
+        $services = DB::table('records_services')->get();
 
         $records = Records::all();
 
@@ -64,9 +70,14 @@ class RecordsController extends Controller
         } // end foreach record
 
 
+        //Календарь
+
         return view('admin.assignments.records_admin_index', 
         [
-            'records' => $records
+            'records' => $records,
+            'calendar' => $calendar,
+            'employees' => $employees,
+            'services' => $services
         ]);
     
     } // end function records_index
@@ -176,15 +187,34 @@ class RecordsController extends Controller
         $new_record->car_model = $request->car_model;
         $new_record->car_number = $request->car_number;
         $new_record->record_date = $request->record_date;
-        $new_record->record_time = $request->record_time; //Желаемое время
+        $new_record->record_time = $request->record_time_from; //Желаемое время 
         $new_record->phone = $request->phone;
 
-        $record_services = Input::get('record_services');
-        $record_services_imp = implode ('!!', $record_services);
-        //dd($record_services_imp);
+        $new_record->employee = $request->employee;
 
-        $new_record->record_services = $record_services_imp; //Желаемые виды услуг
+        // $record_services = $request->record_services;
+        // $record_services_imp = implode ('!!', $record_services);
+        // //dd($record_services_imp);
+
+        $new_record->record_services = $request->record_services;//Желаемые виды услуг
         $new_record->save();
+
+        $calendar_record = new Records_calendar();
+        $calendar_record->description = $request->record_services;
+        $calendar_record->start = $request->start;
+        $start_time = $request->record_time_from;
+        $end_time = $request->record_time_to;
+
+        $arrayOne = array($request->start, $start_time);
+        $arrayTwo = array($request->end, $end_time);
+        $implode_start = implode(' ', $arrayOne);
+        $implode_end = implode(' ', $arrayTwo);
+        $calendar_record->start = $implode_start;
+        $calendar_record->end = $implode_end;
+
+        $calendar_record->save();
+
+        
 
         return back();
     }
@@ -265,5 +295,15 @@ class RecordsController extends Controller
             'records' => $records,
             'confirmed_records' => $confirmed_records
         ]);
+    }
+
+    public function add_service(Request $request){
+
+        $new_service = new Records_services();
+        $new_service->service = $request->service_name;
+        $new_service->save();
+
+
+        return back();
     }
 }
