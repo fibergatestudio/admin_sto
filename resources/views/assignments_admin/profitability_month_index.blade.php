@@ -126,32 +126,6 @@
         </tr>
         @endif
         @endforeach
-        @foreach($zonal_assignment_income as $income_entry)
-        @if(in_array(substr($income_entry->updated_at,0,7), $date_arr))
-        <?php
-        if ($income_entry->zonal_currency === 'USD') {
-            $sum += round(($income_entry->zonal_amount)/$usd);
-        }
-        else if ($income_entry->zonal_currency === 'EUR') {
-            $sum += round(($income_entry->zonal_amount)/$eur);
-        } 
-        else {
-            $sum += $income_entry->zonal_amount;
-        } 
-        ?>
-        <tr>
-            <td>
-            {{ $income_entry->zonal_amount }}<br>
-            </td>
-            <td>
-            {{ $income_entry->zonal_basis }}<br>
-            </td>
-            <td>
-            {{ $income_entry->zonal_currency }}<br>
-            </td>
-        </tr>
-        @endif
-        @endforeach
         @foreach($assignment_expense as $expense_entry)
         @if(in_array(substr($expense_entry->updated_at,0,7), $date_arr))
         <?php
@@ -174,32 +148,6 @@
             </td>
             <td>
             {{ $expense_entry->currency }}<br>
-            </td>
-        </tr>
-        @endif
-        @endforeach
-        @foreach($zonal_assignment_expense as $expense_entry)
-        @if(in_array(substr($expense_entry->updated_at,0,7), $date_arr))
-        <?php
-        if ($expense_entry->zonal_currency === 'USD') {
-            $sum -= round(($expense_entry->zonal_amount)/$usd);
-        }
-        else if ($expense_entry->zonal_currency === 'EUR') {
-            $sum -= round(($expense_entry->zonal_amount)/$eur);
-        }  
-        else {
-            $sum -= $expense_entry->zonal_amount;
-        } 
-        ?>
-        <tr>
-            <td>- 
-            {{ $expense_entry->zonal_amount }}<br>
-            </td>
-            <td>
-            {{ $expense_entry->zonal_basis }}<br>
-            </td>
-            <td>
-            {{ $expense_entry->zonal_currency }}<br>
             </td>
         </tr>
         @endif

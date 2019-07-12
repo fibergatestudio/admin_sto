@@ -168,32 +168,6 @@
         </tr>
         @endforeach
         @endif
-        @if(isset($zonal_assignment_income))
-        @foreach($zonal_assignment_income as $income_entry)
-        <?php
-        if ($income_entry->zonal_currency === 'USD') {
-            $sum += round(($income_entry->zonal_amount)/$usd);
-        }
-        else if ($income_entry->zonal_currency === 'EUR') {
-            $sum += round(($income_entry->zonal_amount)/$eur);
-        } 
-        else {
-            $sum += $income_entry->zonal_amount;
-        } 
-        ?>
-        <tr>
-            <td>
-            {{ $income_entry->zonal_amount }}<br>
-            </td>
-            <td>
-            {{ $income_entry->zonal_basis }}<br>
-            </td>
-            <td>
-            {{ $income_entry->zonal_currency }}<br>
-            </td>
-        </tr>
-        @endforeach
-        @endif
         @if(isset($assignment_expense))
         @foreach($assignment_expense as $expense_entry)
         <?php
@@ -216,32 +190,6 @@
             </td>
             <td>
             {{ $expense_entry->currency }}<br>
-            </td>
-        </tr>
-        @endforeach
-        @endif
-        @if(isset($zonal_assignment_expense))
-        @foreach($zonal_assignment_expense as $expense_entry)
-        <?php
-        if ($expense_entry->zonal_currency === 'USD') {
-            $sum -= round(($expense_entry->zonal_amount)/$usd);
-        }
-        else if ($expense_entry->zonal_currency === 'EUR') {
-            $sum -= round(($expense_entry->zonal_amount)/$eur);
-        }  
-        else {
-            $sum -= $expense_entry->zonal_amount;
-        } 
-        ?>
-        <tr>
-            <td>- 
-            {{ $expense_entry->zonal_amount }}<br>
-            </td>
-            <td>
-            {{ $expense_entry->zonal_basis }}<br>
-            </td>
-            <td>
-            {{ $expense_entry->zonal_currency }}<br>
             </td>
         </tr>
         @endforeach

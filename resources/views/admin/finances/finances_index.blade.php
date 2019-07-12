@@ -1,7 +1,84 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-Финансы
+Счета
+
+<div style="margin-top: 10px">
+  <!-- Вызов попапа Добавить счет -->
+  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addAccount" style="margin: 10px">
+      Добавить счет
+  </button>
+  <!-- Вызов попапа Добавить(Изменить) категорию -->
+  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addCategory" style="margin: 10px">
+      Добавить(Изменить) категорию
+  </button>
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#searchModal" style="margin: 10px">Поиск</button>
+  <button type="button" class="btn btn-primary" style="margin: 10px">Архив</button>
+
+</div>
+
+<!-- Модальное окно Добавить счет -->
+<div class="modal fade" id="addAccount" tabindex="-1" role="dialog" aria-labelledby="addAccountModalLabel" aria-hidden="true">
+  <form action="{{ url('/admin/finances/add_account') }}" method="POST">
+    @csrf
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addAccountModalLabel">Добавить счет</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <div class="form-row">
+            {{-- Название --}}
+            <div class="form-group col-md-6">
+                <label>Название</label>
+                <input type="text" name="name" class="form-control" required>
+            </div>
+            {{-- Категория --}}
+            <div class="form-group col-md-6">
+                <label>Категория</label>
+                <select name="category" class="form-control">
+                    @foreach($categories as $category)
+                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+          </div>
+         
+          <div class="form-row">
+            {{-- Валюта --}}
+            <div class="form-group col-md-6">
+              <label>Валюта</label>
+              <select name="currency"class="form-control">
+                  <option value="MDL">MDL</option>
+                  <option value="USD">USD</option>
+                  <option value="EUR">EUR</option>
+              </select>
+            </div>
+            <div class="form-group col-md-6">
+              <label>Аккаунт (необязательно)</label>
+              <select name="user_email" class="form-control">
+                  <option value="" selected >Выбрать</option>
+                  @foreach($users as $user)
+                  <option value="{{ $user->email }}">{{ $user->name }} ({{ $user->email }})</option>
+                  @endforeach
+              </select>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+          <button type="submit" class="btn btn-primary">Создать</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
 @endsection
 
 
@@ -9,7 +86,6 @@
 
 <style type="text/css">
 .content { padding: 0; }
-#table-calculation-profitability { padding: 1.25rem 1.25rem; }
 .tabs-menu { width: 100%; padding: 0px; margin: 0 auto; }
 .tabs-menu>input { display:none; }
 .tabs-menu>div {
@@ -46,47 +122,6 @@
 #tab_10:checked ~ #txt_10{ display: block; }
 </style>
 
-    Оплата за смены, ожидает подтверждения<br>
-    <table class="table">
-        @foreach($pending_shifts as $shift)
-            <tr>
-                {{-- Дата --}}
-                <td>
-                    {{-- ... --}}
-                </td>
-
-                {{-- Время открытия --}}
-                <td>
-                    {{-- ... --}}
-                </td>
-
-                {{-- Время закрытия --}}
-                <td>
-                    {{-- ... --}}
-                </td>
-
-                {{-- Сумма --}}
-                <td>
-                    {{-- ... --}}
-                </td>
-
-                {{-- Кнопки контроля --}}
-                <td>
-                    {{-- Применить --}}
-                    {{-- ... --}}
-
-                    {{-- Изменить --}}
-                    {{-- ... --}}
-
-                    {{-- Кнопки "удалить" нету --}}
-                    {{-- Вместо неё - изменить сумму на 0 --}}
-                    {{-- Такая схема выбрана для того, чтобы сохранить целостность отчётности --}}
-
-                </td>
-            </tr>
-        @endforeach
-    </table>
-
     <!-- Вкладки -->
 <div class="tabs-menu">
   
@@ -122,7 +157,41 @@
   <label for="tab_10">Без категории</label>
 
   <div id="txt_1">
-  Сервис
+    <table class="table">
+        <thead>
+            <tr>
+              <th scope="col">№</th>
+              <th scope="col">Название</th>
+              <th scope="col">Баланс</th>
+              <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach($accounts as $account)
+        @if($account->status === 'active' && $account->category_id == 1)
+            <tr>
+                {{-- Номер счета --}}
+                <td>{{ $account->id }}</td>
+
+                {{-- Название --}}
+                <td>{{ $account->name }}</td>
+
+                {{-- Баланс --}}
+                <td>{{ $account->balance }}</td>
+
+                {{-- Кнопка подробнее --}}
+                <td>
+                    <a href="{{ url('/admin/accounts/view/'.$account->id) }}">
+                        <div class="btn btn-secondary">
+                            Подробнее
+                        </div>
+                    </a>
+                </td>
+            </tr>
+        @endif
+        @endforeach
+        </tbody>
+    </table>
   </div>
   <div id="txt_2">
   Мойка

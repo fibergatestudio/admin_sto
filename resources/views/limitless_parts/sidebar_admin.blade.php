@@ -28,7 +28,14 @@
 						<!-- Main -->
 						<li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs">Меню</div> <i class="icon-menu" title="Main"></i></li>
 
-
+						<li class="nav-item">
+							<a href="{{ url('/admin/finances/index') }}" class="nav-link {{ request()->is('admin/finances/*') ? 'active' : ''}}">
+								<i class="icon-book3"></i>
+								<span>
+									Счета
+								</span>
+							</a>
+						</li>
 
 						<li class="nav-item nav-item-submenu">
 							<a href="#" class="nav-link legitRipple"><i class="icon-copy"></i> <span>Записи</span></a>
@@ -62,6 +69,15 @@
 						</li>
 
 						<li class="nav-item">
+							<a href="{{ url('admin/assignments/assignments_index') }}" class="nav-link {{ request()->is('admin/assignments/*') ? 'active' : ''}}">
+								<i class="icon-list3"></i>
+								<span>
+									Наряды
+								</span>
+							</a>
+						</li>
+
+						<li class="nav-item">
 							<a href="{{ url('/admin/wash_assignments') }}" class="nav-link {{ request()->is('admin/wash_assignments') ? 'active' : ''}}">
 
 								<i class="icon-fan"></i>
@@ -89,15 +105,7 @@
 								</span>
 							</a>
 						</li>
-
-                                                <li class="nav-item">
-							<a href="{{ url('admin/assignments/assignments_index') }}" class="nav-link {{ request()->is('admin/assignments/*') ? 'active' : ''}}">
-								<i class="icon-list3"></i>
-								<span>
-									Наряды
-								</span>
-							</a>
-						</li>
+                       
 
 						<li class="nav-item">
 							<a href="{{ url('admin/clients/clients_index') }}" class="nav-link {{ request()->is('admin/clients/*') ? 'active' : ''}}">
@@ -133,15 +141,7 @@
 								</span>
 							</a>
 						</li>
-
-						<li class="nav-item">
-							<a href="{{ url('/admin/finances/index') }}" class="nav-link {{ request()->is('admin/finances/*') ? 'active' : ''}}">
-								<i class="icon-book3"></i>
-								<span>
-									Финансы
-								</span>
-							</a>
-						</li>
+						
 						{{-- Модели Машин --}}
 						<li class="nav-item">
 							<a href="{{ url('/admin/cars/index') }}" class="nav-link {{ request()->is('admin/cars/*') ? 'active' : ''}}">
