@@ -218,103 +218,6 @@
 </style>
 
 
-<div id="appVue">
-
-
-<!-- Модальное окно поиска наряда -->
-<div class="modal fade" id="searchModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <form action="{{ url('/admin/assignments/search_assignment') }}" method="POST">
-    @csrf
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="searchModalLabel">Форма поиска</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-
-          <div class="form-row">
-
-            {{-- Модель и марка --}}
-            {{-- Марка : от неё будут подтягивать подсказки . Используется Typeahead --}}
-            <div class="form-group">
-                <label>Марка машины</label>
-                <input v-model.lazy="mark2" type="text" name="car_brand" id="carBrand" class="form-control typeahead">
-            </div>
-
-            {{-- Модель : подтягивается с базы --}}
-            {{-- ... --}}
-            <div class="form-group">
-                <label>Модель машины</label>
-                <select v-model.lazy="model2" id="carModel" name="car_model" class="form-control">
-                </select>
-            </div>
-
-            {{-- Год выпуска --}}
-            <div class="form-group">
-                <label>Год выпуска</label>
-                <input type="number" min="1900" max="2099" step="1" value="" name="release_year" id="releaseyear" class="form-control typeahead">
-            </div>
-
-            {{-- Регистрационный номер --}}
-            <div class="form-group">
-                <label>Регистрационный номер</label>
-                <input type="text" name="reg_number" id="regnumber" class="form-control">
-            </div>
-
-            {{-- VIN --}}
-            <div class="form-group">
-                <label>VIN</label>
-                <input type="text" name="vin_number" id="vinnumber" class="form-control">
-            </div>
-
-            {{-- Обьем мотора --}}
-            <div class="form-group">
-                <label>Объем двигателя</label>
-                <input type="number" min="0" max="20000" step="1" name="engine_capacity" id="enginecapacity" class="form-control">
-            </div>
-
-            {{-- Тип топлива --}}
-            <div class="form-group">
-                <label>Тип топлива</label>
-                <select name="fuel_type" id="fueltype" class="form-control">
-                  <option value="Бензин">Бензин</option>
-                  <option value="Дизель">Дизель</option>
-                  <option value="Hybrid (Бензин)">Hybrid (Бензин)</option>
-                  <option value="Hybrid (Дизель)">Hybrid (Дизель)</option>
-                  <option value="Plug-in Hybrid (Бензин)">Plug-in Hybrid (Бензин)</option>
-                  <option value="Plug-in Hybrid (Дизель)">Plug-in Hybrid (Дизель)</option>
-                  <option value="Газ (Пропан) / Бензин">Газ (Пропан) / Бензин</option>
-                  <option value="Газ (Метан) / Бензин">Газ (Метан) / Бензин</option>
-                  <option value="Газ (Пропан)">Газ (Пропан)</option>
-                  <option value="Газ (Метан)">Газ (Метан)</option>
-                  <option value="Электро">Электро</option>
-                </select>
-            </div>
-
-            {{-- Номер наряда --}}
-            <div class="form-group">
-                <label>Номер наряда</label>
-                <input type="text" name="num_assignment" class="form-control">
-            </div>
-
-          </div>
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-          <button type="submit" class="btn btn-primary">Поиск</button>
-        </div>
-      </div>
-    </div>
-  </form>
-
-</div>
-<!-- Конец Модальное окно поиска наряда -->
-
-
     {{-- Статическая информация по наряду --}}
     <table id="read-more" class="table" style="display: none;">
       <thead>
@@ -335,53 +238,6 @@
       </tbody>
     </table>
 
-<!-- {{-- Зональные наряды --}}
-<h3>Текущие зональные наряды:</h3>
-<table id="table" class="table">
-  <thead>
-    <tr>
-      <th>#</th>
-      <th>Номер</th>
-      <th>Название</th>
-      <th>Рабочая зона</th>
-      <th>Ответственный сотрудник </th>
-      <th>Дата</th>
-      <th>Время начал работ</th>
-      <th>Время окончания работ</th>
-      <th></th>{{-- Кнопка просмотр --}}
-    </tr>
-  </thead>
-  <tbody id="tablecontents">
-    @foreach($sub_assignments as $sub_assignment)
-      <tr class="row1" data-id="{{ $sub_assignment->id }}">
-        <td>
-            <div style="color:rgb(124,77,255); padding-left: 10px; float: left; font-size: 20px; cursor: pointer;" title="change display order">
-            <i class="icon-menu-open"></i>
-            <i class=""></i>
-            </div>
-        </td>
-        <td>{{ $sub_assignment->id }}</td>
-        <td>{{ $sub_assignment->name }} </td>{{-- Название наряда --}}
-        <td>{{ $sub_assignment->workzone_name }} </td>{{-- Название рабочей зоны --}}
-        <td>{{ $sub_assignment->responsible_employee }} </td>{{-- Название ответственного сотрудника --}}
-        <td>{{ $sub_assignment->date_of_creation }} </td>{{-- Дата создания --}}
-        <td>{{ $sub_assignment->start_time }} </td>{{-- Время начала работ --}}
-        <td>{{ $sub_assignment->end_time }} </td>{{-- Время окончания работ --}}
-
-        {{-- url('admin/assignments/view/'.$assignment->id.'/management') --}}
-        <td>
-          {{-- Кнопка управления --}}
-          <a href="{{ url('admin/assignments/view/'.$sub_assignment->id.'/management') }}">
-            <div class="btn btn-light">
-              Управление зональным нарядом
-            </div>
-          </a>
-        </td>
-      </tr>
-    @endforeach
-  </tbody>
-</table> -->
-
 
     {{-- Расчет рентабельности --}}
     <div id="table-calculation-profitability" style="display: none;">
@@ -397,17 +253,24 @@
                 </tr>
             </thead>
             <tbody>
-            <?php $sum = 0;?>
+            <?php 
+            $sum = 0;
+            $sum_income = 0;
+            $sum_expense = 0;
+            ?>
             @foreach($assignment_income as $income_entry)
             <?php
             if ($income_entry->currency === 'USD') {
                 $sum += round(($income_entry->amount)/$usd);
+                $sum_income += round(($income_entry->amount)/$usd);
             }
             else if ($income_entry->currency === 'EUR') {
                 $sum += round(($income_entry->amount)/$eur);
+                $sum_income += round(($income_entry->amount)/$eur);
             }
             else {
                 $sum += $income_entry->amount;
+                $sum_income += $income_entry->amount;
             }
             ?>
             <tr>
@@ -421,41 +284,20 @@
                 {{ $income_entry->currency }}<br>
                 </td>
             </tr>
-            @endforeach
-            @foreach($zonal_assignment_income as $income_entry)
-            <?php
-            if ($income_entry->zonal_currency === 'USD') {
-                $sum += round(($income_entry->zonal_amount)/$usd);
-            }
-            else if ($income_entry->zonal_currency === 'EUR') {
-                $sum += round(($income_entry->zonal_amount)/$eur);
-            }
-            else {
-                $sum += $income_entry->zonal_amount;
-            }
-            ?>
-            <tr>
-                <td>
-                {{ $income_entry->zonal_amount }}<br>
-                </td>
-                <td>
-                {{ $income_entry->zonal_basis }}<br>
-                </td>
-                <td>
-                {{ $income_entry->zonal_currency }}<br>
-                </td>
-            </tr>
-            @endforeach
+            @endforeach            
             @foreach($assignment_expense as $expense_entry)
             <?php
             if ($expense_entry->currency === 'USD') {
                 $sum -= round(($expense_entry->amount)/$usd);
+                $sum_expense += round(($expense_entry->amount)/$usd);
             }
             else if ($expense_entry->currency === 'EUR') {
                 $sum -= round(($expense_entry->amount)/$eur);
+                $sum_expense += round(($expense_entry->amount)/$eur);
             }
             else {
                 $sum -= $expense_entry->amount;
+                $sum_expense += $expense_entry->amount;
             }
             ?>
             <tr>
@@ -470,30 +312,7 @@
                 </td>
             </tr>
             @endforeach
-            @foreach($zonal_assignment_expense as $expense_entry)
-            <?php
-            if ($expense_entry->zonal_currency === 'USD') {
-                $sum -= round(($expense_entry->zonal_amount)/$usd);
-            }
-            else if ($expense_entry->zonal_currency === 'EUR') {
-                $sum -= round(($expense_entry->zonal_amount)/$eur);
-            }
-            else {
-                $sum -= $expense_entry->zonal_amount;
-            }
-            ?>
-            <tr>
-                <td>-
-                {{ $expense_entry->zonal_amount }}<br>
-                </td>
-                <td>
-                {{ $expense_entry->zonal_basis }}<br>
-                </td>
-                <td>
-                {{ $expense_entry->zonal_currency }}<br>
-                </td>
-            </tr>
-            @endforeach
+            
             </tbody>
         </table>
         <h4 id="total">Итого: {{ $sum }} лей</h4>
@@ -523,12 +342,7 @@
 
 
     {{-- Добавить новый зональный наряд : Переход --}}
-    <!-- <a href="{{ url('admin/assignments/add_sub_assignment/'.$assignment->id) }}">
-        <div class="btn btn-light">
-            Новый зональный наряд
-        </div>
-    </a>
-     -->
+
     <div class="form-group">
       <h3>Новый зональный наряд</h3>
       <div class="row">
@@ -551,6 +365,116 @@
 
 
     <!---------------------------------  Динамические таблицы зональных нарядов  //--------------------------------------------->
+    <style type="text/css">
+      table.table
+      {
+        max-width: 1000px;
+        border: 1px solid #b7b7b7;        
+      }
+      form:nth-child(6) table.table{
+        max-width: 770px;
+      }
+      table.table, table.table td 
+      {
+        vertical-align: top;
+      }
+      table.table td, table.table th
+      {
+        padding: 0;
+        padding-top: 10px;
+        border-left: 1px solid #b7b7b7;
+      }
+      table.table td
+      {
+        padding-left: 4px;
+      }
+      table.table th{
+        text-align: center;
+        vertical-align: middle;
+      }
+      form:nth-child(2) table.table tr td:first-child, form:nth-child(2) table.table tr th:first-child
+      {
+        width: 20px;
+      }
+      form:nth-child(2) table.table tr td:nth-child(2), form:nth-child(2) table.table tr th:nth-child(2)
+      {
+        width: 170px;
+      }
+      form:nth-child(2) table.table tr td:nth-child(3), form:nth-child(2) table.table tr th:nth-child(3),
+      form:nth-child(2) table.table tr td:nth-child(4), form:nth-child(2) table.table tr th:nth-child(4)
+      {
+        width: 80px;
+      }
+      form:nth-child(2) table.table tr td:nth-child(5), form:nth-child(2) table.table tr th:nth-child(5)
+      {
+        width: 170px;
+      }
+      form:nth-child(2) table.table tr td:nth-child(6), form:nth-child(2) table.table tr th:nth-child(6)
+      {
+        width: 170px;
+      }
+      form:nth-child(2) table.table tr td:nth-child(7), form:nth-child(2) table.table tr th:nth-child(7)
+      {
+        width: 20px;
+      }
+      form:nth-child(2) table.table tr td:nth-child(8), form:nth-child(2) table.table tr th:nth-child(8)
+      {
+        width: 70px;
+      }
+      form:nth-child(2) table.table tr td:nth-child(9), form:nth-child(2) table.table tr th:nth-child(9)
+      {
+        width: 60px;
+      }
+      form:nth-child(2) table.table tr td:nth-child(10), form:nth-child(2) table.table tr th:nth-child(10)
+      {
+        width: 30px;
+      }
+      form:nth-child(2) table.table tr td:nth-child(11), form:nth-child(2) table.table tr th:nth-child(11)
+      {
+        width: 95px;
+      }
+      form:nth-child(6) table.table tr td:nth-child(1), form:nth-child(6) table.table tr th:nth-child(1)
+      {
+        width: 210px;
+      }
+      form:nth-child(6) table.table tr td:nth-child(2), form:nth-child(6) table.table tr th:nth-child(2)
+      {
+        width: 175px;
+      }
+      form:nth-child(6) table.table tr td:nth-child(3), form:nth-child(6) table.table tr th:nth-child(3)
+      {
+        width: 70px;
+      }
+      form:nth-child(6) table.table tr td:nth-child(4), form:nth-child(6) table.table tr th:nth-child(4)
+      {
+        width: 30px;
+      }
+      form:nth-child(6) table.table tr td:nth-child(5), form:nth-child(6) table.table tr th:nth-child(5)
+      {
+        width: 70px;
+      }
+      form:nth-child(6) table.table tr td:nth-child(6), form:nth-child(6) table.table tr th:nth-child(6)
+      {
+        width: 65px;
+      }
+      form:nth-child(6) table.table tr td:nth-child(7), form:nth-child(6) table.table tr th:nth-child(7)
+      {
+        width: 50px;
+      }
+      form:nth-child(6) table.table tr td:nth-child(8), form:nth-child(6) table.table tr th:nth-child(8)
+      {
+        width: 95px;
+      }
+      table.table tr td:last-child
+      {
+        display: flex;
+        height: 45px;
+      }
+      table.table tr td:last-child button
+      {
+        height: 25px;
+      }
+    </style>
 
 
     <h1 id="dynamic-tables">Динамические таблицы зональных нарядов</h1>
@@ -577,7 +501,7 @@
         }
     ?>
 
-    <div class="dynamic-{{ $work_direction_id }}">
+    <div class="dyn-tab dynamic-{{ $work_direction_id }}">
 
                   <?php
                         $j = 1;
@@ -618,19 +542,7 @@
                         <strong><?=$j?></strong>
                       </td>
                       <td>
-                          <label>
-
-                              @if(isset($new_sub_assignment->d_table_workzone))
-                              @foreach($workzone_data as $work_data)
-                              @if($work_data->id == $new_sub_assignment->d_table_workzone)
-                                <p style="background-color: {{ $work_data->workzone_color }}; color: #fff;">{{ $work_data->general_name }}</p>
-                                <?php $selected_work_id = $work_data->id; ?>
-                              @endif
-                              @endforeach
-                              @else
-                              <p></p>
-                              @endif
-
+                          <label>                            
                               @if($new_sub_assignment->work_is_locked == 'active')
                               <select disabled onchange="workzoneSelect(this)" data-row="{{ $new_sub_assignment->work_row_index }}" name="d_table_workzone" style="max-width: 160px;">
                               @else
@@ -644,7 +556,7 @@
                                 <option value="{{ $work_data->id }}">{{ $work_data->general_name }}</option>
                                 @endif
                                 @endforeach
-                              </select>
+                              </select>                          
                           </label>
                       </td>
                       <td>
@@ -667,18 +579,6 @@
                       </td>
                       <td>
                           <label>
-
-                              @if(isset($new_sub_assignment->d_table_responsible_officer))
-                              @foreach($employees as $employee)
-                              @if($employee->id == $new_sub_assignment->d_table_responsible_officer)
-                                <p>{{ $employee->general_name }}</p>
-                                <?php $selected_employee_id = $employee->id; ?>
-                              @endif
-                              @endforeach
-                              @else
-                              <p></p>
-                              @endif
-
                               @if($new_sub_assignment->work_is_locked == 'active')
                               <select disabled onchange="employeeSelect(this)" data-row="{{ $new_sub_assignment->work_row_index }}" name="d_table_responsible_officer" style="max-width: 160px;">
                               @else
@@ -698,9 +598,9 @@
                       <td>
                           <label>
                               @if($new_sub_assignment->work_is_locked == 'active')
-                              <textarea disabled data-row="{{ $new_sub_assignment->work_row_index }}" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works">{{ $new_sub_assignment->d_table_list_completed_works }}</textarea>
+                              <input disabled data-row="{{ $new_sub_assignment->work_row_index }}" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value="{{ $new_sub_assignment->d_table_list_completed_works }}">
                               @else
-                              <textarea data-row="{{ $new_sub_assignment->work_row_index }}" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works">{{ $new_sub_assignment->d_table_list_completed_works }}</textarea>
+                              <input data-row="{{ $new_sub_assignment->work_row_index }}" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value="{{ $new_sub_assignment->d_table_list_completed_works }}">
                               @endif
                           </label>
                       </td>
@@ -987,7 +887,7 @@
 
     <!--  dynamic-1  //-->
 
-    <div class="dynamic-1" style="display: none;">
+    <div class="dyn-tab dynamic-1" style="display: none;">
 
       <h3>Выполненная работа (Разборка-сборка)</h3>
 
@@ -1018,7 +918,6 @@
                       </td>
                       <td>
                           <label>
-                              <p></p>
                               <select onchange="workzoneSelect(this)" data-row="11000" name="d_table_workzone" style="max-width: 160px;">
                                 <option value="">Выбрать</option>
                                 @foreach($workzone_data as $work_data)
@@ -1039,7 +938,6 @@
                       </td>
                       <td>
                           <label>
-                              <p></p>
                               <select onchange="employeeSelect(this)" data-row="11000" name="d_table_responsible_officer" style="max-width: 160px;">
                                 <option value="">Выбрать</option>
                                 @foreach($employees as $employee)
@@ -1050,7 +948,7 @@
                       </td>
                       <td>
                           <label>
-                              <textarea data-row="11000" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value=""></textarea>
+                              <input data-row="11000" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value="">
                           </label>
                       </td>
                       <td>
@@ -1167,7 +1065,7 @@
 
     <!--  dynamic-2  //-->
 
-    <div class="dynamic-2" style="display: none;">
+    <div class="dyn-tab dynamic-2" style="display: none;">
 
       <h3>Выполненная работа (Электрика)</h3>
 
@@ -1198,7 +1096,6 @@
                       </td>
                       <td>
                           <label>
-                              <p></p>
                               <select onchange="workzoneSelect(this)" data-row="21000" name="d_table_workzone" style="max-width: 160px;">
                                 <option value="">Выбрать</option>
                                 @foreach($workzone_data as $work_data)
@@ -1219,7 +1116,6 @@
                       </td>
                       <td>
                           <label>
-                              <p></p>
                               <select onchange="employeeSelect(this)" data-row="21000" name="d_table_responsible_officer" style="max-width: 160px;">
                                 <option value="">Выбрать</option>
                                 @foreach($employees as $employee)
@@ -1230,7 +1126,7 @@
                       </td>
                       <td>
                           <label>
-                              <textarea data-row="21000" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value=""></textarea>
+                              <input data-row="21000" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value="">
                           </label>
                       </td>
                       <td>
@@ -1347,7 +1243,7 @@
 
     <!--  dynamic-3  //-->
 
-    <div class="dynamic-3" style="display: none;">
+    <div class="dyn-tab dynamic-3" style="display: none;">
 
       <h3>Выполненная работа (Слесарка)</h3>
 
@@ -1376,7 +1272,6 @@
                       </td>
                       <td>
                           <label>
-                              <p></p>
                               <select onchange="workzoneSelect(this)" data-row="31000" name="d_table_workzone" style="max-width: 160px;">
                                 <option value="">Выбрать</option>
                                 @foreach($workzone_data as $work_data)
@@ -1397,7 +1292,6 @@
                       </td>
                       <td>
                           <label>
-                              <p></p>
                               <select onchange="employeeSelect(this)" data-row="31000" name="d_table_responsible_officer" style="max-width: 160px;">
                                 <option value="">Выбрать</option>
                                 @foreach($employees as $employee)
@@ -1408,7 +1302,7 @@
                       </td>
                       <td>
                           <label>
-                              <textarea data-row="31000" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value=""></textarea>
+                              <input data-row="31000" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value="">
                           </label>
                       </td>
                       <td>
@@ -1525,7 +1419,7 @@
 
     <!--  dynamic-4  //-->
 
-    <div class="dynamic-4" style="display: none;">
+    <div class="dyn-tab dynamic-4" style="display: none;">
 
       <h3>Выполненная работа (Рихтовка)</h3>
 
@@ -1554,7 +1448,6 @@
                       </td>
                       <td>
                           <label>
-                              <p></p>
                               <select onchange="workzoneSelect(this)" data-row="41000" name="d_table_workzone" style="max-width: 160px;">
                                 <option value="">Выбрать</option>
                                 @foreach($workzone_data as $work_data)
@@ -1575,7 +1468,6 @@
                       </td>
                       <td>
                           <label>
-                              <p></p>
                               <select onchange="employeeSelect(this)" data-row="41000" name="d_table_responsible_officer" style="max-width: 160px;">
                                 <option value="">Выбрать</option>
                                 @foreach($employees as $employee)
@@ -1586,7 +1478,7 @@
                       </td>
                       <td>
                           <label>
-                              <textarea data-row="41000" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value=""></textarea>
+                              <input data-row="41000" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value="">
                           </label>
                       </td>
                       <td>
@@ -1703,7 +1595,7 @@
 
     <!--  dynamic-5  //-->
 
-    <div class="dynamic-5" style="display: none;">
+    <div class="dyn-tab dynamic-5" style="display: none;">
 
       <h3>Выполненная работа (Покраска)</h3>
 
@@ -1732,7 +1624,6 @@
                       </td>
                       <td>
                           <label>
-                              <p></p>
                               <select onchange="workzoneSelect(this)" data-row="51000" name="d_table_workzone" style="max-width: 160px;">
                                 <option value="">Выбрать</option>
                                 @foreach($workzone_data as $work_data)
@@ -1753,7 +1644,6 @@
                       </td>
                       <td>
                           <label>
-                              <p></p>
                               <select onchange="employeeSelect(this)" data-row="51000" name="d_table_responsible_officer" style="max-width: 160px;">
                                 <option value="">Выбрать</option>
                                 @foreach($employees as $employee)
@@ -1764,7 +1654,7 @@
                       </td>
                       <td>
                           <label>
-                              <textarea data-row="51000" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value=""></textarea>
+                              <input data-row="51000" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value="">
                           </label>
                       </td>
                       <td>
@@ -1881,7 +1771,7 @@
 
     <!--  dynamic-6  //-->
 
-    <div class="dynamic-6" style="display: none;">
+    <div class="dyn-tab dynamic-6" style="display: none;">
 
       <h3>Выполненная работа (Детэйлинг)</h3>
 
@@ -1910,7 +1800,6 @@
                       </td>
                       <td>
                           <label>
-                              <p></p>
                               <select onchange="workzoneSelect(this)" data-row="61000" name="d_table_workzone" style="max-width: 160px;">
                                 <option value="">Выбрать</option>
                                 @foreach($workzone_data as $work_data)
@@ -1931,7 +1820,6 @@
                       </td>
                       <td>
                           <label>
-                              <p></p>
                               <select onchange="employeeSelect(this)" data-row="61000" name="d_table_responsible_officer" style="max-width: 160px;">
                                 <option value="">Выбрать</option>
                                 @foreach($employees as $employee)
@@ -1942,7 +1830,7 @@
                       </td>
                       <td>
                           <label>
-                              <textarea data-row="61000" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value=""></textarea>
+                              <input data-row="61000" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value="">
                           </label>
                       </td>
                       <td>
@@ -2059,7 +1947,7 @@
 
     <!--  dynamic-7  //-->
 
-    <div class="dynamic-7" style="display: none;">
+    <div class="dyn-tab dynamic-7" style="display: none;">
 
       <h3>Выполненная работа (Малярка)</h3>
 
@@ -2088,7 +1976,6 @@
                       </td>
                       <td>
                           <label>
-                              <p></p>
                               <select onchange="workzoneSelect(this)" data-row="71000" name="d_table_workzone" style="max-width: 160px;">
                                 <option value="">Выбрать</option>
                                 @foreach($workzone_data as $work_data)
@@ -2109,7 +1996,6 @@
                       </td>
                       <td>
                           <label>
-                              <p></p>
                               <select onchange="employeeSelect(this)" data-row="71000" name="d_table_responsible_officer" style="max-width: 160px;">
                                 <option value="">Выбрать</option>
                                 @foreach($employees as $employee)
@@ -2120,7 +2006,7 @@
                       </td>
                       <td>
                           <label>
-                              <textarea data-row="71000" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value=""></textarea>
+                              <input data-row="71000" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value="">
                           </label>
                       </td>
                       <td>
@@ -2239,6 +2125,101 @@
 
   <div id="txt_2">
 
+    <div id="appVue">
+
+    <!-- Модальное окно поиска наряда -->
+    <div class="modal fade" id="searchModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <form action="{{ url('/admin/assignments/search_assignment') }}" method="POST">
+        @csrf
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="searchModalLabel">Форма поиска</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+
+              <div class="form-row">
+
+                {{-- Модель и марка --}}
+                {{-- Марка : от неё будут подтягивать подсказки . Используется Typeahead --}}
+                <div class="form-group">
+                    <label>Марка машины</label>
+                    <input v-model.lazy="mark2" type="text" name="car_brand" id="carBrand" class="form-control typeahead">
+                </div>
+
+                {{-- Модель : подтягивается с базы --}}
+                {{-- ... --}}
+                <div class="form-group">
+                    <label>Модель машины</label>
+                    <select v-model.lazy="model2" id="carModel" name="car_model" class="form-control">
+                    </select>
+                </div>
+
+                {{-- Год выпуска --}}
+                <div class="form-group">
+                    <label>Год выпуска</label>
+                    <input type="number" min="1900" max="2099" step="1" value="" name="release_year" id="releaseyear" class="form-control typeahead">
+                </div>
+
+                {{-- Регистрационный номер --}}
+                <div class="form-group">
+                    <label>Регистрационный номер</label>
+                    <input type="text" name="reg_number" id="regnumber" class="form-control">
+                </div>
+
+                {{-- VIN --}}
+                <div class="form-group">
+                    <label>VIN</label>
+                    <input type="text" name="vin_number" id="vinnumber" class="form-control">
+                </div>
+
+                {{-- Обьем мотора --}}
+                <div class="form-group">
+                    <label>Объем двигателя</label>
+                    <input type="number" min="0" max="20000" step="1" name="engine_capacity" id="enginecapacity" class="form-control">
+                </div>
+
+                {{-- Тип топлива --}}
+                <div class="form-group">
+                    <label>Тип топлива</label>
+                    <select name="fuel_type" id="fueltype" class="form-control">
+                      <option value="Бензин">Бензин</option>
+                      <option value="Дизель">Дизель</option>
+                      <option value="Hybrid (Бензин)">Hybrid (Бензин)</option>
+                      <option value="Hybrid (Дизель)">Hybrid (Дизель)</option>
+                      <option value="Plug-in Hybrid (Бензин)">Plug-in Hybrid (Бензин)</option>
+                      <option value="Plug-in Hybrid (Дизель)">Plug-in Hybrid (Дизель)</option>
+                      <option value="Газ (Пропан) / Бензин">Газ (Пропан) / Бензин</option>
+                      <option value="Газ (Метан) / Бензин">Газ (Метан) / Бензин</option>
+                      <option value="Газ (Пропан)">Газ (Пропан)</option>
+                      <option value="Газ (Метан)">Газ (Метан)</option>
+                      <option value="Электро">Электро</option>
+                    </select>
+                </div>
+
+                {{-- Номер наряда --}}
+                <div class="form-group">
+                    <label>Номер наряда</label>
+                    <input type="text" name="num_assignment" class="form-control">
+                </div>
+
+              </div>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+              <button type="submit" class="btn btn-primary">Поиск</button>
+            </div>
+          </div>
+        </div>
+      </form>
+
+    </div>
+    <!-- Конец Модальное окно поиска наряда -->
+      
       <h3>Информация автомобиля: {{ $assignment->car_name }}</h3>
 
       {{-- Форма изменения машины для клиента --}}
@@ -2458,6 +2439,8 @@
         </a><br>
         <br>
 
+      </div><!-- appVue -->
+
   </div><!-- txt_2 Информация автомобиля-->
 
 
@@ -2507,10 +2490,78 @@
 
     </form>
 
-  </div><!-- txt_2 Информация клиента-->
+  </div><!-- txt_3 Информация клиента-->
+  
+  
   <div id="txt_4">
-      <p>Доходная часть</p>
-  </div>
+      
+      <h3>Доходная часть</h3>
+
+      <div class="form-row">
+        <div class="form-group col-md-6" style="margin: 0 auto;">
+          <input type="number" name="usd" value="{{ $usd }}">
+          <input type="number" name="eur" value="{{ $eur }}">
+          <a href="#" class="btn btn-success">Сохранить</a>
+        </div>
+      </div>
+      <br>  
+
+      {{-- Тип операции --}}
+          <input type="hidden" name="type_operation" value="Доход">
+          {{-- Категория --}}
+          <input type="hidden" name="category" value="">
+          {{-- Тег --}}
+          <input type="hidden" name="tag" value="">
+          {{-- Описание --}}
+          <input type="hidden" name="comment" value="">
+
+      <table class="table">       
+          <thead>
+            <tr>
+              <th scope="col">Счет</th>
+              <th scope="col">Сумма</th>
+              <th scope="col">Дата</th>
+              <th scope="col">Действие</th>
+            </tr>
+          </thead>     
+          <tbody>
+            <tr>
+                <td>
+                  <select name="account_id" class="form-control">
+                    @foreach($accounts as $account)
+                    <option value="{{ $account->id }}">{{ $account->name }}</option>
+                    @endforeach
+                  </select>
+                </td> 
+                <td>
+                  <input type="text" name="income" class="form-control" value="{{ $sum_expense }}" >
+                </td>
+                <td>
+                  <input type="text" name="disabled-date" class="form-control" disabled value="{{ date('Y-m-d H:i:s') }}">
+                  <input type="hidden" name="date" value="{{ date('Y-m-d H:i:s') }}">
+                </td>
+                <td>
+                  <button type="button">+</button>
+                </td>             
+            </tr>
+          </tbody>                                                               
+      
+      </table>
+      <br>
+      
+      <div class="form-row">
+        <div class="form-group col-md-6" style="margin: 0 auto;">
+          <h4>Всего: {{ $sum_income }} лей</h4>
+          <h4>Остаток: {{ $sum_expense - $sum_income }} лей</h4>
+        </div>
+      </div>
+      
+      <br>
+      <button type="button" id="closeOutfit" class="btn btn-primary">Закрыть наряд</button>
+  
+  </div><!-- txt_4 Доходная часть-->
+  
+  
   <div id="txt_5">
       <p>Настройки печати</p>
   </div>
@@ -2518,8 +2569,6 @@
 
 </div><!-- tabs-menu -->
 
-
-</div><!-- appVue -->
 
 @endsection
 
@@ -2837,35 +2886,11 @@ $(document)
   //Функция для выбора рабочих постов в таблице
   function workzoneSelect(element) {
     dataTransmission(element);
-    var workzoneId = $(element).val();
-
-    for (var i = 0; i < workzoneData.length; i++){
-      if (workzoneId == workzoneData[i].id) {
-        $(element).parent().children("p")
-          .css({'background-color': workzoneData[i].workzone_color, 'color': '#fff'})
-          .text(workzoneData[i].general_name);
-      }
-      else if(workzoneId == ''){
-        $(element).parent().children("p")
-          .css({'background-color': 'transparent'})
-          .text('');
-      }
-    }
   }
 
   //Функция для выбора работников в таблице
   function employeeSelect(element) {
     dataTransmission(element);
-    var employeeId = $(element).val();
-
-    for (var i = 0; i < employeeData.length; i++){
-      if (employeeId == employeeData[i].id) {
-        $(element).parent().children("p").text(employeeData[i].general_name);
-      }
-      else if(employeeId == ''){
-        $(element).parent().children("p").text('');
-      }
-    }
   }
 
   //Функция для блокировки строк в таблице

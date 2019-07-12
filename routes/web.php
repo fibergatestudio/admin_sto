@@ -28,9 +28,6 @@ Route::get('/client/profile', 'Client_Controller@profile')->middleware('can:clie
 /*Путь к нарядам клиента*/
 Route::get('/client/cars/assignments/{id}', 'Client_Controller@assignments')->middleware('can:client_rights');
 
-/*Путь к зональным нарядам клиента*/
-Route::get('/client/cars/sub_assignments/{id}', 'Client_Controller@sub_assignments')->middleware('can:client_rights');
-
 /*Путь к архивным нарядам клиента*/
 Route::get('/client/cars/assignments_archive/{id}', 'Client_Controller@assignments_archive')->middleware('can:client_rights');
 
@@ -68,23 +65,6 @@ Route::post('/master/work_entry/{id}', 'Master_Controller@work_entry')->middlewa
 
 /*Подтверждение работы мастером*/
 Route::post('/master/confirm_work/{id}', 'Master_Controller@confirm_work')->middleware('can:master_rights');
-
-
-/*Редактирование мастером зональных нарядов*/
-
-/*Редактирование доходной части наряда мастером*/
-Route::post('/master/zonal_income_entry/{id}', 'Master_Controller@zonal_income_entry')->middleware('can:master_rights');
-
-/*Редактирование расходной части наряда мастером*/
-Route::post('/master/zonal_expense_entry/{id}', 'Master_Controller@zonal_expense_entry')->middleware('can:master_rights');
-
-/*Редактирование списка выполненых работ мастером*/
-Route::post('/master/zonal_work_entry/{id}', 'Master_Controller@zonal_work_entry')->middleware('can:master_rights');
-
-/* Подтверждение зональной работы мастером */
-Route::post('/master/zonal_confirm_work/{id}', 'Master_Controller@zonal_confirm_work')->middleware('can:master_rights');
-/**/
-
 
 /*Путь к профилям рабочих для просмотра мастером*/
 Route::get('/master/employees/profiles', 'Master_Controller@master_employees')->middleware('can:master_rights');
@@ -358,7 +338,7 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
     Route::get('admin/clients/view_client/{client_id}', 'Clients_Admin_Controller@single_client_view')->name('admin_view_client')->middleware('can:admin_rights');
 
         /* Редактировать данные о машине */
-        Route::post('admin/clients/view_client/{client_id}/{car_id}', 'Clients_Admin_Controller@single_client_view_edit_car')->name('admin_view_client')->middleware('can:admin_rights');
+        Route::post('admin/clients/view_client/{client_id}/{car_id?}', 'Clients_Admin_Controller@single_client_view_edit_car')->name('admin_view_client')->middleware('can:admin_rights');
 
 
     /*Добавить примечание о клиенте : страница*/
@@ -459,30 +439,8 @@ Route::post('/admin/profitability/profitability_index/month', 'Assignments_Admin
     /* Обновление (перестановка) елементов таблицы */
     Route::post('admin/assignments/view/{assignment_id}', 'Assignments_Admin_Controller@updateOrder');
 
-        /* Управление зонального наряда */
-        Route::get('admin/assignments/view/{sub_assignment_id}/management', 'Assignments_Admin_Controller@assignment_management');
-
-            /* Изменить время зонального наряда : POST */
-            Route::post('admin/assignments/view/{sub_assignment_id}/management/update_zonal_assignment_time', 'Assignments_Admin_Controller@update_zonal_assignment_time');
-
-             /* Добавить зональную доходную часть : POST */
-            Route::post('admin/assignments/view/{sub_assignment_id}/management/add_zonal_assignment_income', 'Assignments_Admin_Controller@add_zonal_assignment_income');
-
-            /* Добавить зональную расходную часть : POST */
-            Route::post('admin/assignments/view/{sub_assignment_id}/management/add_zonal_assignment_expense', 'Assignments_Admin_Controller@add_zonal_assignment_expense');
-
-            /* Добавить зональный список выполненых работ : POST */
-            Route::post('admin/assignments/view/{sub_assignment_id}/management/add_zonal_assignment_works', 'Assignments_Admin_Controller@add_zonal_assignment_works');
-
         /* Изменение названия наряда */
         Route::post('/admin/assignments/change_name', 'Assignments_Admin_Controller@change_assignment_name');
-
-
-    /* Добавление зонального наряда : страница */
-    Route::get('admin/assignments/add_sub_assignment/{assignment_id}', 'Assignments_Admin_Controller@add_sub_assignment_page');
-
-        /* Добавление зонального наряда : POST */
-        Route::post('admin/assignments/add_sub_assignment', 'Assignments_Admin_Controller@add_sub_assignment_post');
 
         /* Добавление нового зонального наряда : POST */
         Route::post('admin/assignments/add_new_sub_assignment', 'Assignments_Admin_Controller@add_new_sub_assignment_post')->name('add_new_sub_assignment');
@@ -525,8 +483,17 @@ Route::post('/admin/profitability/profitability_index/month', 'Assignments_Admin
          /* Админ Добавить список выполненых работ : POST */
          Route::post('/admin/manage_assignment/add_works_entry', 'Assignments_Admin_Controller@add_works_post');
 
+
 /****** Финансы : Администратор ******/
+/* Просмотр счетов */
 Route::get('/admin/finances/index', 'Finances_Admin_Controller@finances_index')->middleware('can:admin_rights');
+/* Добавление счета */
+Route::post('/admin/finances/add_account', 'Finances_Admin_Controller@add_account')->middleware('can:admin_rights');
+/* Просмотр счета */
+Route::get('/admin/accounts/view/{account_id}', 'Finances_Admin_Controller@show_account')->middleware('can:admin_rights');
+/* Добавление операции */
+Route::post('/admin/accounts/add_operation/{account_id}', 'Finances_Admin_Controller@add_operation')->middleware('can:admin_rights');
+
 
 /****** Модели машин : Администратор ******/
 Route::get('/admin/cars/index', 'Cars_Admin_Controller@cars_index')->middleware('can:admin_rights');
@@ -663,15 +630,6 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
 
              /* Наряд архив : POST */
              Route::get('/employee/manage_assignment/{assignment_id}/assignment_archive', 'Employee_Dashboard_Controller@assignment_archive');
-
-    /* Страница управления ЗОНАЛЬНЫМ нарядом  */
-    Route::get('/employee/assignments/manage_assignment/{sub_assignment_id}/management', 'Employee_Dashboard_Controller@manage_zonal_assignment');
-
-        /* Изменить время зонального наряда : POST */
-        Route::post('/employee/manage_assignment/{sub_assignment_id}/management/update_zonal_assignment_time', 'Employee_Dashboard_Controller@update_zonal_assignment_time');
-
-        /* Добавить зональный список выполненых работ : POST */
-        Route::post('/employee/manage_assignment/{sub_assignment_id}/management/add_zonal_assignment_works', 'Employee_Dashboard_Controller@add_zonal_assignment_works');
 
     /* Архив моих нарядов */
     Route::get('/employee/assignments/my_assignments_archive', 'Employee_Dashboard_Controller@my_assignments_archive');
