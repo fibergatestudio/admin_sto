@@ -52,7 +52,7 @@
             {{-- Валюта --}}
             <div class="form-group col-md-6">
               <label>Валюта</label>
-              <select name="currency"class="form-control">
+              <select name="currency" class="form-control">
                   <option value="MDL">MDL</option>
                   <option value="USD">USD</option>
                   <option value="EUR">EUR</option>
@@ -79,6 +79,56 @@
   </form>
 </div>
 
+
+<!-- Модальное окно Добавить(Изменить) категорию -->
+<div class="modal fade" id="addCategory" tabindex="-1" role="dialog" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+  <form action="{{ url('/admin/finances/add_category') }}" method="POST">
+    @csrf
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addCategoryModalLabel">Добавить(Изменить) категорию</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+            {{-- Категории --}}
+            <label>Категории</label>
+            @php
+            $i = 1;
+            @endphp
+            @foreach($categories as $category)
+            @if ($i%2 != 0)
+            <div class="form-row">
+            @endif
+              <div class="form-group col-md-6">
+                <input type="text" name="category_name[]" value="{{ $category->name }}" class="form-control">
+              </div>
+            @if ($i%2 == 0)
+            </div>
+            @endif
+            @php
+            $i++;
+            @endphp
+            @endforeach
+            <div class="form-row">
+              <div class="form-group col-md-12">
+                  <input type="text" name="new_category_name" value="" class="form-control" placeholder="Новая категория">
+              </div>
+            </div>      
+
+        </div><!-- modal-body -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+          <button type="submit" class="btn btn-primary">Создать</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
 @endsection
 
 
@@ -86,6 +136,7 @@
 
 <style type="text/css">
 .content { padding: 0; }
+
 .tabs-menu { width: 100%; padding: 0px; margin: 0 auto; }
 .tabs-menu>input { display:none; }
 .tabs-menu>div {
@@ -110,117 +161,92 @@
     border-bottom: 1px solid #f2f2f2;
     background: #f2f2f2;
 }
-#tab_1:checked ~ #txt_1,
-#tab_2:checked ~ #txt_2,
-#tab_3:checked ~ #txt_3,
-#tab_4:checked ~ #txt_4,
-#tab_5:checked ~ #txt_5,
-#tab_6:checked ~ #txt_6,
-#tab_7:checked ~ #txt_7, 
-#tab_8:checked ~ #txt_8,
-#tab_9:checked ~ #txt_9,
-#tab_10:checked ~ #txt_10{ display: block; }
+#tab_1:checked ~ #txt_1{ display: block; }
+
+.total-sum{
+  position: absolute;
+  right: 150px;
+}
 </style>
 
     <!-- Вкладки -->
 <div class="tabs-menu">
-  
+  @php
+  $i = 1;
+  @endphp
+  @foreach($categories as $category)
+  <input type="radio" name="inset" value="" id="tab_<?=$i?>" <?=($i==1)?'checked':''?>>
+  <label for="tab_<?=$i?>">{{ $category->name }}</label>
+  @php
+  $i++;
+  @endphp
+  @endforeach
 
-  <input type="radio" name="inset" value="" id="tab_1" checked>
-  <label for="tab_1">Сервис</label>
 
-  <input type="radio" name="inset" value="" id="tab_2">
-  <label for="tab_2">Мойка</label>
+  @php
+  $i = 1;
+  @endphp
+  @foreach($categories as $category)
 
-  <input type="radio" name="inset" value="" id="tab_3">
-  <label for="tab_3">Банк MD</label>
+    <div id="txt_<?=$i?>">
+      <table class="table">
+          <thead>
+              <tr>
+                <th scope="col">№</th>
+                <th scope="col">Название</th>
+                <th scope="col">Баланс</th>
+                <th scope="col"></th>
+              </tr>
+          </thead>
+          <tbody>
+          @foreach($accounts as $account)
+          @if($account->status === 'active' && $account->category_id == $category->id)
+              <tr>
+                  {{-- Номер счета --}}
+                  <td>{{ $account->id }}</td>
 
-  <input type="radio" name="inset" value="" id="tab_4">
-  <label for="tab_4">Польша MD</label>
+                  {{-- Название --}}
+                  <td>{{ $account->name }}</td>
 
-  <input type="radio" name="inset" value="" id="tab_5">
-  <label for="tab_5">Фирмы Кредиторы</label>
+                  {{-- Баланс --}}
+                  <td>{{ $account->balance }}</td>
 
-  <input type="radio" name="inset" value="" id="tab_6">
-  <label for="tab_6">Фирмы Дебюторы</label>
+                  {{-- Кнопка подробнее --}}
+                  <td>
+                      <a href="{{ url('/admin/accounts/view/'.$account->id) }}">
+                          <div class="btn btn-secondary">
+                              Подробнее
+                          </div>
+                      </a>
+                  </td>
+              </tr>
+          @endif
+          @endforeach
+          </tbody>
+      </table>
+    </div>
 
-  <input type="radio" name="inset" value="" id="tab_7">
-  <label for="tab_7">Кредит</label>
-
-  <input type="radio" name="inset" value="" id="tab_8">
-  <label for="tab_8">Аукционы</label>
-
-  <input type="radio" name="inset" value="" id="tab_9">
-  <label for="tab_9">Инвестиции</label>
-
-  <input type="radio" name="inset" value="" id="tab_10">
-  <label for="tab_10">Без категории</label>
-
-  <div id="txt_1">
-    <table class="table">
-        <thead>
-            <tr>
-              <th scope="col">№</th>
-              <th scope="col">Название</th>
-              <th scope="col">Баланс</th>
-              <th scope="col"></th>
-            </tr>
-        </thead>
-        <tbody>
-        @foreach($accounts as $account)
-        @if($account->status === 'active' && $account->category_id == 1)
-            <tr>
-                {{-- Номер счета --}}
-                <td>{{ $account->id }}</td>
-
-                {{-- Название --}}
-                <td>{{ $account->name }}</td>
-
-                {{-- Баланс --}}
-                <td>{{ $account->balance }}</td>
-
-                {{-- Кнопка подробнее --}}
-                <td>
-                    <a href="{{ url('/admin/accounts/view/'.$account->id) }}">
-                        <div class="btn btn-secondary">
-                            Подробнее
-                        </div>
-                    </a>
-                </td>
-            </tr>
-        @endif
-        @endforeach
-        </tbody>
-    </table>
-  </div>
-  <div id="txt_2">
-  Мойка
-  </div>
-  <div id="txt_3">
-  Банк MD
-  </div>
-  <div id="txt_4">
-  Польша MD
-  </div>
-  <div id="txt_5">
-  Фирмы Кредиторы
-  </div>
-  <div id="txt_6">
-  Фирмы Дебюторы
-  </div>
-  <div id="txt_7">
-  Кредит
-  </div>
-  <div id="txt_8">
-  Аукционы
-  </div>
-  <div id="txt_9">
-  Инвестиции
-  </div>
-  <div id="txt_10">
-  Без категории
-  </div>
-
+  @php
+  $i++;
+  @endphp
+  @endforeach  
 
 </div>
+
+<div class="total-sum">
+  <h4>Всего: лей</h4>
+  <h4>Оборот: лей</h4>
+</div>
+
+@endsection
+
+
+@section('custom_scripts')
+<script type="text/javascript">
+  $('.tabs-menu label').click(function () {
+    let el = $(this).attr('for').substring(4);
+    $('.tabs-menu > div').css('display', 'none');
+    $('#txt_'+ el).css('display', 'block');
+  });
+</script>
 @endsection

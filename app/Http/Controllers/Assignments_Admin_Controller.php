@@ -36,6 +36,9 @@ use PHPExcel_Worksheet_Drawing;
 use PHPExcel_Style_NumberFormat;
 
 use App\Account;
+use App\AccountCategory;
+use App\AccountOperation;
+use App\AccountOperationCategory;
 
 class Assignments_Admin_Controller extends Controller
 {
@@ -59,7 +62,10 @@ class Assignments_Admin_Controller extends Controller
                         'cars_in_service.car_color AS car_color',
                         'new_sub_assignments.d_table_workzone AS assignment_workzone'
                     )
-                ->where('new_sub_assignments.work_row_index', '<>', null)
+                ->where([
+                    ['new_sub_assignments.work_row_index', '<>', null],
+                    ['assignments.status', '=', 'active']
+                ])
                 ->get();
         $workzone_data = DB::table('workzones')->get();
 
@@ -93,6 +99,62 @@ class Assignments_Admin_Controller extends Controller
         }
         //echo '<pre>'.print_r($assignments_data,true).'</pre>';
         return view('assignments_admin.assignments_admin_index', ['assignments' => $assignments_data, 'workzone_data' => $workzone_data]);
+    }
+
+
+    /* Отображения Архив нарядов */
+    public function assignments_archive(){
+        /* Получаем всю нужную информацию по нарядам */
+        $assignments_data =
+            DB::table('assignments')
+                ->join('employees', 'assignments.responsible_employee_id', '=', 'employees.id')
+                ->join('cars_in_service', 'assignments.car_id', '=', 'cars_in_service.id')
+                ->join('new_sub_assignments', 'assignments.id', '=', 'new_sub_assignments.assignment_id')
+                ->orderBy('order','ASC')
+                ->select(
+                        'assignments.*',
+                        'employees.general_name AS employee_name',
+                        'cars_in_service.general_name AS car_name',
+                        'cars_in_service.vin_number AS vin_number',
+                        'cars_in_service.release_year AS release_year',
+                        'cars_in_service.reg_number AS reg_number',
+                        'cars_in_service.car_color AS car_color',
+                        'new_sub_assignments.d_table_workzone AS assignment_workzone'
+                    )
+                ->where([
+                    ['new_sub_assignments.work_row_index', '<>', null],
+                    ['assignments.status', '=', 'closed']
+                ])
+                ->get();
+        $workzone_data = DB::table('workzones')->get();
+
+        // Собираем зональные наряды в массив
+        if($assignments_data->count()){
+            $temp_arr_obj = [];
+            $temp_arr_workzone = [];
+            $temp_id = $assignments_data[0]->order;
+            $i = 0;
+
+            for ( ;$i < count($assignments_data); $i++) {
+                if ($temp_id == $assignments_data[$i]->order) {
+                    $temp_arr_workzone[] = $assignments_data[$i]->assignment_workzone;
+                }
+                else{
+                    $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+                    $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                    $temp_id = $assignments_data[$i]->order;
+                    $temp_arr_workzone = [];
+                    $temp_arr_workzone[] = $assignments_data[$i]->assignment_workzone;
+                }
+            }
+
+            $temp_arr_obj[$i-1] = $assignments_data[$i-1];
+            $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+
+            $assignments_data = $temp_arr_obj;
+        }
+
+        return view('assignments_admin.assignments_admin_archive', ['assignments' => $assignments_data, 'workzone_data' => $workzone_data]);
     }
 
 
@@ -1579,114 +1641,145 @@ class Assignments_Admin_Controller extends Controller
         return redirect('admin/assignments/'.$request->assignment_id.'/delete_photos_page');
     }
 
+    
     public function print_settings_page(){
-
-
 
         return view('admin.assignments.print_settings_page');
     }
 
 
-        /* Добавить заход денег : POST */
-        public function add_income_post(Request $request){
-            /* Создаём новое вхождение по заходу денег и вносим туда информацию */
-            $new_income_entry = new Assignments_income();
-            $new_income_entry->assignment_id = $request->assignment_id; /* Идентификатор наряда */
-            $new_income_entry->amount = $request->amount; /* Сумма захода */
-            $new_income_entry->currency = $request->currency; /* Валюта захода */
-            $new_income_entry->basis = $request->basis; /* Основание для захода денег */
-            $new_income_entry->description = $request->description; /* Описание для захода */
-            $new_income_entry->save();
+    // Закрытие наряда
+    public function closed_assignment(Request $request){
+
+        if (isset($request->account_id)) {
+
+            $assignment = Assignment::find($request->assignment_id);
+            $assignment->status = $request->closed_assignment;
+            $assignment->save();
+            
+            $account_operation = AccountOperation::where('account_id', $request->account_id)->latest()->first();
+            $account = Account::find($request->account_id);
+            
+            $new_account_operation = new AccountOperation();
+            $new_account_operation->account_id = $request->account_id;
+            $new_account_operation->author = Auth::User()->name;      
+            $new_account_operation->date = date("Y-m-d H:i:s");
+            $new_account_operation->income = $request->income;
+            $new_account_operation->balance = $account_operation->balance + $new_account_operation->income;
+            $new_account_operation->comment = 'Закрытие наряда №'.$request->assignment_id;
+            $new_account_operation->save();
+            $account->balance = $new_account_operation->balance;
+            $account->save();
+
+        }
+
+        return redirect('/admin/assignments/assignments_index');
+    }
+
+    
+    /* Добавить заход денег : POST */
+    public function add_income_post(Request $request){
+        /* Создаём новое вхождение по заходу денег и вносим туда информацию */
+        $new_income_entry = new Assignments_income();
+        $new_income_entry->assignment_id = $request->assignment_id; /* Идентификатор наряда */
+        $new_income_entry->amount = $request->amount; /* Сумма захода */
+        $new_income_entry->currency = $request->currency; /* Валюта захода */
+        $new_income_entry->basis = $request->basis; /* Основание для захода денег */
+        $new_income_entry->description = $request->description; /* Описание для захода */
+        $new_income_entry->save();
 
 
-            /* Проверка оповещенияй (включено ли) */
-            $user_id = Auth::user()->id;
-            $notification_check = DB::table('user_options')->where('id','=', $user_id)->first();
+        /* Проверка оповещенияй (включено ли) */
+        $user_id = Auth::user()->id;
+        $notification_check = DB::table('user_options')->where('id','=', $user_id)->first();
 
-            if($notification_check->tg_income_notification == 1){
+        if($notification_check->tg_income_notification == 1){
 
-                /* Оповещения для телеграма */
-                $text = "У вас новый доход!\n"
-                . "<b>ID Наряда: </b>\n"
-                . "$new_income_entry->assignment_id\n"
-                . "<b>Сумма Дохода: </b>\n"
-                . "$new_income_entry->amount $new_income_entry->currency\n"
-                . "<b>Основание: </b>\n"
-                . "$new_income_entry->basis\n"
-                . "<b>Описание: </b>\n"
-                .  $new_income_entry->description;
+            /* Оповещения для телеграма */
+            $text = "У вас новый доход!\n"
+            . "<b>ID Наряда: </b>\n"
+            . "$new_income_entry->assignment_id\n"
+            . "<b>Сумма Дохода: </b>\n"
+            . "$new_income_entry->amount $new_income_entry->currency\n"
+            . "<b>Основание: </b>\n"
+            . "$new_income_entry->basis\n"
+            . "<b>Описание: </b>\n"
+            .  $new_income_entry->description;
 
-                Telegram::sendMessage([
-                'chat_id' => '-1001204206841.0',
-                'parse_mode' => 'HTML',
-                'text' => $text
-                ]);
+            Telegram::sendMessage([
+            'chat_id' => '-1001204206841.0',
+            'parse_mode' => 'HTML',
+            'text' => $text
+            ]);
 
-            } else {
+        }
 
-            }
-
-
-
+        if (isset($request->account_id)) {
+            return redirect('admin/assignments/view/'.$request->assignment_id.'?account_id='.$request->account_id);
+        }
+        else{
             /* Возвращаемся обратно на страницу наряда */
             return back();
         }
-        /* Добавить расход денег : POST */
-        public function add_expense_post(Request $request){
-            /* Создаём новое вхождение по расходу денег и вносим туда информацию */
-            $new_expense_entry = new Assignments_expense();
-            $new_expense_entry->assignment_id = $request->assignment_id; /* Идентификатор наряда */
-            $new_expense_entry->amount = $request->amount; /* Сумма расхода */
-            $new_expense_entry->currency = $request->currency; /* Валюта расхода */
-            $new_expense_entry->basis = $request->basis; /* Основание для расхода денег */
-            $new_expense_entry->description = $request->description; /* Описание для расхода */
-            $new_expense_entry->save();
+        
+    }
+        
+        
+    /* Добавить расход денег : POST */
+    public function add_expense_post(Request $request){
+        /* Создаём новое вхождение по расходу денег и вносим туда информацию */
+        $new_expense_entry = new Assignments_expense();
+        $new_expense_entry->assignment_id = $request->assignment_id; /* Идентификатор наряда */
+        $new_expense_entry->amount = $request->amount; /* Сумма расхода */
+        $new_expense_entry->currency = $request->currency; /* Валюта расхода */
+        $new_expense_entry->basis = $request->basis; /* Основание для расхода денег */
+        $new_expense_entry->description = $request->description; /* Описание для расхода */
+        $new_expense_entry->save();
 
-            /* Проверка оповещенияй (включено ли) */
-            $user_id = Auth::user()->id;
-            $notification_check = DB::table('user_options')->where('id','=', $user_id)->first();
+        /* Проверка оповещенияй (включено ли) */
+        $user_id = Auth::user()->id;
+        $notification_check = DB::table('user_options')->where('id','=', $user_id)->first();
 
-            if($notification_check->tg_expense_notification == 1){
+        if($notification_check->tg_expense_notification == 1){
 
-                /* Оповещения для телеграма */
-                $text = "У вас новый расход!\n"
-                . "<b>ID Наряда: </b>\n"
-                . "$new_expense_entry->assignment_id\n"
-                . "<b>Сумма Расхода: </b>\n"
-                . "$new_expense_entry->amount $new_expense_entry->currency\n"
-                . "<b>Основание: </b>\n"
-                . "$new_expense_entry->basis\n"
-                . "<b>Описание: </b>\n"
-                .  $new_expense_entry->description;
+            /* Оповещения для телеграма */
+            $text = "У вас новый расход!\n"
+            . "<b>ID Наряда: </b>\n"
+            . "$new_expense_entry->assignment_id\n"
+            . "<b>Сумма Расхода: </b>\n"
+            . "$new_expense_entry->amount $new_expense_entry->currency\n"
+            . "<b>Основание: </b>\n"
+            . "$new_expense_entry->basis\n"
+            . "<b>Описание: </b>\n"
+            .  $new_expense_entry->description;
 
-                Telegram::sendMessage([
-                'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
-                'parse_mode' => 'HTML',
-                'text' => $text
-                ]);
+            Telegram::sendMessage([
+            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+            'parse_mode' => 'HTML',
+            'text' => $text
+            ]);
 
-            } else {
-
-            }
-
-
-            /* Возвращаемся обратно на страницу наряда */
-            return back();
         }
-        /* Добавить выполненые работы : POST */
-        public function add_works_post(Request $request){
-            /* Создаём новое вхождение по выполненым работам и вносим туда информацию */
-            $new_works_entry = new Assignments_completed_works();
-            $new_works_entry->assignment_id = $request->assignment_id; /* Идентификатор наряда */
-            $new_works_entry->basis = $request->basis;
-            $new_works_entry->description = $request->description;
-            $new_works_entry->status = 'unconfirmed';
-            $new_works_entry->save();
+
+        /* Возвращаемся обратно на страницу наряда */
+        return back();
+    }
+    
+
+    /* Добавить выполненые работы : POST */
+    public function add_works_post(Request $request){
+        /* Создаём новое вхождение по выполненым работам и вносим туда информацию */
+        $new_works_entry = new Assignments_completed_works();
+        $new_works_entry->assignment_id = $request->assignment_id; /* Идентификатор наряда */
+        $new_works_entry->basis = $request->basis;
+        $new_works_entry->description = $request->description;
+        $new_works_entry->status = 'unconfirmed';
+        $new_works_entry->save();
 
 
-            /* Возвращаемся обратно на страницу наряда */
-            return back();
-        }
+        /* Возвращаемся обратно на страницу наряда */
+        return back();
+    }
 
 
     /* Отображения общей рентабельности */
@@ -1745,7 +1838,13 @@ class Assignments_Admin_Controller extends Controller
                 ->insert(['usd' => $request->usd_currency, 'eur' => $request->eur_currency]);
             }
 
-            return back();
+            if (isset($request->assignment_id)) {
+                return redirect('admin/assignments/view/'.$request->assignment_id);
+            }
+            else{
+                return back();
+            }
+            
     }
 
     /* Отображение месячной рентабельности*/

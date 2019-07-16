@@ -8,53 +8,8 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    Страница нарядов
-    <!-- <a href="{{ url('admin/add_client') }}">
-        <div class="btn btn-success">
-            Добавить наряд
-        </div>
-    </a> -->
-
-
-  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addAssignment">
-  Добавить наряд
-  </button>
-  <a href="{{ url('/admin/assignments/archive') }}" class="btn btn-danger">Архив</a>
-
-        <div style="margin:0;"class="modal fade modal-dialog" id="addAssignment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Добавление наряда</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-
-                    <div class="row">
-                      <div class="col-lg-6">
-                        <a href="{{ url('admin/clients/add_client') }}">
-                            <div class="btn btn-large btn-primary">
-                                Новый клиент
-                            </div>
-                        </a>
-                      </div>
-                      <div class="col-lg-6">
-                        <a href="{{ url('admin/cars_in_service/add') }}">
-                            <div class="btn btn-large btn-info">
-                                Существующий
-                            </div>
-                        </a>
-                      </div>
-                    </div>
-
-                    </div>
-                </div>{{-- /modal-content --}}
-            </div>{{-- /modal-dialog --}}
-        </div>{{-- /modal fade --}}
-
-
+    
+    Архив нарядов
 
 @endsection
 
@@ -72,10 +27,11 @@
               <th scope="col">VIN</th>
               <th scope="col">Цвет</th>
               <th scope="col">Рабочие зоны</th>
-              <th scope="col"></th>
+              <!-- <th scope="col"></th> -->
             </tr>
         </thead>
         <tbody id="tablecontents">
+        @if(isset($assignments))
         @foreach($assignments as $assignment)
             <tr class="row1" data-id="{{ $assignment->id }}">
                 <td>
@@ -108,7 +64,7 @@
                 @endif
                 </td>
 
-                {{-- Рабочии зоны --}}
+                {{-- Рабочиe зоны --}}
                 <td style="color: white;">
                   <?php $workzone = $assignment->workzone; ?>
                   @if ($workzone)
@@ -123,21 +79,19 @@
                 </td>
 
                 {{-- Кнопка подробнее --}}
-                <td>
-                    <a href="{{ url('/admin/assignments/view/'.$assignment->id) }}">
-                        <div class="btn btn-secondary">
-                            Подробнее
-                        </div>
-                    </a>
-                </td>
+<!--                 <td>
+    <a href="{{ url('/admin/assignments/view/'.$assignment->id) }}">
+        <div class="btn btn-secondary">
+            Подробнее
+        </div>
+    </a>
+</td> -->
             </tr>
         @endforeach
+        @endif
         </tbody>
     </table>
     <hr>
-
-    <p>* Добавление наряда будет осуществляться из карточки машины (вкладка "Клиенты" или "Машины в сервисе")</p>
-    <p>* Если не назначены рабочие зоны, наряд в списке нарядов отображаться не будет, а только на "Страница машины"</p>
 
 <!-- Скрипты для таблиц -->
 <script type="text/javascript">
