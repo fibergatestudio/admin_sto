@@ -2496,14 +2496,18 @@
   <div id="txt_4">
       
       <h3>Доходная часть</h3>
-
-      <div class="form-row">
-        <div class="form-group col-md-6" style="margin: 0 auto;">
-          <input type="number" name="usd" value="{{ $usd }}">
-          <input type="number" name="eur" value="{{ $eur }}">
-          <a href="#" class="btn btn-success">Сохранить</a>
+      
+      <form method="POST" action="{{ url('/admin/profitability/profitability_index') }}">
+        @csrf
+        <div class="form-row">
+          <div class="form-group col-md-6" style="margin: 0 auto;">
+            <input type="number" name="usd_currency" value="{{ $usd }}" step="0.00001">
+            <input type="number" name="eur_currency" value="{{ $eur }}" step="0.00001">
+            <input type="hidden" name="assignment_id" value="{{ $assignment->id }}">
+            <button type="submit" class="btn btn-success">Сохранить</button>
+          </div>
         </div>
-      </div>
+      </form>
       <br>  
 
       {{-- Тип операции --}}
@@ -2519,34 +2523,48 @@
           <thead>
             <tr>
               <th scope="col">Счет</th>
-              <th scope="col">Сумма</th>
+              <th scope="col">Сумма(MDL)</th>
               <th scope="col">Дата</th>
               <th scope="col">Действие</th>
             </tr>
           </thead>     
           <tbody>
             <tr>
-                <td>
-                  <select name="account_id" class="form-control">
-                    @foreach($accounts as $account)
-                    <option value="{{ $account->id }}">{{ $account->name }}</option>
-                    @endforeach
-                  </select>
-                </td> 
-                <td>
-                  <input type="text" name="income" class="form-control" value="{{ $sum_expense }}" >
-                </td>
-                <td>
-                  <input type="text" name="disabled-date" class="form-control" disabled value="{{ date('Y-m-d H:i:s') }}">
-                  <input type="hidden" name="date" value="{{ date('Y-m-d H:i:s') }}">
-                </td>
-                <td>
-                  <button type="button">+</button>
-                </td>             
+
+                <form action="{{ url('/admin/manage_assignment/add_income_entry') }}" method="POST">
+                  @csrf
+                  <input type="hidden" name="assignment_id" value="{{ $assignment->id }}"> 
+                  <input type="hidden" name="currency" value="MDL">
+                  <input type="hidden" name="basis" value="Закрытие наряда">
+                  <input type="hidden" name="description" value="Закрытие наряда">
+                  <td>
+                    <select name="account_id" class="form-control">
+                      @foreach($accounts as $account)
+                      @if(isset($_GET['account_id']) && $_GET['account_id'] == $account->id)
+                      <option value="{{ $account->id }}" selected>{{ $account->name }}</option>
+                      @else
+                      <option value="{{ $account->id }}">{{ $account->name }}</option>
+                      @endif
+                      @endforeach
+                    </select>
+                  </td>
+                  <td>
+                    <input type="text" name="amount" class="form-control" value="" required>
+                  </td>
+                  <td>
+                    <input type="text" name="disabled-date" class="form-control" disabled value="{{ date('Y-m-d H:i:s') }}">
+                    <input type="hidden" name="date" value="{{ date('Y-m-d H:i:s') }}">
+                  </td>
+                  <td>
+                    <button type="submit">+</button>
+                  </td>
+                </form>                       
+            
             </tr>
           </tbody>                                                               
       
       </table>
+      <p>*Для закрытия наряда внесите полную сумму и загрузите акты принятия и выдачи машины клиенту</p>
       <br>
       
       <div class="form-row">
@@ -2556,8 +2574,17 @@
         </div>
       </div>
       
+      @if($sum_income == $sum_expense)
       <br>
-      <button type="button" id="closeOutfit" class="btn btn-primary">Закрыть наряд</button>
+      <form action="{{ url('/admin/assignments/closed_assignment') }}" method="POST">
+      @csrf
+        <input type="hidden" name="assignment_id" value="{{ $assignment->id }}">
+        <input type="hidden" name="income" value="{{ $sum_income }}">
+        <input type="hidden" name="account_id" value="<?=(isset($_GET['account_id']))?$_GET['account_id']:''?>">
+        <input type="hidden" name="closed_assignment" value="closed">
+        <button type="submit" class="btn btn-primary">Закрыть наряд</button>
+      </form>
+      @endif
   
   </div><!-- txt_4 Доходная часть-->
   

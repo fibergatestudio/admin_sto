@@ -408,7 +408,7 @@ Route::get('admin/firms/firms_index', 'Firms_Admin_Controller@firms_index')->mid
         Route::post('admin/cars_in_service/edit_note_to_car', 'Cars_in_service_Admin_Controller@edit_note_to_car_post')->middleware('can:admin_rights');;
 
         /* -  Удалить примечание - */
-        Route::get('admin/cars_in_service/delete_note/{note_id}', 'Cars_in_service_Admin_Controller@delete_note')->middleware('can:admin_rights');;
+        Route::get('admin/cars_in_service/delete_note/{note_id}', 'Cars_in_service_Admin_Controller@delete_note')->middleware('can:admin_rights');
 
     /* История машины */
     // ...
@@ -417,6 +417,8 @@ Route::get('admin/firms/firms_index', 'Firms_Admin_Controller@firms_index')->mid
 Route::get('/admin/assignments/assignments_index', 'Assignments_Admin_Controller@assignments_index')->middleware('can:admin_rights');
 /* Обновление (перестановка) елементов таблицы */
 Route::post('/admin/assignments/assignments_index', 'Assignments_Admin_Controller@updateMainOrder')->middleware('can:admin_rights');
+// Архив нарядов
+Route::get('/admin/assignments/archive', 'Assignments_Admin_Controller@assignments_archive')->middleware('can:admin_rights');
 
 /****** Страница общей рентабельности: Администратор ******/
 Route::get('/admin/profitability/profitability_index', 'Assignments_Admin_Controller@profitability_index')->middleware('can:admin_rights');
@@ -470,8 +472,8 @@ Route::post('/admin/profitability/profitability_index/month', 'Assignments_Admin
     /* Настройка печати : Страница */
     Route::get('/admin/assignments/{assignment_id}/print_settings', 'Assignments_Admin_Controller@print_settings_page');
 
-        /* Удаление фотографий : POST */
-        Route::post('/admin/assignments/delete_photo_from_assignment', 'Assignments_Admin_Controller@delete_photos_post');
+    /* Удаление фотографий : POST */
+    Route::post('/admin/assignments/delete_photo_from_assignment', 'Assignments_Admin_Controller@delete_photos_post');
 
     /* АДМИН УПРАВЛЕНИЕ НАРЯДАМИ
 
@@ -481,19 +483,24 @@ Route::post('/admin/profitability/profitability_index/month', 'Assignments_Admin
     /* Админ страница управления одним нарядом */
     Route::get('/admin/manage_assignment/{assignment_id}', 'Assignments_Admin_Controller@manage_assignment');
 
-        /* Админ Добавить доходную часть : POST */
-        Route::post('/admin/manage_assignment/add_income_entry', 'Assignments_Admin_Controller@add_income_post');
+    /* Админ Добавить доходную часть : POST */
+    Route::post('/admin/manage_assignment/add_income_entry', 'Assignments_Admin_Controller@add_income_post');
 
-         /* Админ Добавить расходную часть : POST */
-         Route::post('/admin/manage_assignment/add_expense_entry', 'Assignments_Admin_Controller@add_expense_post');
+     /* Админ Добавить расходную часть : POST */
+     Route::post('/admin/manage_assignment/add_expense_entry', 'Assignments_Admin_Controller@add_expense_post');
 
-         /* Админ Добавить список выполненых работ : POST */
-         Route::post('/admin/manage_assignment/add_works_entry', 'Assignments_Admin_Controller@add_works_post');
+     /* Админ Добавить список выполненых работ : POST */
+     Route::post('/admin/manage_assignment/add_works_entry', 'Assignments_Admin_Controller@add_works_post');
+
+     /* Админ закрытие наряда : POST */
+    Route::post('/admin/assignments/closed_assignment', 'Assignments_Admin_Controller@closed_assignment');
 
 
 /****** Финансы : Администратор ******/
 /* Просмотр счетов */
 Route::get('/admin/finances/index', 'Finances_Admin_Controller@finances_index')->middleware('can:admin_rights');
+/* Добавление категории */
+Route::post('/admin/finances/add_category', 'Finances_Admin_Controller@add_category')->middleware('can:admin_rights');
 /* Добавление счета */
 Route::post('/admin/finances/add_account', 'Finances_Admin_Controller@add_account')->middleware('can:admin_rights');
 /* Просмотр счета */

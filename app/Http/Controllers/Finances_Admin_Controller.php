@@ -36,7 +36,7 @@ class Finances_Admin_Controller extends Controller
         $new_account_operation->account_id = $new_account->id;
         $new_account_operation->author = Auth::User()->name;
         $new_account_operation->comment = 'Открытие счета';
-        $new_account_operation->date = date('Y-m-d H:i:s');
+        $new_account_operation->date = date("Y-m-d H:i:s");
         $new_account_operation->save();
     	return redirect('/admin/finances/index');
     }
@@ -117,6 +117,26 @@ class Finances_Admin_Controller extends Controller
             $new_account_operation_category->save();
         }                   
         
+        return redirect('/admin/finances/index');
+    }
+
+    // Добавление категории
+    public function add_category(Request $request)
+    {
+        $categories = AccountCategory::all();
+        $i = 0;
+        foreach ($categories as $category) {
+            $category->name = $request->category_name[$i];
+            $i++;
+            $category->save();
+        }
+
+        if (isset($request->new_category_name)) {
+            $new_category = new AccountCategory();
+            $new_category->name = $request->new_category_name;
+            $new_category->save();
+        }
+
         return redirect('/admin/finances/index');
     }
 }

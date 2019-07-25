@@ -61,7 +61,7 @@
                 </select>
             </div>
           </div>
-         
+
           <div class="form-row">
             {{-- Валюта --}}
             <div class="form-group col-md-6">
@@ -100,7 +100,7 @@
 .tabs-menu>div {
     display: none;
     padding: 12px;
-    border: 1px solid #C0C0C0;    
+    border: 1px solid #C0C0C0;
 }
 .tabs-menu>label {
     display: inline-block;
@@ -160,10 +160,10 @@
 
             <!-- Вкладки -->
             <div class="tabs-menu">
-            	@php
-            	$categories_arr = [];
-            	@endphp
-              
+              @php
+              $categories_arr = [];
+              @endphp
+
               <input type="radio" name="inset" value="" id="tab_1" checked>
               <label for="tab_1">Расход</label>
 
@@ -174,7 +174,7 @@
               <label for="tab_3">Перевод на счет</label>
 
               <div class="tabs-menu-child" id="txt_1">
-                
+
                 {{-- Тип операции --}}
                 <input type="hidden" name="type_operation" value="Расход">
 
@@ -189,7 +189,7 @@
                       <label>Категория</label>
                       @if(count($account_operation_categories) > 0)
                       <p onclick="chooseCategory()" class="form-control">Выберите</p>
-                      <ul class="listCategories">                       
+                      <ul class="listCategories">
                         <li><input type="text" name="category" onblur="createCategory(this)" class="form-control" placeholder="Введите новую категорию" autocomplete="off"></li>
                         @foreach($account_operation_categories as $category)
                         @php
@@ -197,13 +197,13 @@
                         @endphp
                         <li class="form-control" data-value="{{ $category->name }}">{{ $category->name }}</li>
                         @endforeach
-                      </ul>                                               
+                      </ul>
                       @else
                       <input type="text" name="category" class="form-control" placeholder="Введите новую категорию" required>
                       @endif
                   </div>
                 </div>
-               
+
                 <div class="form-row">
                   {{-- Сумма --}}
                   <div class="form-group col-md-6">
@@ -215,21 +215,21 @@
                     <label>Дата</label>
                     <input type="text" name="disabled-date" class="form-control" disabled value="{{ date('Y-m-d H:i:s') }}">
                     <input type="hidden" name="date" value="{{ date('Y-m-d H:i:s') }}">
-                  </div>                  
+                  </div>
                 </div>
-                
+
                 {{-- Описание --}}
                 <div class="col-md-6">
                   <label>Описание</label>
                   <textarea name="comment" class="form-control"></textarea>
                 </div>
-                
-              
+
+
               </div><!--txt_1 Расход -->
-              
-              
+
+
               <div class="tabs-menu-child" id="txt_2">
-                
+
                 {{-- Тип операции --}}
                 <input type="hidden" name="type_operation" value="Доход">
 
@@ -255,13 +255,13 @@
                         @endphp
                         <li class="form-control" data-value="{{ $category->name }}">{{ $category->name }}</li>
                         @endforeach
-                      </ul>                                               
+                      </ul>
                       @else
                       <input type="text" name="category" class="form-control" placeholder="Введите новую категорию" required>
                       @endif
                   </div>
                 </div>
-               
+
                 <div class="form-row">
                   {{-- Сумма --}}
                   <div class="form-group col-md-6">
@@ -273,20 +273,20 @@
                     <label>Дата</label>
                     <input type="text" name="disabled-date" class="form-control" disabled value="{{ date('Y-m-d H:i:s') }}">
                     <input type="hidden" name="date" value="{{ date('Y-m-d H:i:s') }}">
-                  </div>                  
+                  </div>
                 </div>
-                
+
                 {{-- Описание --}}
                 <div class="col-md-6">
                   <label>Описание</label>
                   <textarea name="comment" class="form-control"></textarea>
                 </div>
-              
+
               </div><!--txt_2 Доход -->
-              
+
 
               <div class="tabs-menu-child" id="txt_3">
-                
+
                 {{-- Тип операции --}}
                 <input type="hidden" name="type_operation" value="Перевод на счет">
 
@@ -306,9 +306,9 @@
                   <div class="form-group col-md-6">
                     <label>Описание</label>
                     <textarea name="comment" class="form-control"></textarea>
-                  </div>                  
+                  </div>
                 </div>
-               
+
                 <div class="form-row">
                   {{-- Сумма --}}
                   <div class="form-group col-md-6">
@@ -319,23 +319,23 @@
                   <div class="form-group col-md-6">
                     <label>Сумма получения</label>
                     <input type="text" name="income_to" class="form-control" value="">
-                  </div>                  
+                  </div>
                 </div>
-                
+
                 {{-- Дата --}}
                 <div class="form-group col-md-6">
                   <label>Дата</label>
                   <input type="text" name="disabled-date" class="form-control" disabled value="{{ date('Y-m-d H:i:s') }}">
                   <input type="hidden" name="date" value="{{ date('Y-m-d H:i:s') }}">
                 </div>
-                
+
               </div><!--txt_3 Перевод на счет -->
 
-            
+
             </div><!-- tabs-menu -->
-      
+
         </div><!-- modal-body -->
-        
+
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
           <button type="submit" id="createOperation" class="btn btn-primary">Создать</button>
@@ -388,7 +388,7 @@
                 <td>{{ $operation->income }}</td>
 
                 {{-- Баланс --}}
-                <td>{{ $operation->balance }}</td>               
+                <td>{{ $operation->balance }}</td>
             </tr>
         @endforeach
         </tbody>
@@ -404,7 +404,7 @@
 @section('custom_scripts')
 
 <script type="text/javascript">
-  
+
   // Корректная передача данных
   $('#createOperation').click(function(event){
     event.preventDefault();
@@ -440,7 +440,7 @@
     $('input[name="category"]').val(valText);
     $('.listCategories').hide();
   });
-  
+
   $('.listCategories input').keyup(function(){
     let valText = $(this).val();
     $('.choose-category p').text(valText);
@@ -458,5 +458,5 @@
   // End "Вывод категорий операций"
 
 </script>
-  
+
 @endsection
