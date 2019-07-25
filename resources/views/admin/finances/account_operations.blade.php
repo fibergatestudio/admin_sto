@@ -1,8 +1,9 @@
 <?php
     function new_date($mysql_date){
-        $date_dump_full = explode(' ', $mysql_date);
+        /*$date_dump_full = explode(' ', $mysql_date);
         $date_dump = explode('-', $date_dump_full[0]);
-        return $date_dump[2].'/'.$date_dump[1].'/'.$date_dump[0].' '.$date_dump_full[1];
+        return $date_dump[2].'/'.$date_dump[1].'/'.$date_dump[0].' '.$date_dump_full[1];*/
+        return $mysql_date;
     }
 ?>
 
@@ -159,6 +160,9 @@
 
             <!-- Вкладки -->
             <div class="tabs-menu">
+            	@php
+            	$categories_arr = [];
+            	@endphp
               
               <input type="radio" name="inset" value="" id="tab_1" checked>
               <label for="tab_1">Расход</label>
@@ -185,10 +189,7 @@
                       <label>Категория</label>
                       @if(count($account_operation_categories) > 0)
                       <p onclick="chooseCategory()" class="form-control">Выберите</p>
-                      <ul class="listCategories">
-                        @php
-                        $categories_arr = [];
-                        @endphp
+                      <ul class="listCategories">                       
                         <li><input type="text" name="category" onblur="createCategory(this)" class="form-control" placeholder="Введите новую категорию" autocomplete="off"></li>
                         @foreach($account_operation_categories as $category)
                         @php

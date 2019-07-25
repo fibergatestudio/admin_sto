@@ -14,6 +14,42 @@
         <input type="hidden" id="counter" name="entries_count" value="1">
 
         {{-- Строки под элементы заказа на Vue.JS --}}
+        <!-- <div class="form-group">
+            <label class="col-md-4 form-group" style="display: inline-block" for="item_name">Название</label>
+            <label class="col-md-1 form-group" style="display: inline-block" for="item_numbers">Количество</label>
+            <label class="col-md-2 form-group" style="display: inline-block" for="item_urgency">Срочность</label>
+            <label for="order_comment">Комментарий к заказу</label>
+            <div class="form-group">
+                <input type="text" name="item" class="form-control col-md-4" style="display: inline-block" required id="item_name">
+                <input type="number" name="count" class="form-control col-md-1" style="display: inline-block" value="1" min="1" required id="item_numbers">
+                <select name="urgency" class="form-control col-md-3" style="display: inline-block" required id="item_urgency">
+                    <option selected="selected">Выберите срочность</option>
+                    <option value="Не горит">Не горит</option>
+                    <option value="Горит">Горит</option>
+                    <option value="Очень горит">Очень горит</option>
+                </select>
+            </div>
+            {{-- Комментарий к заказу --}}
+            <div class="form-group col-md-8">
+                <textarea class="form-control" rows="3" cols="45" name="order_comment" id="order_comment" placeholder="Введите коментарий к заказу"></textarea>
+            </div>
+            {{-- Добавить новый элемент : кнопка --}}
+            <div class="row">
+                <!-- <div onclick="app1.addNewEntry()" class="btn btn-success m-1">+</div> -->
+                <!-- <button type="submit" class="btn btn-primary m-1">
+                    Добавить
+                </button>
+            </div>
+            <hr> -->
+        
+            <!-- <div class="form-group">
+                <label for="order_comment">Комментарий к заказу</label>
+            </div>
+            <div class="form-group">
+            <textarea rows="3" cols="45" name="order_comment" id="order_comment" placeholder="Введите коментарий к заказу"></textarea>
+            </div> -->
+        <!-- </div> -->
+
         <div id="app1">
             <label class="col-md-4" style="display: inline-block" for="item_name">Название</label>
             <label class="col-md-1" style="display: inline-block" for="item_numbers">Количество</label>
@@ -29,10 +65,11 @@
                     <option value="Горит">Горит</option>
                     <option value="Очень горит">Очень горит</option>
                 </select>
-            </div>
-            {{-- Комментарий к заказу --}}
-            <div class="form-group col-md-8">
-                <textarea class="form-control" rows="3" cols="45" name="order_comment" id="order_comment" placeholder="Введите коментарий к заказу"></textarea>
+
+                {{-- Комментарий к заказу --}}
+                <div class="form-group col-md-8 p-2">
+                    <textarea class="form-control" rows="3" cols="45" :name="'order_comment'+id,id" id="order_comment" placeholder="Введите коментарий к заказу"></textarea>
+                </div>
             </div>
             {{-- Добавить новый элемент : кнопка --}}
             <div class="row">
@@ -52,6 +89,18 @@
         </div>
                  
     </form>
+    <div class="row">
+            {{-- Заказы для подтверждения : кнопка --}}
+            <div class="col-2">
+                <a href="{{ url('admin/supply_orders/worker') }}" class="btn btn-info">Заказы для подтверждения</a>
+            </div>     
+            {{-- Архив : переход --}}
+            <a href="{{ url('admin/supply_orders/archive') }}">
+                <div class="btn btn-light">
+                    Архив
+                </div>    
+            </a>      
+        </div>
     <br>
     <hr>
 
@@ -63,15 +112,16 @@
             <tr>
                 <th>Имя заказчика</th>
                 <th>Дата создания</th>
-                <th>Кол-во позиций</th>
-                <th>Кол-во товара</th>
+                <th>Название товара</th>
+                <th>Количество</th>
+                <th>Срочность</th>   
                 <th>Комментарий</th>
                 <th></th>{{-- Кнопки управления --}}
             </tr>
         </thead>
         <tbody>
             
-                <tr>
+                <tr style="background-color: wheat;">
                     <td >
                         {{-- Имя заказчика --}}
                         {{ $supply_order->creator_name }}<br>
@@ -81,19 +131,29 @@
                         {{-- Дата создания --}}
                         {{ $supply_order->date_of_creation }}
                     </td>
+  
+                        @foreach($supply_order->items as $supply_order->item)
+                            <td >
+                                {{-- Название --}}
+                                {{ $supply_order->item->item }}<br>
+                            </td>
+                            
+                            <td >
+                                {{-- Количество --}}
+                                {{ $supply_order->item->number }}
+                            </td>
 
-                    <td >
-                        {{-- Количество пунктов --}}
-                        {{ $supply_order->entries_count }}
-                    </td>
-                
-                    <td>
-                        {{-- Количество предметов (штук) --}}
-                        {{ $supply_order->items_count }}
-                    </td>
-                     
-                   
-                    
+                            <td>
+                                {{-- Срочност --}}
+                                @if($supply_order->item->urgency == 'Не горит')
+                                <span class="badge badge-success">{{$supply_order->item->urgency}}</span>
+                                @elseif($supply_order->item->urgency == 'Горит')
+                                <span class="badge badge-warning">{{$supply_order->item->urgency}}</span>
+                                @elseif($supply_order->item->urgency == 'Очень горит')
+                                <span class="badge badge-danger">{{$supply_order->item->urgency}}</span>
+                                @endif                        
+                            </td>
+                        @endforeach
                     <td >
                         {{-- Комментарий --}}
                         {{ $supply_order->order_comment }}
@@ -118,45 +178,6 @@
                         </form>
                     </td>
                 </tr> 
-        </tbody>
-    </table>
-    <div>
-        <span>Подробности заказа</span>
-    </div>
-    <table class="table" >
-        <thead>
-            <tr>
-                <th>Название товара</th>
-                <th>Количество</th>
-                <th>Срочность</th>                
-            </tr>
-        </thead>
-        <tbody> 
-            @foreach($supply_order->items as $supply_order->item)
-                <tr>
-                    <td >
-                        {{-- Название --}}
-                        {{ $supply_order->item->item }}<br>
-                    </td>
-                    
-                    <td >
-                        {{-- Количество --}}
-                        {{ $supply_order->item->number }}
-                    </td>
-
-                    <td>
-                        {{-- Срочност --}}
-                        @if($supply_order->item->urgency == 'Не горит')
-                        <span class="badge badge-success">{{$supply_order->item->urgency}}</span>
-                        @elseif($supply_order->item->urgency == 'Горит')
-                        <span class="badge badge-warning">{{$supply_order->item->urgency}}</span>
-                        @elseif($supply_order->item->urgency == 'Очень горит')
-                        <span class="badge badge-danger">{{$supply_order->item->urgency}}</span>
-                        @endif                        
-                    </td>
-                                   
-                </tr> 
-            @endforeach
         </tbody>
     </table>
     <hr>

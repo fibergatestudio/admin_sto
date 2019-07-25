@@ -32,7 +32,7 @@
                  
         {{-- Комментарий к заказу --}}
         
-        <div class="form-group">
+        <div class="form-group col-md-8 p-2">
             <label for="order_comment">Комментарий к заказу</label>
         </div>
         <div class="form-group">

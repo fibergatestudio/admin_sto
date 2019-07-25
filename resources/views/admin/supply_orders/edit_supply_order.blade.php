@@ -32,7 +32,7 @@
             </div>
         </div>
 
-        <div id="app1">
+        <!-- <div id="app1">
             <label class="col-md-4" style="display: inline-block" for="item_name">Новые поля</label>
             <div v-for="id in ids" class="form-group">
             @{{ id.id }}.
@@ -49,7 +49,7 @@
             {{-- Добавить новый элемент : кнопка --}}
             <div onclick="app1.addNewEntry()" class="btn btn-success">+</div>
             <hr>
-        </div>
+        </div> -->
             
             
                  

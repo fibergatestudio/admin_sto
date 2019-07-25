@@ -2,11 +2,11 @@
 
 @section('page_name')
     Список фирм 
-    <a href="{{ url('admin/clients/add_client') }}">
+    <!-- <a href="{{ url('admin/clients/add_client') }}">
         <div class="btn btn-primary">
             Добавить фирму
         </div>
-    </a>
+    </a> -->
 
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addZonalExpenseModal">
         Добавить Фирму
@@ -63,7 +63,7 @@
             @foreach($firms as $firm)
             <tr>
                 <td>{{ $firm->firm_name }}</td>
-                <td>{{ $firm->firm_discount }}%</td>
+                <td>{{ $firm->firm_discount }}</td>
             </tr>
             @endforeach
         </tbody>

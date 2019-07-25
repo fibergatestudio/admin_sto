@@ -691,16 +691,39 @@ class Employee_Dashboard_Controller extends Controller
     /* Новый ордер : POST */
     public function employee_order_new_post(Request $request){
         
-        /* Вносим заказ в базу */
-        $new_order = new Supply_order();
-        $new_order->creator_id = Auth::user()->id; // Создатель заказа
-        $new_order->order_comment = $request->order_comment; // комментарий к заказу
-        $new_order->status = 'active';
-        $new_order->save();
-        
-        /* Вносим предметы из заказа в базу */
+        // /* Вносим заказ в базу */
+        // $new_order = new Supply_order();
+        // $new_order->creator_id = Auth::user()->id; // Создатель заказа
+        // $new_order->order_comment = $request->order_comment; // комментарий к заказу
+        // $new_order->status = 'active';
+        // $new_order->save();
+
+        // $item_name = $request->item;
+        // $item_count = $request->entries_count;
+        // $item_urgency = $request->urgency;
+
+        // //dd($item_name,$item_count,$item_urgency);
+
+        // // Внести в базу
+        // $new_order_item = new Supply_order_item();
+        // $new_order_item->supply_order_id = $new_order->id;
+        // $new_order_item->item = $item_name;
+        // $new_order_item->number = $item_count;
+        // $new_order_item->urgency = $item_urgency;
+
+        // $new_order_item->save();
+
         $counter = intval($request->entries_count);
         for($i = 1; $i <= $counter; $i++){
+
+            /* Вносим заказ в базу */
+            $new_order = new Supply_order();
+            $new_order->creator_id = Auth::user()->id; // Создатель заказа
+            $new_order->order_comment = 'order_comment'.$i;//$request->order_comment; // комментарий к заказу
+            $new_order->save();
+
+            //dd($new_order->order_comment);
+
             // Получает данные из POST запроса
             $item_input_name = 'item'.$i;
             $item_count_name = 'count'.$i;
@@ -715,10 +738,33 @@ class Employee_Dashboard_Controller extends Controller
             $new_order_item->item = $item_name;
             $new_order_item->number = $item_count;
             $new_order_item->urgency = $item_urgency;
-            
+
             $new_order_item->save();
-            
+
         }
+
+        
+        /* Вносим предметы из заказа в базу */
+        // $counter = intval($request->entries_count);
+        // for($i = 1; $i <= $counter; $i++){
+        //     // Получает данные из POST запроса
+        //     $item_input_name = 'item'.$i;
+        //     $item_count_name = 'count'.$i;
+        //     $item_urgency_name = 'urgency'.$i;
+        //     $item_name = $request->$item_input_name;
+        //     $item_count = $request->$item_count_name;
+        //     $item_urgency = $request->$item_urgency_name;
+
+        //     // Внести в базу
+        //     $new_order_item = new Supply_order_item();
+        //     $new_order_item->supply_order_id = $new_order->id;
+        //     $new_order_item->item = $item_name;
+        //     $new_order_item->number = $item_count;
+        //     $new_order_item->urgency = $item_urgency;
+            
+        //     $new_order_item->save();
+            
+        // }
 
          /* Проверка оповещенияй (включено ли) */
          $user_id = Auth::user()->id;
@@ -821,7 +867,7 @@ class Employee_Dashboard_Controller extends Controller
             .  $item_urgency;
 
             Telegram::sendMessage([
-            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+            'chat_id' => '-1001204206841.0',
             'parse_mode' => 'HTML',
             'text' => $text
             ]);

@@ -12,6 +12,8 @@ use App\Supply_order;
 use App\Supply_order_item;
 use App\Supply_order_log;
 
+use App\User;
+
 use DB;
 
 class Supply_orders_Admin_Controller extends Controller
@@ -52,15 +54,43 @@ class Supply_orders_Admin_Controller extends Controller
     /* Новый ордер : POST */
     public function new_supply_order_post(Request $request){
 
-        /* Вносим заказ в базу */
-        $new_order = new Supply_order();
-        $new_order->creator_id = Auth::user()->id; // Создатель заказа
-        $new_order->order_comment = $request->order_comment; // комментарий к заказу
-        $new_order->save();
+        // /* Вносим заказ в базу */
+        // $new_order = new Supply_order();
+        // $new_order->creator_id = Auth::user()->id; // Создатель заказа
+        // $new_order->order_comment = $request->order_comment; // комментарий к заказу
+        // $new_order->save();
 
         /* Вносим предметы из заказа в базу */
+
+        // $item_input_name = $request->item;
+        // $item_count_name = $request->entries_count;
+        // $item_urgency_name = $request->urgency;
+        // $item_name = $request->item;
+        // $item_count = $request->entries_count;
+        // $item_urgency = $request->urgency;
+
+        //dd($item_name,$item_count,$item_urgency);
+
+        // Внести в базу
+        // $new_order_item = new Supply_order_item();
+        // $new_order_item->supply_order_id = $new_order->id;
+        // $new_order_item->item = $item_name;
+        // $new_order_item->number = $item_count;
+        // $new_order_item->urgency = $item_urgency;
+
+        // $new_order_item->save();
+
         $counter = intval($request->entries_count);
         for($i = 1; $i <= $counter; $i++){
+
+            /* Вносим заказ в базу */
+            $new_order = new Supply_order();
+            $new_order->creator_id = Auth::user()->id; // Создатель заказа
+            $new_order->order_comment = 'order_comment'.$i;//$request->order_comment; // комментарий к заказу
+            $new_order->save();
+
+            //dd($new_order->order_comment);
+
             // Получает данные из POST запроса
             $item_input_name = 'item'.$i;
             $item_count_name = 'count'.$i;
@@ -82,22 +112,22 @@ class Supply_orders_Admin_Controller extends Controller
 
         /* Отправляем телеграм оповещение о созданном заказе*/
 
-        $text = "У вас новый заказ!\n"
-        . "<b>Название товара: </b>\n"
-        . "$item_name\n"
-        . "<b>Кол-во: </b>\n"
-        . "$item_count\n"
-        . "<b>Срочность: </b>\n"
-        .  "$item_urgency\n"
-        . "<b>Комментарий к заказу: </b>\n"
-        .  $request->order_comment;
+        // $text = "У вас новый заказ!\n"
+        // . "<b>Название товара: </b>\n"
+        // . "$item_name\n"
+        // . "<b>Кол-во: </b>\n"
+        // . "$item_count\n"
+        // . "<b>Срочность: </b>\n"
+        // .  "$item_urgency\n"
+        // . "<b>Комментарий к заказу: </b>\n"
+        // .  $request->order_comment;
 
-        Telegram::sendMessage([
-            //'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
-            'chat_id' => '-1001204206841.0',
-            'parse_mode' => 'HTML',
-            'text' => $text
-        ]);
+        // Telegram::sendMessage([
+        //     //'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+        //     'chat_id' => '-1001204206841.0',
+        //     'parse_mode' => 'HTML',
+        //     'text' => $text
+        // ]);
 
         /* Вносим в лог запись о том, что заказ создан*/
         // ...
@@ -217,7 +247,7 @@ class Supply_orders_Admin_Controller extends Controller
          .  $request->order_comment;
 
          Telegram::sendMessage([
-             'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+             'chat_id' => '-1001204206841.0',
              'parse_mode' => 'HTML',
              'text' => $text
          ]);
@@ -252,8 +282,8 @@ class Supply_orders_Admin_Controller extends Controller
         $supply_order->save();
 
         /* - Вносим в логи архивирование заказа - */
-        $new_supply_order_arhive_log_entry = new Supply_order_logs();
-        $new_supply_order_arhive_log_entry->order_id = $supply_order->id;
+        $new_supply_order_arhive_log_entry = new Supply_order_log();
+        $new_supply_order_arhive_log_entry->supply_order_id = $supply_order->id;
         $new_supply_order_arhive_log_entry->author_id = Auth::user()->id;
 
         /* - Имя автора - */
@@ -262,12 +292,13 @@ class Supply_orders_Admin_Controller extends Controller
         $author_name = $author->general_name;
 
         /* - Номер заказа - */
-        $order_id = $new_supply_order_arhive_log_entry->order_id;
-        $order = Supply_orders::find($order_id);
+        $order_id = $new_supply_order_arhive_log_entry->supply_order_id;
+        //dd($order_id);
+        $order = Supply_order::find($order_id);
         $order_number = $order->id;
 
-        $new_supply_order_arhive_log_entry->text = 'Заказ номер - ' .$order_number. ' переведён в архив автором - ' .$author_name; //текст лога о переводе заказа(№) в архив автором(имя)
-        $new_supply_order_arhive_log_entry->type = '';  
+        $new_supply_order_arhive_log_entry->log_entry_content = 'Заказ номер - ' .$order_number. ' переведён в архив автором - ' .$author_name; //текст лога о переводе заказа(№) в архив автором(имя)
+        //$new_supply_order_arhive_log_entry->type = '';  
         $new_supply_order_arhive_log_entry->save();
 
 
@@ -278,7 +309,7 @@ class Supply_orders_Admin_Controller extends Controller
          .  $supply_order->order_comment;
 
          Telegram::sendMessage([
-             'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+             'chat_id' => '-1001204206841.0',
              'parse_mode' => 'HTML',
              'text' => $text
          ]);
