@@ -714,12 +714,14 @@ class Employee_Dashboard_Controller extends Controller
         // $new_order_item->save();
 
         $counter = intval($request->entries_count);
-        for($i = 1; $i <= $counter; $i++){
+        for($i = 0; $i <= $counter; $i++){
 
             /* Вносим заказ в базу */
             $new_order = new Supply_order();
             $new_order->creator_id = Auth::user()->id; // Создатель заказа
-            $new_order->order_comment = 'order_comment'.$i;//$request->order_comment; // комментарий к заказу
+            $item_order_comment = 'order_comment'.$i;
+            $new_order->order_comment = $request->$item_order_comment;//$request->order_comment; // комментарий к заказу
+            //$new_order->order_comment = 'order_comment'.$i;//$request->order_comment; // комментарий к заказу
             $new_order->save();
 
             //dd($new_order->order_comment);

@@ -81,12 +81,17 @@ class Supply_orders_Admin_Controller extends Controller
         // $new_order_item->save();
 
         $counter = intval($request->entries_count);
-        for($i = 1; $i <= $counter; $i++){
+
+        //dd($counter);
+        for($i = 0; $i <= $counter; $i++){
 
             /* Вносим заказ в базу */
             $new_order = new Supply_order();
             $new_order->creator_id = Auth::user()->id; // Создатель заказа
-            $new_order->order_comment = 'order_comment'.$i;//$request->order_comment; // комментарий к заказу
+            $item_order_comment = 'order_comment'.$i;
+            $new_order->order_comment = $request->$item_order_comment;//$request->order_comment; // комментарий к заказу
+
+            
             $new_order->save();
 
             //dd($new_order->order_comment);
@@ -96,6 +101,7 @@ class Supply_orders_Admin_Controller extends Controller
             $item_count_name = 'count'.$i;
             $item_urgency_name = 'urgency'.$i;
             $item_name = $request->$item_input_name;
+            //dd($item_name);
             $item_count = $request->$item_count_name;
             $item_urgency = $request->$item_urgency_name;
 
@@ -103,6 +109,7 @@ class Supply_orders_Admin_Controller extends Controller
             $new_order_item = new Supply_order_item();
             $new_order_item->supply_order_id = $new_order->id;
             $new_order_item->item = $item_name;
+            //dd($new_order_item->item);
             $new_order_item->number = $item_count;
             $new_order_item->urgency = $item_urgency;
 
