@@ -11,26 +11,25 @@
 @endsection
 
 @section('content')
-    <table class="table">
-        @foreach($assignments as $assignment)
-            <tr>
-                {{-- Описание --}}
-                <td>{{ $assignment->description }}</td>
+    <div class="card card-p">
+        <table class="table">
+            @foreach($assignments as $assignment)
+                <tr>
+                    {{-- Описание --}}
+                    <td>{{ $assignment->description }}</td>
 
-                <td>{{ $assignment->status }}</td>
-                
-                {{-- Управление : переход --}}
-                <td>
-                    <a href="{{ url('/employee/assignments/manage_assignment/'.$assignment->id) }}">
-                        <div class="btn btn-primary">
-                            Управление
-                        </div>
-                    </a>
-                </td>
-            </tr>
-        @endforeach
-    </table>
-    <hr>
-    
-    
+                    <td>{{ $assignment->status }}</td>
+
+                    {{-- Управление : переход --}}
+                    <td>
+                        <a href="{{ url('/employee/assignments/manage_assignment/'.$assignment->id) }}">
+                            <div class="btn btn-primary">
+                                Управление
+                            </div>
+                        </a>
+                    </td>
+                </tr>
+            @endforeach
+        </table>
+    </div>
 @endsection

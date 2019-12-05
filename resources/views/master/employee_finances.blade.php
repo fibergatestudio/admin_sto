@@ -16,48 +16,68 @@
     {{-- Ставка сотрудника за смену --}}
     <b>Ставка сотрудника за смену:</b> {{ $employee->standard_shift_wage }}<br>
     <hr>
-
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <b>Последние штрафы:</b>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Дата</th>
-                    <th>Сумма</th>
-                    <th>Статус</th>
-                    <th>Основание</th>
-                </tr>
-                </thead>
-                @foreach($employee_fines as $employee_fine)
+    <div class="card card-p">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <b>Последние штрафы:</b>
+                <table class="table">
+                    <thead>
                     <tr>
-                        <td>
-                            {{ $employee_fine->date }}
-                        </td>
-                        <td>
-                            {{ $employee_fine->amount }}
-                        </td>
-                        <td>
-                            {{ $employee_fine->status }}
-                        </td>
-                        <td>
-                            {{ $employee_fine->reason }}
-                        </td>
+                        <th>Дата</th>
+                        <th>Сумма</th>
+                        <th>Статус</th>
+                        <th>Основание</th>
                     </tr>
-                @endforeach
-            </table>
-        </div>
-        <div class="form-group col-md-6">
-            <b>Жетоны:</b>
-            <table class="table">
-                <thead>
-                <tr>
-                    <th>Кол-во жетонов</th>
-                    <th>Сумма</th>
-                    <th>Дата</th>
-                </tr>
-                </thead>
-            </table>
+                    </thead>
+                    @foreach($employee_fines as $employee_fine)
+                        <tr>
+                            <td>
+                                {{ $employee_fine->date }}
+                            </td>
+                            <td>
+                                {{ $employee_fine->amount }}
+                            </td>
+                            <td>
+                                {{ $employee_fine->status }}
+                            </td>
+                            <td>
+                                {{ $employee_fine->reason }}
+                            </td>
+                        </tr>
+                    @endforeach
+                </table>
+            </div>
+            <div class="form-group col-md-6">
+                <b>Жетоны:</b>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Кол-во жетонов</th>
+                        <th>Сумма</th>
+                        <th>Дата</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    </tbody>
+
+                </table>
+            </div>
         </div>
     </div>
+
 @endsection

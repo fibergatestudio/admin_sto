@@ -9,7 +9,7 @@
         Клиент: {{ $owner->general_name }}<br>
         Авто: {{ $car->general_name }}
     </p>
-
+<div class="card card-p">
     {{-- Форма добавления наряда --}}
     <form method="POST" action="{{ url('admin/assignments/add') }}">
         @csrf
@@ -43,4 +43,6 @@
     </form>
 
     {{-- Конец формы добавления наряда --}}
+</div>
+
 @endsection

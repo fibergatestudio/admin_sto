@@ -13,7 +13,7 @@
         {{-- Если смена не открыта, то отобразить кнопку "открыть смену" --}}
         {{-- Открыть смену : кнопка --}}
         <a href="{{ url('/employee/shifts/start') }}">
-            <div class="btn btn-primary">
+            <div class="mt-3 btn btn-primary">
                 Открыть смену
             </div>
         </a>

@@ -8,7 +8,7 @@
 
 @section('content')
 <div class="form-row">
-    <b>Текущая дата: {{ $year }} {{ $month }} {{ $day }}</b><br>
+    <h5>Текущая дата: {{ $year }} {{ $month }} {{ $day }}</h5><br>
     <div class="card card-outline-secondary col-md-12">
         <form action="{{ url('/admin/wash_post') }}" method="POST">
         @csrf
@@ -28,12 +28,12 @@
                         <input type="text" name="car_model" class="form-control typeahead" required>
                     </div>
 
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-4">
                         <label>Номер</label>
                         <input type="text" name="car_number" class="form-control" required>
                     </div>
 
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
                         <label>Номер прицепа</label>
                         <input type="text" name="trailer_number" class="form-control" required>
                     </div>
@@ -106,7 +106,7 @@
                             <label class="custom-control-label" for="check6">Нет талона</label>
                         </div> -->
                     </div>
-                    <div class="form-group col-md-1">
+                    <div class="form-group col-md-2">
                         <!-- <div class="custom-control custom-checkbox">
                             <input type="checkbox" name="wash_services[]" value="Терминал" class="custom-control-input" id="check7" v-model="fine">
                             <label class="custom-control-label" for="check7">Терминал</label>
@@ -120,7 +120,7 @@
                             <label class="custom-control-label" for="check3">Наружка без сушки</label>
                         </div>
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
                         <label>Сумма</label>
                         <input type="text" name="payment_sum" class="form-control" required>
                     </div>
@@ -220,14 +220,35 @@
                     <tr>
                         <th>Всего безналичные</th>
                         <th>{{ $car_wash_sum_non_cash }}</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
                     </tr> 
                     <tr>
                         <th>Всего терминал</th>
                         <th>{{ $car_wash_sum_terminal }}</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
                     </tr> 
                     <tr>
                         <th>Всего</th>
                         <th>{{ $car_wash_sum_total }}</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
                     </tr> 
             </tbody>
             </table>

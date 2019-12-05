@@ -33,12 +33,12 @@
                 </select>
 
                 {{-- Комментарий к заказу --}}
-                <div class="form-group col-md-8 p-2">
+                <div class="form-group col-md-9">
                     <textarea class="form-control" rows="3" cols="45" :name="'order_comment'+index" id="order_comment" placeholder="Введите коментарий к заказу"></textarea>
                 </div>
             </div>
             {{-- Добавить новый элемент : кнопка --}}
-            <div class="row">
+            <div class="pl-3 row">
                 <div onclick="app1.addNewEntry()" class="btn btn-success m-1">+</div>
                 <!-- <div @click="removeNewEntry(index)" class="btn btn-warning m-1">-</div> -->
                 <!-- <div onclick="app1.removeNewEntry()" class="btn btn-warning m-1">remove</div> -->
@@ -57,7 +57,6 @@
         </div>
                  
     </form>
-    <br>
     {{-- Конец вывода --}}
 
         <div class="row">
@@ -79,38 +78,40 @@
 
 
     @foreach($supply_orders as $supply_order)
-    <h5><span class="badge badge-primary">Заказ {{ $supply_order->id }}</span></h5>
-    <table class="table">
-        <thead>
+
+    <div class="card card-p">
+        <h5><span class="badge badge-primary">Заказ {{ $supply_order->id }}</span></h5>
+        <table class="table">
+            <thead>
             <tr>
                 <th>Имя заказчика</th>
                 <th>Дата создания</th>
                 <th>Название товара</th>
                 <th>Количество</th>
-                <th>Срочность</th> 
+                <th>Срочность</th>
                 <th>Комментарий</th>
                 <th></th>{{-- Кнопки управления --}}
             </tr>
-        </thead>
-        <tbody>
-            
-                <tr>
-                    <td >
-                        {{-- Имя заказчика --}}
-                        {{ $supply_order->creator_name }}<br>
-                    </td>
-                    
-                    <td >
-                        {{-- Дата создания --}}
-                        {{ $supply_order->date_of_creation }}
-                    </td>
+            </thead>
+            <tbody>
 
-                    @foreach($supply_order->items as $supply_order->item)
+            <tr>
+                <td >
+                    {{-- Имя заказчика --}}
+                    {{ $supply_order->creator_name }}<br>
+                </td>
+
+                <td >
+                    {{-- Дата создания --}}
+                    {{ $supply_order->date_of_creation }}
+                </td>
+
+                @foreach($supply_order->items as $supply_order->item)
                     <td >
                         {{-- Название --}}
                         {{ $supply_order->item->item }}<br>
                     </td>
-                    
+
                     <td >
                         {{-- Количество --}}
                         {{ $supply_order->item->number }}
@@ -119,48 +120,50 @@
                     <td>
                         {{-- Срочност --}}
                         @if($supply_order->item->urgency == 'Не горит')
-                        <span class="badge badge-success">{{$supply_order->item->urgency}}</span>
+                            <span class="badge badge-success">{{$supply_order->item->urgency}}</span>
                         @elseif($supply_order->item->urgency == 'Горит')
-                        <span class="badge badge-warning">{{$supply_order->item->urgency}}</span>
+                            <span class="badge badge-warning">{{$supply_order->item->urgency}}</span>
                         @elseif($supply_order->item->urgency == 'Очень горит')
-                        <span class="badge badge-danger">{{$supply_order->item->urgency}}</span>
-                        @endif                        
-                    </td>
-                                        
-                    @endforeach
-                     
-                   
-                    
-                    <td >
-                        {{-- Комментарий --}}
-                        {{ $supply_order->order_comment }}
-                          
+                            <span class="badge badge-danger">{{$supply_order->item->urgency}}</span>
+                        @endif
                     </td>
 
-                    <td >
-                        {{-- Кнопка управления --}}
-                        @if($supply_order->creator_id != $curr_user_id)
+                @endforeach
+
+
+
+                <td >
+                    {{-- Комментарий --}}
+                    {{ $supply_order->order_comment }}
+
+                </td>
+
+                <td >
+                    {{-- Кнопка управления --}}
+                    @if($supply_order->creator_id != $curr_user_id)
                         <a href="{{ url('/admin/supply_orders/manage/'.$supply_order->id) }}">
                             <div class="btn btn-primary">
                                 Управление
                             </div>
                         </a>
-                        @else
+                    @else
                         <b>Нельзя Редактировать</b>
-                        @endif
-                        <!-- <form method="POST" action="{{ url('/admin/supply_orders/'.$supply_order->id.'/order_completed_action') }}">
+                @endif
+                <!-- <form method="POST" action="{{ url('/admin/supply_orders/'.$supply_order->id.'/order_completed_action') }}">
                             @csrf
-                            {{-- ID выполненного заказа --}}
-                            <input type="hidden" name="order_id" value="{{ $supply_order->id }}">
+                {{-- ID выполненного заказа --}}
+                        <input type="hidden" name="order_id" value="{{ $supply_order->id }}">
 
                             <button type="submit" class="btn btn-success">
                                 Исполнено
                             </button>
                         </form> -->
-                    </td>
-                </tr> 
-        </tbody>
-    </table>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
     <hr>
    @endforeach
     {{-- Конец вывода --}}

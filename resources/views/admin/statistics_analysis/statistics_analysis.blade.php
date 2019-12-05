@@ -94,14 +94,14 @@
 					<h5>Период:</h5>
 					<div class="col-6 col-md-4">
 						<h5>от</h5>
-						<select name="fromMonth" id="fromMonth" class="form-control-sm form-control">
+						<select name="fromMonth" id="fromMonth" class="my-2 form-control-sm form-control">
 							@if(isset($months))
 							@for($i=0; $i < count($months); $i++)
 							<option value="{{$i}}">{{ $months[$i] }}</option>
 							@endfor
 							@endif
 						</select>
-						<select name="fromYear" id="fromYear" class="form-control-sm form-control">
+						<select name="fromYear" id="fromYear" class="my-2 form-control-sm form-control">
 							@if(isset($years))
 							@for($i=0; $i < count($years); $i++)
 							<option value="{{$years[$i]}}">{{ $years[$i] }}</option>
@@ -111,14 +111,14 @@
 					</div>
 					<div class="col-6 col-md-4">
 						<h5>до</h5>
-						<select name="untilMonth" id="untilMonth" class="form-control-sm form-control">
+						<select name="untilMonth" id="untilMonth" class="my-2 form-control-sm form-control">
 							@if(isset($months))
 							@for($i=0; $i < count($months); $i++)
 							<option value="{{$i}}">{{ $months[$i] }}</option>
 							@endfor
 							@endif
 						</select>
-						<select name="untilYear" id="untilYear" class="form-control-sm form-control">
+						<select name="untilYear" id="untilYear" class="my-2 form-control-sm form-control">
 							@if(isset($years))
 							@for($i=0; $i < count($years); $i++)
 							<option value="{{$years[$i]}}">{{ $years[$i] }}</option>

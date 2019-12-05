@@ -22,7 +22,7 @@
 
 <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.css' />
 
-<div class="col-lg-7 bg-white card card-outline-secondary p-3">
+<div class="col-lg-12 bg-white card card-outline-secondary p-3">
     <div id='calendar'></div>
 </div>
 

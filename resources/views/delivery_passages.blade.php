@@ -7,36 +7,39 @@
 @section('content')
 
 <button id="submit" class="btn btn-success">Генерировать post-данные</button>
-<table class="table datatable-basic" id="summary-table">
-	<thead>
-		<tr>
-			<th>Id в системе Sigur</th>
-			<th>Время прохода</th>
-			<th>Имя</th>
-			<th>Табельный номер</th>
-			<th>Направление</th>
-		</tr>
-	</thead>
-	<tbody>
-		@if(isset($passages))
-		@foreach($passages as $passage)
-            <tr>
-                <td>{{ $passage->log_id }}</td>
-                <td>{{ date("Y-m-d H:i:s", $passage->time) }}</td>
-                <td>{{ $passage->emp_id }}</td>
-                <td>{{ $passage->internal_emp_id }}</td>
-                @if($passage->direction == 1)
-                <td>{{ 'вход' }}</td>
-                @elseif($passage->direction == 2)
-                <td>{{ 'выход' }}</td>
-                @elseif($passage->direction == 3)
-                <td>{{ 'неизвестно' }}</td>
-                @endif
-            </tr>
-        @endforeach
-		@endif
-	</tbody>
-</table>
+<div class="mt-3 card card-p">
+    <table class=" table datatable-basic" id="summary-table">
+        <thead>
+        <tr>
+            <th>Id в системе Sigur</th>
+            <th>Время прохода</th>
+            <th>Имя</th>
+            <th>Табельный номер</th>
+            <th>Направление</th>
+        </tr>
+        </thead>
+        <tbody>
+        @if(isset($passages))
+            @foreach($passages as $passage)
+                <tr>
+                    <td>{{ $passage->log_id }}</td>
+                    <td>{{ date("Y-m-d H:i:s", $passage->time) }}</td>
+                    <td>{{ $passage->emp_id }}</td>
+                    <td>{{ $passage->internal_emp_id }}</td>
+                    @if($passage->direction == 1)
+                        <td>{{ 'вход' }}</td>
+                    @elseif($passage->direction == 2)
+                        <td>{{ 'выход' }}</td>
+                    @elseif($passage->direction == 3)
+                        <td>{{ 'неизвестно' }}</td>
+                    @endif
+                </tr>
+            @endforeach
+        @endif
+        </tbody>
+    </table>
+</div>
+
 
 {{ $passages->links() }}
 <script type="text/javascript">

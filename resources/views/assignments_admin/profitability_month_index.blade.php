@@ -22,7 +22,9 @@
     {{-- Ежемесячные расходы --}}
     <h2>Ежемесячные расходы</h2>
     <p>*Число месяца игнорируется, данные берутся целиком за месяц, и так же если данные запрашиваются за несколько месяцев.</p>
-        <div class="row">            
+
+    <div class="card card-p">
+        <div class="row">
             <div class="col-lg-3">
                 <div class="form-group">
                     <label>Стоимость аренды</label>
@@ -66,176 +68,183 @@
                 </div>
             </div>
             <div class="col-lg-3">
-                <div class="row">            
+                <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label>Дата начала периода</label>
-                            <input type="date" id="start-date" name="start-date" value="{{ $start_date }}" min="2000-01-01" max="{{ date('Y-m-d') }}">
+                            <input class="form-control" type="date" id="start-date" name="start-date" value="{{ $start_date }}" min="2000-01-01" max="{{ date('Y-m-d') }}">
                         </div>
                     </div>
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label>Дата конца периода</label>
-                            <input type="date" id="end-date" name="end-date" value="{{ $end_date }}" min="2000-01-01" max="{{ date('Y-m-d') }}">
+                            <input class="form-control" type="date" id="end-date" name="end-date" value="{{ $end_date }}" min="2000-01-01" max="{{ date('Y-m-d') }}">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <div>
+            <button onclick="showProfitability()" class="btn btn-primary">Показать</button>
+        </div>
+
+    </div>
+
         
-        <button onclick="showProfitability()" class="btn btn-primary">Показать</button>
-    <hr>
+
+{{--    <hr>--}}
 
     {{-- Расчет рентабельности --}}
     <h2>Расчет рентабельности</h2>
-    
-    {{-- Вывод списока расходов и доходов --}}
-    <table class="table">
-        <thead>
+    <div class="card card-p">
+        {{-- Вывод списока расходов и доходов --}}
+        <table class="table">
+            <thead>
             <tr>
                 <th>Сумма</th>
                 <th>Основание</th>
                 <th>Валюта</th>
             </tr>
-        </thead>
-        <tbody>
-        <?php $sum = 0;?>
-        @foreach($assignment_income as $income_entry)
-        @if(in_array(substr($income_entry->updated_at,0,7), $date_arr))
-        <?php
-        if ($income_entry->currency === 'USD') {
-            $sum += round(($income_entry->amount)/$usd);
-        }
-        else if ($income_entry->currency === 'EUR') {
-            $sum += round(($income_entry->amount)/$eur);
-        }
-        else {
-            $sum += $income_entry->amount;
-        } 
-        ?>
-        <tr>
-            <td>
-            {{ $income_entry->amount }}<br>
-            </td>
-            <td>
-            {{ $income_entry->basis }}<br>
-            </td>
-            <td>
-            {{ $income_entry->currency }}<br>
-            </td>
-        </tr>
-        @endif
-        @endforeach
-        @foreach($assignment_expense as $expense_entry)
-        @if(in_array(substr($expense_entry->updated_at,0,7), $date_arr))
-        <?php
-        if ($expense_entry->currency === 'USD') {
-            $sum -= round(($expense_entry->amount)/$usd);
-        }
-        else if ($expense_entry->currency === 'EUR') {
-            $sum -= round(($expense_entry->amount)/$eur);
-        } 
-        else {
-            $sum -= $expense_entry->amount;
-        } 
-        ?>
-        <tr>
-            <td>- 
-            {{ $expense_entry->amount }}<br>
-            </td>
-            <td>
-            {{ $expense_entry->basis }}<br>
-            </td>
-            <td>
-            {{ $expense_entry->currency }}<br>
-            </td>
-        </tr>
-        @endif
-        @endforeach
-        <tr>
-            <td>- 
-            {{ $rental_price }}<br>
-            </td>
-            <td>
-            {{ 'Стоимость аренды' }}<br>
-            </td>
-            <td>
-            {{ 'MDL' }}<br>
-            </td>
-        </tr>
-        <tr>
-            <td>- 
-            {{ $electricity }}<br>
-            </td>
-            <td>
-            {{ 'Электричество' }}<br>
-            </td>
-            <td>
-            {{ 'MDL' }}<br>
-            </td>
-        </tr>
-        <tr>
-            <td>- 
-            {{ $water_supply }}<br>
-            </td>
-            <td>
-            {{ 'Водоснабжение' }}<br>
-            </td>
-            <td>
-            {{ 'MDL' }}<br>
-            </td>
-        </tr>
-        <tr>
-            <td>- 
-            {{ $gas }}<br>
-            </td>
-            <td>
-            {{ 'Газ' }}<br>
-            </td>
-            <td>
-            {{ 'MDL' }}<br>
-            </td>
-        </tr>
-        <tr>
-            <td>- 
-            {{ $cleaning }}<br>
-            </td>
-            <td>
-            {{ 'Уборка' }}<br>
-            </td>
-            <td>
-            {{ 'MDL' }}<br>
-            </td>
-        </tr>
-        <tr>
-            <td>- 
-            {{ $garbage_removal }}<br>
-            </td>
-            <td>
-            {{ 'Вывоз мусора' }}<br>
-            </td>
-            <td>
-            {{ 'MDL' }}<br>
-            </td>
-        </tr>
-        <tr>
-            <td>- 
-            {{ $other_expenses }}<br>
-            </td>
-            <td>
-            {{ 'Прочие расходы' }}<br>
-            </td>
-            <td>
-            {{ 'MDL' }}<br>
-            </td>
-        </tr>
-        <?php
+            </thead>
+            <tbody>
+            <?php $sum = 0;?>
+            @foreach($assignment_income as $income_entry)
+                @if(in_array(substr($income_entry->updated_at,0,7), $date_arr))
+                    <?php
+                    if ($income_entry->currency === 'USD') {
+                        $sum += round(($income_entry->amount)/$usd);
+                    }
+                    else if ($income_entry->currency === 'EUR') {
+                        $sum += round(($income_entry->amount)/$eur);
+                    }
+                    else {
+                        $sum += $income_entry->amount;
+                    }
+                    ?>
+                    <tr>
+                        <td>
+                            {{ $income_entry->amount }}<br>
+                        </td>
+                        <td>
+                            {{ $income_entry->basis }}<br>
+                        </td>
+                        <td>
+                            {{ $income_entry->currency }}<br>
+                        </td>
+                    </tr>
+                @endif
+            @endforeach
+            @foreach($assignment_expense as $expense_entry)
+                @if(in_array(substr($expense_entry->updated_at,0,7), $date_arr))
+                    <?php
+                    if ($expense_entry->currency === 'USD') {
+                        $sum -= round(($expense_entry->amount)/$usd);
+                    }
+                    else if ($expense_entry->currency === 'EUR') {
+                        $sum -= round(($expense_entry->amount)/$eur);
+                    }
+                    else {
+                        $sum -= $expense_entry->amount;
+                    }
+                    ?>
+                    <tr>
+                        <td>-
+                            {{ $expense_entry->amount }}<br>
+                        </td>
+                        <td>
+                            {{ $expense_entry->basis }}<br>
+                        </td>
+                        <td>
+                            {{ $expense_entry->currency }}<br>
+                        </td>
+                    </tr>
+                @endif
+            @endforeach
+            <tr>
+                <td>-
+                    {{ $rental_price }}<br>
+                </td>
+                <td>
+                    {{ 'Стоимость аренды' }}<br>
+                </td>
+                <td>
+                    {{ 'MDL' }}<br>
+                </td>
+            </tr>
+            <tr>
+                <td>-
+                    {{ $electricity }}<br>
+                </td>
+                <td>
+                    {{ 'Электричество' }}<br>
+                </td>
+                <td>
+                    {{ 'MDL' }}<br>
+                </td>
+            </tr>
+            <tr>
+                <td>-
+                    {{ $water_supply }}<br>
+                </td>
+                <td>
+                    {{ 'Водоснабжение' }}<br>
+                </td>
+                <td>
+                    {{ 'MDL' }}<br>
+                </td>
+            </tr>
+            <tr>
+                <td>-
+                    {{ $gas }}<br>
+                </td>
+                <td>
+                    {{ 'Газ' }}<br>
+                </td>
+                <td>
+                    {{ 'MDL' }}<br>
+                </td>
+            </tr>
+            <tr>
+                <td>-
+                    {{ $cleaning }}<br>
+                </td>
+                <td>
+                    {{ 'Уборка' }}<br>
+                </td>
+                <td>
+                    {{ 'MDL' }}<br>
+                </td>
+            </tr>
+            <tr>
+                <td>-
+                    {{ $garbage_removal }}<br>
+                </td>
+                <td>
+                    {{ 'Вывоз мусора' }}<br>
+                </td>
+                <td>
+                    {{ 'MDL' }}<br>
+                </td>
+            </tr>
+            <tr>
+                <td>-
+                    {{ $other_expenses }}<br>
+                </td>
+                <td>
+                    {{ 'Прочие расходы' }}<br>
+                </td>
+                <td>
+                    {{ 'MDL' }}<br>
+                </td>
+            </tr>
+            <?php
             $sum -= $rental_price + $electricity + $water_supply + $gas + $cleaning + $garbage_removal + $other_expenses;
-        ?>
-        </tbody>
-    </table>
-    <h4 id="total">Итого: {{ $sum }} лей</h4>
-    <hr>
+            ?>
+            </tbody>
+        </table>
+        <h4 id="total">Итого: {{ $sum }} лей</h4>
+    </div>
+
     
     <script type="text/javascript">
         var rootSite = '<?=URL::to('/')?>';

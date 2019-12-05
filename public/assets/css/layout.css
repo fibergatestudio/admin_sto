@@ -1100,3 +1100,7 @@ body {
     margin-left: 1.25rem; }
   .breadcrumb-line > .content-boxed > *:last-child {
     margin-right: 1.25rem; } }
+
+.custom-card{
+  background-color: #fff;
+}

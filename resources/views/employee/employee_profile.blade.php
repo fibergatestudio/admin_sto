@@ -6,7 +6,7 @@
 
 @section('content')
 {{-- Отображения данных текущего профиля --}}
-<div class="content py-5  bg-light">
+<div class="content bg-light">
     <div class="container">
         <div class="row">
             <div class="col-md-8 offset-md-2">

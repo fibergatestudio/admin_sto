@@ -7,28 +7,30 @@
             Добавить клиента
         </div>
     </a>
-    <hr>
-      <input type="text" name="search" id="search" class="form-control" placeholder="Поиск клиента" />
+{{--    <hr>--}}
+      <input type="text" name="search" id="search" class="mt-3 form-control" placeholder="Поиск клиента" />
     
 @endsection
 
 @section('content')
-
+<div class="card card-p">
     <table class="table table-striped">
-       <thead>
+        <thead>
         <tr>
-         <th>Общее имя</th>
-        <!-- <th>ФИО</th>
-         <th>Организация</th>
-         <th>Номер телефона</th>
-         <th>Баланс</th>
-         <th>Скидка</th> -->
+            <th>Общее имя</th>
+            <!-- <th>ФИО</th>
+             <th>Организация</th>
+             <th>Номер телефона</th>
+             <th>Баланс</th>
+             <th>Скидка</th> -->
         </tr>
-       </thead>
-       <tbody>
+        </thead>
+        <tbody>
 
-       </tbody>
-      </table>
+        </tbody>
+    </table>
+</div>
+
     
 
 
@@ -38,7 +40,7 @@
         </a>
         <br>
     @endforeach -->
-    <hr>
+{{--    <hr>--}}
     
 
     <script>

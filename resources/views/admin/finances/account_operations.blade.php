@@ -33,64 +33,65 @@
 
 <!-- Модальное окно Добавить счет -->
 <div class="modal fade" id="addAccount" tabindex="-1" role="dialog" aria-labelledby="addAccountModalLabel" aria-hidden="true">
-  <form action="{{ url('/admin/finances/add_account') }}" method="POST">
-    @csrf
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addAccountModalLabel">Добавить счет</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
+        <form action="{{ url('/admin/finances/add_account') }}" method="POST">
+            @csrf
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addAccountModalLabel">Добавить счет</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
 
-          <div class="form-row">
-            {{-- Название --}}
-            <div class="form-group col-md-6">
-                <label>Название</label>
-                <input type="text" name="name" class="form-control" required>
-            </div>
-            {{-- Категория --}}
-            <div class="form-group col-md-6">
-                <label>Категория</label>
-                <select name="category" class="form-control">
-                    @foreach($categories as $category)
-                    <option value="{{ $category->id }}">{{ $category->name }}</option>
-                    @endforeach
-                </select>
-            </div>
-          </div>
+                        <div class="form-row">
+                            {{-- Название --}}
+                            <div class="form-group col-md-6">
+                                <label>Название</label>
+                                <input type="text" name="name" class="form-control" required>
+                            </div>
+                            {{-- Категория --}}
+                            <div class="form-group col-md-6">
+                                <label>Категория</label>
+                                <select name="category" class="form-control">
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
 
-          <div class="form-row">
-            {{-- Валюта --}}
-            <div class="form-group col-md-6">
-              <label>Валюта</label>
-              <select name="currency"class="form-control">
-                  <option value="MDL">MDL</option>
-                  <option value="USD">USD</option>
-                  <option value="EUR">EUR</option>
-              </select>
-            </div>
-            <div class="form-group col-md-6">
-              <label>Аккаунт (необязательно)</label>
-              <select name="user_email" class="form-control">
-                  <option value="" selected >Выбрать</option>
-                  @foreach($users as $user)
-                  <option value="{{ $user->email }}">{{ $user->name }} ({{ $user->email }})</option>
-                  @endforeach
-              </select>
-            </div>
-          </div>
+                        <div class="form-row">
+                            {{-- Валюта --}}
+                            <div class="form-group col-md-6">
+                                <label>Валюта</label>
+                                <select name="currency"class="form-control">
+                                    <option value="MDL">MDL</option>
+                                    <option value="USD">USD</option>
+                                    <option value="EUR">EUR</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Аккаунт (необязательно)</label>
+                                <select name="user_email" class="form-control">
+                                    <option value="" selected >Выбрать</option>
+                                    @foreach($users as $user)
+                                        <option value="{{ $user->email }}">{{ $user->name }} ({{ $user->email }})</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
 
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-          <button type="submit" class="btn btn-primary">Создать</button>
-        </div>
-      </div>
-    </div>
-  </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                        <button type="submit" class="btn btn-primary">Создать</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
 </div>
 
 <!-- Модальное окно Добавить операцию -->
@@ -349,19 +350,19 @@
 
 
 @section('content')
-
+<div class="card card-p">
     <table class="table table-operations">
         <thead>
-            <tr>
-              <th scope="col">Дата</th>
-              <th scope="col">Автор</th>
-              <th scope="col">Тег/Работник (ФИО работника)</th>
-              <th scope="col">Категория</th>
-              <th scope="col">Комментарий</th>
-              <th scope="col">Расход</th>
-              <th scope="col">Доход</th>
-              <th scope="col">Баланс</th>
-            </tr>
+        <tr>
+            <th scope="col">Дата</th>
+            <th scope="col">Автор</th>
+            <th scope="col">Тег/Работник (ФИО работника)</th>
+            <th scope="col">Категория</th>
+            <th scope="col">Комментарий</th>
+            <th scope="col">Расход</th>
+            <th scope="col">Доход</th>
+            <th scope="col">Баланс</th>
+        </tr>
         </thead>
         <tbody>
         @foreach($account_operations as $operation)
@@ -393,6 +394,8 @@
         @endforeach
         </tbody>
     </table>
+</div>
+
 
 @endsection
 

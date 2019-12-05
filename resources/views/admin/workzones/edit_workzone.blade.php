@@ -13,63 +13,65 @@
 
 @section('content')
     <h2>Изменение рабочего поста</h2>
-    
-    <form action="{{ url('admin/workzones/edit') }}" method="POST">
-        @csrf
-        <input type="hidden" name="workzones_id" value="{{ $workzones_id }}">
-        <div class="form-group">
-            <div class="col-md-12">
-                <label>Название</label>
-                <input type="text" class="form-control" name="general_name" value="{{ $workzone->general_name }}"  required>
-            </div>
-        </div>
-
-        @if ( !empty( $workzone->workzone_color ))
-        <div class="form-group">
-            <div class="col-md-12">
-                <label>Цвет рабочей зоны</label>
-                <div id="cp2" class="input-group colorpicker-component"> 
-                    <span class="input-group-addon"><i style="width:35px; height:35px; display:flex; border: 2px solid rgb(97, 97, 97);"></i></span> 
-                    <input type="text" name="workzone_color" value="{{ $workzone->workzone_color }}" class="form-control" /> 
+    <div class="card card-p">
+        <form action="{{ url('admin/workzones/edit') }}" method="POST">
+            @csrf
+            <input type="hidden" name="workzones_id" value="{{ $workzones_id }}">
+            <div class="form-group">
+                <div class="col-md-12">
+                    <label>Название</label>
+                    <input type="text" class="form-control" name="general_name" value="{{ $workzone->general_name }}"  required>
                 </div>
             </div>
-        </div>
-        @else
-        <div class="form-group">
-            <div class="col-md-12">
-                <label>Цвет рабочей зоны</label>
-                <div id="cp2" class="input-group colorpicker-component"> 
-                    <span class="input-group-addon"><i style="width:35px; height:35px; display:flex; border: 2px solid rgb(97, 97, 97);"></i></span> 
-                    <input type="text" name="workzone_color" value="Цвет не задан" class="form-control" placeholder="Цвет не задан" /> 
+
+            @if ( !empty( $workzone->workzone_color ))
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <label>Цвет рабочей зоны</label>
+                        <div id="cp2" class="input-group colorpicker-component">
+                            <span class="input-group-addon"><i style="width:35px; height:35px; display:flex; border: 2px solid rgb(97, 97, 97);"></i></span>
+                            <input type="text" name="workzone_color" value="{{ $workzone->workzone_color }}" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            @else
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <label>Цвет рабочей зоны</label>
+                        <div id="cp2" class="input-group colorpicker-component">
+                            <span class="input-group-addon"><i style="width:35px; height:35px; display:flex; border: 2px solid rgb(97, 97, 97);"></i></span>
+                            <input type="text" name="workzone_color" value="Цвет не задан" class="form-control" placeholder="Цвет не задан" />
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    <label>Направление работ</label>
+                    <select class="form-control" name="works_direction" required>
+                        @foreach($work_directions as $direction)
+                            <option value="{{ $direction->name }}">{{ $direction->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
-        </div>
-        @endif
 
-        <div class="form-group">
-            <div class="col-md-12">
-                <label>Направление работ</label>
-                <select class="form-control" name="works_direction" required>
-                    @foreach($work_directions as $direction)
-                    <option value="{{ $direction->name }}">{{ $direction->name }}</option>
-                    @endforeach
-                </select>
+            <div class="form-group">
+                <div class="col-md-12">
+                    <label>Описание</label>
+                    <input type="text" class="form-control" name="description" value="{{ $workzone->description }}" required></input>
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            <div class="col-md-12">
-                <label>Описание</label>
-                <input type="text" class="form-control" name="description" value="{{ $workzone->description }}" required></input>
-            </div>
-        </div>
+            <button type="submit" class="ml-2 btn btn-primary">
+                Изменить
+            </button>
 
-        <button type="submit" class="btn btn-primary">
-            Изменить
-        </button>
+        </form>
+        <hr>
+    </div>
 
-    </form>
-    <hr>
 
     
 

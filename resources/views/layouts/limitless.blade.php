@@ -20,6 +20,7 @@
 	<link href="{{ url('assets/css/layout.min.css') }}" rel="stylesheet" type="text/css">
 	<link href="{{ url('assets/css/components.min.css') }}" rel="stylesheet" type="text/css">
 	<link href="{{ url('assets/css/colors.min.css') }}" rel="stylesheet" type="text/css">
+	<link href="{{ url('css/custom.css') }}" rel="stylesheet" type="text/css">
 	<!-- /global stylesheets -->
 	<!-- Color picker -->
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/css/bootstrap-colorpicker.min.css" rel="stylesheet">
@@ -79,7 +80,7 @@
 <body>
 
 	<!-- Main navbar -->
-	<div class="navbar navbar-expand-md navbar-dark">
+	<div class="navbar navbar-expand-md navbar-dark align-items-center">
 		<div class="navbar-brand">
 			<a href="/" class="d-inline-block">
                 <h5>СТО</h5>
@@ -169,7 +170,7 @@
                         
 		</div>
             @if(Auth::user()->isAdmin())
-                <div>
+                <div class="text-welcome">
                     <span>Привет, admin!</span>                    
                 </div>
             @endif

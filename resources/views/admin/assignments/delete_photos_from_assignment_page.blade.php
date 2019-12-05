@@ -81,7 +81,7 @@
 
     {{-- Кнопка вернуться : на страницу наряда --}}
     <a href="{{ url('admin/assignments/view/'.$assignment_id) }}">
-        <div class="btn btn-light">
+        <div class="btn btn-danger">
             Вернуться
         </div>
     </a>

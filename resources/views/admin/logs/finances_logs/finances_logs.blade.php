@@ -6,32 +6,34 @@
 
 @section('content')
     <h2>Логи по финансам</h2>
-    
-    <table class="table">
-        <tr>
-            <td><b>Дата</b></td>
-            <td><b>Текст лога</b></td>
-        </tr>
-        @foreach($employees_finances_logs as $employee_finances_log)
+    <div class="card card-p">
+        <table class="table">
             <tr>
-                {{-- Дата --}}
-                <td>
-                    <p>
-                        {{ date('j. m. Y H:i', strtotime($employee_finances_log->created_at)) }}
-                    </p>
-                
-                </td>
-                
-                {{-- Текст лога --}}
-                <td>
-                    <a>
-                        {{ $employee_finances_log->text }}    
-                    </a>    
-                </td>
-                
+                <td><b>Дата</b></td>
+                <td><b>Текст лога</b></td>
             </tr>
-        @endforeach
-    </table>
-    <hr>
+            @foreach($employees_finances_logs as $employee_finances_log)
+                <tr>
+                    {{-- Дата --}}
+                    <td>
+                        <p>
+                            {{ date('j. m. Y H:i', strtotime($employee_finances_log->created_at)) }}
+                        </p>
+
+                    </td>
+
+                    {{-- Текст лога --}}
+                    <td>
+                        <a>
+                            {{ $employee_finances_log->text }}
+                        </a>
+                    </td>
+
+                </tr>
+            @endforeach
+        </table>
+        <hr>
+    </div>
+
     
 @endsection

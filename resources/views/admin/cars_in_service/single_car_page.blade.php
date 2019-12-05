@@ -12,24 +12,29 @@
 
 @section('content')
     {{-- Клиент-владелец : ссылка --}}
-    <p>Клиент-владелец: 
-        <a href="{{ url('admin/clients/view_client/'.$client->id) }}">
-            {{ $client->general_name }}
-        </a>
-    
-    </p>
+    <div class="d-flex">
+        <p>Клиент-владелец:
+            <a href="{{ url('admin/clients/view_client/'.$client->id) }}">
+                {{ $client->general_name }}
+            </a>
+
+        </p>
+    </div>
+
     <hr>
     {{-- Текущие наряды : вывод --}}
+    <div class="d-flex">
+        Текущие наряды по авто:<br>
+        @foreach($assignments as $assignment)
+            {{-- Название наряда + переход на страницу наряда--}}
+            <a href="{{ url('admin/assignments/view/'.$assignment->id) }}">
+                {{ $assignment->description }}
+            </a>
+            <br>
 
-    Текущие наряды по авто:<br>
-    @foreach($assignments as $assignment)
-        {{-- Название наряда + переход на страницу наряда--}}
-        <a href="{{ url('admin/assignments/view/'.$assignment->id) }}">
-            {{ $assignment->description }}
-        </a>
-        <br>
+        @endforeach
+    </div>
 
-    @endforeach
 
 
     <hr>
@@ -42,17 +47,18 @@
     <hr>
     <h3>Примечания к авто</h3>
     {{-- Вывод примечаний --}}
-    <table class="table">
-        <thead>
+    <div class="card card-p">
+        <table class="table">
+            <thead>
             <tr>
                 <th>Текст</th>
                 <th>Автор</th>
                 <th></th>
             </tr>
-        </thead>
+            </thead>
 
-        <tbody>
-        {{-- Непосредственно вывод данных --}}
+            <tbody>
+            {{-- Непосредственно вывод данных --}}
             @foreach($car_notes as $car_note)
                 <tr>
                     {{-- Текст примечания --}}
@@ -63,8 +69,8 @@
 
                     {{-- Кнопки управления --}}
                     <td>
-                        <a href="{{ url('admin/cars_in_service/edit_note_to_car/'.$car_note->id) }}">                            
-                                Редактировать            
+                        <a href="{{ url('admin/cars_in_service/edit_note_to_car/'.$car_note->id) }}">
+                            Редактировать
                         </a>
                     </td>
                     <td>
@@ -74,12 +80,14 @@
                             </div>
                         </a>
                     </td>
-                    
+
                 </tr>
             @endforeach
-        </tbody>
+            </tbody>
 
-    </table>
+        </table>
+    </div>
+
     {{-- Конец таблицы --}}
 
     {{-- Кнопка добавить примечание--}}

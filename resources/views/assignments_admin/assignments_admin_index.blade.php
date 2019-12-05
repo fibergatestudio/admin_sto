@@ -19,13 +19,13 @@
   <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addAssignment">
   Добавить наряд
   </button>
-  <a href="{{ url('/admin/assignments/archive') }}" class="btn btn-danger">Архив</a>
+  <a href="{{ url('/admin/assignments/archive') }}" class="btn btn-danger mx-2">Архив</a>
 
         <div style="margin:0;"class="modal fade modal-dialog" id="addAssignment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Добавление наряда</h5>
+                    <div class="modal-header m-auto">
+                        <h5 class="modal-title mx-2" id="exampleModalLabel">Добавление наряда</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
@@ -59,29 +59,30 @@
 @endsection
 
 @section('content')
-
+<div class="card-p card">
     <table id="table" class="table">
         <thead>
-            <tr>
-              <th>#</th>
-              <th scope="col">№</th>
-              <th scope="col">Дата</th>
-              <th scope="col">Модель\Марка</th>
-              <th scope="col">Год</th>
-              <th scope="col">Рег номер</th>
-              <th scope="col">VIN</th>
-              <th scope="col">Цвет</th>
-              <th scope="col">Рабочие зоны</th>
-              <th scope="col"></th>
-            </tr>
+        <tr>
+            <th>#</th>
+            <th scope="col">№</th>
+            <th scope="col">Дата</th>
+            <th scope="col">Модель\Марка</th>
+            <th scope="col">Год</th>
+            <th scope="col">Рег номер</th>
+            <th scope="col">VIN</th>
+            <th scope="col">Цвет</th>
+            <th scope="col">Рабочие зоны</th>
+            <th scope="col"></th>
+        </tr>
+
         </thead>
         <tbody id="tablecontents">
         @foreach($assignments as $assignment)
             <tr class="row1" data-id="{{ $assignment->id }}">
                 <td>
                     <div style="color:rgb(124,77,255); padding-left: 10px; float: left; font-size: 20px; cursor: pointer;" title="change display order">
-                    <i class="icon-menu-open"></i>
-                    <i class=""></i>
+                        <i class="icon-menu-open"></i>
+                        <i class=""></i>
                     </div>
                 </td>
                 {{-- Номер Наряда --}}
@@ -104,22 +105,22 @@
 
                 {{-- Цвет --}}
                 <td>@if (!empty($assignment->car_color ))
-                <i style="width:35px; height:35px; display:flex;background-color:{{ $assignment->car_color }};"></i>
-                @endif
+                        <i style="width:35px; height:35px; display:flex;background-color:{{ $assignment->car_color }};"></i>
+                    @endif
                 </td>
 
                 {{-- Рабочии зоны --}}
                 <td style="color: white;">
-                  <?php $workzone = $assignment->workzone; ?>
-                  @if ($workzone)
-                  @for($i=0; $i < count($workzone); $i++)
-                  @foreach($workzone_data as $work_data)
-                  @if ($work_data->id == $workzone[$i])
-                  <p style="background-color: {{ $work_data->workzone_color }};">{{ $work_data->general_name }}</p>
-                  @endif
-                  @endforeach
-                  @endfor
-                  @endif
+                    <?php $workzone = $assignment->workzone; ?>
+                    @if ($workzone)
+                        @for($i=0; $i < count($workzone); $i++)
+                            @foreach($workzone_data as $work_data)
+                                @if ($work_data->id == $workzone[$i])
+                                    <p style="background-color: {{ $work_data->workzone_color }};">{{ $work_data->general_name }}</p>
+                                @endif
+                            @endforeach
+                        @endfor
+                    @endif
                 </td>
 
                 {{-- Кнопка подробнее --}}
@@ -135,6 +136,9 @@
         </tbody>
     </table>
     <hr>
+</div>
+
+
 
     <p>* Добавление наряда будет осуществляться из карточки машины (вкладка "Клиенты" или "Машины в сервисе")</p>
     <p>* Если не назначены рабочие зоны, наряд в списке нарядов отображаться не будет, а только на "Страница машины"</p>

@@ -1,9 +1,9 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-<div class="col-md-12 row">
+<div class="col-md-12 d-flex align-items-center">
         <div class="col-md-3">
-            Сотрудники
+            <span>Сотрудники</span>
         </div>
         <div class="col-md-5">
             <a href="{{ url('/supervisor/add_employee') }}" class="btn btn-primary">Добавить сотрудника</a>    
@@ -17,12 +17,12 @@
 @section('content')
 <div id="employee">
     <div v-if="wash" class="col-md-3">
-        <div v-on:click="wash = !wash" class="btn btn-success">Мойка</div>
+        <div v-on:click="wash = !wash" class="w-50 btn btn-success">Мойка</div>
     </div>
     <div v-if="!wash" class="col-md-3">
-        <div v-on:click="wash = !wash" class="btn btn-success">Сервис</div>
+        <div v-on:click="wash = !wash" class="w-50 btn btn-success">Сервис</div>
     </div>
-    <table v-if="wash" class="table">
+    <table v-if="wash" class="table mt-3 card card-p">
         @foreach($employee_data as $employee)
             <tr>
                 <td>
@@ -48,6 +48,14 @@
                         </div>
                     </a>
                 </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
         @endforeach
     </table>

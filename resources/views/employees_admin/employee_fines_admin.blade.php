@@ -12,36 +12,39 @@
 @endsection
 
 @section('content')
-    <b>Ожидают подтверждения:</b>
-    <table class="table">
-        @foreach($fines as $fine)
-            <tr>
-                <td>{{ $fine->amount }}</td>
-                <td>{{ $fine->date }}</td>
-                <td>{{ $fine->reason }}</td>
-                <td>
-                    {{-- Применить штраф --}}
-                    <a href="{{ url('/supervisor/employee_fines/apply_fine/'.$fine->id) }}">
-                        <div class="btn btn-danger">
-                            Применить
-                        </div>
-                    </a>
-                    <br>
-                    {{-- Отменить штраф --}}
-                    <a onclick="return do_check();" href="{{ url('/supervisor/employee_fines/quash_fine/'.$fine->id) }}">
-                        <div class="btn btn-primary" style="margin-top: 10px">
-                            Отменить
-                        </div>
-                    </a>
+    <h4 class="mb-3">Ожидают подтверждения:</h4>
+    <div class="card card-p">
+        <table class="table">
+            @foreach($fines as $fine)
+                <tr>
+                    <td>{{ $fine->amount }}</td>
+                    <td>{{ $fine->date }}</td>
+                    <td>{{ $fine->reason }}</td>
+                    <td class="d-flex align-items-baseline">
+                        {{-- Применить штраф --}}
+                        <a href="{{ url('/supervisor/employee_fines/apply_fine/'.$fine->id) }}">
+                            <div class="btn btn-danger">
+                                Применить
+                            </div>
+                        </a>
+                        <br>
+                        {{-- Отменить штраф --}}
+                        <a onclick="return do_check();" href="{{ url('/supervisor/employee_fines/quash_fine/'.$fine->id) }}">
+                            <div class="ml-2 btn btn-primary" >
+                                Отменить
+                            </div>
+                        </a>
 
-                </td>
-            </tr>
-        @endforeach
-    </table>
+                    </td>
+                </tr>
+            @endforeach
+        </table>
+    </div>
+
 
     {{-- График Начислений --}}
-    <div v-if="payout_graph">
-        Тест график
+    <div v-if="payout_graph"  class="card card-p">
+       <h3>Тест график</h3>
         <div style="max-width:600px; max-height: 400px;">
             {!! $chart->container() !!}
             {!! $chart->script() !!}
@@ -49,7 +52,7 @@
     </div>
 
     <div class="btn btn-primary" data-toggle="modal" data-target="#addFineModal">Добавить штраф вручную</div>
-    <div class="btn btn-secondary" data-toggle="modal" data-target="#fineHistory">История штрафов</div>
+    <div class="ml-1 btn btn-secondary" data-toggle="modal" data-target="#fineHistory">История штрафов</div>
 
     <a href="{{ url('supervisor/employee_finances/'.$employee->id) }}">
         <div class="btn btn-danger">Вернуться</div>

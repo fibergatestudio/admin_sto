@@ -7,7 +7,8 @@
 @endsection
 
 @section('content')
-    <table class="table">
+
+    <table class="card table">
         @foreach($assignments_archive as $assignment)
             <tr>
                 {{-- Описание --}}

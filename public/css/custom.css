@@ -1,0 +1,138 @@
+.card-p {
+  padding: 25px;
+}
+
+.tabs-menu {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.tabs-menu > label {
+  margin: 0 !important;
+  width: 20% !important;
+}
+
+#tab_1:checked ~ #txt_1 {
+  width: 100%;
+}
+
+.tabs-menu > label {
+  border: 1px solid #f2f2f2 !important;
+}
+
+.tabs-menu > input:checked + label {
+  border: 1px solid #f2f2f2 !important;
+}
+
+.tabs-menu > div {
+  width: 100%;
+}
+
+.total-sum h4 {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.total-sum h4 span {
+  margin-left: 25px;
+}
+
+.table thead th {
+  padding: 0.5rem .3rem 1rem;
+}
+
+#calendar {
+  padding: 35px;
+  margin: 15px 45px;
+}
+
+.fc-unthemed td.fc-today {
+  background: skyblue !important;
+}
+
+.table-deb.table td {
+  padding: 0;
+}
+
+.table-deb.table td input,
+.table-deb.table td select {
+  height: 50px;
+}
+
+.table-deb.table td button {
+  margin: 0 auto;
+  margin-top: 10px;
+}
+
+form:nth-child(6) table.table tr td:nth-child(4),
+form:nth-child(6) table.table tr th:nth-child(4) {
+  width: 50px !important;
+  text-align: center;
+}
+
+form:nth-child(2) table.table tr td:nth-child(7),
+form:nth-child(2) table.table tr th:nth-child(7) {
+  width: 50px !important;
+  text-align: center;
+}
+
+table label select {
+  height: 25px;
+}
+
+.check-custom {
+  width: 36px;
+}
+
+.dropdown-menu.show {
+  min-width: auto;
+}
+
+.icon-lock2-custom {
+  width: 37px;
+  height: 35px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.custom-control-label {
+  font-size: 11px;
+}
+
+.icon-plus-custom {
+  color: #fff;
+  background-color: #4caf50;
+  width: 25px;
+  height: 25px;
+  border: 1px solid transparent;
+  font-size: .8125rem;
+  line-height: 1.5385;
+  border-radius: .1875rem;
+}
+
+.table-list-order-custom td,
+.table-list-order-custom th {
+  padding: .75rem  0.5rem;
+}
+
+@media (min-width: 1850px) {
+  .table thead th {
+    padding: .75rem 1.25rem;
+    font-size: 15px;
+  }
+}
+

@@ -7,7 +7,7 @@
 @section('content')        
 
 {{-- Таблица-вывод данных записей --}}
-<table class="table">
+<table class="table table-expense">
         <thead>
             <tr>
                 <th>Статус</th>
@@ -101,10 +101,10 @@
 {{-- Форма добавления записи --}}
 <form action="{{ url('/add_record') }}" method="POST">
     @csrf
-<div class="content py-5  bg-light">
-    <div class="container">
-        <div class="row">
-                <div class="col-md-8 offset-md-2">
+<div class="content py-3">
+{{--    <div class="container">--}}
+        <div class="row custom-card">
+                <div class="w-100">
                 <span class="anchor" id="formUserEdit"></span>
                 <div class="card card-outline-secondary">
                     <div class="card-header">
@@ -192,7 +192,7 @@
                                         <option value="Химчистка">Химчистка</option>
                                     </select>
                                 </div>
-                                <div class="col-lg-1">
+                                <div class="col-lg-1 text-right">
                                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addServiceModal">+</button>
                                 </div>
                             </div>
@@ -240,7 +240,7 @@
                 </div>
             </div>
         </div>
-    </div>
+{{--    </div>--}}
 </div>
 </form>
 

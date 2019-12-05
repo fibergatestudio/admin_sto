@@ -6,15 +6,15 @@
 
 @section('content')
     {{-- Выводим заказы --}}
-
+<div class="card card-p">
     <form class="form" action="{{ url('admin/supply_orders/new') }}" method="POST">
         @csrf
 
         {{-- Счётчик количества вхождений --}}
         <input type="hidden" id="counter" name="entries_count" value="0">
 
-        {{-- Строки под элементы заказа на Vue.JS --}}
-        <!-- <div class="form-group">
+    {{-- Строки под элементы заказа на Vue.JS --}}
+    <!-- <div class="form-group">
             <label class="col-md-4 form-group" style="display: inline-block" for="item_name">Название</label>
             <label class="col-md-1 form-group" style="display: inline-block" for="item_numbers">Количество</label>
             <label class="col-md-2 form-group" style="display: inline-block" for="item_urgency">Срочность</label>
@@ -36,29 +36,29 @@
             {{-- Добавить новый элемент : кнопка --}}
             <div class="row">
                 <!-- <div onclick="app1.addNewEntry()" class="btn btn-success m-1">+</div> -->
-                <!-- <button type="submit" class="btn btn-primary m-1">
-                    Добавить
-                </button>
-            </div>
-            <hr> -->
-        
-            <!-- <div class="form-group">
-                <label for="order_comment">Комментарий к заказу</label>
-            </div>
-            <div class="form-group">
-            <textarea rows="3" cols="45" name="order_comment" id="order_comment" placeholder="Введите коментарий к заказу"></textarea>
-            </div> -->
+        <!-- <button type="submit" class="btn btn-primary m-1">
+            Добавить
+        </button>
+    </div>
+    <hr> -->
+
+        <!-- <div class="form-group">
+            <label for="order_comment">Комментарий к заказу</label>
+        </div>
+        <div class="form-group">
+        <textarea rows="3" cols="45" name="order_comment" id="order_comment" placeholder="Введите коментарий к заказу"></textarea>
+        </div> -->
         <!-- </div> -->
 
         <div id="app1">
             <label class="col-md-4" style="display: inline-block" for="item_name">Название</label>
-            <label class="col-md-1" style="display: inline-block" for="item_numbers">Количество</label>
+            <label class="col-md-2" style="display: inline-block" for="item_numbers">Количество</label>
             <label class="col-md-2" style="display: inline-block" for="item_urgency">Срочность</label>
             <label for="order_comment">Комментарий к заказу</label>
             <div v-for="(id, index) in ids" class="form-group">
                 @{{ id.id + 1 }}.
                 <div @click="removeNewEntry(index)" class="btn btn-warning m-1">-</div>
-                <input type="text" :name="'item'+index" class="form-control col-md-4" style="display: inline-block" required id="item_name">
+                <input type="text" :name="'item'+index" class="form-control col-md-5" style="display: inline-block" required id="item_name">
                 <input type="number" :name="'count'+index" class="form-control col-md-1" style="display: inline-block" value="1" min="1" required id="item_numbers">
                 <select :name="'urgency'+index" class="form-control col-md-3" style="display: inline-block" required id="item_urgency">
                     <option selected="selected">Выберите срочность</option>
@@ -68,12 +68,12 @@
                 </select>
 
                 {{-- Комментарий к заказу --}}
-                <div class="form-group col-md-8 p-2">
+                <div class="form-group col-md-10 p-2">
                     <textarea class="form-control" rows="3" cols="45" :name="'order_comment'+index" id="order_comment" placeholder="Введите коментарий к заказу"></textarea>
                 </div>
             </div>
             {{-- Добавить новый элемент : кнопка --}}
-            <div class="row">
+            <div class="row pl-3">
                 <div onclick="app1.addNewEntry()" class="btn btn-success m-1">+</div>
                 <!-- <div @click="removeNewEntry(index)" class="btn btn-warning m-1">-</div> -->
                 <!-- <div onclick="app1.removeNewEntry()" class="btn btn-warning m-1">remove</div> -->
@@ -82,7 +82,7 @@
                 </button>
             </div>
             <hr>
-        
+
             <!-- <div class="form-group">
                 <label for="order_comment">Комментарий к заказу</label>
             </div>
@@ -90,21 +90,25 @@
             <textarea rows="3" cols="45" name="order_comment" id="order_comment" placeholder="Введите коментарий к заказу"></textarea>
             </div> -->
         </div>
-                 
+
     </form>
+</div>
+
     <div class="row">
             {{-- Заказы для подтверждения : кнопка --}}
-            <div class="col-2">
-                <a href="{{ url('admin/supply_orders/worker') }}" class="btn btn-info">Заказы для подтверждения</a>
+            <div class="col-3">
+                <a href="{{ url('admin/supply_orders/worker') }}" class="w-100 btn btn-info">Заказы для подтверждения</a>
             </div>     
             {{-- Архив : переход --}}
+        <div class="col-3">
             <a href="{{ url('admin/supply_orders/archive') }}">
-                <div class="btn btn-light">
+                <div class="btn btn-light w-100">
                     Архив
-                </div>    
-            </a>      
+                </div>
+            </a>
         </div>
-    <br>
+
+        </div>
     <hr>
 
 
@@ -166,7 +170,7 @@
                     <td >
                         {{-- Кнопка управления --}}
                         <a href="{{ url('/admin/supply_orders/manage/'.$supply_order->id) }}">
-                            <div class="btn btn-primary">
+                            <div class="w-100 btn btn-primary">
                                 Управление
                             </div>
                         </a>
@@ -175,7 +179,7 @@
                             {{-- ID выполненного заказа --}}
                             <input type="hidden" name="order_id" value="{{ $supply_order->id }}">
 
-                            <button type="submit" class="btn btn-success">
+                            <button type="submit" class="w-100 my-2 btn btn-success">
                                 Исполнено
                             </button>
                         </form>
@@ -199,15 +203,18 @@
         
         <div class="row">
             {{-- Заказы для подтверждения : кнопка --}}
-            <div class="col-2">
-                <a href="{{ url('admin/supply_orders/worker') }}" class="btn btn-info">Заказы для подтверждения</a>
+            <div class="col-3">
+                <a href="{{ url('admin/supply_orders/worker') }}" class="w-100 btn btn-info">Заказы для подтверждения</a>
             </div>     
             {{-- Архив : переход --}}
-            <a href="{{ url('admin/supply_orders/archive') }}">
-                <div class="btn btn-light">
-                    Архив
-                </div>    
-            </a>      
+            <div class="col-3">
+                <a href="{{ url('admin/supply_orders/archive') }}">
+                    <div class="w-100 btn btn-light">
+                        Архив
+                    </div>
+                </a>
+            </div>
+
         </div>
     
     

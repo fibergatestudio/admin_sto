@@ -8,7 +8,7 @@
         </div>
     </a> -->
 
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addZonalExpenseModal">
+    <button type="button" class="ml-3 btn btn-primary" data-toggle="modal" data-target="#addZonalExpenseModal">
         Добавить Фирму
     </button>
 
@@ -44,31 +44,29 @@
         </div>{{-- /modal fade --}}
     </form>
 
-    <hr>
-    
 @endsection
 
 @section('content')
-
-    <table class="table">
-        <thead>
+    <div class="card card-p">
+        <table class="table">
+            <thead>
             <tr>
                 <th>Фирма</th>
                 <th>Скидка</th>
 
                 <th></th>{{-- Кнопки управления --}}
             </tr>
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
             @foreach($firms as $firm)
-            <tr>
-                <td>{{ $firm->firm_name }}</td>
-                <td>{{ $firm->firm_discount }}</td>
-            </tr>
+                <tr>
+                    <td>{{ $firm->firm_name }}</td>
+                    <td>{{ $firm->firm_discount }}</td>
+                </tr>
             @endforeach
-        </tbody>
-      </table>
-    
-    <hr>
-    
+            </tbody>
+        </table>
+    </div>
+
+
 @endsection

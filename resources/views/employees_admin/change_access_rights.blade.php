@@ -11,18 +11,18 @@
     @csrf
     {{-- ID сотрудника --}}
     <input type="hidden" name="user_id" value="{{ $user->id }}">
-    
-    <table class="table">
-        <thead>
+    <div class="card card-p">
+        <table class="table">
+            <thead>
             <tr>
                 <th>Общее имя</th>
                 <th>Администратор</th>
-                <th>Мастер</th>  
+                <th>Мастер</th>
                 <th>Рабочий</th>
-                <th>Снабженец</th>               
+                <th>Снабженец</th>
             </tr>
-        </thead>
-        <tbody>        
+            </thead>
+            <tbody>
             <tr>
                 <td>
                     {{ $user->general_name }} - {{ $user->role }}
@@ -35,18 +35,21 @@
                 </td>
                 <td>
                     <input type="radio" name="rights" value="employee" @if($user->role == 'employee') checked @endif>
-                </td>  
+                </td>
                 <td>
                     <input type="radio" name="rights" value="supply_order" @if($user->role == 'supply_officer') checked @endif>
-                </td>           
+                </td>
             </tr>
-        </tbody>        
-    </table>   
+            </tbody>
+        </table>
+    </div>
+
+
 
     <div>
         <input type="submit" class="btn btn-success" value="Изменить">
     </div>
-    </div>
+
 </form>
 {{-- Конец формы --}}
 

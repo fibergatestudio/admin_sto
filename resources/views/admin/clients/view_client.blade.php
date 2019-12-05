@@ -55,20 +55,20 @@
     </div>
 
 
-    <h3>Машины клиента:</h3>
-
+    <h3 class="mt-2">Машины клиента:</h3>
+<div class="card card-p">
     <table class="table">
         <thead>
-            <tr>
-                <th>№</th>
-                <th>Дата</th>
-                <th>Модель/марка</th>
-                <th>Год</th>
-                <th>Рег номер</th>
-                <th>VIN</th>
-                <th>Цвет</th>
-                <th></th> {{-- Кнопки управления --}}
-            </tr>
+        <tr>
+            <th>№</th>
+            <th>Дата</th>
+            <th>Модель/марка</th>
+            <th>Год</th>
+            <th>Рег номер</th>
+            <th>VIN</th>
+            <th>Цвет</th>
+            <th></th> {{-- Кнопки управления --}}
+        </tr>
         </thead>
 
         <tbody>
@@ -79,13 +79,13 @@
 
                 {{-- Дата --}}
                 <td>{{ $car->created_at }}</td>
-                
+
                 {{-- Название машины --}}
                 <td>{{ $car->general_name }}</td>
 
                 {{-- Год --}}
                 <td>{{ $car->release_year }}</td>
-                
+
                 {{-- Рег номер --}}
                 <td>{{ $car->reg_number }}</td>
 
@@ -94,10 +94,10 @@
 
                 {{-- Цвет --}}
                 <td>@if (!empty($car->car_color ))
-                <i style="width:35px; height:35px; display:flex;background-color:{{ $car->car_color }}; border: 2px solid rgb(97, 97, 97);"></i>
-                @else
-                null
-                @endif
+                        <i style="width:35px; height:35px; display:flex;background-color:{{ $car->car_color }}; border: 2px solid rgb(97, 97, 97);"></i>
+                    @else
+                        null
+                    @endif
                 </td>
                 {{-- Кнопка подробнее --}}
                 <td>
@@ -114,42 +114,42 @@
                 </td>
             </tr>
 
-{{-- Редактировать машину : Форма и модальное окно --}}
-    <form action="{{ url('admin/clients/view_client/' . $client->id . '/' . $car->id) }}" method="POST">
-        @csrf
+            {{-- Редактировать машину : Форма и модальное окно --}}
+            <form action="{{ url('admin/clients/view_client/' . $client->id . '/' . $car->id) }}" method="POST">
+                @csrf
 
-        <div class="modal fade" id="editCarModal{{ $car->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Редактировать машину #{{ $car->id }}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-
-                            <input type="hidden" name="id" value="{{ $car->id }}">
-
-                            <div class="form-group">
-                                <label>Полное название</label>
-                                <input type="text" name="general_name" class="form-control" value="{{ $car->general_name }}" required > 
+                <div class="modal fade" id="editCarModal{{ $car->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Редактировать машину #{{ $car->id }}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
+                            <div class="modal-body">
 
-                            <div class="form-group">
-                                <label>Год выпуска</label>
-                                <input type="number" min="1900" max="2099" step="1" name="release_year" class="form-control" value="{{ $car->release_year }}" required> 
-                            </div>
+                                <input type="hidden" name="id" value="{{ $car->id }}">
 
-                            <div class="form-group">
-                                <label>Регистрационный номер</label>
-                                <input type="text" name="reg_number" class="form-control" value="{{ $car->reg_number }}" required>
-                            </div>
+                                <div class="form-group">
+                                    <label>Полное название</label>
+                                    <input type="text" name="general_name" class="form-control" value="{{ $car->general_name }}" required >
+                                </div>
 
-                            <div class="form-group">
-                                <label>VIN Номер</label>
-                                <input type="text" name="vin_number" class="form-control" value="{{ $car->vin_number }}" required>
-                            </div>
+                                <div class="form-group">
+                                    <label>Год выпуска</label>
+                                    <input type="number" min="1900" max="2099" step="1" name="release_year" class="form-control" value="{{ $car->release_year }}" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Регистрационный номер</label>
+                                    <input type="text" name="reg_number" class="form-control" value="{{ $car->reg_number }}" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>VIN Номер</label>
+                                    <input type="text" name="vin_number" class="form-control" value="{{ $car->vin_number }}" required>
+                                </div>
 
                             <!-- <div class="form-group col-md-12 row">
 
@@ -164,32 +164,34 @@
 
                             </div> -->
 
-                            <div class="form-group">
-                                <label>Тип топлива</label>
-                                <select name="fuel_type" id="fueltype" class="form-control" required>
-                                @if ($fuel_type->isNotEmpty())
-                                    @foreach ($fuel_type as $fuel)
-                                    <option value="{{ $fuel->fuel_name }}">{{ $fuel->fuel_name }}</option>
-                                    @endforeach
-                                @endif
-                                </select>
+                                <div class="form-group">
+                                    <label>Тип топлива</label>
+                                    <select name="fuel_type" id="fueltype" class="form-control" required>
+                                        @if ($fuel_type->isNotEmpty())
+                                            @foreach ($fuel_type as $fuel)
+                                                <option value="{{ $fuel->fuel_name }}">{{ $fuel->fuel_name }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+
+
+
                             </div>
-
-
-                        
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                        <button type="submit" class="btn btn-success">Применить</button>
-                    </div>
-                </div>{{-- /modal-content --}}
-            </div>{{-- /modal-dialog --}}
-        </div>{{-- /modal fade --}}
-    </form>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                                <button type="submit" class="btn btn-success">Применить</button>
+                            </div>
+                        </div>{{-- /modal-content --}}
+                    </div>{{-- /modal-dialog --}}
+                </div>{{-- /modal fade --}}
+            </form>
 
         @endforeach
         </tbody>
     </table>
+</div>
+
 
 
     {{-- Добавить машину клиента --}}
@@ -203,17 +205,18 @@
 
     <h3>Примечания к клиенту</h3>
     {{-- Вывод примечаний --}}
-    <table class="table">
-        <thead>
+    <div class="card card-p">
+        <table class="table">
+            <thead>
             <tr>
                 <th>Текст</th>
                 <th>Автор</th>
                 <th></th>
             </tr>
-        </thead>
+            </thead>
 
-        <tbody>
-        {{--  Вывод данных --}}
+            <tbody>
+            {{--  Вывод данных --}}
             @foreach($client_notes as $client_note)
                 <tr>
                     {{-- Текст примечания --}}
@@ -237,9 +240,11 @@
 
                 </tr>
             @endforeach
-        </tbody>
+            </tbody>
 
-    </table>
+        </table>
+    </div>
+
     {{-- Конец таблицы --}}
 
         {{-- Добавить примечание к клиенту --}}

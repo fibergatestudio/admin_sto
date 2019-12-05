@@ -101,7 +101,7 @@
     <hr>
     {{-- Доходная часть --}}
     <h2>Доходная часть</h2>
-
+    <div class="card card-p">
     {{-- Вывод текущих заходов денег --}}
     <table class="table">
         <thead>
@@ -200,14 +200,16 @@
         @endforeach
         </tbody>
     </table>
-    <!--<p>Сумма заходов: {{ $assignment_income->sum('amount') }}<br></p>-->
+<!--<p>Сумма заходов: {{ $assignment_income->sum('amount') }}<br></p>-->
+
+</div>
 
 
 
     <hr>
     {{-- Расходная часть --}}
     <h2>Расходная часть</h2>
-
+<div class="card card-p">
     {{-- Вывод текущих заходов денег --}}
     <table class="table">
         <thead>
@@ -306,7 +308,9 @@
         @endforeach
         </tbody>
     </table>
-    <!--<p>Сумма расходов: {{ $assignment_expense->sum('amount') }}<br></p>-->
+<!--<p>Сумма расходов: {{ $assignment_expense->sum('amount') }}<br></p>-->
+</div>
+
 
 
 

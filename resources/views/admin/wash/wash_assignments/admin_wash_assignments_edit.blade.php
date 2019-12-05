@@ -1,10 +1,10 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    <div class="row">
-        Наряд Мойка #{{ $id }}
+    <div class="d-flex align-items-baseline">
+        <h3 class="mr-2">Наряд Мойка #{{ $id }}</h3>
         <a href="{{ url()->previous() }}"><button class="btn btn-warning">Назад</button></a>
-        <div class="dropdown"> 
+        <div class=" mx-3 dropdown">
             <a class="dropdown-toggle btn btn-primary" style="margin-left: -2px;" data-toggle="dropdown" href="#">Скачать</a>
             <ul class="dropdown-menu"  role="menu" aria-labelledby="dropdownMenu">
                 <li> 
@@ -45,14 +45,14 @@
                 <table id="table" class="table">
                     <thead>
                         <tr>
-                            <th>#</th>
-                            <th>Дата</th>
-                            <th>Марка</th>
-                            <th>Рег.Номер</th>
-                            <th>Кол-во</th>
-                            <th>Цена</th>
-                            <th>Сумма</th>
-                            <th>Действие</th>
+                            <th class="pl-2">#</th>
+                            <th class="pl-4">Дата</th>
+                            <th class="pl-4">Марка</th>
+                            <th class="pl-4">Рег.Номер</th>
+                            <th class="pl-4">Кол-во</th>
+                            <th class="pl-4">Цена</th>
+                            <th class="pl-4">Сумма</th>
+                            <th class="pl-4">Действие</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -65,12 +65,12 @@
                                 <td> <input class="form-control" value="{{ $work->amount }}" disabled/></td>
                                 <td> <input class="form-control" value="{{ $work->price }}" disabled/></td>
                                 <td> <input class="form-control" value="{{ $work->sum }}" disabled/></td>
-                                <td>
-                                    <a href="{{ url('/admin/wash_assignments/id/delete_complete_work/'.$work->id) }}"><button class="btn btn-warning">X</button></a>
+                                <td class="d-flex align-items-center">
+                                    <a href="{{ url('/admin/wash_assignments/id/delete_complete_work/'.$work->id) }}"><button class="mx-2 btn btn-warning">X</button></a>
                                     @if ($work->lock == 'locked')
-                                    <a href="{{ url('/admin/wash_assignments/'. $id .'/unset_lock') }}"><button class="btn btn-warning"><i class="icon-lock2"></i></button></a>
+                                    <a href="{{ url('/admin/wash_assignments/'. $id .'/unset_lock') }}"><button class="btn btn-warning icon-lock2-custom "><i class=" icon-lock2"></i></button></a>
                                     @elseif ($work->lock == 'unlocked')
-                                    <a href="{{ url('/admin/wash_assignments/'. $id .'/set_lock') }}"><button class="btn btn-warning"><i class="icon-unlocked2"></i></button></a>
+                                    <a href="{{ url('/admin/wash_assignments/'. $id .'/set_lock') }}"><button class="btn btn-warning"><i class=" icon-unlocked2"></i></button></a>
                                     @endif
                                 </td>
                             </tr>
@@ -135,7 +135,7 @@
         </div>
     </div>
     <div id="menu1" class="tab-pane fade">
-        <div class="content py-2 col-md-8 offset-md-2">
+        <div class="content py-2 col-md-12">
             <div class="container">
                 <div class="form-row">
                     <div class="card card-outline-secondary col-md-12">
@@ -231,7 +231,7 @@
         </div>
     </div>
     <div id="menu2" class="tab-pane fade">
-        <div class="content py-2 col-md-8 offset-md-2">
+        <div class="content py-2 col-md-12">
             <div class="container">
                 <div class="form-row">
                     <div class="card card-outline-secondary col-md-12">

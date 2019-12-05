@@ -168,75 +168,83 @@
   right: 150px;
 }
 </style>
-
     <!-- Вкладки -->
-<div class="tabs-menu">
-  @php
-  $i = 1;
-  @endphp
-  @foreach($categories as $category)
-  <input type="radio" name="inset" value="" id="tab_<?=$i?>" <?=($i==1)?'checked':''?>>
-  <label for="tab_<?=$i?>">{{ $category->name }}</label>
-  @php
-  $i++;
-  @endphp
-  @endforeach
+    <div class=" custom-card">
+        <div class="card">
+            <div class="tabs-menu">
+                @php
+                    $i = 1;
+                @endphp
+                @foreach($categories as $category)
+                    <input type="radio" name="inset" value="" id="tab_<?=$i?>" <?=($i==1)?'checked':''?>>
+                    <label for="tab_<?=$i?>">{{ $category->name }}</label>
+                    @php
+                        $i++;
+                    @endphp
+                @endforeach
 
 
-  @php
-  $i = 1;
-  @endphp
-  @foreach($categories as $category)
+                @php
+                    $i = 1;
+                @endphp
+                @foreach($categories as $category)
 
-    <div id="txt_<?=$i?>">
-      <table class="table">
-          <thead>
-              <tr>
-                <th scope="col">№</th>
-                <th scope="col">Название</th>
-                <th scope="col">Баланс</th>
-                <th scope="col"></th>
-              </tr>
-          </thead>
-          <tbody>
-          @foreach($accounts as $account)
-          @if($account->status === 'active' && $account->category_id == $category->id)
-              <tr>
-                  {{-- Номер счета --}}
-                  <td>{{ $account->id }}</td>
+                    <div id="txt_<?=$i?>">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">№</th>
+                                <th scope="col">Название</th>
+                                <th scope="col">Баланс</th>
+                                <th scope="col"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($accounts as $account)
+                                @if($account->status === 'active' && $account->category_id == $category->id)
+                                    <tr>
+                                        {{-- Номер счета --}}
+                                        <td>{{ $account->id }}</td>
 
-                  {{-- Название --}}
-                  <td>{{ $account->name }}</td>
+                                        {{-- Название --}}
+                                        <td>{{ $account->name }}</td>
 
-                  {{-- Баланс --}}
-                  <td>{{ $account->balance }}</td>
+                                        {{-- Баланс --}}
+                                        <td>{{ $account->balance }}</td>
 
-                  {{-- Кнопка подробнее --}}
-                  <td>
-                      <a href="{{ url('/admin/accounts/view/'.$account->id) }}">
-                          <div class="btn btn-secondary">
-                              Подробнее
-                          </div>
-                      </a>
-                  </td>
-              </tr>
-          @endif
-          @endforeach
-          </tbody>
-      </table>
+                                        {{-- Кнопка подробнее --}}
+                                        <td>
+                                            <a href="{{ url('/admin/accounts/view/'.$account->id) }}">
+                                                <div class="btn btn-secondary">
+                                                    Подробнее
+                                                </div>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endif
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                    @php
+                        $i++;
+                    @endphp
+                @endforeach
+
+            </div>
+        </div>
     </div>
-
-  @php
-  $i++;
-  @endphp
-  @endforeach  
-
-</div>
-
 <div class="total-sum">
-  <h4>Всего: лей</h4>
-  <h4>Оборот: лей</h4>
+    <h4>Всего:   <span>лей</span></h4>
+    <h4>Оборот:   <span>лей</span></h4>
 </div>
+
+
+
+
+
+
 
 @endsection
 

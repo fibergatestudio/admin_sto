@@ -1,7 +1,7 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-<div class="row">
+<div class="d-flex align-items-baseline">
     <div class="col-sm-3">
         <p>Модели</p>
     </div>
@@ -27,26 +27,26 @@
             </ul>
         </div>
     </div>
-
+<div class="mt-3 card card-p">
     <table class="table">
-    <thead>
+        <thead>
         <tr>
             <th>Полное название</th>
             <th>Брэнд</th>
             <th>Модель</th>
             <th></th>{{-- Кнопки управления --}}
         </tr>
-    </thead>
+        </thead>
         @foreach($car_models as $model)
             <tr>
                 <td>
-                {{ $model->general_name }}<br>
+                    {{ $model->general_name }}<br>
                 </td>
                 <td>
-                {{ $model->brand }}<br>
+                    {{ $model->brand }}<br>
                 </td>
                 <td>
-                {{ $model->model }}<br>
+                    {{ $model->model }}<br>
                 </td>
                 <td>
                     <a href="{{ url('/admin/cars/'.$model->id.'/car_edit') }}">
@@ -65,6 +65,8 @@
             </tr>
         @endforeach
     </table>
+</div>
+
 
     {{-- Пагинация --}}
     <div class="row text-center">

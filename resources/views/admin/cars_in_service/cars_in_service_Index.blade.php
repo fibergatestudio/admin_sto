@@ -6,32 +6,34 @@
 
 @section('content')
     <h2>Все машины в сервисе</h2>
-    
-    <table class="table">
-        <tr>
-            <td><b>Машина</b></td>
-            <td><b>Клиент</b></td>
-        </tr>
-        @foreach($cars as $car)
+    <div class="card card-p">
+        <table class="table">
             <tr>
-                {{-- Машина --}}
-                <td>
-                    <a href="{{ url('/admin/cars_in_service/view/'.$car->id) }}">
-                        {{ $car->general_name }}
-                    </a>
-                
-                </td>
-                
-                {{-- Клиент : имя + ссылка --}}
-                <td>
-                    <a href="{{ url('admin/clients/view_client/'.$car->owner_client_id) }}">
-                        {{ $car->client_name }}
-                    </a>    
-                </td>
-                
+                <td><b>Машина</b></td>
+                <td><b>Клиент</b></td>
             </tr>
-        @endforeach
-    </table>
+            @foreach($cars as $car)
+                <tr>
+                    {{-- Машина --}}
+                    <td>
+                        <a href="{{ url('/admin/cars_in_service/view/'.$car->id) }}">
+                            {{ $car->general_name }}
+                        </a>
+
+                    </td>
+
+                    {{-- Клиент : имя + ссылка --}}
+                    <td>
+                        <a href="{{ url('admin/clients/view_client/'.$car->owner_client_id) }}">
+                            {{ $car->client_name }}
+                        </a>
+                    </td>
+
+                </tr>
+            @endforeach
+        </table>
+    </div>
+
 
     {{-- Добавить машину --}}
     <a href="{{ url('admin/cars_in_service/add') }}">

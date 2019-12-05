@@ -16,7 +16,7 @@ $d=cal_days_in_month(CAL_GREGORIAN,$month,$year);
 echo "There was $d days in $month 2019.";
 ?>
 <?php 
-echo '<div class="row">';
+echo '<div class="d-flex flex-wrap">';
 for ($i = 0; $i < $d; $i++)
     {
         $today = strtotime(date("Y-m-j"));

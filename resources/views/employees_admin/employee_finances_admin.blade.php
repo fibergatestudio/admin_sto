@@ -1,36 +1,36 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-Финансы по сотруднику: {{ $employee->general_name }}
+    <span class="mr-2">Финансы по сотруднику:</span> {{ $employee->general_name }}
 {{-- Вернуться : Кнопка --}}
-    <a href="{{ url('/supervisor/view_employees') }}" title="Страница Содрудники">
+    <a class="mx-1" href="{{ url('/supervisor/view_employees') }}" title="Страница Содрудники">
         <div class="btn btn-danger">
             Вернуться
         </div>
     </a>
 {{-- Начисления : Кнопка --}}
-    <a href="{{ url('/supervisor/employee_finances/credit/'.$employee->id) }}">
+    <a class="mx-1" href="{{ url('/supervisor/employee_finances/credit/'.$employee->id) }}">
         <div class="btn btn-success">
             Начисления
         </div>
     </a>
     {{-- Выплата : Кнопка --}}
-    <a href="{{ url('/supervisor/employee_finances/payout/'.$employee->id) }}">
+    <a class="mx-1" href="{{ url('/supervisor/employee_finances/payout/'.$employee->id) }}">
         <div class="btn btn-warning">
             Выплата
         </div>
     </a>
 
-    
+
     {{-- Штрафы : Кнопка --}}
-    <a href="{{ url('/supervisor/employee_fines/'.$employee->id ) }}">
+    <a class="mx-1" href="{{ url('/supervisor/employee_fines/'.$employee->id ) }}">
         <div class="btn btn-secondary">
             Штрафы сотрудинка
         </div>
     </a>
-    
+
     {{-- Жетоны на кофе : Кнопка --}}
-    <a href="{{ url('/supervisor/employee_coffee_tokens/'.$employee->id ) }}">
+    <a class="mx-1" href="{{ url('/supervisor/employee_coffee_tokens/'.$employee->id ) }}">
         <div class="btn btn-info">
             Жетоны на кофе
         </div>
@@ -40,22 +40,23 @@
 @section('content')
     
     {{-- Баланс сотрудника --}}
-    <b>Баланс сотрудника:</b> {{ $employee->balance }}<br>
+    <b class="mr-2">Баланс сотрудника:</b>    <div class="btn btn-success">{{ $employee->balance }}</div><br>
     
     <hr>
     {{-- Наряды сотрудника --}}
-    <b>Тест вывода заходов по нарядам сотрудника:</b><br>    
-    <table class="table">
-                <thead>
-                    <tr>
-                        <th>Номер наряда</th>
-                        <th>Основание</th>
-                        <th>Описание</th>
-                        <th>Сумма</th>
-                        <th>Валюта</th>
-                    </tr>
-                </thead>
-                @foreach ($test as $test)
+    <b>Тест вывода заходов по нарядам сотрудника:</b><br>
+    <div class="mt-3 card card-p">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Номер наряда</th>
+                <th>Основание</th>
+                <th>Описание</th>
+                <th>Сумма</th>
+                <th>Валюта</th>
+            </tr>
+            </thead>
+            @foreach ($test as $test)
                 <tr>
                     <td>
                         {{$test->id}}
@@ -73,10 +74,12 @@
                         {{$test->as_cur}}
                     </td>
                 </tr>
-                @endforeach
-            </table>
+            @endforeach
+        </table>
 
-    <hr>
+        <hr>
+    </div>
+
     {{-- Ставка сотрудника за смену --}}
     <b>Ставка сотрудника за смену:</b> {{ $employee->pay_per_shift }}<br>
 
@@ -97,7 +100,7 @@
                     @csrf
                     
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Изменить ставку за смену</h5>
+                        <h5 class="text-center modal-title" id="exampleModalLabel">Изменить ставку за смену</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                         </button>
@@ -136,7 +139,7 @@
             <div class="card-header">
                 <h3 class="mb-0">История Финансов:</h3>
             </div>
-            <div class="row">
+            <div class="row align-items-center">
                 <div class="col">
                     <div class="custom-control">
                         <label>Фильтры типа: </label>

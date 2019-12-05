@@ -5,9 +5,10 @@
 @endsection
 
 @section('content')
-    {{-- Вывод списка выполненных заказов --}}
-    <table class="table">
-        <thead>
+    <div class="card card-p">
+        {{-- Вывод списка выполненных заказов --}}
+        <table class="table">
+            <thead>
             <tr>
                 <th>#</th>
                 <th>Имя заказчика</th>
@@ -19,20 +20,20 @@
                 <th>Комментарий</th>
                 <th></th>{{-- Кнопки управления --}}
             </tr>
-        </thead>
-        <tbody>
+            </thead>
+            <tbody>
             @foreach($supply_orders as $supply_order)
                 <tr>
                     <td>
                         {{-- Номер заказа --}}
                         {{ $supply_order->id }}<br>
                     </td>
-                    
+
                     <td>
                         {{-- Имя заказчика --}}
                         {{ $supply_order->creator_name }}<br>
                     </td>
-                    
+
                     <td>
                         {{-- Дата создания --}}
                         {{ $supply_order->date_of_creation }}
@@ -48,10 +49,10 @@
                         {{ $supply_order->responsible_officer_name }}
                     </td>
 
-                    <!-- <td>
+                <!-- <td>
                         {{-- Количество пунктов --}}
-                        {{ $supply_order->entries_count }}
-                    </td> -->
+                {{ $supply_order->entries_count }}
+                        </td> -->
 
                     <td>
                         {{-- Количество предметов (штук) --}}
@@ -73,7 +74,9 @@
                     </td>
                 </tr>
             @endforeach
-        </tbody>
-    </table>
-    {{-- Конец вывода заказов --}}
+            </tbody>
+        </table>
+        {{-- Конец вывода заказов --}}
+    </div>
+
 @endsection

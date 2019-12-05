@@ -6,8 +6,7 @@
 
 @section('content')
     <h2>Добавить примечание к сотруднику</h2>
-
-
+<div class="card card-p">
     {{-- Форма добавления примечания --}}
     <form method="POST" action="{{ url('admin/employee/add_note_to_employee') }}">
         @csrf
@@ -18,13 +17,16 @@
         <button type="submit" class="btn btn-primary">Добавить</button>
     </form>
     {{-- Конец формы --}}
+</div>
+
+
 
 
 
     <hr>
     {{-- Вернуться : кнопка --}}
     <a href="{{ url('/view_employees') }}">
-        <div class="btn btn-secondary">
+        <div class="btn btn-danger">
             Вернуться
         </div>
     </a>

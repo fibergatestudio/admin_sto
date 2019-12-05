@@ -10,8 +10,9 @@
 @section('content')
 
 {{-- Добавить модель машны : Кнопка открытия модального окна --}}
+<div class="card card-p">
     <table class="table">
-    <thead>
+        <thead>
         <tr>
             <th>ID</th>
             <th>Полное название</th>
@@ -19,29 +20,31 @@
             <th>Модель</th>
             <th></th>{{-- Кнопки управления --}}
         </tr>
-    </thead>
-            <tr>
-                <td>
+        </thead>
+        <tr>
+            <td>
                 {{ $car_model->id }}<br>
-                </td>
-                <td>
+            </td>
+            <td>
                 {{ $car_model->general_name }}<br>
-                </td>
-                <td>
+            </td>
+            <td>
                 {{ $car_model->brand }}<br>
-                </td>
-                <td>
+            </td>
+            <td>
                 {{ $car_model->model }}<br>
-                </td>
-                <td>
+            </td>
+            <td>
                 {{-- Редактировать модель машны : Кнопка открытия модального окна --}}
                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#editCarModelModal">
                     Изменить
                 </button><br>
-                </td>
-               
-            </tr>
+            </td>
+
+        </tr>
     </table>
+</div>
+
 
     {{-- Редактировать модель машины : Форма и модальное окно --}}
     <form action="{{ url('/admin/cars/'.$car_model->id.'/submit_car_entry') }}" method="POST">
