@@ -409,6 +409,10 @@ Route::get('admin/firms/firms_index', 'Firms_Admin_Controller@firms_index')->mid
 
         /* -  Удалить примечание - */
         Route::get('admin/cars_in_service/delete_note/{note_id}', 'Cars_in_service_Admin_Controller@delete_note')->middleware('can:admin_rights');
+    
+    /* Добавление топлива (тест)*/
+
+    Route::get('admin/cars_in_service/add_fuel', 'Cars_in_service_Admin_Controller@add_fuel')->middleware('can:admin_rights');
 
     /* История машины */
     // ...

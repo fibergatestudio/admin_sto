@@ -361,6 +361,27 @@ class Cars_in_service_Admin_Controller extends Controller
         return back();
     }
 
+    /* Добавление Типов Топлива */
+    public function add_fuel(){
+
+        // $new_fuel = array('fuel_name' => 'fuel_name');
+        // Fuel_type::create($new_fuel);
+
+        $fuels = Fuel_type::all();
+
+        if($fuels->isEmpty()){
+            $array = array('Дизель', 'Гибрид', 'Бензин', 'Природный газ', 'Сжиженный газ', 'Электрический');
+
+            foreach ($array as $fuel){
+                $new_fuel_entry = new Fuel_type();
+                $new_fuel_entry->fuel_name = $fuel; /* Название */
+                $new_fuel_entry->save();
+            }
+        }
+
+        return back();
+    }
+
 
 
 }
