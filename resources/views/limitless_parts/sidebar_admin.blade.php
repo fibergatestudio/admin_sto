@@ -197,14 +197,14 @@
 							</a>
 						</li>
 
-						<li class="nav-item nav-item-submenu">
+						<li class="nav-item nav-item-submenu {{ request()->is('admin/employees_logs') ? 'nav-item-open' : '' || request()->is('admin/clients_logs') ? 'nav-item-open' : '' || request()->is('admin/cars_in_service_logs') ? 'nav-item-open' : '' || request()->is('admin/finances_logs') ? 'nav-item-open' : ''}}">
 							<a href="#" class="nav-link legitRipple"><i class="icon-copy"></i> <span>Логирование</span></a>
 
-							<ul class="nav nav-group-sub" data-submenu-title="Layouts" style="display: none;">
-								<li class="nav-item"><a href="{{ url('/admin/employees_logs') }}" class="nav-link legitRipple">Сотрудники</a></li>
-								<li class="nav-item"><a href="{{ url('/admin/clients_logs') }}" class="nav-link legitRipple">Клиенты</a></li>
-								<li class="nav-item"><a href="{{ url('/admin/cars_in_service_logs') }}" class="nav-link legitRipple">Машины в сервисе</a></li>
-								<li class="nav-item"><a href="{{ url('/admin/finances_logs') }}" class="nav-link legitRipple">Финансы</a></li>
+							<ul class="nav nav-group-sub" data-submenu-title="Layouts" style="display: none; {{ request()->is('admin/employees_logs') ? 'display: block' : '' || request()->is('admin/clients_logs') ? 'display: block' : '' || request()->is('admin/cars_in_service_logs') ? 'display: block' : '' || request()->is('admin/finances_logs') ? 'display: block' : ''}}">
+								<li class="nav-item"><a href="{{ url('/admin/employees_logs') }}" class="nav-link {{ request()->is('admin/employees_logs') ? 'active' : ''}} legitRipple">Сотрудники</a></li>
+								<li class="nav-item"><a href="{{ url('/admin/clients_logs') }}" class="nav-link {{ request()->is('admin/clients_logs') ? 'active' : ''}}  legitRipple">Клиенты</a></li>
+								<li class="nav-item"><a href="{{ url('/admin/cars_in_service_logs') }}" class="nav-link {{ request()->is('admin/cars_in_service_logs') ? 'active' : ''}}  legitRipple">Машины в сервисе</a></li>
+								<li class="nav-item"><a href="{{ url('/admin/finances_logs') }}" class="nav-link {{ request()->is('admin/finances_logs') ? 'active' : ''}}  legitRipple">Финансы</a></li>
 								</ul>
 						</li>
 

@@ -51,26 +51,29 @@
         <!-- </div> -->
 
         <div id="app1">
-            <label class="col-md-4" style="display: inline-block" for="item_name">Название</label>
+            <label class="col-md-1" style="display: inline-block" for="item_name"></label>
+            <label class="col-md-3" style="display: inline-block" for="item_name">Название</label>
             <label class="col-md-2" style="display: inline-block" for="item_numbers">Количество</label>
             <label class="col-md-2" style="display: inline-block" for="item_urgency">Срочность</label>
-            <label for="order_comment">Комментарий к заказу</label>
+            <label class="col-md-2" style="display: inline-block" for="item_urgency">Комментарий к заказу</label>
+            <!-- <label for="order_comment">Комментарий к заказу</label> -->
             <div v-for="(id, index) in ids" class="form-group">
                 @{{ id.id + 1 }}.
                 <div @click="removeNewEntry(index)" class="btn btn-warning m-1">-</div>
-                <input type="text" :name="'item'+index" class="form-control col-md-5" style="display: inline-block" required id="item_name">
-                <input type="number" :name="'count'+index" class="form-control col-md-1" style="display: inline-block" value="1" min="1" required id="item_numbers">
-                <select :name="'urgency'+index" class="form-control col-md-3" style="display: inline-block" required id="item_urgency">
+                <input type="text" :name="'item'+index" class="form-control col-md-3" style="display: inline-block" required id="item_name">
+                <input type="number" :name="'count'+index" class="form-control col-md-2" style="display: inline-block" value="1" min="1" required id="item_numbers">
+                <select :name="'urgency'+index" class="form-control col-md-2" style="display: inline-block" required id="item_urgency">
                     <option selected="selected">Выберите срочность</option>
                     <option value="Не горит">Не горит</option>
                     <option value="Горит">Горит</option>
                     <option value="Очень горит">Очень горит</option>
                 </select>
-
+                <!-- <input type="text" class="form-control col-md-2" style="display: inline-block" > -->
+                <input type="text" :name="'order_comment'+index" class="form-control col-md-3" style="display: inline-block" required id="order_comment">
                 {{-- Комментарий к заказу --}}
-                <div class="form-group col-md-10 p-2">
-                    <textarea class="form-control" rows="3" cols="45" :name="'order_comment'+index" id="order_comment" placeholder="Введите коментарий к заказу"></textarea>
-                </div>
+                <!-- <div class="form-group p-2">
+                    <textarea class="form-control col-md-2" rows="3" cols="45" :name="'order_comment'+index" id="order_comment" placeholder="Введите коментарий к заказу"></textarea>
+                </div> -->
             </div>
             {{-- Добавить новый элемент : кнопка --}}
             <div class="row pl-3">
