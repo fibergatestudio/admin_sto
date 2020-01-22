@@ -22,9 +22,18 @@
 .tabs-menu > label {
   border: 1px solid #f2f2f2 !important;
 }
-
+.table tbody tr:hover{
+  background-color: #f2f2f2;
+}
+.btn-success-1{
+  background-color: #3f51b5;
+  border-color: #3f51b5;
+  color: #fff;
+}
 .tabs-menu > input:checked + label {
-  border: 1px solid #f2f2f2 !important;
+  border: 1px solid #1F456E !important;
+  color: #fff !important;
+  background-color: #1F456E !important;
 }
 
 .tabs-menu > div {

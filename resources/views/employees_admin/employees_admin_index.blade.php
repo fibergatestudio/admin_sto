@@ -17,7 +17,7 @@
 @section('content')
 <div id="employee">
     <div v-if="wash" class="col-md-3">
-        <div v-on:click="wash = !wash" class="w-50 btn btn-success">Мойка</div>
+        <div v-on:click="wash = !wash" class="w-50 btn btn-success-1">Мойка</div>
     </div>
     <div v-if="!wash" class="col-md-3">
         <div v-on:click="wash = !wash" class="w-50 btn btn-success">Сервис</div>
