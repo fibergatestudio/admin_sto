@@ -974,7 +974,7 @@ class EmployeesAdminController extends Controller
                 Telegram::sendMessage([
                     'chat_id' => '-1001204206841.0',
                     'parse_mode' => 'HTML',
-                    'text' => $text
+                    'text' => $text,
                 ]);
 
             } else {

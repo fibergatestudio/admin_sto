@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use App\Records;
@@ -250,6 +251,7 @@ class RecordsController extends Controller
 
         //dd($explode_services);
 
+
         return view('admin.assignments.edit_record_page',
         [
             'record' => $record,
@@ -259,7 +261,30 @@ class RecordsController extends Controller
 
     public function apply_record_edit(Request $request){
 
-        return view('admin.assignments.records_admin_index');
+        $id = $request->id;
+        $service_name = $request->service_name; 
+        $record_time = $request->time_start;
+
+        //$record_date = $request->record_date;
+        //$record_date .= $request->record_time;
+
+
+        //dd($record_date);
+        //
+        $work_date = $request->work_date;
+        $record_time = $request->time_start;
+        $time_finish = $request->time_finish;
+
+        
+        DB::table('records')
+        ->where('id', '=', $id)
+        ->update([
+            'record_date' => $work_date,
+            'record_time' => $record_time,
+            ]);
+
+        return back();
+        //return view('admin.assignments.records_admin_index');
     }
 
     public function delete_record(Request $request){

@@ -97,8 +97,61 @@ class Assignments_Admin_Controller extends Controller
 
             $assignments_data = $temp_arr_obj;
         }
+
+        $assignments_list =
+        DB::table('assignments')
+            ->join('employees', 'assignments.responsible_employee_id', '=', 'employees.id')
+            ->join('cars_in_service', 'assignments.car_id', '=', 'cars_in_service.id')
+            //->join('new_sub_assignments', 'assignments.id', '=', 'new_sub_assignments.assignment_id')
+            ->orderBy('order','ASC')
+            ->select(
+                    'assignments.*',
+                    'employees.general_name AS employee_name',
+                    'cars_in_service.general_name AS car_name',
+                    'cars_in_service.vin_number AS vin_number',
+                    'cars_in_service.release_year AS release_year',
+                    'cars_in_service.reg_number AS reg_number',
+                    'cars_in_service.car_color AS car_color',
+                    //'new_sub_assignments.d_table_workzone AS assignment_workzone'
+                )
+            // ->where([
+            //     ['new_sub_assignments.work_row_index', '<>', null],
+            //     ['assignments.status', '=', 'active']
+            // ])
+            ->get();
+
+        if($assignments_list->count()){
+            $temp_arr_obj = [];
+            $temp_arr_workzone = [];
+            $temp_id = $assignments_list[0]->order;
+            $i = 0;
+
+            for ( ;$i < count($assignments_list); $i++) {
+                if ($temp_id == $assignments_list[$i]->order) {
+                    //$temp_arr_workzone[] = $assignments_list[$i]->assignment_workzone;
+                }
+                else{
+                    $temp_arr_obj[$i-1] = $assignments_list[$i-1];
+                    $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+                    $temp_id = $assignments_list[$i]->order;
+                    //$temp_arr_workzone = [];
+                    //$temp_arr_workzone[] = $assignments_list[$i]->assignment_workzone;
+                }
+            }
+
+            $temp_arr_obj[$i-1] = $assignments_list[$i-1];
+            $temp_arr_obj[$i-1]->workzone = $temp_arr_workzone;
+
+            $assignments_list = $temp_arr_obj;
+        }
+
         //echo '<pre>'.print_r($assignments_data,true).'</pre>';
-        return view('assignments_admin.assignments_admin_index', ['assignments' => $assignments_data, 'workzone_data' => $workzone_data]);
+        return view('assignments_admin.assignments_admin_index', 
+        [
+            'assignments' => $assignments_data, 
+            'workzone_data' => $workzone_data, 
+            'assignments_list' => $assignments_list
+        ]);
     }
 
 
@@ -1156,8 +1209,10 @@ class Assignments_Admin_Controller extends Controller
             . "<b>Описание: </b>\n"
             .  $assignment_description;
 
+            $chat_id = env('TELEGRAM_CHANNEL_ID', '');
             Telegram::sendMessage([
-            'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
+            'chat_id' => '-1001204206841.0',
+            //'chat_id' => env('TELEGRAM_CHANNEL_ID', ''),
             'parse_mode' => 'HTML',
             'text' => $text
             ]);

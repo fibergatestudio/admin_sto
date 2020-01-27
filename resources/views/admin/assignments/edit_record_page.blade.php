@@ -22,6 +22,7 @@
                         <form class="form" role="form" autocomplete="off">
 
                         <input type="hidden" name="status" value="unconfirmed">
+                        <input type="hidden" name="id" value="{{ $record->id }}">
 
                             <div class="form-group row">
                                 <label class="col-lg-2 col-form-label form-control-label">Имя</label>
