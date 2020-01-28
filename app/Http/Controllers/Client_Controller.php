@@ -30,6 +30,8 @@ class Client_Controller extends Controller
                 }
         })->get();
 
+        //dd($cars);
+
         return view('client.client')->with(array('cars' => $cars));
 
     }

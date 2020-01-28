@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Assignment;
 use App\Client;
 use App\Employee;
-use App\employee_fine;
+use App\Employee_fine;
 use App\Sub_assignment;
 use App\Workzone;
 use Auth;
@@ -268,7 +268,7 @@ class Master_Controller extends Controller
     public function employee_finances($id)
     {
         $employee = Employee::where('id',$id)->get();
-        $employee_fines = employee_fine::where('employee_id', $id)->get();
+        $employee_fines = Employee_fine::where('employee_id', $id)->get();
         return view('master.employee_finances')->with(array('employee' => $employee[0],'employee_fines'=>$employee_fines));
     }
 

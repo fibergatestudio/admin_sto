@@ -19,9 +19,9 @@
 
             @foreach ($cars as $car)
                 <tr>
-                    <td>{{($car->car_model->brand)}} {{--  Марка --}}</td>
+                    <td>{{($car->car_brand)}} {{--  Марка --}}</td>
                     <td></td>
-                    <td>{{($car->car_model->model)}} {{--  Модель --}}</td>
+                    <td>{{($car->car_model)}} {{--  Модель --}}</td>
                     <td></td>
                     <td>{{($car->release_year)}} {{-- Год выпуска --}}</td>
 

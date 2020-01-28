@@ -140,9 +140,13 @@ class Supply_officer_Controller extends Controller
         if($payment_method = "Наличные"){
             //..
 
-            $supply_user_id = Auth::user()->id;
+            //$supply_user_id = Auth::user()->id;
+            //New Id
+            $supply_user_id = $request->user_id;
 
             $user_wallet = DB::table('employees')->where('id', $supply_user_id)->first();
+
+            //dd($supply_user_id);
 
             $wallet = $user_wallet->balance;
 

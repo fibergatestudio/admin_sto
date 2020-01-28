@@ -5,5 +5,5 @@
 @endsection
 
 @section('content')
-    Вы можете перейти на страницу <a href="{{ url('supply_officer/all_orders') }}">заказов на снабжение</a>.
+    Вы можете перейти на страницу <a href="{{ url('supply_officer/all_orders/list') }}">заказов на снабжение</a>.
 @endsection

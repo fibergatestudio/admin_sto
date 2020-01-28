@@ -84,7 +84,6 @@
 
                         <td>
                             {{ $supply_order->given_to }}
-
                             <select class="form-control" name="given_to">
 
                                 <option>Выберите</option>
@@ -106,6 +105,8 @@
 
                             <input type="hidden" name="order_price" value="{{ $supply_order->order_price }}">
                             <input type="hidden" name="payment_method" value="{{ $supply_order->payment_method }}">
+
+                            <input type="hidden" name="user_id" value="{{ $supply_order->given_to }}">
 
                             <button type="submit" class="my-1 btn btn-success">
                                 Исполнено
