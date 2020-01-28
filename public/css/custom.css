@@ -2,6 +2,10 @@
   padding: 25px;
 }
 
+.table{
+  text-align: center;
+}
+
 .tabs-menu {
   display: -webkit-box;
   display: -ms-flexbox;
