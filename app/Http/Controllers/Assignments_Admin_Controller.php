@@ -114,10 +114,10 @@ class Assignments_Admin_Controller extends Controller
                     'cars_in_service.car_color AS car_color',
                     //'new_sub_assignments.d_table_workzone AS assignment_workzone'
                 )
-            // ->where([
-            //     ['new_sub_assignments.work_row_index', '<>', null],
-            //     ['assignments.status', '=', 'active']
-            // ])
+            ->where([
+                //['new_sub_assignments.work_row_index', '<>', null],
+                ['assignments.status', '=', 'active']
+            ])
             ->get();
 
         if($assignments_list->count()){
