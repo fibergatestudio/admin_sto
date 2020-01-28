@@ -111,7 +111,7 @@ class Assignments_Admin_Controller extends Controller
                     'cars_in_service.vin_number AS vin_number',
                     'cars_in_service.release_year AS release_year',
                     'cars_in_service.reg_number AS reg_number',
-                    'cars_in_service.car_color AS car_color',
+                    'cars_in_service.car_color AS car_color'
                     //'new_sub_assignments.d_table_workzone AS assignment_workzone'
                 )
             ->where([
