@@ -9,6 +9,7 @@ use App\Client;
 use App\Employee;
 use App\Employee_fine;
 use App\Sub_assignment;
+use App\New_sub_assignment;
 use App\Workzone;
 use Auth;
 use App\Cars_in_service;
@@ -147,9 +148,9 @@ class Master_Controller extends Controller
         $assignment->car_name = $assignment->get_car_name();
         /* Получаем список зональных нарядов */
         $sub_assignments =
-            Sub_assignment::where('assignment_id', $id)
-                ->join('workzones', 'sub_assignments.workzone_id', '=', 'workzones.id')
-                ->select('sub_assignments.*', 'workzones.general_name')
+            New_sub_assignment::where('assignment_id', $id)
+                ->join('workzones', 'new_sub_assignments.d_table_workzone', '=', 'workzones.id')
+                ->select('new_sub_assignments.*', 'workzones.general_name')
                 ->get();
 
 

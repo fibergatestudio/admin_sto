@@ -308,13 +308,13 @@ class Employee_Dashboard_Controller extends Controller
 
 
         $sub_assignments = 
-        DB::table('sub_assignments')
+        DB::table('new_sub_assignments')
         ->where('assignment_id', $assignment_id)
-        ->join('workzones', 'sub_assignments.workzone_id', '=', 'workzones.id')
-        ->join('employees', 'sub_assignments.responsible_employee_id', '=', 'employees.id')
-        ->orderBy('order','ASC')
+        ->join('workzones', 'new_sub_assignments.d_table_workzone', '=', 'workzones.id')
+        ->join('employees', 'new_sub_assignments.d_table_responsible_officer', '=', 'employees.id')
+        ->orderBy('id','ASC')
         ->select(
-            'sub_assignments.*', 
+            'new_sub_assignments.*', 
             'workzones.general_name AS workzone_name',
             'employees.fio AS employee_name'
             )
