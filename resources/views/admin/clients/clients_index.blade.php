@@ -1,7 +1,6 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    Список клиентов 
     <a href="{{ url('admin/clients/add_client') }}">
         <div class="btn btn-primary">
             Добавить клиента

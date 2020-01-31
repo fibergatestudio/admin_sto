@@ -8,7 +8,7 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    Страница нарядов
+    
     <!-- <a href="{{ url('admin/add_client') }}">
         <div class="btn btn-success">
             Добавить наряд

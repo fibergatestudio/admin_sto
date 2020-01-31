@@ -1,7 +1,7 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    Все машины в сервисе
+
 @endsection
 
 @section('content')

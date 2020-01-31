@@ -1,6 +1,6 @@
 @extends('layouts.limitless')
 @section('page_name')
-    Профиль
+
 @endsection
 @section('content')
     <div class="card card-p">
@@ -27,7 +27,7 @@
                 <td></td>
                 <td>{{($profile->phone)}} {{-- ТЕЛЕФОН --}}</td>
                 <td></td>
-                <td>{{($profile->balance)}} {{-- БАЛАНС --}}</td>
+                <td>{{($profile->balance)}} MDL {{-- БАЛАНС --}}</td>
                 <td></td>
                 <td>{{($profile->discount)}} {{-- СКИДКА --}}</td>
 

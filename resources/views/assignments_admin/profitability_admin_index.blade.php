@@ -8,7 +8,7 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    Страница общей рентабельности    
+      
     <a href="{{ url('/admin/profitability/profitability_index/month') }}" class="btn btn-success">Просмотреть ежемесячную рентабельность</a>
 @endsection
 

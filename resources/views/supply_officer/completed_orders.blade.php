@@ -1,7 +1,7 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    Список выполненных заказов
+ 
 @endsection
 
 @section('content')

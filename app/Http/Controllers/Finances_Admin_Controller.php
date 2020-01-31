@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Auth;
-
 use App\User;
 use App\Account;
 use App\AccountCategory;
@@ -14,11 +13,12 @@ use App\AccountOperationCategory;
 class Finances_Admin_Controller extends Controller
 {
     /* Главная страница счетов */
-    public function finances_index()
+    public function finances_index() 
     {       
         $users = User::all();
         $categories = AccountCategory::all();
         $accounts = Account::all();
+
         return view('admin.finances.finances_index', ['users' => $users, 'categories' => $categories, 'accounts' => $accounts]);
     }
 

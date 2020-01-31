@@ -1,7 +1,7 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    Логи по финансам
+    <!-- Финансы -->
 @endsection
 
 @section('content')

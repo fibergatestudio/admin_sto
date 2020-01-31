@@ -1,7 +1,7 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    Учёт мойки
+        <!-- Учет мойки -->
         <a href="{{ url('/admin/wash/report/'.$year.'/'.$month.'/'.$day) }}"><button class="btn btn-primary">Отчет</button></a>
         <a href="{{ url('/admin/wash/select_date') }}"><button class="btn btn-primary">Выбрать дату</button></a>
 @endsection
@@ -199,7 +199,7 @@
                             {{ $car_wash->wash_services }}
                         </td>
                         <td>
-                           {{ $car_wash->payment_sum }}
+                           {{ $car_wash->payment_sum }} MDL
                         </td>
                         <td>
                             {{ $car_wash->box_number }}

@@ -1,7 +1,7 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    Страница Записей
+
 @endsection
 
 @section('content')        

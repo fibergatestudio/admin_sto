@@ -1,6 +1,6 @@
 @extends('layouts.limitless')
 @section('page_name')
-    Профили рабочих
+
 @endsection
 @section('content')
     <div class="card card-p">

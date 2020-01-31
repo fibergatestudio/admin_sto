@@ -1,6 +1,5 @@
 @extends('layouts.limitless')
 @section('page_name')
-    Подтвержденные записи
     <a href="{{ url('/master') }}">
         <div class="btn btn-danger">
             Вернуться

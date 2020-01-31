@@ -1,8 +1,6 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-Счета
-
 <div style="margin-top: 10px">
   <!-- Вызов попапа Добавить счет -->
   <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addAccount" style="margin: 10px">
@@ -201,6 +199,7 @@
                             </tr>
                             </thead>
                             <tbody>
+                            <?php $sum_tot_price = 0 ?>
                             @foreach($accounts as $account)
                                 @if($account->status === 'active' && $account->category_id == $category->id)
                                     <tr>
@@ -211,7 +210,8 @@
                                         <td>{{ $account->name }}</td>
 
                                         {{-- Баланс --}}
-                                        <td>{{ $account->balance }}</td>
+                                        <td>{{ $account->balance }} MDL</td>
+                                        <?php $sum_tot_price += $account->balance ?>
 
                                         {{-- Кнопка подробнее --}}
                                         <td>
@@ -226,20 +226,26 @@
                             @endforeach
                             </tbody>
                         </table>
+                        <div style="float: right; padding-right: 10%;" ">
+                          <hr>
+                          <h4>Всего: {{ $sum_tot_price }}<span>лей</span></h4>
+                          <h4>Оборот: {{ $sum_tot_price }}<span>лей</span></h4>
+                        </div>
                     </div>
 
                     @php
                         $i++;
                     @endphp
+                    
                 @endforeach
 
             </div>
         </div>
     </div>
-<div class="total-sum">
-    <h4>Всего:   <span>лей</span></h4>
-    <h4>Оборот:   <span>лей</span></h4>
-</div>
+    <!-- <div class="total-sum">
+        <h4>Всего: <span>лей</span></h4>
+        <h4>Оборот: <span>лей</span></h4>
+    </div> -->
 
 
 

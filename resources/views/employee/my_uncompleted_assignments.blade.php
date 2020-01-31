@@ -1,7 +1,7 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-Мои невыполненые наряды
+
 @endsection
 
 @section('content')

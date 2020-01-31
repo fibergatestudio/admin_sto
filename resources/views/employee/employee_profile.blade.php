@@ -1,7 +1,7 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-Мой профиль
+
 @endsection
 
 @section('content')
@@ -38,7 +38,7 @@
                             <div class="form-group row">
                                 <label class="col-lg-3 col-form-label form-control-label">Баланс</label>
                                 <div class="col-lg-9">
-                                    <input class="form-control" type="text" value="{{ $employee_edit->balance }}" readonly>
+                                    <input class="form-control" type="text" value="{{ $employee_edit->balance }} MDL" readonly>
                                 </div>
                             </div>
                             <div class="form-group row">

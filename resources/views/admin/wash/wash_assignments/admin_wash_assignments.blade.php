@@ -1,7 +1,7 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    Наряды Мойка
+    
     <a href="{{ url('/admin/wash_assignments/create_assignment_index')}}"><button class="btn btn-primary">Добавить наряд</button></a>
     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addAssignment">
     Поиск

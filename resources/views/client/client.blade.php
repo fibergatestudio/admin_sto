@@ -1,6 +1,6 @@
 @extends('layouts.limitless')
 @section('page_name')
-    Список машин клиента
+    
 @endsection
 @section('content')
     <table class="table">

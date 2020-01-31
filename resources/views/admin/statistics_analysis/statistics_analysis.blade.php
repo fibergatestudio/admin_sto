@@ -1,7 +1,7 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    Список графиков
+
 @endsection
 
 @section('content')

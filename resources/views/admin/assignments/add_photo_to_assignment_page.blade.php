@@ -1,7 +1,7 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-Добавление фото к наряду
+    Добавление фото к наряду
 @endsection
 
 @section('content')

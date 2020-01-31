@@ -3,7 +3,7 @@
 @section('page_name')
 <div class="d-flex align-items-baseline">
     <div class="col-sm-3">
-        <p>Модели</p>
+        <!-- <p>Модели</p> -->
     </div>
     <div class="col-sm-3">
         {{-- Добавить модель машны : Кнопка открытия модального окна --}}

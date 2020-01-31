@@ -1,7 +1,7 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-Проходы через систему контроля
+
 @endsection
 
 @section('content')

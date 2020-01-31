@@ -1,7 +1,7 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-Рабочие зоны
+
 {{-- Добавить пост: переход --}}
 <a href="{{ url('admin/workzones/add') }}">
     <div class="ml-3 btn btn-primary">

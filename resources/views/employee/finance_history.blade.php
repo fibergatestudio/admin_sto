@@ -1,7 +1,7 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-История финансов
+    <!-- История финансов -->
 @endsection
 
 @section('content')
@@ -77,10 +77,10 @@
                                     {{ $all_logs_asc_entry->type }}
                                 </td>
                                 <td>
-                                    {{ $all_logs_asc_entry->amount }}
+                                    {{ $all_logs_asc_entry->amount }} MDL
                                 </td>
                                 <td>
-                                    {{ $all_logs_asc_entry->old_balance }}
+                                    {{ $all_logs_asc_entry->old_balance }} MDL
                                 </td>
                                 <td>
                                     {{ $all_logs_asc_entry->reason }}

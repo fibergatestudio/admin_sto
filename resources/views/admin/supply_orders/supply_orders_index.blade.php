@@ -1,7 +1,7 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    Заказы для поставщиков 
+
 @endsection
 
 @section('content')

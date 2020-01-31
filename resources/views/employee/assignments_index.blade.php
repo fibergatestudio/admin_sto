@@ -1,7 +1,7 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-Мои активные наряды
+
 {{-- Архив нарядов : переход --}}
     <a href="{{ url('employee/assignments/my_assignments_archive') }}">
         <div class="btn btn-secondary">

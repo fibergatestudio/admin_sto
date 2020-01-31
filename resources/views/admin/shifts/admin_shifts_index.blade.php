@@ -1,11 +1,11 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    Все смены
+    <!-- Все смены -->
 @endsection
 
 @section('content')
-    <h2>Смены</h2>
+    <!-- <h2>Смены</h2> -->
 
 
     <div class="card card-p">
@@ -45,7 +45,7 @@
                         {{ $shift->note }}<br>
                     </td>
                     <td>
-                        {{ $shift->payment_amount }}<br>
+                        {{ $shift->payment_amount }} MDL<br>
                     </td>
                     <td>
                         {{ $shift->payment_status }}<br>

@@ -1,7 +1,7 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    Телеграм: Отправка фото
+
 @endsection
 
 @section('content')

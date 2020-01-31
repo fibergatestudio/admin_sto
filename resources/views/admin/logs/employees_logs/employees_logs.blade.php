@@ -1,7 +1,7 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-    Логи по сотрудникам
+
 @endsection
 
 @section('content')

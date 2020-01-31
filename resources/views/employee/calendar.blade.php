@@ -1,7 +1,7 @@
 @extends('layouts.limitless')
 
 @section('page_name')
-Календарь
+
 
 <a href="{{ url('/employee/calendar/'.$employee_id.'/test_late') }}">
     <button class="btn btn-info">Запись отсутствовал</button>

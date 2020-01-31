@@ -6,7 +6,7 @@ function beautify_date($mysql_date){
 ?>
 @extends('layouts.limitless')
 @section('page_name')
-    Страница нарядов
+    
 @endsection
 @section('content')
     <div class="card card-p">
