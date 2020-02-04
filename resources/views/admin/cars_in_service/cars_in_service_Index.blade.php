@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    <h2>Все машины в сервисе</h2>
+    <!-- <h2>Все машины в сервисе</h2> -->
     <div class="card card-p">
         <table class="table">
             <tr>

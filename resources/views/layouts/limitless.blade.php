@@ -228,7 +228,11 @@
 					style="float:right";
 				@endif
 				class="page-header-content header-elements-md-inline">
-					<div class="page-title d-flex">
+					<div 
+					@if (Request::is('admin/finances/*'))
+						style="padding:0px";
+					@endif
+					class="page-title d-flex">
 						
                         {{-- Заголовок страницы --}}
                         <h4>
