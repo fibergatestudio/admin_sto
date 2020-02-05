@@ -11,6 +11,9 @@
         <div class="col-md-4">
             <a href="{{ url('/supervisor/employee_archive') }}" class="btn btn-secondary">Архив сотрудников</a>
         </div>  
+        <div class="col-md-4">
+            <a href="{{ url('/supervisor/employee_migrate') }}" class="btn btn-success">Миграция Сотрудников</a> 
+        </div>
 </div>
 @endsection
 

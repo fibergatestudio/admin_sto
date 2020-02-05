@@ -152,6 +152,9 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
 
     /* Страница архива сотрудников */
     Route::get('/supervisor/employee_archive', 'EmployeesAdminController@show_employee_archive')->middleware('can:admin_rights');
+    
+    /* Миграция сотрудников + создание аккаунтов (тест) */
+    Route::get('/supervisor/employee_migrate', 'EmployeesAdminController@employee_migrate')->middleware('can:admin_rights');
 
     /* Страница финансов сотрудника */
     Route::get('/supervisor/employee_finances/{employee_id}', 'EmployeesAdminController@employee_finances')->name('employee_finances_admin')->middleware('can:admin_rights');
