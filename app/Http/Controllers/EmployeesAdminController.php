@@ -46,11 +46,14 @@ class EmployeesAdminController extends Controller
 
         $employee_wash = Employee::where('status', 'active')->where('position', 'Washer')->get();
 
+        $employee_totalbal = Employee_balance_logs::where('type', 'Начисление')->get();
+
 
         return view('employees_admin.employees_admin_index', 
         [
             'employee_data' => $employee_data,
-            'employee_wash' => $employee_wash
+            'employee_wash' => $employee_wash,
+            'employee_totalbal' => $employee_totalbal
         ]);
 
     }
@@ -1193,6 +1196,21 @@ class EmployeesAdminController extends Controller
         $archived_employees = Employee::where('status', 'archived')->get();
 
         return view('employees_admin.employee_archive', ['archived_employees' => $archived_employees]);
+    }
+
+    /* Восстановить Сотрудника */
+    public function empl_restore(Request $request){
+
+        $empl_id = $request->emp_id;
+        //dd($empl_id);
+
+        DB::table('employees')
+        ->where('id', '=', $empl_id)
+        ->update([
+            'status' => 'active',
+            ]);
+
+        return back();
     }
 
     /*

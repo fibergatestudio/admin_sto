@@ -31,6 +31,7 @@
                     <th>Имя</th>
                     <th>Должность</th>
                     <th>Баланс</th>
+                    <th>Итого по балансу</th>
                     <th></th>{{-- Кнопки управления --}}
                 </tr>
             </thead>
@@ -48,6 +49,17 @@
                         {{ $employee->balance }} MDL
                     </td>
 
+                    
+                    <td>
+                        <?php $sum_tot = 0 ?>
+                        @foreach($employee_totalbal as $totbal)
+                            @if($totbal->employee_id == $employee->id)
+                                <?php $sum_tot += $totbal->amount; ?>
+                            @endif
+                        @endforeach
+                        Итого <?php echo $sum_tot ?>
+                    </td>
+
                     <td>
                         <a href="{{ url('/supervisor/employee_finances/'.$employee->id) }}">
                             <div class="btn btn-primary">
@@ -55,6 +67,7 @@
                             </div>
                         </a>
                     </td>
+
 
                     <!-- <td>
                         <a href="{{ url('/supervisor/manage_employee_status/'.$employee->id.'/employee_edit') }}">
