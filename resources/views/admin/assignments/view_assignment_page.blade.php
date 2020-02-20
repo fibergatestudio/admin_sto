@@ -187,6 +187,15 @@
 @section('content')
 
 <style type="text/css">
+
+label{
+    font-weight: bold;
+    /*text-align: left;*/
+    display: block;
+}
+.form-row>.col, .form-row>[class*=col-] {
+    text-align: left;
+}
 .content { padding: 0; }
 #table-calculation-profitability { padding: 1.25rem 1.25rem; }
 .tabs-menu { width: 100%; padding: 0px; margin: 0 auto; }
@@ -219,6 +228,7 @@
 #tab_3:checked ~ #txt_3,
 #tab_4:checked ~ #txt_4,
 #tab_5:checked ~ #txt_5{ display: block; }
+
 </style>
 
 <div class="card">
@@ -246,7 +256,7 @@
 
 
     {{-- Расчет рентабельности --}}
-    <div id="table-calculation-profitability" style="display: none;">
+    <div id="table-calculation-profitability"  style="display: none;">
         <h2>Расчет рентабельности</h2>
         <div class="card card-p">
     {{-- Вывод списока расходов и доходов --}}
@@ -321,6 +331,7 @@
 
         </tbody>
     </table>
+            <hr/>
     <h4 id="total">Итого: {{ $sum }} лей</h4>
 </div>
     </div>
@@ -378,11 +389,11 @@
     <style type="text/css">
       table.table
       {
-        max-width: 1000px;
+        /*max-width: 1000px;*/
         border: 1px solid #b7b7b7;        
       }
       form:nth-child(6) table.table{
-        max-width: 770px;
+        /*max-width: 770px;*/
       }
       table.table, table.table td 
       {
@@ -396,7 +407,21 @@
       }
       table.table td
       {
-        padding-left: 4px;
+        /*padding-left: 4px;*/
+        padding: 4px;
+        vertical-align: baseline;
+      }
+      table.table-income thead{
+          background: #E0E0E0;
+      }
+      table.table-income td  .form-control{
+          border-radius: 0;
+          border: none;
+      }
+
+      table.table-income td {
+          vertical-align: top;
+
       }
       table.table th{
         text-align: center;
@@ -443,6 +468,10 @@
       {
         width: 95px;
       }
+      form:nth-child(2) table.table tr td:nth-child(11), form:nth-child(2) table.table tr th:nth-child(11)
+      {
+        width: 95px;
+      }
       form:nth-child(6) table.table tr td:nth-child(1), form:nth-child(6) table.table tr th:nth-child(1)
       {
         width: 210px;
@@ -479,10 +508,12 @@
       {
         display: flex;
         height: 45px;
+        justify-content: center;
       }
       table.table tr td:last-child button
       {
         height: 25px;
+        align-self: center;
       }
     </style>
 
@@ -547,7 +578,7 @@
             <tbody id="dynamic-{{ substr($new_sub_assignment->work_row_index, 0, 1) }}-1">
             @endif
 
-            <tr style="background-color: {{ ($new_sub_assignment->work_is_locked == 'active') ? '#4dffff' : 'transparent' }} ;"  data-tr-row="{{ $new_sub_assignment->work_row_index }}">
+            <tr style="background-color: {{ ($new_sub_assignment->work_is_locked == 'active') ? '#f0f0f0' : 'transparent' }} ;"  data-tr-row="{{ $new_sub_assignment->work_row_index }}">
                 <td class="number_sub_assignment">
                     <strong><?=$j?></strong>
                 </td>
@@ -678,10 +709,11 @@
             </tbody>
         </table>
     </form>
-
+    <hr/>
+    <h4>Итого: <?=$total_work_sum?> лей</h4>
 </div>
 
-      <h4>Итого: <?=$total_work_sum?> лей</h4>
+
 
       <hr/>
       @endif
@@ -722,7 +754,7 @@
 
                   @endif
 
-                  <tr style="background-color: {{ ($new_sub_assignment->spares_is_locked == 'active') ? '#4dffff' : 'transparent' }} ;" data-tr-row="{{ $new_sub_assignment->spares_row_index }}">
+                  <tr style="background-color: {{ ($new_sub_assignment->spares_is_locked == 'active') ? '#f0f0f0' : 'transparent' }} ;" data-tr-row="{{ $new_sub_assignment->spares_row_index }}">
                       <td>
                           <label>
                               @if($new_sub_assignment->spares_is_locked == 'active')
@@ -814,9 +846,11 @@
                   </tbody>
               </table>
           </form>
+          <hr/>
+          <i style="color: green; cursor: pointer;" class="icon-wallet"> Склад</i>
+          <h4>Итого: <?=$total_spares_sum?> лей</h4>
       </div>
-      <i style="color: green; cursor: pointer;" class="icon-wallet"> Склад</i>
-      <h4>Итого: <?=$total_spares_sum?> лей</h4>
+
 
       <hr/>
     @else
@@ -888,9 +922,9 @@
             </tbody>
         </table>
     </form>
+    <hr/>
     <i style="color: green; cursor: pointer;" class="icon-wallet"> Склад</i>
     <h4>Итого: 0 лей</h4>
-
 </div>
 
       <hr/>
@@ -908,98 +942,98 @@
       <h3>Выполненная работа (Разборка-сборка)</h3>
         <div class="card card-p">
             <form method="post" action="">
-        <table class="table">
-            <thead>
-            <tr>
-                <th scope="col">№</th>
-                <th scope="col">Рабочая зона</th>
-                <th scope="col">Время начала работ</th>
-                <th scope="col">Время окончания работ</th>
-                <th scope="col">Ответственный сотрудник</th>
-                <th scope="col">Список выполненных работ</th>
-                <th scope="col">Кол-во</th>
-                <th scope="col">Цена</th>
-                <th scope="col">Валюта</th>
-                <th scope="col">Сумма</th>
-                <th scope="col">Действие</th>
-            </tr>
-            </thead>
-            <tbody id="dynamic-1-1">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">№</th>
+                    <th scope="col">Рабочая зона</th>
+                    <th scope="col">Время начала работ</th>
+                    <th scope="col">Время окончания работ</th>
+                    <th scope="col">Ответственный сотрудник</th>
+                    <th scope="col">Список выполненных работ</th>
+                    <th scope="col">Кол-во</th>
+                    <th scope="col">Цена</th>
+                    <th scope="col">Валюта</th>
+                    <th scope="col">Сумма</th>
+                    <th scope="col">Действие</th>
+                </tr>
+                </thead>
+                <tbody id="dynamic-1-1">
 
-            <?php //echo '<pre>'.print_r($new_sub_work_assignments->count(),true).'</pre>'; ?>
+                <?php //echo '<pre>'.print_r($new_sub_work_assignments->count(),true).'</pre>'; ?>
 
-            <tr data-tr-row="11000">
-                <td class="number_sub_assignment">
-                    <strong></strong>
-                </td>
-                <td>
-                    <label>
-                        <select onchange="workzoneSelect(this)" data-row="11000" name="d_table_workzone" style="max-width: 160px;">
-                            <option value="">Выбрать</option>
-                            @foreach($workzone_data as $work_data)
-                                <option value="{{ $work_data->id }}">{{ $work_data->general_name }}</option>
-                            @endforeach
-                        </select>
-                    </label>
-                </td>
-                <td>
-                    <label>
-                        <input data-row="11000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_start" value="{{ $assignment->date_of_creation }}">
-                    </label>
-                </td>
-                <td>
-                    <label>
-                        <input data-row="11000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_finish" value="0000-00-00">
-                    </label>
-                </td>
-                <td>
-                    <label>
-                        <select onchange="employeeSelect(this)" data-row="11000" name="d_table_responsible_officer" style="max-width: 160px;">
-                            <option value="">Выбрать</option>
-                            @foreach($employees as $employee)
-                                <option value="{{ $employee->id }}">{{ $employee->general_name }}</option>
-                            @endforeach
-                        </select>
-                    </label>
-                </td>
-                <td>
-                    <label>
-                        <input data-row="11000" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value="">
-                    </label>
-                </td>
-                <td>
-                    <label>
-                        <input data-row="11000" onblur="dataTransmission(this)" style="width: 20px;" type="text" name="d_table_quantity" value="1">
-                    </label>
-                </td>
-                <td>
-                    <label>
-                        <input data-row="11000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_price" value="00.00">
-                    </label>
-                </td>
-                <td>
-                    <label>
-                        <select data-row="11000" onchange="dataTransmission(this)" name="d_table_currency">
-                            @for($i=0; $i < count($currency_arr); $i++)
-                                <option value="{{ $currency_arr[$i] }}">{{ $currency_arr[$i] }}</option>
-                            @endfor
-                        </select>
-                    </label>
-                </td>
-                <td class="sum-row">
-                    <strong data-row="11000">0</strong>
-                </td>
-                <td>
-                    <button data-row="11000" type="button" class="add">+</button>
-                    <button data-row="11000" type="button" class="del">-</button>
-                    <button data-row="11000" type="button" onclick="buttonUnlocked(this)"><i class="icon-unlocked2"></i></button>
-                    <button data-row="11000" type="button" onclick="buttonLock(this)" style="display: none;"><i class="icon-lock2"></i></button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        </form>
-
+                <tr data-tr-row="11000">
+                    <td class="number_sub_assignment">
+                        <strong></strong>
+                    </td>
+                    <td>
+                        <label>
+                            <select onchange="workzoneSelect(this)" data-row="11000" name="d_table_workzone" style="max-width: 160px;">
+                                <option value="">Выбрать</option>
+                                @foreach($workzone_data as $work_data)
+                                    <option value="{{ $work_data->id }}">{{ $work_data->general_name }}</option>
+                                @endforeach
+                            </select>
+                        </label>
+                    </td>
+                    <td>
+                        <label>
+                            <input data-row="11000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_start" value="{{ $assignment->date_of_creation }}">
+                        </label>
+                    </td>
+                    <td>
+                        <label>
+                            <input data-row="11000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_finish" value="0000-00-00">
+                        </label>
+                    </td>
+                    <td>
+                        <label>
+                            <select onchange="employeeSelect(this)" data-row="11000" name="d_table_responsible_officer" style="max-width: 160px;">
+                                <option value="">Выбрать</option>
+                                @foreach($employees as $employee)
+                                    <option value="{{ $employee->id }}">{{ $employee->general_name }}</option>
+                                @endforeach
+                            </select>
+                        </label>
+                    </td>
+                    <td>
+                        <label>
+                            <input data-row="11000" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value="">
+                        </label>
+                    </td>
+                    <td>
+                        <label>
+                            <input data-row="11000" onblur="dataTransmission(this)" style="width: 20px;" type="text" name="d_table_quantity" value="1">
+                        </label>
+                    </td>
+                    <td>
+                        <label>
+                            <input data-row="11000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_price" value="00.00">
+                        </label>
+                    </td>
+                    <td>
+                        <label>
+                            <select data-row="11000" onchange="dataTransmission(this)" name="d_table_currency">
+                                @for($i=0; $i < count($currency_arr); $i++)
+                                    <option value="{{ $currency_arr[$i] }}">{{ $currency_arr[$i] }}</option>
+                                @endfor
+                            </select>
+                        </label>
+                    </td>
+                    <td class="sum-row">
+                        <strong data-row="11000">0</strong>
+                    </td>
+                    <td>
+                        <button data-row="11000" type="button" class="add">+</button>
+                        <button data-row="11000" type="button" class="del">-</button>
+                        <button data-row="11000" type="button" onclick="buttonUnlocked(this)"><i class="icon-unlocked2"></i></button>
+                        <button data-row="11000" type="button" onclick="buttonLock(this)" style="display: none;"><i class="icon-lock2"></i></button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            </form>
+            <hr/>
             <h4>Итого: 0 лей</h4>
         </div>
 
@@ -1073,6 +1107,7 @@
             </tbody>
         </table>
     </form>
+    <hr/>
     <i style="color: green; cursor: pointer;" class="icon-wallet"> Склад</i>
     <h4>Итого: 0 лей</h4>
 </div>
@@ -1085,176 +1120,181 @@
 
     <!--  dynamic-2  //-->
 
-    <div class=" card card-p dyn-tab dynamic-2" style="display: none;">
+    <div class=" dyn-tab dynamic-2" style="display: none;">
 
       <h3>Выполненная работа (Электрика)</h3>
+        <div class="card card-p">
+            <form method="post"  action="">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">№</th>
+                        <th scope="col">Рабочая зона</th>
+                        <th scope="col">Время начала работ</th>
+                        <th scope="col">Время окончания работ</th>
+                        <th scope="col">Ответственный сотрудник</th>
+                        <th scope="col">Список выполненных работ</th>
+                        <th scope="col">Кол-во</th>
+                        <th scope="col">Цена</th>
+                        <th scope="col">Валюта</th>
+                        <th scope="col">Сумма</th>
+                        <th scope="col">Действие</th>
+                    </tr>
+                    </thead>
+                    <tbody id="dynamic-2-1">
 
-      <form method="post" action="">
-          <table class="table">
-              <thead>
-                  <tr>
-                      <th scope="col">№</th>
-                      <th scope="col">Рабочая зона</th>
-                      <th scope="col">Время начала работ</th>
-                      <th scope="col">Время окончания работ</th>
-                      <th scope="col">Ответственный сотрудник</th>
-                      <th scope="col">Список выполненных работ</th>
-                      <th scope="col">Кол-во</th>
-                      <th scope="col">Цена</th>
-                      <th scope="col">Валюта</th>
-                      <th scope="col">Сумма</th>
-                      <th scope="col">Действие</th>
-                  </tr>
-              </thead>
-              <tbody id="dynamic-2-1">
+                    <?php //echo '<pre>'.print_r($new_sub_work_assignments->count(),true).'</pre>'; ?>
 
-    <?php //echo '<pre>'.print_r($new_sub_work_assignments->count(),true).'</pre>'; ?>
+                    <tr data-tr-row="21000">
+                        <td class="number_sub_assignment">
+                            <strong></strong>
+                        </td>
+                        <td>
+                            <label>
+                                <select onchange="workzoneSelect(this)" data-row="21000" name="d_table_workzone" style="max-width: 160px;">
+                                    <option value="">Выбрать</option>
+                                    @foreach($workzone_data as $work_data)
+                                        <option value="{{ $work_data->id }}">{{ $work_data->general_name }}</option>
+                                    @endforeach
+                                </select>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="21000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_start" value="{{ $assignment->date_of_creation }}">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="21000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_finish" value="0000-00-00">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <select onchange="employeeSelect(this)" data-row="21000" name="d_table_responsible_officer" style="max-width: 160px;">
+                                    <option value="">Выбрать</option>
+                                    @foreach($employees as $employee)
+                                        <option value="{{ $employee->id }}">{{ $employee->general_name }}</option>
+                                    @endforeach
+                                </select>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="21000" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value="">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="21000" onblur="dataTransmission(this)" style="width: 20px;" type="text" name="d_table_quantity" value="1">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="21000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_price" value="00.00">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <select data-row="21000" onchange="dataTransmission(this)" name="d_table_currency">
+                                    @for($i=0; $i < count($currency_arr); $i++)
+                                        <option value="{{ $currency_arr[$i] }}">{{ $currency_arr[$i] }}</option>
+                                    @endfor
+                                </select>
+                            </label>
+                        </td>
+                        <td class="sum-row">
+                            <strong data-row="21000">0</strong>
+                        </td>
+                        <td>
+                            <button data-row="21000" type="button" class="add">+</button>
+                            <button data-row="21000" type="button" class="del">-</button>
+                            <button data-row="21000" type="button" onclick="buttonUnlocked(this)"><i class="icon-unlocked2"></i></button>
+                            <button data-row="21000" type="button" onclick="buttonLock(this)" style="display: none;"><i class="icon-lock2"></i></button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+            <hr/>
+            <h4>Итого: 0 лей</h4>
+        </div>
 
-                  <tr data-tr-row="21000">
-                      <td class="number_sub_assignment">
-                        <strong></strong>
-                      </td>
-                      <td>
-                          <label>
-                              <select onchange="workzoneSelect(this)" data-row="21000" name="d_table_workzone" style="max-width: 160px;">
-                                <option value="">Выбрать</option>
-                                @foreach($workzone_data as $work_data)
-                                <option value="{{ $work_data->id }}">{{ $work_data->general_name }}</option>
-                                @endforeach
-                              </select>
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="21000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_start" value="{{ $assignment->date_of_creation }}">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="21000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_finish" value="0000-00-00">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <select onchange="employeeSelect(this)" data-row="21000" name="d_table_responsible_officer" style="max-width: 160px;">
-                                <option value="">Выбрать</option>
-                                @foreach($employees as $employee)
-                                <option value="{{ $employee->id }}">{{ $employee->general_name }}</option>
-                                @endforeach
-                              </select>
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="21000" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value="">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="21000" onblur="dataTransmission(this)" style="width: 20px;" type="text" name="d_table_quantity" value="1">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="21000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_price" value="00.00">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <select data-row="21000" onchange="dataTransmission(this)" name="d_table_currency">
-                                  @for($i=0; $i < count($currency_arr); $i++)
-                                  <option value="{{ $currency_arr[$i] }}">{{ $currency_arr[$i] }}</option>
-                                  @endfor
-                              </select>
-                          </label>
-                      </td>
-                      <td class="sum-row">
-                        <strong data-row="21000">0</strong>
-                      </td>
-                      <td>
-                          <button data-row="21000" type="button" class="add">+</button>
-                          <button data-row="21000" type="button" class="del">-</button>
-                          <button data-row="21000" type="button" onclick="buttonUnlocked(this)"><i class="icon-unlocked2"></i></button>
-                          <button data-row="21000" type="button" onclick="buttonLock(this)" style="display: none;"><i class="icon-lock2"></i></button>
-                      </td>
-                  </tr>
-              </tbody>
-          </table>
-      </form>
-
-      <h4>Итого: 0 лей</h4>
 
       <hr/>
 
       <h3>Запчасти / Материалы (Электрика)</h3>
+        <div class="card card-p">
+            <form method="post"  action="">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Деталь</th>
+                        <th scope="col">Артикул</th>
+                        <th scope="col">Ед. измерения</th>
+                        <th scope="col">Кол-во</th>
+                        <th scope="col">Цена</th>
+                        <th scope="col">Валюта</th>
+                        <th scope="col">Сумма</th>
+                        <th scope="col">Действие</th>
+                    </tr>
+                    </thead>
 
-      <form method="post" action="">
-          <table class="table">
-              <thead>
-                  <tr>
-                      <th scope="col">Деталь</th>
-                      <th scope="col">Артикул</th>
-                      <th scope="col">Ед. измерения</th>
-                      <th scope="col">Кол-во</th>
-                      <th scope="col">Цена</th>
-                      <th scope="col">Валюта</th>
-                      <th scope="col">Сумма</th>
-                      <th scope="col">Действие</th>
-                  </tr>
-              </thead>
+                    <tbody id="dynamic-2-2">
 
-              <tbody id="dynamic-2-2">
+                    <tr data-tr-row="22000">
+                        <td>
+                            <label>
+                                <input data-row="22000" onblur="dataTransmission(this)" style="width: 200px;" type="text" name="d_table_spares_detail" value="">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="22000" onblur="dataTransmission(this)" type="text" name="d_table_spares_vendor_code" value="">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="22000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_spares_unit_measurements" value="">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="22000" onblur="dataTransmission(this)" style="width: 20px;" type="text" name="d_table_spares_quantity" value="1">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="22000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_spares_price" value="00.00">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <select data-row="22000" onchange="dataTransmission(this)" name="d_table_spares_currency">
+                                    <option value="MDL">MDL</option>
+                                    <option value="USD">USD</option>
+                                    <option value="EUR">EUR</option>
+                                </select>
+                            </label>
+                        </td>
+                        <td class="sum-row">
+                            <strong data-row="22000">0</strong>
+                        </td>
+                        <td>
+                            <button data-row="22000" type="button" class="add">+</button>
+                            <button data-row="22000" type="button" class="del">-</button>
+                            <button data-row="22000" type="button" onclick="buttonUnlocked(this)"><i class="icon-unlocked2"></i></button>
+                            <button data-row="22000" type="button" onclick="buttonLock(this)" style="display: none;"><i class="icon-lock2"></i></button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+            <hr/>
+            <i style="color: green; cursor: pointer;" class="icon-wallet"> Склад</i>
+            <h4>Итого: 0 лей</h4>
+        </div>
 
-                  <tr data-tr-row="22000">
-                      <td>
-                          <label>
-                              <input data-row="22000" onblur="dataTransmission(this)" style="width: 200px;" type="text" name="d_table_spares_detail" value="">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="22000" onblur="dataTransmission(this)" type="text" name="d_table_spares_vendor_code" value="">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="22000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_spares_unit_measurements" value="">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="22000" onblur="dataTransmission(this)" style="width: 20px;" type="text" name="d_table_spares_quantity" value="1">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="22000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_spares_price" value="00.00">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <select data-row="22000" onchange="dataTransmission(this)" name="d_table_spares_currency">
-                                  <option value="MDL">MDL</option>
-                                  <option value="USD">USD</option>
-                                  <option value="EUR">EUR</option>
-                              </select>
-                          </label>
-                      </td>
-                      <td class="sum-row">
-                        <strong data-row="22000">0</strong>
-                      </td>
-                      <td>
-                          <button data-row="22000" type="button" class="add">+</button>
-                          <button data-row="22000" type="button" class="del">-</button>
-                          <button data-row="22000" type="button" onclick="buttonUnlocked(this)"><i class="icon-unlocked2"></i></button>
-                          <button data-row="22000" type="button" onclick="buttonLock(this)" style="display: none;"><i class="icon-lock2"></i></button>
-                      </td>
-                  </tr>
-              </tbody>
-          </table>
-      </form>
-      <i style="color: green; cursor: pointer;" class="icon-wallet"> Склад</i>
-      <h4>Итого: 0 лей</h4>
 
       <hr/>
 
@@ -1263,174 +1303,179 @@
 
     <!--  dynamic-3  //-->
 
-    <div class="dyn-tab dynamic-3 card card-p" style="display: none;">
+    <div class="dyn-tab dynamic-3 " style="display: none;">
 
       <h3>Выполненная работа (Слесарка)</h3>
+        <div class="card card-p">
+            <form method="post" action="">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">№</th>
+                        <th scope="col">Рабочая зона</th>
+                        <th scope="col">Время начала работ</th>
+                        <th scope="col">Время окончания работ</th>
+                        <th scope="col">Ответственный сотрудник</th>
+                        <th scope="col">Список выполненных работ</th>
+                        <th scope="col">Кол-во</th>
+                        <th scope="col">Цена</th>
+                        <th scope="col">Валюта</th>
+                        <th scope="col">Сумма</th>
+                        <th scope="col">Действие</th>
+                    </tr>
+                    </thead>
+                    <tbody id="dynamic-3-1">
 
-      <form method="post" action="">
-          <table class="table">
-              <thead>
-                  <tr>
-                      <th scope="col">№</th>
-                      <th scope="col">Рабочая зона</th>
-                      <th scope="col">Время начала работ</th>
-                      <th scope="col">Время окончания работ</th>
-                      <th scope="col">Ответственный сотрудник</th>
-                      <th scope="col">Список выполненных работ</th>
-                      <th scope="col">Кол-во</th>
-                      <th scope="col">Цена</th>
-                      <th scope="col">Валюта</th>
-                      <th scope="col">Сумма</th>
-                      <th scope="col">Действие</th>
-                  </tr>
-              </thead>
-              <tbody id="dynamic-3-1">
+                    <tr data-tr-row="31000">
+                        <td class="number_sub_assignment">
+                            <strong></strong>
+                        </td>
+                        <td>
+                            <label>
+                                <select onchange="workzoneSelect(this)" data-row="31000" name="d_table_workzone" style="max-width: 160px;">
+                                    <option value="">Выбрать</option>
+                                    @foreach($workzone_data as $work_data)
+                                        <option value="{{ $work_data->id }}">{{ $work_data->general_name }}</option>
+                                    @endforeach
+                                </select>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="31000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_start" value="{{ $assignment->date_of_creation }}">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="31000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_finish" value="0000-00-00">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <select onchange="employeeSelect(this)" data-row="31000" name="d_table_responsible_officer" style="max-width: 160px;">
+                                    <option value="">Выбрать</option>
+                                    @foreach($employees as $employee)
+                                        <option value="{{ $employee->id }}">{{ $employee->general_name }}</option>
+                                    @endforeach
+                                </select>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="31000" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value="">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="31000" onblur="dataTransmission(this)" style="width: 20px;" type="text" name="d_table_quantity" value="1">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="31000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_price" value="00.00">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <select data-row="31000" onchange="dataTransmission(this)" name="d_table_currency">
+                                    @for($i=0; $i < count($currency_arr); $i++)
+                                        <option value="{{ $currency_arr[$i] }}">{{ $currency_arr[$i] }}</option>
+                                    @endfor
+                                </select>
+                            </label>
+                        </td>
+                        <td class="sum-row">
+                            <strong data-row="31000">0</strong>
+                        </td>
+                        <td>
+                            <button data-row="31000" type="button" class="add">+</button>
+                            <button data-row="31000" type="button" class="del">-</button>
+                            <button data-row="31000" type="button" onclick="buttonUnlocked(this)"><i class="icon-unlocked2"></i></button>
+                            <button data-row="31000" type="button" onclick="buttonLock(this)" style="display: none;"><i class="icon-lock2"></i></button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
 
-                  <tr data-tr-row="31000">
-                      <td class="number_sub_assignment">
-                        <strong></strong>
-                      </td>
-                      <td>
-                          <label>
-                              <select onchange="workzoneSelect(this)" data-row="31000" name="d_table_workzone" style="max-width: 160px;">
-                                <option value="">Выбрать</option>
-                                @foreach($workzone_data as $work_data)
-                                <option value="{{ $work_data->id }}">{{ $work_data->general_name }}</option>
-                                @endforeach
-                              </select>
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="31000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_start" value="{{ $assignment->date_of_creation }}">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="31000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_finish" value="0000-00-00">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <select onchange="employeeSelect(this)" data-row="31000" name="d_table_responsible_officer" style="max-width: 160px;">
-                                <option value="">Выбрать</option>
-                                @foreach($employees as $employee)
-                                <option value="{{ $employee->id }}">{{ $employee->general_name }}</option>
-                                @endforeach
-                              </select>
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="31000" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value="">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="31000" onblur="dataTransmission(this)" style="width: 20px;" type="text" name="d_table_quantity" value="1">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="31000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_price" value="00.00">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <select data-row="31000" onchange="dataTransmission(this)" name="d_table_currency">
-                                  @for($i=0; $i < count($currency_arr); $i++)
-                                  <option value="{{ $currency_arr[$i] }}">{{ $currency_arr[$i] }}</option>
-                                  @endfor
-                              </select>
-                          </label>
-                      </td>
-                      <td class="sum-row">
-                        <strong data-row="31000">0</strong>
-                      </td>
-                      <td>
-                          <button data-row="31000" type="button" class="add">+</button>
-                          <button data-row="31000" type="button" class="del">-</button>
-                          <button data-row="31000" type="button" onclick="buttonUnlocked(this)"><i class="icon-unlocked2"></i></button>
-                          <button data-row="31000" type="button" onclick="buttonLock(this)" style="display: none;"><i class="icon-lock2"></i></button>
-                      </td>
-                  </tr>
-              </tbody>
-          </table>
-      </form>
+            <h4>Итого: 0 лей</h4>
+        </div>
 
-      <h4>Итого: 0 лей</h4>
 
       <hr/>
 
       <h3>Запчасти / Материалы (Слесарка)</h3>
+        <div class="card card-p">
+            <form method="post" action="">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Деталь</th>
+                        <th scope="col">Артикул</th>
+                        <th scope="col">Ед. измерения</th>
+                        <th scope="col">Кол-во</th>
+                        <th scope="col">Цена</th>
+                        <th scope="col">Валюта</th>
+                        <th scope="col">Сумма</th>
+                        <th scope="col">Действие</th>
+                    </tr>
+                    </thead>
 
-      <form method="post" action="">
-          <table class="table">
-              <thead>
-                  <tr>
-                      <th scope="col">Деталь</th>
-                      <th scope="col">Артикул</th>
-                      <th scope="col">Ед. измерения</th>
-                      <th scope="col">Кол-во</th>
-                      <th scope="col">Цена</th>
-                      <th scope="col">Валюта</th>
-                      <th scope="col">Сумма</th>
-                      <th scope="col">Действие</th>
-                  </tr>
-              </thead>
+                    <tbody id="dynamic-3-2">
 
-              <tbody id="dynamic-3-2">
+                    <tr data-tr-row="32000">
+                        <td>
+                            <label>
+                                <input data-row="32000" onblur="dataTransmission(this)" style="width: 200px;" type="text" name="d_table_spares_detail" value="">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="32000" onblur="dataTransmission(this)" type="text" name="d_table_spares_vendor_code" value="">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="32000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_spares_unit_measurements" value="">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="32000" onblur="dataTransmission(this)" style="width: 20px;" type="text" name="d_table_spares_quantity" value="1">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="32000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_spares_price" value="00.00">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <select data-row="32000" onchange="dataTransmission(this)" name="d_table_spares_currency">
+                                    <option value="MDL">MDL</option>
+                                    <option value="USD">USD</option>
+                                    <option value="EUR">EUR</option>
+                                </select>
+                            </label>
+                        </td>
+                        <td class="sum-row">
+                            <strong data-row="32000">0</strong>
+                        </td>
+                        <td>
+                            <button data-row="32000" type="button" class="add">+</button>
+                            <button data-row="32000" type="button" class="del">-</button>
+                            <button data-row="32000" type="button" onclick="buttonUnlocked(this)"><i class="icon-unlocked2"></i></button>
+                            <button data-row="32000" type="button" onclick="buttonLock(this)" style="display: none;"><i class="icon-lock2"></i></button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+            <hr/>
+            <i style="color: green; cursor: pointer;" class="icon-wallet"> Склад</i>
+            <h4>Итого: 0 лей</h4>
+        </div>
 
-                  <tr data-tr-row="32000">
-                      <td>
-                          <label>
-                              <input data-row="32000" onblur="dataTransmission(this)" style="width: 200px;" type="text" name="d_table_spares_detail" value="">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="32000" onblur="dataTransmission(this)" type="text" name="d_table_spares_vendor_code" value="">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="32000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_spares_unit_measurements" value="">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="32000" onblur="dataTransmission(this)" style="width: 20px;" type="text" name="d_table_spares_quantity" value="1">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="32000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_spares_price" value="00.00">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <select data-row="32000" onchange="dataTransmission(this)" name="d_table_spares_currency">
-                                  <option value="MDL">MDL</option>
-                                  <option value="USD">USD</option>
-                                  <option value="EUR">EUR</option>
-                              </select>
-                          </label>
-                      </td>
-                      <td class="sum-row">
-                        <strong data-row="32000">0</strong>
-                      </td>
-                      <td>
-                          <button data-row="32000" type="button" class="add">+</button>
-                          <button data-row="32000" type="button" class="del">-</button>
-                          <button data-row="32000" type="button" onclick="buttonUnlocked(this)"><i class="icon-unlocked2"></i></button>
-                          <button data-row="32000" type="button" onclick="buttonLock(this)" style="display: none;"><i class="icon-lock2"></i></button>
-                      </td>
-                  </tr>
-              </tbody>
-          </table>
-      </form>
-      <i style="color: green; cursor: pointer;" class="icon-wallet"> Склад</i>
-      <h4>Итого: 0 лей</h4>
 
       <hr/>
 
@@ -1439,174 +1484,177 @@
 
     <!--  dynamic-4  //-->
 
-    <div class="dyn-tab dynamic-4 card card-p" style="display: none;">
+    <div class="dyn-tab dynamic-4" style="display: none;">
 
       <h3>Выполненная работа (Рихтовка)</h3>
+        <div class=" card card-p">
+            <form method="post" action="">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">№</th>
+                        <th scope="col">Рабочая зона</th>
+                        <th scope="col">Время начала работ</th>
+                        <th scope="col">Время окончания работ</th>
+                        <th scope="col">Ответственный сотрудник</th>
+                        <th scope="col">Список выполненных работ</th>
+                        <th scope="col">Кол-во</th>
+                        <th scope="col">Цена</th>
+                        <th scope="col">Валюта</th>
+                        <th scope="col">Сумма</th>
+                        <th scope="col">Действие</th>
+                    </tr>
+                    </thead>
+                    <tbody id="dynamic-4-1">
 
-      <form method="post" action="">
-          <table class="table">
-              <thead>
-                  <tr>
-                      <th scope="col">№</th>
-                      <th scope="col">Рабочая зона</th>
-                      <th scope="col">Время начала работ</th>
-                      <th scope="col">Время окончания работ</th>
-                      <th scope="col">Ответственный сотрудник</th>
-                      <th scope="col">Список выполненных работ</th>
-                      <th scope="col">Кол-во</th>
-                      <th scope="col">Цена</th>
-                      <th scope="col">Валюта</th>
-                      <th scope="col">Сумма</th>
-                      <th scope="col">Действие</th>
-                  </tr>
-              </thead>
-              <tbody id="dynamic-4-1">
-
-                  <tr data-tr-row="41000">
-                      <td class="number_sub_assignment">
-                        <strong></strong>
-                      </td>
-                      <td>
-                          <label>
-                              <select onchange="workzoneSelect(this)" data-row="41000" name="d_table_workzone" style="max-width: 160px;">
-                                <option value="">Выбрать</option>
-                                @foreach($workzone_data as $work_data)
-                                <option value="{{ $work_data->id }}">{{ $work_data->general_name }}</option>
-                                @endforeach
-                              </select>
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="41000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_start" value="{{ $assignment->date_of_creation }}">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="41000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_finish" value="0000-00-00">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <select onchange="employeeSelect(this)" data-row="41000" name="d_table_responsible_officer" style="max-width: 160px;">
-                                <option value="">Выбрать</option>
-                                @foreach($employees as $employee)
-                                <option value="{{ $employee->id }}">{{ $employee->general_name }}</option>
-                                @endforeach
-                              </select>
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="41000" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value="">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="41000" onblur="dataTransmission(this)" style="width: 20px;" type="text" name="d_table_quantity" value="1">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="41000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_price" value="00.00">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <select data-row="41000" onchange="dataTransmission(this)" name="d_table_currency">
-                                  @for($i=0; $i < count($currency_arr); $i++)
-                                  <option value="{{ $currency_arr[$i] }}">{{ $currency_arr[$i] }}</option>
-                                  @endfor
-                              </select>
-                          </label>
-                      </td>
-                      <td class="sum-row">
-                        <strong data-row="41000">0</strong>
-                      </td>
-                      <td>
-                          <button data-row="41000" type="button" class="add">+</button>
-                          <button data-row="41000" type="button" class="del">-</button>
-                          <button data-row="41000" type="button" onclick="buttonUnlocked(this)"><i class="icon-unlocked2"></i></button>
-                          <button data-row="41000" type="button" onclick="buttonLock(this)" style="display: none;"><i class="icon-lock2"></i></button>
-                      </td>
-                  </tr>
-              </tbody>
-          </table>
-      </form>
-
-      <h4>Итого: 0 лей</h4>
-
+                    <tr data-tr-row="41000">
+                        <td class="number_sub_assignment">
+                            <strong></strong>
+                        </td>
+                        <td>
+                            <label>
+                                <select onchange="workzoneSelect(this)" data-row="41000" name="d_table_workzone" style="max-width: 160px;">
+                                    <option value="">Выбрать</option>
+                                    @foreach($workzone_data as $work_data)
+                                        <option value="{{ $work_data->id }}">{{ $work_data->general_name }}</option>
+                                    @endforeach
+                                </select>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="41000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_start" value="{{ $assignment->date_of_creation }}">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="41000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_finish" value="0000-00-00">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <select onchange="employeeSelect(this)" data-row="41000" name="d_table_responsible_officer" style="max-width: 160px;">
+                                    <option value="">Выбрать</option>
+                                    @foreach($employees as $employee)
+                                        <option value="{{ $employee->id }}">{{ $employee->general_name }}</option>
+                                    @endforeach
+                                </select>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="41000" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value="">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="41000" onblur="dataTransmission(this)" style="width: 20px;" type="text" name="d_table_quantity" value="1">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="41000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_price" value="00.00">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <select data-row="41000" onchange="dataTransmission(this)" name="d_table_currency">
+                                    @for($i=0; $i < count($currency_arr); $i++)
+                                        <option value="{{ $currency_arr[$i] }}">{{ $currency_arr[$i] }}</option>
+                                    @endfor
+                                </select>
+                            </label>
+                        </td>
+                        <td class="sum-row">
+                            <strong data-row="41000">0</strong>
+                        </td>
+                        <td>
+                            <button data-row="41000" type="button" class="add">+</button>
+                            <button data-row="41000" type="button" class="del">-</button>
+                            <button data-row="41000" type="button" onclick="buttonUnlocked(this)"><i class="icon-unlocked2"></i></button>
+                            <button data-row="41000" type="button" onclick="buttonLock(this)" style="display: none;"><i class="icon-lock2"></i></button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+            <hr/>
+            <h4>Итого: 0 лей</h4>
+        </div>
       <hr/>
 
       <h3>Запчасти / Материалы (Рихтовка)</h3>
+        <div class=" card card-p">
+            <form method="post" action="">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Деталь</th>
+                        <th scope="col">Артикул</th>
+                        <th scope="col">Ед. измерения</th>
+                        <th scope="col">Кол-во</th>
+                        <th scope="col">Цена</th>
+                        <th scope="col">Валюта</th>
+                        <th scope="col">Сумма</th>
+                        <th scope="col">Действие</th>
+                    </tr>
+                    </thead>
 
-      <form method="post" action="">
-          <table class="table">
-              <thead>
-                  <tr>
-                      <th scope="col">Деталь</th>
-                      <th scope="col">Артикул</th>
-                      <th scope="col">Ед. измерения</th>
-                      <th scope="col">Кол-во</th>
-                      <th scope="col">Цена</th>
-                      <th scope="col">Валюта</th>
-                      <th scope="col">Сумма</th>
-                      <th scope="col">Действие</th>
-                  </tr>
-              </thead>
+                    <tbody id="dynamic-4-2">
 
-              <tbody id="dynamic-4-2">
+                    <tr data-tr-row="42000">
+                        <td>
+                            <label>
+                                <input data-row="42000" onblur="dataTransmission(this)" style="width: 200px;" type="text" name="d_table_spares_detail" value="">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="42000" onblur="dataTransmission(this)" type="text" name="d_table_spares_vendor_code" value="">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="42000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_spares_unit_measurements" value="">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="42000" onblur="dataTransmission(this)" style="width: 20px;" type="text" name="d_table_spares_quantity" value="1">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="42000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_spares_price" value="00.00">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <select data-row="42000" onchange="dataTransmission(this)" name="d_table_spares_currency">
+                                    <option value="MDL">MDL</option>
+                                    <option value="USD">USD</option>
+                                    <option value="EUR">EUR</option>
+                                </select>
+                            </label>
+                        </td>
+                        <td class="sum-row">
+                            <strong data-row="42000">0</strong>
+                        </td>
+                        <td>
+                            <button data-row="42000" type="button" class="add">+</button>
+                            <button data-row="42000" type="button" class="del">-</button>
+                            <button data-row="42000" type="button" onclick="buttonUnlocked(this)"><i class="icon-unlocked2"></i></button>
+                            <button data-row="42000" type="button" onclick="buttonLock(this)" style="display: none;"><i class="icon-lock2"></i></button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+            <hr/>
+            <i style="color: green; cursor: pointer;" class="icon-wallet"> Склад</i>
+            <h4>Итого: 0 лей</h4>
 
-                  <tr data-tr-row="42000">
-                      <td>
-                          <label>
-                              <input data-row="42000" onblur="dataTransmission(this)" style="width: 200px;" type="text" name="d_table_spares_detail" value="">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="42000" onblur="dataTransmission(this)" type="text" name="d_table_spares_vendor_code" value="">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="42000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_spares_unit_measurements" value="">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="42000" onblur="dataTransmission(this)" style="width: 20px;" type="text" name="d_table_spares_quantity" value="1">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="42000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_spares_price" value="00.00">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <select data-row="42000" onchange="dataTransmission(this)" name="d_table_spares_currency">
-                                  <option value="MDL">MDL</option>
-                                  <option value="USD">USD</option>
-                                  <option value="EUR">EUR</option>
-                              </select>
-                          </label>
-                      </td>
-                      <td class="sum-row">
-                        <strong data-row="42000">0</strong>
-                      </td>
-                      <td>
-                          <button data-row="42000" type="button" class="add">+</button>
-                          <button data-row="42000" type="button" class="del">-</button>
-                          <button data-row="42000" type="button" onclick="buttonUnlocked(this)"><i class="icon-unlocked2"></i></button>
-                          <button data-row="42000" type="button" onclick="buttonLock(this)" style="display: none;"><i class="icon-lock2"></i></button>
-                      </td>
-                  </tr>
-              </tbody>
-          </table>
-      </form>
-      <i style="color: green; cursor: pointer;" class="icon-wallet"> Склад</i>
-      <h4>Итого: 0 лей</h4>
+        </div>
 
       <hr/>
 
@@ -1615,175 +1663,178 @@
 
     <!--  dynamic-5  //-->
 
-    <div class="dyn-tab dynamic-5 card card-p" style="display: none;">
+    <div class="dyn-tab dynamic-5 " style="display: none;">
 
       <h3>Выполненная работа (Покраска)</h3>
+        <div class=" card card-p">
+            <form method="post" action="">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">№</th>
+                        <th scope="col">Рабочая зона</th>
+                        <th scope="col">Время начала работ</th>
+                        <th scope="col">Время окончания работ</th>
+                        <th scope="col">Ответственный сотрудник</th>
+                        <th scope="col">Список выполненных работ</th>
+                        <th scope="col">Кол-во</th>
+                        <th scope="col">Цена</th>
+                        <th scope="col">Валюта</th>
+                        <th scope="col">Сумма</th>
+                        <th scope="col">Действие</th>
+                    </tr>
+                    </thead>
+                    <tbody id="dynamic-5-1">
 
-      <form method="post" action="">
-          <table class="table">
-              <thead>
-                  <tr>
-                      <th scope="col">№</th>
-                      <th scope="col">Рабочая зона</th>
-                      <th scope="col">Время начала работ</th>
-                      <th scope="col">Время окончания работ</th>
-                      <th scope="col">Ответственный сотрудник</th>
-                      <th scope="col">Список выполненных работ</th>
-                      <th scope="col">Кол-во</th>
-                      <th scope="col">Цена</th>
-                      <th scope="col">Валюта</th>
-                      <th scope="col">Сумма</th>
-                      <th scope="col">Действие</th>
-                  </tr>
-              </thead>
-              <tbody id="dynamic-5-1">
+                    <tr data-tr-row="51000">
+                        <td class="number_sub_assignment">
+                            <strong></strong>
+                        </td>
+                        <td>
+                            <label>
+                                <select onchange="workzoneSelect(this)" data-row="51000" name="d_table_workzone" style="max-width: 160px;">
+                                    <option value="">Выбрать</option>
+                                    @foreach($workzone_data as $work_data)
+                                        <option value="{{ $work_data->id }}">{{ $work_data->general_name }}</option>
+                                    @endforeach
+                                </select>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="51000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_start" value="{{ $assignment->date_of_creation }}">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="51000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_finish" value="0000-00-00">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <select onchange="employeeSelect(this)" data-row="51000" name="d_table_responsible_officer" style="max-width: 160px;">
+                                    <option value="">Выбрать</option>
+                                    @foreach($employees as $employee)
+                                        <option value="{{ $employee->id }}">{{ $employee->general_name }}</option>
+                                    @endforeach
+                                </select>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="51000" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value="">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="51000" onblur="dataTransmission(this)" style="width: 20px;" type="text" name="d_table_quantity" value="1">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="51000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_price" value="00.00">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <select data-row="51000" onchange="dataTransmission(this)" name="d_table_currency">
+                                    @for($i=0; $i < count($currency_arr); $i++)
+                                        <option value="{{ $currency_arr[$i] }}">{{ $currency_arr[$i] }}</option>
+                                    @endfor
+                                </select>
+                            </label>
+                        </td>
+                        <td class="sum-row">
+                            <strong data-row="51000">0</strong>
+                        </td>
+                        <td>
+                            <button data-row="51000" type="button" class="add">+</button>
+                            <button data-row="51000" type="button" class="del">-</button>
+                            <button data-row="51000" type="button" onclick="buttonUnlocked(this)"><i class="icon-unlocked2"></i></button>
+                            <button data-row="51000" type="button" onclick="buttonLock(this)" style="display: none;"><i class="icon-lock2"></i></button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+            <hr/>
+            <h4>Итого: 0 лей</h4>
+        </div>
 
-                  <tr data-tr-row="51000">
-                      <td class="number_sub_assignment">
-                        <strong></strong>
-                      </td>
-                      <td>
-                          <label>
-                              <select onchange="workzoneSelect(this)" data-row="51000" name="d_table_workzone" style="max-width: 160px;">
-                                <option value="">Выбрать</option>
-                                @foreach($workzone_data as $work_data)
-                                <option value="{{ $work_data->id }}">{{ $work_data->general_name }}</option>
-                                @endforeach
-                              </select>
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="51000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_start" value="{{ $assignment->date_of_creation }}">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="51000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_finish" value="0000-00-00">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <select onchange="employeeSelect(this)" data-row="51000" name="d_table_responsible_officer" style="max-width: 160px;">
-                                <option value="">Выбрать</option>
-                                @foreach($employees as $employee)
-                                <option value="{{ $employee->id }}">{{ $employee->general_name }}</option>
-                                @endforeach
-                              </select>
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="51000" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value="">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="51000" onblur="dataTransmission(this)" style="width: 20px;" type="text" name="d_table_quantity" value="1">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="51000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_price" value="00.00">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <select data-row="51000" onchange="dataTransmission(this)" name="d_table_currency">
-                                  @for($i=0; $i < count($currency_arr); $i++)
-                                  <option value="{{ $currency_arr[$i] }}">{{ $currency_arr[$i] }}</option>
-                                  @endfor
-                              </select>
-                          </label>
-                      </td>
-                      <td class="sum-row">
-                        <strong data-row="51000">0</strong>
-                      </td>
-                      <td>
-                          <button data-row="51000" type="button" class="add">+</button>
-                          <button data-row="51000" type="button" class="del">-</button>
-                          <button data-row="51000" type="button" onclick="buttonUnlocked(this)"><i class="icon-unlocked2"></i></button>
-                          <button data-row="51000" type="button" onclick="buttonLock(this)" style="display: none;"><i class="icon-lock2"></i></button>
-                      </td>
-                  </tr>
-              </tbody>
-          </table>
-      </form>
-
-      <h4>Итого: 0 лей</h4>
 
       <hr/>
 
       <h3>Запчасти / Материалы (Покраска)</h3>
+        <div class=" card card-p">
+            <form method="post" action="">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Деталь</th>
+                        <th scope="col">Артикул</th>
+                        <th scope="col">Ед. измерения</th>
+                        <th scope="col">Кол-во</th>
+                        <th scope="col">Цена</th>
+                        <th scope="col">Валюта</th>
+                        <th scope="col">Сумма</th>
+                        <th scope="col">Действие</th>
+                    </tr>
+                    </thead>
 
-      <form method="post" action="">
-          <table class="table">
-              <thead>
-                  <tr>
-                      <th scope="col">Деталь</th>
-                      <th scope="col">Артикул</th>
-                      <th scope="col">Ед. измерения</th>
-                      <th scope="col">Кол-во</th>
-                      <th scope="col">Цена</th>
-                      <th scope="col">Валюта</th>
-                      <th scope="col">Сумма</th>
-                      <th scope="col">Действие</th>
-                  </tr>
-              </thead>
+                    <tbody id="dynamic-5-2">
 
-              <tbody id="dynamic-5-2">
-
-                  <tr data-tr-row="52000">
-                      <td>
-                          <label>
-                              <input data-row="52000" onblur="dataTransmission(this)" style="width: 200px;" type="text" name="d_table_spares_detail" value="">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="52000" onblur="dataTransmission(this)" type="text" name="d_table_spares_vendor_code" value="">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="52000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_spares_unit_measurements" value="">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="52000" onblur="dataTransmission(this)" style="width: 20px;" type="text" name="d_table_spares_quantity" value="1">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="52000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_spares_price" value="00.00">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <select data-row="52000" onchange="dataTransmission(this)" name="d_table_spares_currency">
-                                  <option value="MDL">MDL</option>
-                                  <option value="USD">USD</option>
-                                  <option value="EUR">EUR</option>
-                              </select>
-                          </label>
-                      </td>
-                      <td class="sum-row">
-                        <strong data-row="52000">0</strong>
-                      </td>
-                      <td>
-                          <button data-row="52000" type="button" class="add">+</button>
-                          <button data-row="52000" type="button" class="del">-</button>
-                          <button data-row="52000" type="button" onclick="buttonUnlocked(this)"><i class="icon-unlocked2"></i></button>
-                          <button data-row="52000" type="button" onclick="buttonLock(this)" style="display: none;"><i class="icon-lock2"></i></button>
-                      </td>
-                  </tr>
-              </tbody>
-          </table>
-      </form>
-      <i style="color: green; cursor: pointer;" class="icon-wallet"> Склад</i>
-      <h4>Итого: 0 лей</h4>
-
+                    <tr data-tr-row="52000">
+                        <td>
+                            <label>
+                                <input data-row="52000" onblur="dataTransmission(this)" style="width: 200px;" type="text" name="d_table_spares_detail" value="">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="52000" onblur="dataTransmission(this)" type="text" name="d_table_spares_vendor_code" value="">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="52000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_spares_unit_measurements" value="">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="52000" onblur="dataTransmission(this)" style="width: 20px;" type="text" name="d_table_spares_quantity" value="1">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="52000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_spares_price" value="00.00">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <select data-row="52000" onchange="dataTransmission(this)" name="d_table_spares_currency">
+                                    <option value="MDL">MDL</option>
+                                    <option value="USD">USD</option>
+                                    <option value="EUR">EUR</option>
+                                </select>
+                            </label>
+                        </td>
+                        <td class="sum-row">
+                            <strong data-row="52000">0</strong>
+                        </td>
+                        <td>
+                            <button data-row="52000" type="button" class="add">+</button>
+                            <button data-row="52000" type="button" class="del">-</button>
+                            <button data-row="52000" type="button" onclick="buttonUnlocked(this)"><i class="icon-unlocked2"></i></button>
+                            <button data-row="52000" type="button" onclick="buttonLock(this)" style="display: none;"><i class="icon-lock2"></i></button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+            <hr/>
+            <i style="color: green; cursor: pointer;" class="icon-wallet"> Склад</i>
+            <h4>Итого: 0 лей</h4>
+        </div>
       <hr/>
 
     </div><!--Конец  dynamic-5//-->
@@ -1791,174 +1842,179 @@
 
     <!--  dynamic-6  //-->
 
-    <div class="dyn-tab dynamic-6 card card-p" style="display: none;">
+    <div class="dyn-tab dynamic-6" style="display: none;">
 
       <h3>Выполненная работа (Детэйлинг)</h3>
+        <div class=" card card-p">
+            <form method="post" action="">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">№</th>
+                        <th scope="col">Рабочая зона</th>
+                        <th scope="col">Время начала работ</th>
+                        <th scope="col">Время окончания работ</th>
+                        <th scope="col">Ответственный сотрудник</th>
+                        <th scope="col">Список выполненных работ</th>
+                        <th scope="col">Кол-во</th>
+                        <th scope="col">Цена</th>
+                        <th scope="col">Валюта</th>
+                        <th scope="col">Сумма</th>
+                        <th scope="col">Действие</th>
+                    </tr>
+                    </thead>
+                    <tbody id="dynamic-6-1">
 
-      <form method="post" action="">
-          <table class="table">
-              <thead>
-                  <tr>
-                      <th scope="col">№</th>
-                      <th scope="col">Рабочая зона</th>
-                      <th scope="col">Время начала работ</th>
-                      <th scope="col">Время окончания работ</th>
-                      <th scope="col">Ответственный сотрудник</th>
-                      <th scope="col">Список выполненных работ</th>
-                      <th scope="col">Кол-во</th>
-                      <th scope="col">Цена</th>
-                      <th scope="col">Валюта</th>
-                      <th scope="col">Сумма</th>
-                      <th scope="col">Действие</th>
-                  </tr>
-              </thead>
-              <tbody id="dynamic-6-1">
+                    <tr data-tr-row="61000">
+                        <td class="number_sub_assignment">
+                            <strong></strong>
+                        </td>
+                        <td>
+                            <label>
+                                <select onchange="workzoneSelect(this)" data-row="61000" name="d_table_workzone" style="max-width: 160px;">
+                                    <option value="">Выбрать</option>
+                                    @foreach($workzone_data as $work_data)
+                                        <option value="{{ $work_data->id }}">{{ $work_data->general_name }}</option>
+                                    @endforeach
+                                </select>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="61000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_start" value="{{ $assignment->date_of_creation }}">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="61000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_finish" value="0000-00-00">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <select onchange="employeeSelect(this)" data-row="61000" name="d_table_responsible_officer" style="max-width: 160px;">
+                                    <option value="">Выбрать</option>
+                                    @foreach($employees as $employee)
+                                        <option value="{{ $employee->id }}">{{ $employee->general_name }}</option>
+                                    @endforeach
+                                </select>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="61000" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value="">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="61000" onblur="dataTransmission(this)" style="width: 20px;" type="text" name="d_table_quantity" value="1">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="61000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_price" value="00.00">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <select data-row="61000" onchange="dataTransmission(this)" name="d_table_currency">
+                                    @for($i=0; $i < count($currency_arr); $i++)
+                                        <option value="{{ $currency_arr[$i] }}">{{ $currency_arr[$i] }}</option>
+                                    @endfor
+                                </select>
+                            </label>
+                        </td>
+                        <td class="sum-row">
+                            <strong data-row="61000">0</strong>
+                        </td>
+                        <td>
+                            <button data-row="61000" type="button" class="add">+</button>
+                            <button data-row="61000" type="button" class="del">-</button>
+                            <button data-row="61000" type="button" onclick="buttonUnlocked(this)"><i class="icon-unlocked2"></i></button>
+                            <button data-row="61000" type="button" onclick="buttonLock(this)" style="display: none;"><i class="icon-lock2"></i></button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+            <hr/>
+            <h4>Итого: 0 лей</h4>
+        </div>
 
-                  <tr data-tr-row="61000">
-                      <td class="number_sub_assignment">
-                        <strong></strong>
-                      </td>
-                      <td>
-                          <label>
-                              <select onchange="workzoneSelect(this)" data-row="61000" name="d_table_workzone" style="max-width: 160px;">
-                                <option value="">Выбрать</option>
-                                @foreach($workzone_data as $work_data)
-                                <option value="{{ $work_data->id }}">{{ $work_data->general_name }}</option>
-                                @endforeach
-                              </select>
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="61000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_start" value="{{ $assignment->date_of_creation }}">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="61000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_finish" value="0000-00-00">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <select onchange="employeeSelect(this)" data-row="61000" name="d_table_responsible_officer" style="max-width: 160px;">
-                                <option value="">Выбрать</option>
-                                @foreach($employees as $employee)
-                                <option value="{{ $employee->id }}">{{ $employee->general_name }}</option>
-                                @endforeach
-                              </select>
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="61000" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value="">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="61000" onblur="dataTransmission(this)" style="width: 20px;" type="text" name="d_table_quantity" value="1">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="61000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_price" value="00.00">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <select data-row="61000" onchange="dataTransmission(this)" name="d_table_currency">
-                                  @for($i=0; $i < count($currency_arr); $i++)
-                                  <option value="{{ $currency_arr[$i] }}">{{ $currency_arr[$i] }}</option>
-                                  @endfor
-                              </select>
-                          </label>
-                      </td>
-                      <td class="sum-row">
-                        <strong data-row="61000">0</strong>
-                      </td>
-                      <td>
-                          <button data-row="61000" type="button" class="add">+</button>
-                          <button data-row="61000" type="button" class="del">-</button>
-                          <button data-row="61000" type="button" onclick="buttonUnlocked(this)"><i class="icon-unlocked2"></i></button>
-                          <button data-row="61000" type="button" onclick="buttonLock(this)" style="display: none;"><i class="icon-lock2"></i></button>
-                      </td>
-                  </tr>
-              </tbody>
-          </table>
-      </form>
-
-      <h4>Итого: 0 лей</h4>
 
       <hr/>
 
       <h3>Запчасти / Материалы (Детэйлинг)</h3>
+        <div class=" card card-p">
+            <form method="post" action="">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Деталь</th>
+                        <th scope="col">Артикул</th>
+                        <th scope="col">Ед. измерения</th>
+                        <th scope="col">Кол-во</th>
+                        <th scope="col">Цена</th>
+                        <th scope="col">Валюта</th>
+                        <th scope="col">Сумма</th>
+                        <th scope="col">Действие</th>
+                    </tr>
+                    </thead>
 
-      <form method="post" action="">
-          <table class="table">
-              <thead>
-                  <tr>
-                      <th scope="col">Деталь</th>
-                      <th scope="col">Артикул</th>
-                      <th scope="col">Ед. измерения</th>
-                      <th scope="col">Кол-во</th>
-                      <th scope="col">Цена</th>
-                      <th scope="col">Валюта</th>
-                      <th scope="col">Сумма</th>
-                      <th scope="col">Действие</th>
-                  </tr>
-              </thead>
+                    <tbody id="dynamic-6-2">
 
-              <tbody id="dynamic-6-2">
+                    <tr data-tr-row="62000">
+                        <td>
+                            <label>
+                                <input data-row="62000" onblur="dataTransmission(this)" style="width: 200px;" type="text" name="d_table_spares_detail" value="">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="62000" onblur="dataTransmission(this)" type="text" name="d_table_spares_vendor_code" value="">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="62000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_spares_unit_measurements" value="">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="62000" onblur="dataTransmission(this)" style="width: 20px;" type="text" name="d_table_spares_quantity" value="1">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="62000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_spares_price" value="00.00">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <select data-row="62000" onchange="dataTransmission(this)" name="d_table_spares_currency">
+                                    <option value="MDL">MDL</option>
+                                    <option value="USD">USD</option>
+                                    <option value="EUR">EUR</option>
+                                </select>
+                            </label>
+                        </td>
+                        <td class="sum-row">
+                            <strong data-row="62000">0</strong>
+                        </td>
+                        <td>
+                            <button data-row="62000" type="button" class="add">+</button>
+                            <button data-row="62000" type="button" class="del">-</button>
+                            <button data-row="62000" type="button" onclick="buttonUnlocked(this)"><i class="icon-unlocked2"></i></button>
+                            <button data-row="62000" type="button" onclick="buttonLock(this)" style="display: none;"><i class="icon-lock2"></i></button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+            <hr/>
+            <i style="color: green; cursor: pointer;" class="icon-wallet"> Склад</i>
+            <h4>Итого: 0 лей</h4>
+        </div>
 
-                  <tr data-tr-row="62000">
-                      <td>
-                          <label>
-                              <input data-row="62000" onblur="dataTransmission(this)" style="width: 200px;" type="text" name="d_table_spares_detail" value="">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="62000" onblur="dataTransmission(this)" type="text" name="d_table_spares_vendor_code" value="">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="62000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_spares_unit_measurements" value="">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="62000" onblur="dataTransmission(this)" style="width: 20px;" type="text" name="d_table_spares_quantity" value="1">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="62000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_spares_price" value="00.00">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <select data-row="62000" onchange="dataTransmission(this)" name="d_table_spares_currency">
-                                  <option value="MDL">MDL</option>
-                                  <option value="USD">USD</option>
-                                  <option value="EUR">EUR</option>
-                              </select>
-                          </label>
-                      </td>
-                      <td class="sum-row">
-                        <strong data-row="62000">0</strong>
-                      </td>
-                      <td>
-                          <button data-row="62000" type="button" class="add">+</button>
-                          <button data-row="62000" type="button" class="del">-</button>
-                          <button data-row="62000" type="button" onclick="buttonUnlocked(this)"><i class="icon-unlocked2"></i></button>
-                          <button data-row="62000" type="button" onclick="buttonLock(this)" style="display: none;"><i class="icon-lock2"></i></button>
-                      </td>
-                  </tr>
-              </tbody>
-          </table>
-      </form>
-      <i style="color: green; cursor: pointer;" class="icon-wallet"> Склад</i>
-      <h4>Итого: 0 лей</h4>
 
       <hr/>
 
@@ -1967,174 +2023,179 @@
 
     <!--  dynamic-7  //-->
 
-    <div class="dyn-tab dynamic-7 card card-p" style="display: none;">
+    <div class="dyn-tab dynamic-7" style="display: none;">
 
       <h3>Выполненная работа (Малярка)</h3>
+        <div class=" card card-p">
+            <form method="post" action="">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">№</th>
+                        <th scope="col">Рабочая зона</th>
+                        <th scope="col">Время начала работ</th>
+                        <th scope="col">Время окончания работ</th>
+                        <th scope="col">Ответственный сотрудник</th>
+                        <th scope="col">Список выполненных работ</th>
+                        <th scope="col">Кол-во</th>
+                        <th scope="col">Цена</th>
+                        <th scope="col">Валюта</th>
+                        <th scope="col">Сумма</th>
+                        <th scope="col">Действие</th>
+                    </tr>
+                    </thead>
+                    <tbody id="dynamic-7-1">
 
-      <form method="post" action="">
-          <table class="table">
-              <thead>
-                  <tr>
-                      <th scope="col">№</th>
-                      <th scope="col">Рабочая зона</th>
-                      <th scope="col">Время начала работ</th>
-                      <th scope="col">Время окончания работ</th>
-                      <th scope="col">Ответственный сотрудник</th>
-                      <th scope="col">Список выполненных работ</th>
-                      <th scope="col">Кол-во</th>
-                      <th scope="col">Цена</th>
-                      <th scope="col">Валюта</th>
-                      <th scope="col">Сумма</th>
-                      <th scope="col">Действие</th>
-                  </tr>
-              </thead>
-              <tbody id="dynamic-7-1">
+                    <tr data-tr-row="71000">
+                        <td class="number_sub_assignment">
+                            <strong></strong>
+                        </td>
+                        <td>
+                            <label>
+                                <select onchange="workzoneSelect(this)" data-row="71000" name="d_table_workzone" style="max-width: 160px;">
+                                    <option value="">Выбрать</option>
+                                    @foreach($workzone_data as $work_data)
+                                        <option value="{{ $work_data->id }}">{{ $work_data->general_name }}</option>
+                                    @endforeach
+                                </select>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="71000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_start" value="{{ $assignment->date_of_creation }}">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="71000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_finish" value="0000-00-00">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <select onchange="employeeSelect(this)" data-row="71000" name="d_table_responsible_officer" style="max-width: 160px;">
+                                    <option value="">Выбрать</option>
+                                    @foreach($employees as $employee)
+                                        <option value="{{ $employee->id }}">{{ $employee->general_name }}</option>
+                                    @endforeach
+                                </select>
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="71000" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value="">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="71000" onblur="dataTransmission(this)" style="width: 20px;" type="text" name="d_table_quantity" value="1">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="71000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_price" value="00.00">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <select data-row="71000" onchange="dataTransmission(this)" name="d_table_currency">
+                                    @for($i=0; $i < count($currency_arr); $i++)
+                                        <option value="{{ $currency_arr[$i] }}">{{ $currency_arr[$i] }}</option>
+                                    @endfor
+                                </select>
+                            </label>
+                        </td>
+                        <td class="sum-row">
+                            <strong data-row="71000">0</strong>
+                        </td>
+                        <td>
+                            <button data-row="71000" type="button" class="add">+</button>
+                            <button data-row="71000" type="button" class="del">-</button>
+                            <button data-row="71000" type="button" onclick="buttonUnlocked(this)"><i class="icon-unlocked2"></i></button>
+                            <button data-row="71000" type="button" onclick="buttonLock(this)" style="display: none;"><i class="icon-lock2"></i></button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+            <hr/>
+            <h4>Итого: 0 лей</h4>
+        </div>
 
-                  <tr data-tr-row="71000">
-                      <td class="number_sub_assignment">
-                        <strong></strong>
-                      </td>
-                      <td>
-                          <label>
-                              <select onchange="workzoneSelect(this)" data-row="71000" name="d_table_workzone" style="max-width: 160px;">
-                                <option value="">Выбрать</option>
-                                @foreach($workzone_data as $work_data)
-                                <option value="{{ $work_data->id }}">{{ $work_data->general_name }}</option>
-                                @endforeach
-                              </select>
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="71000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_start" value="{{ $assignment->date_of_creation }}">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="71000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_finish" value="0000-00-00">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <select onchange="employeeSelect(this)" data-row="71000" name="d_table_responsible_officer" style="max-width: 160px;">
-                                <option value="">Выбрать</option>
-                                @foreach($employees as $employee)
-                                <option value="{{ $employee->id }}">{{ $employee->general_name }}</option>
-                                @endforeach
-                              </select>
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="71000" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value="">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="71000" onblur="dataTransmission(this)" style="width: 20px;" type="text" name="d_table_quantity" value="1">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="71000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_price" value="00.00">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <select data-row="71000" onchange="dataTransmission(this)" name="d_table_currency">
-                                  @for($i=0; $i < count($currency_arr); $i++)
-                                  <option value="{{ $currency_arr[$i] }}">{{ $currency_arr[$i] }}</option>
-                                  @endfor
-                              </select>
-                          </label>
-                      </td>
-                      <td class="sum-row">
-                        <strong data-row="71000">0</strong>
-                      </td>
-                      <td>
-                          <button data-row="71000" type="button" class="add">+</button>
-                          <button data-row="71000" type="button" class="del">-</button>
-                          <button data-row="71000" type="button" onclick="buttonUnlocked(this)"><i class="icon-unlocked2"></i></button>
-                          <button data-row="71000" type="button" onclick="buttonLock(this)" style="display: none;"><i class="icon-lock2"></i></button>
-                      </td>
-                  </tr>
-              </tbody>
-          </table>
-      </form>
-
-      <h4>Итого: 0 лей</h4>
 
       <hr/>
 
       <h3>Запчасти / Материалы (Малярка)</h3>
+        <div class=" card card-p">
+            <form method="post" action="">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Деталь</th>
+                        <th scope="col">Артикул</th>
+                        <th scope="col">Ед. измерения</th>
+                        <th scope="col">Кол-во</th>
+                        <th scope="col">Цена</th>
+                        <th scope="col">Валюта</th>
+                        <th scope="col">Сумма</th>
+                        <th scope="col">Действие</th>
+                    </tr>
+                    </thead>
 
-      <form method="post" action="">
-          <table class="table">
-              <thead>
-                  <tr>
-                      <th scope="col">Деталь</th>
-                      <th scope="col">Артикул</th>
-                      <th scope="col">Ед. измерения</th>
-                      <th scope="col">Кол-во</th>
-                      <th scope="col">Цена</th>
-                      <th scope="col">Валюта</th>
-                      <th scope="col">Сумма</th>
-                      <th scope="col">Действие</th>
-                  </tr>
-              </thead>
+                    <tbody id="dynamic-7-2">
 
-              <tbody id="dynamic-7-2">
+                    <tr data-tr-row="72000">
+                        <td>
+                            <label>
+                                <input data-row="72000" onblur="dataTransmission(this)" style="width: 200px;" type="text" name="d_table_spares_detail" value="">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="72000" onblur="dataTransmission(this)" type="text" name="d_table_spares_vendor_code" value="">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="72000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_spares_unit_measurements" value="">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="72000" onblur="dataTransmission(this)" style="width: 20px;" type="text" name="d_table_spares_quantity" value="1">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input data-row="72000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_spares_price" value="00.00">
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <select data-row="72000" onchange="dataTransmission(this)" name="d_table_spares_currency">
+                                    <option value="MDL">MDL</option>
+                                    <option value="USD">USD</option>
+                                    <option value="EUR">EUR</option>
+                                </select>
+                            </label>
+                        </td>
+                        <td class="sum-row">
+                            <strong data-row="72000">0</strong>
+                        </td>
+                        <td>
+                            <button data-row="72000" type="button" class="add">+</button>
+                            <button data-row="72000" type="button" class="del">-</button>
+                            <button data-row="72000" type="button" onclick="buttonUnlocked(this)"><i class="icon-unlocked2"></i></button>
+                            <button data-row="72000" type="button" onclick="buttonLock(this)" style="display: none;"><i class="icon-lock2"></i></button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+            <hr/>
+            <i style="color: green; cursor: pointer;" class="icon-wallet"> Склад</i>
+            <h4>Итого: 0 лей</h4>
 
-                  <tr data-tr-row="72000">
-                      <td>
-                          <label>
-                              <input data-row="72000" onblur="dataTransmission(this)" style="width: 200px;" type="text" name="d_table_spares_detail" value="">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="72000" onblur="dataTransmission(this)" type="text" name="d_table_spares_vendor_code" value="">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="72000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_spares_unit_measurements" value="">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="72000" onblur="dataTransmission(this)" style="width: 20px;" type="text" name="d_table_spares_quantity" value="1">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <input data-row="72000" onblur="dataTransmission(this)" style="width: 60px;" type="text" name="d_table_spares_price" value="00.00">
-                          </label>
-                      </td>
-                      <td>
-                          <label>
-                              <select data-row="72000" onchange="dataTransmission(this)" name="d_table_spares_currency">
-                                  <option value="MDL">MDL</option>
-                                  <option value="USD">USD</option>
-                                  <option value="EUR">EUR</option>
-                              </select>
-                          </label>
-                      </td>
-                      <td class="sum-row">
-                        <strong data-row="72000">0</strong>
-                      </td>
-                      <td>
-                          <button data-row="72000" type="button" class="add">+</button>
-                          <button data-row="72000" type="button" class="del">-</button>
-                          <button data-row="72000" type="button" onclick="buttonUnlocked(this)"><i class="icon-unlocked2"></i></button>
-                          <button data-row="72000" type="button" onclick="buttonLock(this)" style="display: none;"><i class="icon-lock2"></i></button>
-                      </td>
-                  </tr>
-              </tbody>
-          </table>
-      </form>
-      <i style="color: green; cursor: pointer;" class="icon-wallet"> Склад</i>
-      <h4>Итого: 0 лей</h4>
+        </div>
 
       <hr/>
 
@@ -2529,18 +2590,21 @@
       
 
 <div class="card card-p">
-    <form class="text-left" method="POST" action="{{ url('/admin/profitability/profitability_index') }}">
+    <form class="text-center" method="POST" action="{{ url('/admin/profitability/profitability_index') }}">
         @csrf
-        <div class="form-row">
-            <div class="form-group col-md-6" style="margin: 0 auto;">
+        <div class="form-row mb-3">
+            <div class="form-group  text-center col-md-6" style="margin: 0 auto;">
                 <input class="py-1" type="number" name="usd_currency" value="{{ $usd }}" step="0.00001">
                 <input class="py-1" type="number" name="eur_currency" value="{{ $eur }}" step="0.00001">
                 <input class="py-1" type="hidden" name="assignment_id" value="{{ $assignment->id }}">
                 <button type="submit" class="btn btn-success">Сохранить</button>
             </div>
         </div>
+
+
     </form>
-    <br>
+
+    <br/>
 
     {{-- Тип операции --}}
     <input type="hidden" name="type_operation" value="Доход">
@@ -2550,7 +2614,7 @@
     <input type="hidden" name="tag" value="">
     {{-- Описание --}}
     <input type="hidden" name="comment" value="">
-    <table class="table table-deb">
+    <table class="table table-deb table-income">
         <thead>
         <tr>
             <th scope="col">Счет</th>
@@ -2595,14 +2659,18 @@
         </tbody>
 
     </table>
-    <p>*Для закрытия наряда внесите полную сумму и загрузите акты принятия и выдачи машины клиенту</p>
-</div>
-      <div class="form-row">
+
+    <p class="text-left mt-3">*Для закрытия наряда внесите полную сумму и загрузите акты принятия и выдачи машины клиенту</p>
+    <div class="form-row">
         <div class="ml-auto form-group col-md-3" style="">
-          <h4>Всего: {{ $sum_income }} лей</h4>
-          <h4>Остаток: {{ $sum_expense - $sum_income }} лей</h4>
+            <h4>Всего: {{ $sum_income }} лей</h4>
+            <h4>Остаток: {{ $sum_expense - $sum_income }} лей</h4>
         </div>
-      </div>
+    </div>
+
+
+</div>
+
       
       @if($sum_income == $sum_expense)
       <form action="{{ url('/admin/assignments/closed_assignment') }}" method="POST">
@@ -2951,7 +3019,7 @@ $(document)
 
   //Функция для блокировки строк в таблице
   function buttonUnlocked(element) {
-    $(element).parent().parent().css({'background-color': '#4dffff'});
+    $(element).parent().parent().css({'background-color': '#f0f0f0'});
     $(element).hide();
     $(element).siblings().show();
     let dataRow = $(element).parent().parent().attr('data-tr-row');
