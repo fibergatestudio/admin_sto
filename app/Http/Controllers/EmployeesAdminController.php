@@ -48,6 +48,8 @@ class EmployeesAdminController extends Controller
 
         $employee_totalbal = Employee_balance_logs::where('type', 'Начисление')->get();
 
+        $employee_month_total = Employee_balance_logs::where('type', 'Начисление')->get();
+
 
         return view('employees_admin.employees_admin_index', 
         [

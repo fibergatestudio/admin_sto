@@ -28,9 +28,11 @@
     <table v-if="wash" style="display: inline-table;" class="table mt-3 card card-p">
             <thead>
                 <tr>
+                    <th>#</th>
                     <th>Имя</th>
                     <th>Должность</th>
                     <th>Баланс</th>
+                    <th>Месяц</th>
                     <th>Итого по балансу</th>
                     <th></th>{{-- Кнопки управления --}}
                 </tr>
@@ -39,14 +41,25 @@
             @foreach($employee_data as $employee)
                 <tr>
                     <td>
+                     {{ $employee->id }}
+                    </td>
+                    <td>
                         <!-- <a href="{{ url('/admin/employee/'.$employee->id) }}">{{ $employee->general_name }}</a> -->
-                        <a href="{{ url('/supervisor/manage_employee_status/'.$employee->id.'/employee_edit') }}">{{ $employee->general_name }}</a>
+                        <a href="{{ url('/supervisor/manage_employee_status/'.$employee->id.'/employee_edit') }}">
+                            <div style="font-weight: 600;" class="btn btn-primary">
+                                {{ $employee->general_name }}
+                            </div>
+                        </a>
                     </td>
 
                     <td>Должность</td>
 
                     <td>
                         {{ $employee->balance }} MDL
+                    </td>
+
+                    <td>
+                        Месяц
                     </td>
 
                     
@@ -62,7 +75,7 @@
 
                     <td>
                         <a href="{{ url('/supervisor/employee_finances/'.$employee->id) }}">
-                            <div class="btn btn-primary">
+                            <div class="btn btn-success">
                                 Финансы сотрудника
                             </div>
                         </a>
