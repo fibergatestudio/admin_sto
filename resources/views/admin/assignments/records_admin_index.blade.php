@@ -7,96 +7,99 @@
 @section('content')        
 
 {{-- Таблица-вывод данных записей --}}
-<table class="table table-expense">
+<div class="card mx-2">
+    <table class="table table-expense">
         <thead>
-            <tr>
-                <th>Статус</th>
-                <th>Имя</th>
-                <th>Год Авто</th>
-                <th>Марка Авто</th>
-                <th>Модель Авто</th>
-                <th>Номер машины</th>
-                <th>Дата записи</th>
-                <th>Телефон</th>
-                <th>Желаемое время</th>
-                <th>Подтвержденное время</th>
-                <th></th>{{-- Кнопки управления --}}
-                <th></th>{{-- Кнопка удалить --}}
-                <th></th>{{-- Кнопка редактировать --}}
-            </tr>
+        <tr>
+            <th>Статус</th>
+            <th>Имя</th>
+            <th>Год Авто</th>
+            <th>Марка Авто</th>
+            <th>Модель Авто</th>
+            <th>Номер машины</th>
+            <th>Дата записи</th>
+            <th>Телефон</th>
+            <th>Желаемое время</th>
+            <th>Подтвержденное время</th>
+            <th></th>{{-- Кнопки управления --}}
+            <th></th>{{-- Кнопка удалить --}}
+            <th></th>{{-- Кнопка редактировать --}}
+        </tr>
         </thead>
         <tbody>
         @foreach($records as $record)
-        <tr>
-            <td>
-                @if($record->status == 'confirmed')
-                <b class="badge bg-success" type="text">{{ $record->status }}</b><br>
-                @else
-                <b class="badge bg-warning" type="text">{{ $record->status }}</b><br>
-                @endif
-            </td>
-            <td>
-            {{ $record->name }}<br>
-            </td>
-            <td>
-            {{ $record->car_year }}<br>
-            </td>
-            <td>
-            {{ $record->car_brand }}<br>
-            </td>
-            <td>
-            {{ $record->car_model }}<br>
-            </td>
-            <td>
-            {{ $record->car_number }}<br>
-            </td>
-            <td>
-            {{ $record->record_date }}<br>
-            </td>
-            <td>
-            {{ $record->phone }}<br>
-            </td>
-            <td>
-            {{ $record->record_time }}<br>
-            </td>
-            <td>
-                @if($record->status == 'unconfirmed')
-                <div class="row">
-                    <div class="col-md-9">
-                        <form action="{{ url('/complete_record/'.$record->id) }}" method="POST">
-                        @csrf
-                            <div style="display: flex;">
-                                <select style="width:auto;" class="dropdown form-control" style='width:60px;' name="confirmed_time" onchange='return timeSchedvalue(this.value)'>
-                                    @foreach($record->available_time as $time_option)
-                                        <option value="{{ $time_option }}">{{ $time_option }}</option>
-                                    @endforeach
-                                </select>
-                                <input type="hidden" name="record_id" value="{{ $record->id }}">
-                                <input type="submit" value="Подтвердить" class="btn btn-primary"/>
+            <tr>
+                <td>
+                    @if($record->status == 'confirmed')
+                        <b class="badge bg-success" type="text">{{ $record->status }}</b><br>
+                    @else
+                        <b class="badge bg-warning" type="text">{{ $record->status }}</b><br>
+                    @endif
+                </td>
+                <td>
+                    {{ $record->name }}<br>
+                </td>
+                <td>
+                    {{ $record->car_year }}<br>
+                </td>
+                <td>
+                    {{ $record->car_brand }}<br>
+                </td>
+                <td>
+                    {{ $record->car_model }}<br>
+                </td>
+                <td>
+                    {{ $record->car_number }}<br>
+                </td>
+                <td>
+                    {{ $record->record_date }}<br>
+                </td>
+                <td>
+                    {{ $record->phone }}<br>
+                </td>
+                <td>
+                    {{ $record->record_time }}<br>
+                </td>
+                <td>
+                    @if($record->status == 'unconfirmed')
+                        <div class="row">
+                            <div class="col-md-9">
+                                <form action="{{ url('/complete_record/'.$record->id) }}" method="POST">
+                                    @csrf
+                                    <div style="display: flex;">
+                                        <select style="width:auto;" class="dropdown form-control" style='width:60px;' name="confirmed_time" onchange='return timeSchedvalue(this.value)'>
+                                            @foreach($record->available_time as $time_option)
+                                                <option value="{{ $time_option }}">{{ $time_option }}</option>
+                                            @endforeach
+                                        </select>
+                                        <input type="hidden" name="record_id" value="{{ $record->id }}">
+                                        <input type="submit" value="Подтвердить" class="btn btn-primary"/>
+                                    </div>
+                                </form>
                             </div>
-                        </form>
-                    </div>
-                        @else
-                            {{ $record->confirmed_time }}
-                        @endif
-                </div>
-            </td>
-            <td>
-                <div class="col-md-3">
+                            @else
+                                {{ $record->confirmed_time }}
+                            @endif
+                        </div>
+                </td>
+                <td>
+                    <div class="col-md-3">
                         <form action="{{ url('/delete_record/'.$record->id) }}" method="POST">
-                        @csrf
+                            @csrf
                             <input type="hidden" name="record_id" value="{{ $record->id }}">
                             <input type="submit" value="Удалить" class="btn btn-warning"/>
                         </form>
-                </div>
-            </td>
-            <td>
-                <a href="{{ url('/records/'.$record->id.'/edit_page') }}"><button type="submit" class="btn btn-primary">Редактировать</button></a>
-            </td>
-        </tr>
+                    </div>
+                </td>
+                <td>
+                    <a href="{{ url('/records/'.$record->id.'/edit_page') }}"><button type="submit" class="btn btn-primary">Редактировать</button></a>
+                </td>
+            </tr>
         @endforeach
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
+
 
 {{-- Форма добавления записи --}}
 <form action="{{ url('/add_record') }}" method="POST">
