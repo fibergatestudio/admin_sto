@@ -25,7 +25,8 @@
     <div v-if="!wash" class="col-md-3">
         <div v-on:click="wash = !wash" class="w-50 btn btn-success">Сервис</div>
     </div>
-    <table v-if="wash" style="display: inline-table;" class="table mt-3 card card-p">
+    <br>
+    <table id="table_all" v-if="wash" style="display: inline-table;" class="table mt-3 card card-p">
             <thead>
                 <tr>
                     <th>#</th>
@@ -130,6 +131,22 @@
         </tbody>
     </table>
 </div>
+<script type="text/javascript">
+ $(function () {
+    $("#table_all").DataTable({
+      "language":{
+          "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Russian.json",
+      }
+   });
+   $("#table").DataTable({
+      "language":{
+          "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Russian.json",
+      }
+   });
+
+ });
+
+</script>
 <script>
         new Vue({
             el: '#employee',

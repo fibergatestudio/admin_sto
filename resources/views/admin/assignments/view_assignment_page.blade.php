@@ -3,6 +3,13 @@
 @section('page_name')
 Наряд: {{ $assignment->description }}
 
+@if($message = Session::get('success'))
+   <div class="alert alert-success alert-block">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+           <strong>{{ $message }}</strong>
+   </div>
+@endif
+
 <style type="text/css">
   #download_xls{
     display: none;

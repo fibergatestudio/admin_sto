@@ -28,6 +28,7 @@ use App\Car_wash_clients;
 use App\Car_wash_print_settings;
 use App\Car_wash_complete_work;
 use App\Fuel_type;
+use Session;
 //На скачивание EXCEL
 use App\Exports\AssignOrder;
 use Maatwebsite\Excel\Facades\Excel;
@@ -2035,6 +2036,12 @@ class EmployeesAdminController extends Controller
         //dd($exist);
 
         return back();
+    }
+
+    public function set_birthday_cookie(){
+        //Выключаем отображение поп-апа на время сессии (сессия стандартно длится 120минут, настраивается в session.php)
+        Session::put('birthday_popup_closed', true);
+
     }
 
 }

@@ -236,6 +236,9 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
     /* - Удаление примечания к сотруднику - */
     Route::get('/admin/employee/delete_employee_note/{note_id}', 'EmployeesAdminController@delete_employee_note')->middleware('can:admin_rights');
 
+    /* - Куки для Дня рожденья - */
+    Route::get('/set_birthday_cookie', 'EmployeesAdminController@set_birthday_cookie');
+
 /**** Все смены : Админ ****/
 
     /* Страница смены (сегодня) */
