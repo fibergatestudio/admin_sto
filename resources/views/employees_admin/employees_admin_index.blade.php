@@ -15,9 +15,20 @@
             <a href="{{ url('/supervisor/employee_migrate') }}" class="btn btn-success">Миграция Сотрудников</a> 
         </div>
 </div>
+
 @endsection
 
 @section('content')
+
+<?php $sum_tot = 0 ?>
+@foreach($employee_data as $employee)
+        @if ($employee->balance > 0)
+            <?php $sum_tot += $employee->balance; ?>
+        @endif
+@endforeach
+
+
+<div class="text-right">Итого по балансу: <?php echo $sum_tot ?> MDL</div>
 <div id="employee">
     <div v-if="wash" class="col-md-3">
         <div v-on:click="wash = !wash" class="w-50 btn btn-success">Мойка</div>
@@ -34,7 +45,7 @@
                     <th>Должность</th>
                     <th>Баланс</th>
                     <th>Месяц</th>
-                    <th>Итого по балансу</th>
+                    <th>Начислено</th>
                     <th></th>{{-- Кнопки управления --}}
                 </tr>
             </thead>
@@ -60,18 +71,24 @@
                     </td>
 
                     <td>
-                        Месяц
+                        <?php $sum_last_mnth = 0 ?>
+                        @foreach($employee_month_total as $last_month)
+                            @if($last_month->employee_id == $employee->id)
+                                <?php $sum_last_mnth += $last_month->amount; ?>
+                            @endif
+                        @endforeach
+                        <?php echo $sum_last_mnth; ?> MDL
                     </td>
 
                     
                     <td>
-                        <?php $sum_tot = 0 ?>
+                        <?php $sum_tot_bal = 0 ?>
                         @foreach($employee_totalbal as $totbal)
                             @if($totbal->employee_id == $employee->id)
-                                <?php $sum_tot += $totbal->amount; ?>
+                                <?php $sum_tot_bal += $totbal->amount; ?>
                             @endif
                         @endforeach
-                        Итого <?php echo $sum_tot ?>
+                        <?php echo $sum_tot_bal ?> MDL
                     </td>
 
                     <td>

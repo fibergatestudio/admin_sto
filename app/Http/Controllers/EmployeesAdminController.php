@@ -36,6 +36,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 use \Crypt;
 use Redirect;
+use Carbon\Carbon;
 
 use App\Charts\FinancesChart;
 
@@ -49,14 +50,21 @@ class EmployeesAdminController extends Controller
 
         $employee_totalbal = Employee_balance_logs::where('type', 'Начисление')->get();
 
-        $employee_month_total = Employee_balance_logs::where('type', 'Начисление')->get();
+        $employee_month_total = Employee_balance_logs::where(
+            [
+
+                ['type', '=', 'Начисление'],
+                ['created_at', '>=', Carbon::now()->subDays(30)->toDateTimeString()],
+
+            ])->get();
 
 
         return view('employees_admin.employees_admin_index', 
         [
             'employee_data' => $employee_data,
             'employee_wash' => $employee_wash,
-            'employee_totalbal' => $employee_totalbal
+            'employee_totalbal' => $employee_totalbal,
+            'employee_month_total' => $employee_month_total
         ]);
 
     }
