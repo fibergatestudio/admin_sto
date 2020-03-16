@@ -1161,7 +1161,8 @@ class EmployeesAdminController extends Controller
         foreach($workers_table as $worker){
             //Создаем User'a
             $phone = $worker->phone_number;
-            if(!empty($phone)){
+            $show_list = $worker->show_list;
+            if(!empty($phone) && $show_list == "yes"){
                 //General Name
                 $general_name = $worker->name;
                 $general_name .= " ";
@@ -2048,8 +2049,8 @@ class EmployeesAdminController extends Controller
 
     public function set_birthday_cookie(){
         //Выключаем отображение поп-апа на время сессии (сессия стандартно длится 120минут, настраивается в session.php)
-        Session::put('birthday_popup_closed', true);
-
+       Session::put('birthday_popup_closed', true);
+       //Session::forget('birthday_popup_closed');
     }
 
 }

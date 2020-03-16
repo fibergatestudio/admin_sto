@@ -610,18 +610,18 @@ label{
                 <td>
                     <label>
                         @if($new_sub_assignment->work_is_locked == 'active')
-                            <input disabled data-row="{{ $new_sub_assignment->work_row_index }}" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_start" value="{{ $new_sub_assignment->d_table_time_start }}">
+                            <input disabled data-row="{{ $new_sub_assignment->work_row_index }}" onclick="dataTransmission(this)" type="date" name="d_table_time_start" value="{{ $new_sub_assignment->d_table_time_start }}">
                         @else
-                            <input data-row="{{ $new_sub_assignment->work_row_index }}" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_start" value="{{ $new_sub_assignment->d_table_time_start }}">
+                            <input data-row="{{ $new_sub_assignment->work_row_index }}" onclick="dataTransmission(this)" type="date" name="d_table_time_start" value="{{ $new_sub_assignment->d_table_time_start }}">
                         @endif
                     </label>
                 </td>
                 <td>
                     <label>
                         @if($new_sub_assignment->work_is_locked == 'active')
-                            <input disabled data-row="{{ $new_sub_assignment->work_row_index }}" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_finish" value="{{ $new_sub_assignment->d_table_time_finish }}">
+                            <input disabled data-row="{{ $new_sub_assignment->work_row_index }}" onclick="dataTransmission(this)" type="date" name="d_table_time_finish" value="{{ $new_sub_assignment->d_table_time_finish }}">
                         @else
-                            <input data-row="{{ $new_sub_assignment->work_row_index }}" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_finish" value="{{ $new_sub_assignment->d_table_time_finish }}">
+                            <input data-row="{{ $new_sub_assignment->work_row_index }}" onclick="dataTransmission(this)" type="date" name="d_table_time_finish" value="{{ $new_sub_assignment->d_table_time_finish }}">
                         @endif
                     </label>
                 </td>
