@@ -592,9 +592,9 @@ label{
                 <td>
                     <label>
                         @if($new_sub_assignment->work_is_locked == 'active')
-                            <select disabled onchange="workzoneSelect(this)" data-row="{{ $new_sub_assignment->work_row_index }}" name="d_table_workzone" style="max-width: 160px;">
+                            <select disabled onchange="workzoneSelect(this)" data-row="{{ $new_sub_assignment->work_row_index }}" name="d_table_workzone" style="max-width: 100px;">
                                 @else
-                                    <select onchange="workzoneSelect(this)" data-row="{{ $new_sub_assignment->work_row_index }}" name="d_table_workzone" style="max-width: 160px;">
+                                    <select onchange="workzoneSelect(this)" data-row="{{ $new_sub_assignment->work_row_index }}" name="d_table_workzone" style="max-width: 100px;">
                                         @endif
                                         <option value="">Выбрать</option>
                                         @foreach($workzone_data as $work_data)
@@ -610,27 +610,27 @@ label{
                 <td>
                     <label>
                         @if($new_sub_assignment->work_is_locked == 'active')
-                            <input disabled data-row="{{ $new_sub_assignment->work_row_index }}" onclick="dataTransmission(this)" type="date" name="d_table_time_start" value="{{ $new_sub_assignment->d_table_time_start }}">
+                            <input disabled data-row="{{ $new_sub_assignment->work_row_index }}" onclick="dataTransmission(this)" type="date" style="max-width: 100px" name="d_table_time_start" value="{{ $new_sub_assignment->d_table_time_start }}">
                         @else
-                            <input data-row="{{ $new_sub_assignment->work_row_index }}" onclick="dataTransmission(this)" type="date" name="d_table_time_start" value="{{ $new_sub_assignment->d_table_time_start }}">
+                            <input data-row="{{ $new_sub_assignment->work_row_index }}" onclick="dataTransmission(this)" type="date" style="max-width: 100px" name="d_table_time_start" value="{{ $new_sub_assignment->d_table_time_start }}">
                         @endif
                     </label>
                 </td>
                 <td>
                     <label>
                         @if($new_sub_assignment->work_is_locked == 'active')
-                            <input disabled data-row="{{ $new_sub_assignment->work_row_index }}" onclick="dataTransmission(this)" type="date" name="d_table_time_finish" value="{{ $new_sub_assignment->d_table_time_finish }}">
+                            <input disabled data-row="{{ $new_sub_assignment->work_row_index }}" onclick="dataTransmission(this)" type="date" style="max-width: 100px" name="d_table_time_finish" value="{{ $new_sub_assignment->d_table_time_finish }}">
                         @else
-                            <input data-row="{{ $new_sub_assignment->work_row_index }}" onclick="dataTransmission(this)" type="date" name="d_table_time_finish" value="{{ $new_sub_assignment->d_table_time_finish }}">
+                            <input data-row="{{ $new_sub_assignment->work_row_index }}" onclick="dataTransmission(this)" type="date" style="max-width: 100px" name="d_table_time_finish" value="{{ $new_sub_assignment->d_table_time_finish }}">
                         @endif
                     </label>
                 </td>
                 <td>
                     <label>
                         @if($new_sub_assignment->work_is_locked == 'active')
-                            <select disabled onchange="employeeSelect(this)" data-row="{{ $new_sub_assignment->work_row_index }}" name="d_table_responsible_officer" style="max-width: 160px;">
+                            <select disabled onchange="employeeSelect(this)" data-row="{{ $new_sub_assignment->work_row_index }}" name="d_table_responsible_officer" style="max-width: 100px;">
                                 @else
-                                    <select onchange="employeeSelect(this)" data-row="{{ $new_sub_assignment->work_row_index }}" name="d_table_responsible_officer" style="max-width: 160px;">
+                                    <select onchange="employeeSelect(this)" data-row="{{ $new_sub_assignment->work_row_index }}" name="d_table_responsible_officer" style="max-width: 100px;">
                                         @endif
                                         <option value="">Выбрать</option>
                                         @foreach($employees as $employee)
@@ -646,9 +646,9 @@ label{
                 <td>
                     <label>
                         @if($new_sub_assignment->work_is_locked == 'active')
-                            <input disabled data-row="{{ $new_sub_assignment->work_row_index }}" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value="{{ $new_sub_assignment->d_table_list_completed_works }}">
+                            <input disabled data-row="{{ $new_sub_assignment->work_row_index }}" onblur="dataTransmission(this)" style="max-width: 75px" rows="1" cols="15" name="d_table_list_completed_works" value="{{ $new_sub_assignment->d_table_list_completed_works }}">
                         @else
-                            <input data-row="{{ $new_sub_assignment->work_row_index }}" onblur="dataTransmission(this)" rows="1" cols="15" name="d_table_list_completed_works" value="{{ $new_sub_assignment->d_table_list_completed_works }}">
+                            <input data-row="{{ $new_sub_assignment->work_row_index }}" onblur="dataTransmission(this)" style="max-width: 75px" rows="1" cols="15" name="d_table_list_completed_works" value="{{ $new_sub_assignment->d_table_list_completed_works }}">
                         @endif
                     </label>
                 </td>
@@ -975,7 +975,7 @@ label{
                     </td>
                     <td>
                         <label>
-                            <select onchange="workzoneSelect(this)" data-row="11000" name="d_table_workzone" style="max-width: 160px;">
+                            <select onchange="workzoneSelect(this)" data-row="11000" name="d_table_workzone" style="max-width: 100px;">
                                 <option value="">Выбрать</option>
                                 @foreach($workzone_data as $work_data)
                                     <option value="{{ $work_data->id }}">{{ $work_data->general_name }}</option>
@@ -995,7 +995,7 @@ label{
                     </td>
                     <td>
                         <label>
-                            <select onchange="employeeSelect(this)" data-row="11000" name="d_table_responsible_officer" style="max-width: 160px;">
+                            <select onchange="employeeSelect(this)" data-row="11000" name="d_table_responsible_officer" style="max-width: 100px;">
                                 <option value="">Выбрать</option>
                                 @foreach($employees as $employee)
                                     <option value="{{ $employee->id }}">{{ $employee->general_name }}</option>
@@ -1158,7 +1158,7 @@ label{
                         </td>
                         <td>
                             <label>
-                                <select onchange="workzoneSelect(this)" data-row="21000" name="d_table_workzone" style="max-width: 160px;">
+                                <select onchange="workzoneSelect(this)" data-row="21000" name="d_table_workzone" style="max-width: 100px;">
                                     <option value="">Выбрать</option>
                                     @foreach($workzone_data as $work_data)
                                         <option value="{{ $work_data->id }}">{{ $work_data->general_name }}</option>
@@ -1178,7 +1178,7 @@ label{
                         </td>
                         <td>
                             <label>
-                                <select onchange="employeeSelect(this)" data-row="21000" name="d_table_responsible_officer" style="max-width: 160px;">
+                                <select onchange="employeeSelect(this)" data-row="21000" name="d_table_responsible_officer" style="max-width: 100px;">
                                     <option value="">Выбрать</option>
                                     @foreach($employees as $employee)
                                         <option value="{{ $employee->id }}">{{ $employee->general_name }}</option>
@@ -1339,7 +1339,7 @@ label{
                         </td>
                         <td>
                             <label>
-                                <select onchange="workzoneSelect(this)" data-row="31000" name="d_table_workzone" style="max-width: 160px;">
+                                <select onchange="workzoneSelect(this)" data-row="31000" name="d_table_workzone" style="max-width: 100px;">
                                     <option value="">Выбрать</option>
                                     @foreach($workzone_data as $work_data)
                                         <option value="{{ $work_data->id }}">{{ $work_data->general_name }}</option>
@@ -1359,7 +1359,7 @@ label{
                         </td>
                         <td>
                             <label>
-                                <select onchange="employeeSelect(this)" data-row="31000" name="d_table_responsible_officer" style="max-width: 160px;">
+                                <select onchange="employeeSelect(this)" data-row="31000" name="d_table_responsible_officer" style="max-width: 100px;">
                                     <option value="">Выбрать</option>
                                     @foreach($employees as $employee)
                                         <option value="{{ $employee->id }}">{{ $employee->general_name }}</option>
@@ -1520,7 +1520,7 @@ label{
                         </td>
                         <td>
                             <label>
-                                <select onchange="workzoneSelect(this)" data-row="41000" name="d_table_workzone" style="max-width: 160px;">
+                                <select onchange="workzoneSelect(this)" data-row="41000" name="d_table_workzone" style="max-width: 100px;">
                                     <option value="">Выбрать</option>
                                     @foreach($workzone_data as $work_data)
                                         <option value="{{ $work_data->id }}">{{ $work_data->general_name }}</option>
@@ -1540,7 +1540,7 @@ label{
                         </td>
                         <td>
                             <label>
-                                <select onchange="employeeSelect(this)" data-row="41000" name="d_table_responsible_officer" style="max-width: 160px;">
+                                <select onchange="employeeSelect(this)" data-row="41000" name="d_table_responsible_officer" style="max-width: 100px;">
                                     <option value="">Выбрать</option>
                                     @foreach($employees as $employee)
                                         <option value="{{ $employee->id }}">{{ $employee->general_name }}</option>
@@ -1699,7 +1699,7 @@ label{
                         </td>
                         <td>
                             <label>
-                                <select onchange="workzoneSelect(this)" data-row="51000" name="d_table_workzone" style="max-width: 160px;">
+                                <select onchange="workzoneSelect(this)" data-row="51000" name="d_table_workzone" style="max-width: 100px;">
                                     <option value="">Выбрать</option>
                                     @foreach($workzone_data as $work_data)
                                         <option value="{{ $work_data->id }}">{{ $work_data->general_name }}</option>
@@ -1719,7 +1719,7 @@ label{
                         </td>
                         <td>
                             <label>
-                                <select onchange="employeeSelect(this)" data-row="51000" name="d_table_responsible_officer" style="max-width: 160px;">
+                                <select onchange="employeeSelect(this)" data-row="51000" name="d_table_responsible_officer" style="max-width: 100px;">
                                     <option value="">Выбрать</option>
                                     @foreach($employees as $employee)
                                         <option value="{{ $employee->id }}">{{ $employee->general_name }}</option>
@@ -1878,7 +1878,7 @@ label{
                         </td>
                         <td>
                             <label>
-                                <select onchange="workzoneSelect(this)" data-row="61000" name="d_table_workzone" style="max-width: 160px;">
+                                <select onchange="workzoneSelect(this)" data-row="61000" name="d_table_workzone" style="max-width: 100px;">
                                     <option value="">Выбрать</option>
                                     @foreach($workzone_data as $work_data)
                                         <option value="{{ $work_data->id }}">{{ $work_data->general_name }}</option>
@@ -1898,7 +1898,7 @@ label{
                         </td>
                         <td>
                             <label>
-                                <select onchange="employeeSelect(this)" data-row="61000" name="d_table_responsible_officer" style="max-width: 160px;">
+                                <select onchange="employeeSelect(this)" data-row="61000" name="d_table_responsible_officer" style="max-width: 100px;">
                                     <option value="">Выбрать</option>
                                     @foreach($employees as $employee)
                                         <option value="{{ $employee->id }}">{{ $employee->general_name }}</option>
@@ -2059,7 +2059,7 @@ label{
                         </td>
                         <td>
                             <label>
-                                <select onchange="workzoneSelect(this)" data-row="71000" name="d_table_workzone" style="max-width: 160px;">
+                                <select onchange="workzoneSelect(this)" data-row="71000" name="d_table_workzone" style="max-width: 100px;">
                                     <option value="">Выбрать</option>
                                     @foreach($workzone_data as $work_data)
                                         <option value="{{ $work_data->id }}">{{ $work_data->general_name }}</option>
@@ -2079,7 +2079,7 @@ label{
                         </td>
                         <td>
                             <label>
-                                <select onchange="employeeSelect(this)" data-row="71000" name="d_table_responsible_officer" style="max-width: 160px;">
+                                <select onchange="employeeSelect(this)" data-row="71000" name="d_table_responsible_officer" style="max-width: 100px;">
                                     <option value="">Выбрать</option>
                                     @foreach($employees as $employee)
                                         <option value="{{ $employee->id }}">{{ $employee->general_name }}</option>

@@ -58,7 +58,7 @@
                     <td>
                         <!-- <a href="{{ url('/admin/employee/'.$employee->id) }}">{{ $employee->general_name }}</a> -->
                         <a href="{{ url('/supervisor/manage_employee_status/'.$employee->id.'/employee_edit') }}">
-                            <div style="font-weight: 600;" class="btn btn-primary">
+                            <div style="font-weight: 600; width: 300px;" class="btn btn-primary">
                                 {{ $employee->general_name }}
                             </div>
                         </a>
