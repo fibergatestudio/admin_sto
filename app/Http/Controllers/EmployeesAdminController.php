@@ -1189,6 +1189,7 @@ class EmployeesAdminController extends Controller
                 $new_employee->fio = $fio;
                 $new_employee->status = 'active';
                 $new_employee->date_join = date("d.m.Y");
+                $new_employee->phone = $phone;
                 /* Добавляем в таблицу работников ID соответствующего юзера */
                 $new_employee->user_id = $new_user_id;
                 $new_employee->balance = $worker->balance;; //Добавление баланса
