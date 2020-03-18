@@ -204,6 +204,9 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
         Route::post('/supervisor/employee_coffee_tokens/add',
                     'EmployeesAdminController@employee_coffee_token_issue')->middleware('can:admin_rights');
 
+    /* Жетоны на кофе, обработка get-запроса */
+    Route::get('/coffee.php', 'CoffeeTokensController@getPhone');
+
     /* Страница добавления документов сотрудника*/
     Route::get('/supervisor/manage_employee_status/{employee_id}/add_documents', 'EmployeesAdminController@add_documents')->middleware('can:admin_rights');
         // Добавление документов POST

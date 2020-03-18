@@ -129,7 +129,7 @@ class DeliveryPassagesController extends Controller
                             $new_user->password = Hash::make($password);
                             $new_user->email = $login.'@test.com';
                             $new_user->role = 'employee';
-                            $new_user->general_name = $new_passage->emp_id;
+                            $new_user->general_name = $new_passage->emp_id;                          
                             $new_user->save();
                             $new_user_id = $new_user->id;
 
@@ -137,6 +137,7 @@ class DeliveryPassagesController extends Controller
                             $new_employee = new Employee();
                             $new_employee->general_name = $new_passage->emp_id;
                             $new_employee->fio = $new_passage->emp_id;
+                            $new_employee->phone = $new_passage->internal_emp_id;
                             $new_employee->status = 'active';
                             $new_employee->date_join = date("d.m.Y");
                             /* Добавляем в таблицу работников ID соответствующего юзера */
@@ -186,6 +187,13 @@ class DeliveryPassagesController extends Controller
                         $employee_id = $passage_user_id;
                         $employee = Employee::find($employee_id);
                         $employee_name = $employee->general_name;
+
+                        //Если нет телефона(табельного номера) - добавляем
+                        if (empty($employee->phone)) {
+                            DB::table('employees')
+                            ->where('id', '=', $employee_id)
+                            ->update(['phone' => $new_passage->internal_emp_id]);
+                        }
 
                         //Есть ли основание для штрафа
                         if ($new_passage->direction == '1') {
@@ -390,7 +398,7 @@ class DeliveryPassagesController extends Controller
                     $new_user->password = Hash::make($password);
                     $new_user->email = $login.'@test.com';
                     $new_user->role = 'employee';
-                    $new_user->general_name = $new_passage->emp_id.'-test';
+                    $new_user->general_name = $new_passage->emp_id.'-test';                   
                     $new_user->save();
                     $new_user_id = $new_user->id;
 
@@ -398,6 +406,7 @@ class DeliveryPassagesController extends Controller
                     $new_employee = new Employee();
                     $new_employee->general_name = $new_passage->emp_id.'-test';
                     $new_employee->fio = $new_passage->emp_id.'-test';
+                    $new_employee->phone = $new_passage->internal_emp_id;
                     $new_employee->status = 'active';
                     $new_employee->date_join = date("d.m.Y");
                     /* Добавляем в таблицу работников ID соответствующего юзера */
@@ -447,6 +456,13 @@ class DeliveryPassagesController extends Controller
                 $employee_id = $passage_user_id;
                 $employee = Employee::find($employee_id);
                 $employee_name = $employee->general_name;
+
+                //Если нет телефона(табельного номера) - добавляем
+                if (empty($employee->phone)) {
+                    DB::table('employees')
+                    ->where('id', '=', $employee_id)
+                    ->update(['phone' => $new_passage->internal_emp_id]);
+                }
 
                 //Есть ли основание для штрафа
                 if ($new_passage->direction == '1') {
