@@ -43,7 +43,8 @@
                     <th>#</th>
                     <th>Имя</th>
                     <th>Должность</th>
-                    <th>Баланс</th>
+                    <th class="balance">Баланс</th>
+                    <th class="no-sort"></th>
                     <th>Месяц</th>
                     <th>Начислено</th>
                     <th></th>{{-- Кнопки управления --}}
@@ -67,9 +68,10 @@
                     <td>Должность</td>
 
                     <td>
-                        {{ $employee->balance }} MDL
+                    
+                    {{ $employee->balance }}
                     </td>
-
+                    <td style="width: 10px;">MDL</td>
                     <td>
                         <?php $sum_last_mnth = 0 ?>
                         @foreach($employee_month_total as $last_month)
@@ -153,12 +155,20 @@
     $("#table_all").DataTable({
       "language":{
           "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Russian.json",
-      }
+      },
+      "columnDefs": [ {
+          "targets": 'no-sort',
+          "orderable": false,
+    } ]
    });
    $("#table").DataTable({
       "language":{
           "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Russian.json",
-      }
+      },
+      "columnDefs": [ {
+          "targets": 'no-sort',
+          "orderable": false,
+    } ]
    });
 
  });

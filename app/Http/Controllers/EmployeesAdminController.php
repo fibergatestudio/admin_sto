@@ -2051,6 +2051,7 @@ class EmployeesAdminController extends Controller
     public function set_birthday_cookie(){
         //Выключаем отображение поп-апа на время сессии (сессия стандартно длится 120минут, настраивается в session.php)
        Session::put('birthday_popup_closed', true);
+       //dd("TEST");
        //Session::forget('birthday_popup_closed');
     }
 

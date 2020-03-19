@@ -165,7 +165,7 @@
                             @if(App\Employee::get_employee_by_user_id(Auth::user()->id) != $employeeTomorrow)
 								@if (!Session::get('birthday_popup_closed'))
 									<div class="alert alert-styled-left alert-styled-custom alert-arrow-left alpha-teal border-teal alert-dismissible" style="color: #000">
-										<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+										<button id="birthday_close" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 										<span>{{$textTomorrow}}</span>
 									</div>    
 								@endif                        
