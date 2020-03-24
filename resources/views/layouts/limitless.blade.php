@@ -119,7 +119,7 @@
 			
 
 			<!-- Вывод fio работников у кого сегодня и завтра день рождения, видят все кроме работников у которых сегодня и завтра ДР-->
-			@php
+						@php
                             $dateToday = date("m-d");
                             $namesToday = ''; // имена тех у кого сегодня ДР
                             $namesTomorrow = ''; // имена тех у кого завтра ДР
@@ -152,18 +152,23 @@
                         <!-- Вариант 2  - с Алертом, но после закрытия Алерта, уведомление будет выскакивать при каждом обновлении страницы -->
                         @if($namesToday != '')
                             @if(App\Employee::get_employee_by_user_id(Auth::user()->id) != $employeeToday)
-                                <div class="alert alert-styled-left alert-styled-custom alert-arrow-left alpha-teal border-teal alert-dismissible" style="color: #000">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+								@if (!Session::get('birthday_popup_closed'))
+								<div class="alert alert-styled-left alert-styled-custom alert-arrow-left alpha-teal border-teal alert-dismissible" style="color: #000">
+                                    <button id="birthday_close" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                     <span>{{$textToday}}</span>
-                                </div>    
+                                </div> 
+								@endif
+   
                             @endif                           
                         @endif
                         @if($namesTomorrow != '')
                             @if(App\Employee::get_employee_by_user_id(Auth::user()->id) != $employeeTomorrow)
-                                <div class="alert alert-styled-left alert-styled-custom alert-arrow-left alpha-teal border-teal alert-dismissible" style="color: #000">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                    <span>{{$textTomorrow}}</span>
-                                </div>                            
+								@if (!Session::get('birthday_popup_closed'))
+									<div class="alert alert-styled-left alert-styled-custom alert-arrow-left alpha-teal border-teal alert-dismissible" style="color: #000">
+										<button id="birthday_close" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+										<span>{{$textTomorrow}}</span>
+									</div>    
+								@endif                        
                             @endif                           
                         @endif
                        
@@ -176,7 +181,6 @@
             @endif
 	</div>
 	<!-- /main navbar -->
-
 
 	<!-- Page content -->
 	<div class="page-content">
@@ -300,6 +304,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>
 <script>
 	$('#cp2').colorpicker();
+</script>
+<!-- Скрипт для отключения оповещения о ДРе -->
+<script>
+	$('#birthday_close').click(function(){
+		$.ajax({
+			type: "GET",
+			url: '/set_birthday_cookie',
+			success: function() {}
+		});
+	});
 </script>
 
 @yield('custom_scripts')

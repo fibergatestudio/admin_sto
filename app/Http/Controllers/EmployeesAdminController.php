@@ -28,6 +28,7 @@ use App\Car_wash_clients;
 use App\Car_wash_print_settings;
 use App\Car_wash_complete_work;
 use App\Fuel_type;
+use Session;
 //На скачивание EXCEL
 use App\Exports\AssignOrder;
 use Maatwebsite\Excel\Facades\Excel;
@@ -35,6 +36,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 use \Crypt;
 use Redirect;
+use Carbon\Carbon;
 
 use App\Charts\FinancesChart;
 
@@ -48,12 +50,21 @@ class EmployeesAdminController extends Controller
 
         $employee_totalbal = Employee_balance_logs::where('type', 'Начисление')->get();
 
+        $employee_month_total = Employee_balance_logs::where(
+            [
+
+                ['type', '=', 'Начисление'],
+                ['created_at', '>=', Carbon::now()->subDays(30)->toDateTimeString()],
+
+            ])->get();
+
 
         return view('employees_admin.employees_admin_index', 
         [
             'employee_data' => $employee_data,
             'employee_wash' => $employee_wash,
-            'employee_totalbal' => $employee_totalbal
+            'employee_totalbal' => $employee_totalbal,
+            'employee_month_total' => $employee_month_total
         ]);
 
     }
@@ -1150,7 +1161,8 @@ class EmployeesAdminController extends Controller
         foreach($workers_table as $worker){
             //Создаем User'a
             $phone = $worker->phone_number;
-            if(!empty($phone)){
+            $show_list = $worker->show_list;
+            if(!empty($phone) && $show_list == "yes"){
                 //General Name
                 $general_name = $worker->name;
                 $general_name .= " ";
@@ -1177,6 +1189,7 @@ class EmployeesAdminController extends Controller
                 $new_employee->fio = $fio;
                 $new_employee->status = 'active';
                 $new_employee->date_join = date("d.m.Y");
+                $new_employee->phone = $phone;
                 /* Добавляем в таблицу работников ID соответствующего юзера */
                 $new_employee->user_id = $new_user_id;
                 $new_employee->balance = $worker->balance;; //Добавление баланса
@@ -2033,6 +2046,13 @@ class EmployeesAdminController extends Controller
         //dd($exist);
 
         return back();
+    }
+
+    public function set_birthday_cookie(){
+        //Выключаем отображение поп-апа на время сессии (сессия стандартно длится 120минут, настраивается в session.php)
+       Session::put('birthday_popup_closed', true);
+       //dd("TEST");
+       //Session::forget('birthday_popup_closed');
     }
 
 }

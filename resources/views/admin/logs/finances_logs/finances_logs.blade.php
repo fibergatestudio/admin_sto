@@ -35,5 +35,6 @@
         <hr>
     </div>
 
-    
+{{ $employees_finances_logs->links() }}    
+
 @endsection

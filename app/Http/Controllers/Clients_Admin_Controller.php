@@ -148,7 +148,9 @@ class Clients_Admin_Controller extends Controller
         $create_client_log_entry->type = '';
         $create_client_log_entry->save();
 
-        return redirect('admin/clients/view_client/'.$client_id);
+        //return back();
+        return back()->with('success', 'Информация клиента изменена!');
+        //return redirect('admin/clients/view_client/'.$client_id);
     }
 
     /* Просмотр клиента : страница */

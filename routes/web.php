@@ -204,6 +204,9 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
         Route::post('/supervisor/employee_coffee_tokens/add',
                     'EmployeesAdminController@employee_coffee_token_issue')->middleware('can:admin_rights');
 
+    /* Жетоны на кофе, обработка get-запроса */
+    Route::get('/coffee.php', 'CoffeeTokensController@getPhone');
+
     /* Страница добавления документов сотрудника*/
     Route::get('/supervisor/manage_employee_status/{employee_id}/add_documents', 'EmployeesAdminController@add_documents')->middleware('can:admin_rights');
         // Добавление документов POST
@@ -235,6 +238,9 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
 
     /* - Удаление примечания к сотруднику - */
     Route::get('/admin/employee/delete_employee_note/{note_id}', 'EmployeesAdminController@delete_employee_note')->middleware('can:admin_rights');
+
+    /* - Куки для Дня рожденья - */
+    Route::get('/set_birthday_cookie', 'EmployeesAdminController@set_birthday_cookie');
 
 /**** Все смены : Админ ****/
 

@@ -70,10 +70,10 @@ class Logs_Admin_Controller extends Controller
     /* - Логи по финансам - */
     public function finances_logs()
     {
-        $employees_finances_logs = Employee_balance_logs::all();
 
-        foreach ($employees_finances_logs as $employee_finances_log_entry) 
-        {
+        $paginate_finances_logs = Employee_balance_logs::orderBy('updated_at', 'desc')->paginate(10);
+
+        foreach ($paginate_finances_logs as $employee_finances_log_entry) {
 
             $employee_id = $employee_finances_log_entry->employee_id;
             $employee_name = Employee::find($employee_id)->general_name;
@@ -92,8 +92,9 @@ class Logs_Admin_Controller extends Controller
             }
 
             $employee_finances_log_entry->text = $text;
+        }           
 
-        }
+        $employees_finances_logs = $paginate_finances_logs;
 
         return view ('admin.logs.finances_logs.finances_logs', compact('employees_finances_logs'));
         
