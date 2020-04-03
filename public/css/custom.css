@@ -2,10 +2,6 @@
   padding: 25px;
 }
 
-.table{
-  text-align: center;
-}
-
 .tabs-menu {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -26,18 +22,9 @@
 .tabs-menu > label {
   border: 1px solid #f2f2f2 !important;
 }
-.table tbody tr:hover{
-  background-color: #f2f2f2;
-}
-/*.btn-success-1{*/
-/*  background-color: #3f51b5;*/
-/*  border-color: #3f51b5;*/
-/*  color: #fff;*/
-/*}*/
+
 .tabs-menu > input:checked + label {
-  border: 1px solid #2196f3 !important;
-  color: #fff !important;
-  background-color: #2196f3 !important;
+  border: 1px solid #f2f2f2 !important;
 }
 
 .tabs-menu > div {
@@ -147,5 +134,17 @@ table label select {
     padding: .75rem 1.25rem;
     font-size: 15px;
   }
+}
+
+.input-data-startwork {
+  width: 90% !important;
+}
+
+.tabs-menu-modal > label {
+  width: 33.33% !important;
+}
+
+.table td i {
+  margin: 0 auto;
 }
 

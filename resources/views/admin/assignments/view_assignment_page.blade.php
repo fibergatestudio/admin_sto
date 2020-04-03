@@ -985,7 +985,7 @@ label{
                     </td>
                     <td>
                         <label>
-                            <input data-row="11000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_start" value="{{ $assignment->date_of_creation }}">
+                            <input class="input-data-startwork" data-row="11000" onclick="dataTransmission(this)" style="width: 72px;" type="date" name="d_table_time_start" value="{{ $assignment->date_of_creation }}">
                         </label>
                     </td>
                     <td>

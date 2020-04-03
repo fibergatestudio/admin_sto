@@ -228,7 +228,7 @@
         <div class="modal-body">
 
             <!-- Вкладки -->
-            <div class="tabs-menu">
+            <div class="tabs-menu tabs-menu-modal">
               @php
               $categories_arr = [];
               @endphp
@@ -288,7 +288,7 @@
                 </div>
 
                 {{-- Описание --}}
-                <div class="col-md-6">
+                <div class="col-md-12 px-0">
                   <label>Описание</label>
                   <textarea name="comment" class="form-control"></textarea>
                 </div>
@@ -346,7 +346,7 @@
                 </div>
 
                 {{-- Описание --}}
-                <div class="col-md-6">
+                <div class="col-md-12 px-0">
                   <label>Описание</label>
                   <textarea name="comment" class="form-control"></textarea>
                 </div>

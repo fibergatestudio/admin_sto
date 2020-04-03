@@ -2,9 +2,9 @@
 
 @section('page_name')
     <div class="row">
-        <div class="col-lg-10">
-            Редактирование сотрудника: {{ $employee->general_name }}
-        </div>
+{{--        <div class="col-lg-10">--}}
+{{--            Редактирование сотрудника: {{ $employee->general_name }}--}}
+{{--        </div>--}}
     <?php
         $status_array = [
             'active' => 'Действующий',
@@ -17,7 +17,7 @@
                 @csrf
                 <input type="hidden" name="employee_id" value="{{ $employee->id }}">
 
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-primary mb-2">
                     Перевести в архив
                 </button>
 
