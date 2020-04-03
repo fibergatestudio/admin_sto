@@ -15,6 +15,8 @@ use App\Clients_logs;
 use App\Clients_notes_logs;
 use App\Deleted_notes;
 use App\Cars_in_service_logs;
+use App\Assignment;
+use App\Assignments_income;
 use App\Firm_list;
 
 
@@ -25,7 +27,27 @@ class Clients_Admin_Controller extends Controller
     /* Перечень клиентов */
     public function clients_index(){
         $clients = Client::all();
-        return view('admin.clients.clients_index', ['clients' => $clients]);
+        $clients_cars = Cars_in_service::all();
+        $client_assignments = Assignment::all();
+        $client_assign_income = Assignments_income::all();
+
+        // $all_client_data =
+        // DB::table('clients')
+        //     ->join('cars_in_service', 'clients.id', '=', 'cars_in_service.owner_client_id')
+        //     ->join('assignments', 'cars_in_service.id', '=', 'assignments.car_id')
+        //     ->join('assignments_income', 'assignments.id', '=', 'assignments_income.assignment_id')
+        //     ->orderBy('order','ASC')
+        //     ->get();
+
+
+
+        return view('admin.clients.clients_index', 
+        [
+            'clients' => $clients, 
+            'clients_cars' => $clients_cars, 
+            'client_assignments' => $client_assignments, 
+            'client_assign_income' => $client_assign_income
+        ]);
     }
 
     /* Добавить клиента: страница */

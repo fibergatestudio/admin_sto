@@ -16,7 +16,11 @@
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>Общее имя</th>
+            <th>ФИО</th>
+            <th>Кол-во Авто</th>
+            <th>Кол-во Нарядов</th>
+            <th>Оплачено</th>
+            <th>Скидка</th>
             <!-- <th>ФИО</th>
              <th>Организация</th>
              <th>Номер телефона</th>
@@ -25,7 +29,64 @@
         </tr>
         </thead>
         <tbody>
-
+        
+            @foreach($clients as $client)
+            <tr>
+           
+                <td> 
+                    <a href="{{ url('admin/clients/view_client/'.$client->id) }}">
+                        {{$client->general_name}}        
+                    </a>
+                </td>
+                <td>
+                    <?php $total_cars = 0; ?>
+                    @foreach($clients_cars as $c_car)
+                        @if($c_car->owner_client_id == $client->id)
+                            <?php $total_cars = $total_cars+1; ?>
+                        @endif
+                    @endforeach
+                    <?php echo $total_cars; ?> 
+                </td>
+                <td>
+                    <?php $total_assgn = 0; ?>
+                    @foreach($client_assignments as $assign)
+                        @foreach($clients_cars as $c_car)
+                            @if($assign->car_id == $c_car->id)
+                                @if($c_car->id == $client->id)
+                                    <?php $total_assgn = $total_assgn+1; ?>
+                                @endif
+                            @endif
+                        @endforeach
+                    @endforeach
+                    <?php echo $total_assgn; ?>
+                </td>
+                <td>
+                    <?php $total_income = 0; ?>
+                    @foreach($client_assign_income as $income)
+                        @foreach($client_assignments as $assign)
+                            @if($income->assignment_id == $assign->id)
+                                @foreach($clients_cars as $c_car)
+                                    @if($assign->car_id == $c_car->id)
+                                        @if($c_car->owner_client_id == $client->id)
+                                            <?php $total_income = $total_income + $income->amount; ?>
+                                        @endif
+                                    @endif
+                                @endforeach
+                            @endif
+                        @endforeach
+                    @endforeach
+                    <?php echo $total_income; ?>
+                </td>
+                <td>
+                    @if($client->discount <= 0)
+                        0 %
+                    @else
+                        {{$client->discount}} %
+                    @endif
+                   
+                </td>
+            </tr>
+            @endforeach
         </tbody>
     </table>
 </div>
@@ -42,7 +103,7 @@
 {{--    <hr>--}}
     
 
-    <script>
+   <!-- <script>
         $(document).ready(function(){
 
          fetch_customer_data();
@@ -66,5 +127,5 @@
           fetch_customer_data(query);
          });
         });
-    </script>
+    </script> -->
 @endsection

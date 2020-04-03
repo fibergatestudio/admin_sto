@@ -521,6 +521,10 @@ Route::post('/admin/finances/add_category', 'Finances_Admin_Controller@add_categ
 Route::post('/admin/finances/add_account', 'Finances_Admin_Controller@add_account')->middleware('can:admin_rights');
 /* Просмотр счета */
 Route::get('/admin/accounts/view/{account_id}', 'Finances_Admin_Controller@show_account')->middleware('can:admin_rights');
+    /* Редактирование счета */
+    Route::post('/admin/accounts/view/apply_edit', 'Finances_Admin_Controller@apply_edit')->middleware('can:admin_rights');
+/* Удаление */
+Route::get('/admin/finances/{account_id}/delete', 'Finances_Admin_Controller@delete_account')->middleware('can:admin_rights');
 /* Добавление операции */
 Route::post('/admin/accounts/add_operation/{account_id}', 'Finances_Admin_Controller@add_operation')->middleware('can:admin_rights');
 

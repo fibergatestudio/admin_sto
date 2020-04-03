@@ -210,14 +210,19 @@
                                         <td>{{ $account->name }}</td>
 
                                         {{-- Баланс --}}
-                                        <td>{{ $account->balance }} MDL</td>
+                                        <td>{{ $account->balance }} {{ $account->currency }}</td>
                                         <?php $sum_tot_price += $account->balance ?>
 
                                         {{-- Кнопка подробнее --}}
                                         <td>
                                             <a href="{{ url('/admin/accounts/view/'.$account->id) }}">
-                                                <div class="btn btn-secondary">
+                                                <div class="btn btn-primary">
                                                     Подробнее
+                                                </div>
+                                            </a>
+                                            <a href="{{ url('/admin/finances/' . $account->id . '/delete') }}">
+                                                <div class="btn btn-warning">
+                                                    Удалить
                                                 </div>
                                             </a>
                                         </td>

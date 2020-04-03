@@ -15,9 +15,9 @@
 <div style="margin-top: 10px">
   <a href="{{ url('/admin/finances/index') }}" class="btn btn-danger" style="margin: 10px">Вернуться</a>
   <!-- Вызов попапа Добавить счет -->
-  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addAccount" style="margin: 10px">
+  <!-- <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addAccount" style="margin: 10px">
       Добавить счет
-  </button>
+  </button> -->
   <!-- Вызов попапа Изменить счет -->
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#changeAccount" style="margin: 10px">
       Изменить счет
@@ -145,6 +145,73 @@
  font-size: .7625rem;
 }
 </style>
+
+<div class="modal fade" id="changeAccount" tabindex="-1" role="dialog" aria-labelledby="changeAccountModalLabel" aria-hidden="true">
+  <form action="{{ url('/admin/accounts/view/apply_edit') }}" method="POST">
+      @csrf
+      <input type="hidden" name="account_id" value="{{ $account->id }}">
+      <input type="hidden" name="balance" value="{{ $account->balance }}">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h5 class="modal-title" id="addOperationModalLabel">Изменить Счет</h5>
+          </div>
+          
+          <div class="modal-body">
+
+            <div class="form-group col-md-12">
+                <label>Название</label>
+                <input type="text" name="name" class="form-control" value="{{ $account->name }}" required>
+            </div>
+
+            <div class="form-group col-md-12">
+                <label>Категория</label>
+                <select name="category_id" class="form-control">
+                    @foreach($categories as $category)
+
+                      @if($category->id == $account->category_id)
+                      <option value="{{ $category->id }}" selected>{{ $category->name }}</option>
+                      @else
+                      <option value="{{ $category->id }}">{{ $category->name }}</option>
+                      @endif
+
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group col-md-12">
+              <label>Валюта</label>
+              <select name="currency" class="form-control">
+                  <option value="MDL" @if($account->currency == 'MDL') selected @endif>MDL</option>
+                  <option value="USD" @if($account->currency == 'USD') selected @endif>USD</option>
+                  <option value="EUR" @if($account->currency == 'EUR') selected @endif>EUR</option>
+              </select>
+            </div>
+            <div class="form-group col-md-12">
+              <label>Аккаунт (необязательно)</label>
+              <select name="user_email" class="form-control">
+                  <option value="" selected >Выбрать</option>
+                  @foreach($users as $user)
+
+                    @if($account->user_email == $user->email)
+                    <option value="{{ $user->email }}" selected>{{ $user->name }} ({{ $user->email }})</option>
+                    @else
+                    <option value="{{ $user->email }}">{{ $user->name }} ({{ $user->email }})</option>
+                    @endif
+
+                  @endforeach
+              </select>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+            <button type="submit" id="createOperation" class="btn btn-primary">Изменить</button>
+          </div>
+
+        </div>
+      </div>
+</div>
 
 
 <div class="modal fade" id="addOperation" tabindex="-1" role="dialog" aria-labelledby="addOperationModalLabel" aria-hidden="true">
@@ -369,7 +436,7 @@
         @foreach($account_operations as $operation)
             <tr>
                 {{-- Дата --}}
-                <td>{{ new_date($operation->date) }}</td>
+                <td>{{ new_date($operation->created_at) }}</td>
 
                 {{-- Автор --}}
                 <td>{{ $operation->author }}</td>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Auth;
+use DB;
 use App\User;
 use App\Account;
 use App\AccountCategory;
@@ -45,6 +46,7 @@ class Finances_Admin_Controller extends Controller
     public function show_account($account_id)
     {
         $users = User::all();
+        $account = Account::where('id', $account_id)->first();
         $accounts = Account::where('status', 'active')->get();
         $categories = AccountCategory::all();
         $account_operations = AccountOperation::where('account_id', $account_id)->orderBy('date', 'DESC')->get();
@@ -55,7 +57,44 @@ class Finances_Admin_Controller extends Controller
             'users' => $users, 
             'account_operation_categories' => $account_operation_categories,
             'accounts' => $accounts,
+            'account' => $account
         ]);
+    }
+
+    public function apply_edit(Request $request){
+
+        $account_id = $request->account_id;
+
+        $name = $request->name;
+        $category = $request->category_id;
+        $currency = $request->currency;
+        $user_email = $request->user_email;
+        $balance = $request->balance;
+
+        DB::table('accounts')
+        ->where('id', '=', $account_id)
+        ->update([
+            'name' => $name,
+            'user_email' => $user_email,
+            'category_id' => $category,
+            'currency' => $currency,
+            'balance' => $balance
+            ]);
+
+        return back();
+    }
+
+    public function delete_account($account_id){
+
+        //dd($account_id);
+
+        DB::table('accounts')
+        ->where([
+            'id' => $account_id,
+        ])
+        ->delete();
+
+        return back();
     }
 
     // Добавление операции
