@@ -171,10 +171,10 @@
 						</li>
 
 						<li class="nav-item">
-							<a href="{{ url('/delivery-passages') }}" class="nav-link {{ request()->is('delivery-passages') ? 'active' : ''}}">
+							<a href="{{ url('/skud') }}" class="nav-link {{ request()->is('skud') ? 'active' : ''}}">
 								<i class="icon-man-woman"></i>
 								<span>
-									Проходы через систему контроля
+									СКУД
 								</span>
 							</a>
 						</li>

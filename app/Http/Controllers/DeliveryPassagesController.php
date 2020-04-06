@@ -20,9 +20,79 @@ class DeliveryPassagesController extends Controller
 {
 
     public function index(){
+
+        $date = date('Y-m-d');
+        $date_time = strtotime($date);
+        $employees_now = [];
+        $exit_arr = [];
+        $entrance_arr = [];
+        $employees_intruder = [];
+        $temp = [];
+
+        // Работники которые отметились на входе сегодня
+        $employees_entrance = Delivery_passage::where(
+            [
+                ['direction', '=', '1' ],
+                ['time', '>', $date_time]
+            ])->orderBy('created_at', 'desc')->get();
+
+        // Работники которые отметились на выходе сегодня
+        $employees_exit = Delivery_passage::where(
+            [
+                ['direction', '=', '2' ],
+                ['time', '>', $date_time]
+            ])->orderBy('created_at', 'desc')->get();
+
+        // Работники которые еще на работе
+        foreach ($employees_entrance as $entrance) {
+            foreach ($employees_exit as $exit) {
+                if ($entrance->internal_emp_id === $exit->internal_emp_id AND $entrance->time < $exit->time) {
+                    $exit_arr[] = $entrance->internal_emp_id;
+                }
+            }
+        }
+        foreach ($employees_entrance as $entrance) {
+            if (!in_array($entrance->internal_emp_id , $exit_arr)) {
+                $employees_now[] = $entrance;
+            }
+        }
+
+        // Работники которые отметились у кофе-автомата сегодня
+        $employees_coffee = Employee_balance_logs::where(
+            [
+                ['type', '=', 'Кофе' ],
+                ['date', '=', $date]
+            ])->orderBy('created_at', 'desc')->get();
+        foreach ($employees_coffee as $employee) {
+            $employee_id = $employee->employee_id;
+            $employee_name = Employee::find($employee_id)->general_name;
+            $employee_phone = Employee::find($employee_id)->phone;
+            $employee->name = $employee_name;
+            $employee->phone = $employee_phone;
+        }
+
+        // Работники которые отметились у кофе-автомата сегодня, но не отметились на входе
+        foreach ($employees_entrance as $entrance) {
+            $entrance_arr[] = $entrance->internal_emp_id;
+        }
+        foreach ($employees_coffee as $employee) {
+            if (!in_array($employee->phone , $entrance_arr)) {
+                $employees_intruder[] = $employee->phone;
+            }
+        }
+        $employees = Employee::all();
+        foreach ($employees as $employee) {
+            if (in_array($employee->phone , $employees_intruder)) {
+                $temp[] = $employee;
+            }
+        }
+        $employees_intruder = $temp;
+       
         $passages = Delivery_passage::orderBy('updated_at', 'desc')->paginate(10);
-        //echo '<pre>'.print_r($data_arr_assoc,true).'</pre>';
-        return view('delivery_passages',['passages' => $passages]);
+        
+        //echo '<pre>'.print_r($employees_intruder,true).'</pre>';
+        
+        return view('delivery_passages',['passages' => $passages, 'employees_coffee' => $employees_coffee, 'employees_now' => $employees_now, 'employees_intruder' => $employees_intruder]);
     }
 
 
@@ -37,11 +107,11 @@ class DeliveryPassagesController extends Controller
     public function translit($s) {
         $s = (string) $s; // преобразуем в строковое значение
         $s = strip_tags($s); // убираем HTML-теги
-        $s = str_replace(array("\n", "\r"), " ", $s); // убираем перевод каретки
-        $s = preg_replace("/\s+/", ' ', $s); // удаляем повторяющие пробелы
+        $s = str_replace(array("\n", "\r"), " ", $s); // убираем перевод каретки        
         $s = trim($s); // убираем пробелы в начале и конце строки
         $s = function_exists('mb_strtolower') ? mb_strtolower($s) : strtolower($s); // переводим строку в нижний регистр (иногда надо задать локаль)
         $s = strtr($s, array('а'=>'a','б'=>'b','в'=>'v','г'=>'g','д'=>'d','е'=>'e','ё'=>'e','ж'=>'j','з'=>'z','и'=>'i','й'=>'y','к'=>'k','л'=>'l','м'=>'m','н'=>'n','о'=>'o','п'=>'p','р'=>'r','с'=>'s','т'=>'t','у'=>'u','ф'=>'f','х'=>'h','ц'=>'c','ч'=>'ch','ш'=>'sh','щ'=>'shch','ы'=>'y','э'=>'e','ю'=>'yu','я'=>'ya','ъ'=>'','ь'=>''));
+        $s = preg_replace("/\s+/", ' ', $s); // удаляем повторяющие пробелы
         $s = preg_replace("/[^0-9a-z-_ ]/i", "", $s); // очищаем строку от недопустимых символов
         $s = str_replace(" ", "-", $s); // заменяем пробелы знаком минус
         return $s; // возвращаем результат

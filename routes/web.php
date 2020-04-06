@@ -589,9 +589,9 @@ Route::get('/admin/supply_orders/archive', 'Supply_orders_Admin_Controller@archi
    /****** Получение информации о приходе-уходе сотрудников из системы СКУД SIGUR ******/
 
    /* Страница получения POST запроса */
-    Route::get('/delivery-passages', 'DeliveryPassagesController@index');
+    Route::get('/skud', 'DeliveryPassagesController@index');
 
-    Route::post('/delivery-passages', 'DeliveryPassagesController@processing_query')->name('processing_query');
+    Route::post('/skud', 'DeliveryPassagesController@processing_query')->name('processing_query');
 
 
 /********** Допустимые названия авто : Администратор **********/
