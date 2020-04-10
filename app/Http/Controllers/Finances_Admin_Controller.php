@@ -49,7 +49,7 @@ class Finances_Admin_Controller extends Controller
         $account = Account::where('id', $account_id)->first();
         $accounts = Account::where('status', 'active')->get();
         $categories = AccountCategory::all();
-        $account_operations = AccountOperation::where('account_id', $account_id)->orderBy('date', 'DESC')->get();
+        $account_operations = AccountOperation::where('account_id', $account_id)->orderBy('created_at', 'DESC')->get();
         $account_operation_categories = AccountOperationCategory::all();
         return view('admin.finances.account_operations', [
             'account_operations' => $account_operations, 
@@ -136,7 +136,7 @@ class Finances_Admin_Controller extends Controller
             $to_account->balance = $new_account_operation_to->balance;
             $to_account->save();
         }
-        else{
+        else {
             $new_account_operation->category = $request->category;
         }
         $new_account_operation->save();
@@ -156,7 +156,8 @@ class Finances_Admin_Controller extends Controller
             $new_account_operation_category->save();
         }                   
         
-        return redirect('/admin/finances/index');
+        return back();
+        //return redirect('/admin/finances/index');
     }
 
     // Добавление категории

@@ -80,7 +80,7 @@
 
                 {{-- Обьем мотора --}}
                 <div class="form-group col-md-4">
-                    <label>Объем мотора</label>
+                    <label>Объем двигателя</label>
                     <input type="number" min="0" max="10" step="0.1" name="engine_capacity" id="enginecapacity" class="form-control" required>
                 </div>
 
@@ -132,10 +132,10 @@
                 </div>
 
                 {{-- Обьем мотора --}}
-                <div class="form-group col-md-4">
-                    <label>Объем мотора</label>
+                <!--<div class="form-group col-md-4">
+                    <label>Объем двигателя</label>
                     <input type="number" min="0" max="20000" step="1" name="engine_capacity" id="enginecapacity" class="form-control" required>
-                </div>
+                </div> -->
 
             </div>
 
@@ -267,7 +267,7 @@
 
                 {{-- Обьем мотора --}}
                 <div class="form-group col-md-4">
-                    <label>Объем мотора</label>
+                    <label>Объем двигателя</label>
                     <input type="number" min="0" max="20000" step="1" name="engine_capacity" id="enginecapacity" class="form-control" required>
                 </div>
 

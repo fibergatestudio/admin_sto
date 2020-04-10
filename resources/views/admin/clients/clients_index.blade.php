@@ -13,7 +13,7 @@
 
 @section('content')
 <div class="card card-p">
-    <table class="table table-striped">
+    <table id="table_all" class="table table-striped">
         <thead>
         <tr>
             <th>ФИО</th>
@@ -90,6 +90,16 @@
         </tbody>
     </table>
 </div>
+
+<script type="text/javascript">
+ $(function () {
+    $("#table_all").DataTable({
+      "language":{
+          "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Russian.json",
+      }
+   });
+ });
+</script>
 
     
 

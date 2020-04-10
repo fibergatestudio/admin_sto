@@ -366,7 +366,7 @@
                       <select name="to_account_id" class="form-control">
                           @foreach($accounts as $account)
                           @if($account->id != $account_operations[0]->account_id)
-                          <option value="{{ $account->id }}">{{ $account->name }}</option>
+                          <option value="{{ $account->id }}">{{ $account->name }} {{ $account->currency }}</option>
                           @endif
                           @endforeach
                       </select>
@@ -468,8 +468,9 @@
 @endsection
 
 <script type="text/javascript">
-    var categoriesArr = '<?=json_encode($categories_arr,JSON_UNESCAPED_UNICODE) ?>';
+    var categoriesArr = '<?= json_encode($categories_arr,JSON_UNESCAPED_UNICODE) ?>';
     categoriesArr = JSON.parse(categoriesArr);
+    console.log(categoriesArr);
 </script>
 
 @section('custom_scripts')
