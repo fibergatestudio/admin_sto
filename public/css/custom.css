@@ -48,6 +48,10 @@
   padding: 0.5rem .3rem 1rem;
 }
 
+.table-car-client thead th {
+  padding: 0.75rem 1.25rem;
+}
+
 #calendar {
   padding: 35px;
   margin: 15px 45px;
@@ -142,9 +146,5 @@ table label select {
 
 .tabs-menu-modal > label {
   width: 33.33% !important;
-}
-
-.table td i {
-  margin: 0 auto;
 }
 
