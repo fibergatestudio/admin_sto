@@ -54,10 +54,9 @@
       </div>
     </div>
 
-
-    <h3 class="mt-2">Машины клиента:</h3>
+<h3 class="mt-2">Машины клиента:</h3>
 <div class="card card-p">
-    <table class="table">
+    <table class="table table-car-client">
         <thead>
         <tr>
             <th>№</th>

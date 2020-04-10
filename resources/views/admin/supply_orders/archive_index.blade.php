@@ -10,7 +10,7 @@
 {{-- Выводим заказы --}}
     @foreach($archived_orders as $supply_order)
     <h5><span class="badge badge-secondary">Заказ {{ $supply_order->id }}</span></h5>
-    <div class="card">
+    <div class="card card-p">
         <table class="table">
             <thead>
             <tr>
