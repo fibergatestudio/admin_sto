@@ -353,9 +353,11 @@ Route::get('/dashboard_admin', 'DashboardController@dashboard_index')->name('das
     /* Просмотр клиента: страница */
     Route::get('admin/clients/view_client/{client_id}', 'Clients_Admin_Controller@single_client_view')->name('admin_view_client')->middleware('can:admin_rights');
 
+        /* Редактировать данные о клиенте */
+        Route::post('admin/clients/view_client/{client_id}/edit_info', 'Clients_Admin_Controller@edit_client_info')->middleware('can:admin_rights');
+        
         /* Редактировать данные о машине */
         Route::post('admin/clients/view_client/{client_id}/{car_id?}', 'Clients_Admin_Controller@single_client_view_edit_car')->name('admin_view_client')->middleware('can:admin_rights');
-
 
     /*Добавить примечание о клиенте : страница*/
     Route::get('/admin/clients/add_note_to_client/{client_id}', 'Clients_Admin_Controller@add_note_to_client_page');
@@ -406,6 +408,8 @@ Route::get('admin/firms/firms_index', 'Firms_Admin_Controller@firms_index')->mid
 
     /* Одна машина : страница */
     Route::get('admin/cars_in_service/view/{car_id}', 'Cars_in_service_Admin_Controller@single_car_view')->middleware('can:admin_rights');
+    /* Наряды на машину */
+    Route::get('admin/cars_in_service/view_assignments/{car_id}', 'Cars_in_service_Admin_Controller@car_assignments_view')->middleware('can:admin_rights');
 
     /* Добавить примечание к машине : страница */
     Route::get('/admin/cars_in_service/add_note_to_car/{car_id}', 'Cars_in_service_Admin_Controller@add_note_to_car_page')->middleware('can:admin_rights');;

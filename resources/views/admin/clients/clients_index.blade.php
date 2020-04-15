@@ -12,7 +12,7 @@
 @endsection
 
 @section('content')
-<div class="card card-p">
+<!-- <div class="card card-p">
     <table id="table_all" class="table table-striped">
         <thead>
         <tr>
@@ -21,11 +21,6 @@
             <th>Кол-во Нарядов</th>
             <th>Оплачено</th>
             <th>Скидка</th>
-            <!-- <th>ФИО</th>
-             <th>Организация</th>
-             <th>Номер телефона</th>
-             <th>Баланс</th>
-             <th>Скидка</th> -->
         </tr>
         </thead>
         <tbody>
@@ -89,11 +84,62 @@
             @endforeach
         </tbody>
     </table>
+</div> -->
+
+<div class="card card-p">
+    <table id="table_all" class="table table-striped">
+        <thead>
+        <tr>
+            <th>ФИО</th>
+            <th>Кол-во Авто</th>
+            <th>Кол-во Нарядов</th>
+            <th>Оплачено</th>
+            <th>Скидка</th>
+            <!-- <th>ФИО</th>
+             <th>Организация</th>
+             <th>Номер телефона</th>
+             <th>Баланс</th>
+             <th>Скидка</th> -->
+        </tr>
+        </thead>
+        <tbody>
+        
+            @foreach($all_info as $info)
+                    <tr>
+                
+                        <td> 
+                            <a href="{{ url('admin/clients/view_client/'.$info['id']) }}">
+                                {{ $info['fio'] }}
+                            </a>
+                        </td>
+                        <td>
+                            {{ $info['cars_count'] }}
+                        </td>
+                        <td>
+                            {{ $info['assignment_count'] }}
+                        </td>
+                        <td>
+                            {{ $info['total_income'] }}
+                        </td>
+                        <td>
+
+                            @if($info['discount'] <= 0)
+                                0 %
+                            @else
+                                {{ $info['discount'] }} %
+                            @endif
+                        
+                        </td>
+                    </tr>
+            @endforeach
+        </tbody>
+    </table>
 </div>
 
 <script type="text/javascript">
  $(function () {
     $("#table_all").DataTable({
+      "order": [[ 2, 'desc' ]],
       "language":{
           "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Russian.json",
       }

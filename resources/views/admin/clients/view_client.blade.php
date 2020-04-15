@@ -29,6 +29,18 @@
           </div>
           <h4 class="mb-1 text-success">{{ $client->created_at }}</h4>
         </a>
+        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">Скидка:</h5>
+            </div>
+            <h4 class="mb-1 text-success">
+                @if($client->discount == '')
+                    0 %
+                @else
+                    {{ $client->discount }} %
+                @endif
+            </h4>
+        </a>
       </div>
       <div class="list-group col-md-6">
         <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
@@ -51,8 +63,59 @@
             @endif
             </h4>
         </a>
+        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">Редактирование:</h5>
+          </div>
+          <button class="btn btn-success" type="button" class="px-5 btn btn-primary" data-toggle="modal" data-target="#editInfo">Изменить Данные</button>
+        </a>
       </div>
     </div>
+
+
+    <div class="modal fade" id="editInfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel"> Редактировать</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form action="{{ url('admin/clients/view_client/'. $client->id .'/edit_info') }}" method="POST">
+                    @csrf
+                        <div class="modal-body">
+
+                                <input type="hidden" name="client_id" value="{{ $client->id }}">
+                                
+                                <div class="form-group">
+                                    <label>ФИО</label>
+                                    <input type="text" class="form-control" value="{{ $client->fio }}" name="fio">
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>Номер телефона</label>
+                                    <input type="number" class="form-control" value="{{ $client->phone }}" name="phone">
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label>Скидка</label>
+                                    <input type="number" class="form-control" value="{{ $client->discount }}" name="discount">
+                                </div>
+
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-secondary" >Применить</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
 
 <h3 class="mt-2">Машины клиента:</h3>
 <div class="card card-p">
@@ -100,6 +163,11 @@
                 </td>
                 {{-- Кнопка подробнее --}}
                 <td>
+                    <!-- <a href="{{ url('admin/cars_in_service/view_assignments/'.$car->id) }}">
+                        <div class="btn btn-primary">
+                            Наряды
+                        </div>
+                    </a> -->
                     <a href="{{ url('admin/cars_in_service/view/'.$car->id) }}">
                         <div class="btn btn-secondary">
                             Подробнее

@@ -1151,53 +1151,59 @@ class EmployeesAdminController extends Controller
     /* Миграция сотрудников */
     public function employee_migrate(){
 
-        //User
-        //Employee
-        //
-        $workers_table = DB::table('workers')->distinct()->get();
+        $users = DB::table('users')->get();
 
-        //dd($workers_table);
+        $users_count = $users->count();
 
-        foreach($workers_table as $worker){
-            //Создаем User'a
-            $phone = $worker->phone_number;
-            $show_list = $worker->show_list;
-            if(!empty($phone) && $show_list == "yes"){
-                //General Name
-                $general_name = $worker->name;
-                $general_name .= " ";
-                $general_name .= $worker->lastname;
-                //fio
-                $fio = $worker->name;
-                $fio .= " ";
-                $fio .= $worker->lastname;
-                $fio .= " ";
-                $fio .= $worker->patronymic;
-    
-                $new_user = new User();
-                $new_user->name = $phone;
-                $new_user->password = Hash::make($phone);
-                $new_user->email = $phone . $fio.'@test.com';
-                $new_user->role = 'employee';
-                $new_user->general_name = $general_name;
-                $new_user->save();
+        if($users_count >= '25'){
 
-                $new_user_id = $new_user->id;
+            return back()->with('error', 'Данные уже импортированы!');
 
-                $new_employee = new Employee();
-                $new_employee->general_name = $general_name;
-                $new_employee->fio = $fio;
-                $new_employee->status = 'active';
-                $new_employee->date_join = date("d.m.Y");
-                $new_employee->phone = $phone;
-                /* Добавляем в таблицу работников ID соответствующего юзера */
-                $new_employee->user_id = $new_user_id;
-                $new_employee->balance = $worker->balance;; //Добавление баланса
-                $new_employee->save();
+        } else {
+
+            $workers_table = DB::table('workers')->distinct()->get();
+
+            foreach($workers_table as $worker){
+                //Создаем User'a
+                $phone = $worker->phone_number;
+                $show_list = $worker->show_list;
+                if(!empty($phone) && $show_list == "yes"){
+                    //General Name
+                    $general_name = $worker->name;
+                    $general_name .= " ";
+                    $general_name .= $worker->lastname;
+                    //fio
+                    $fio = $worker->name;
+                    $fio .= " ";
+                    $fio .= $worker->lastname;
+                    $fio .= " ";
+                    $fio .= $worker->patronymic;
+        
+                    $new_user = new User();
+                    $new_user->name = $phone;
+                    $new_user->password = Hash::make($phone);
+                    $new_user->email = $phone . $fio.'@test.com';
+                    $new_user->role = 'employee';
+                    $new_user->general_name = $general_name;
+                    $new_user->save();
+
+                    $new_user_id = $new_user->id;
+
+                    $new_employee = new Employee();
+                    $new_employee->general_name = $general_name;
+                    $new_employee->fio = $fio;
+                    $new_employee->status = 'active';
+                    $new_employee->date_join = date("d.m.Y");
+                    $new_employee->phone = $phone;
+                    /* Добавляем в таблицу работников ID соответствующего юзера */
+                    $new_employee->user_id = $new_user_id;
+                    $new_employee->balance = $worker->balance;; //Добавление баланса
+                    $new_employee->save();
+                }
             }
-        }
 
-        return back();
+            return back();
+        }
     }
 
     /*

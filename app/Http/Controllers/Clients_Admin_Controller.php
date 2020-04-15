@@ -39,14 +39,56 @@ class Clients_Admin_Controller extends Controller
         //     ->orderBy('order','ASC')
         //     ->get();
 
+        $all_clients = DB::table('clients')->get();
 
+        $all_info = [];
+
+        //
+        $number = 0;
+        foreach($all_clients as $client){
+
+
+            $all_info[$number]['id'] = $client->id;
+            $all_info[$number]['fio'] = $client->fio; 
+            //Берем машины клиента (их кол-во)
+            $client_cars = DB::table('cars_in_service')->where('owner_client_id', $client->id)->get();
+            $all_info[$number]['cars_count'] = $client_cars->count();
+
+            //Берем кол-во нарядов клиента
+            $assignment_count = 0;
+            $total_income = 0;
+            foreach($client_cars as $client_car){
+                $client_assignments = DB::table('assignments')->where('car_id', $client_car->id)->get();
+                foreach($client_assignments as $assign){
+                    $assignment_count++;
+
+                    $assignments_income = DB::table('assignments_income')->where('assignment_id', $assign->id)->get();
+                    foreach($assignments_income as $income){
+                        $income_amount = $income->amount;
+                        $total_income = $total_income + $income_amount;
+                    }
+                }
+                
+            }
+            $all_info[$number]['assignment_count'] = $assignment_count;
+            $all_info[$number]['total_income'] = $total_income;
+
+            $all_info[$number]['discount'] = $client->discount;
+
+            //
+            $number++;
+
+        }
+        //dd($clients);
+        //dd($all_info);
 
         return view('admin.clients.clients_index', 
         [
             'clients' => $clients, 
             'clients_cars' => $clients_cars, 
             'client_assignments' => $client_assignments, 
-            'client_assign_income' => $client_assign_income
+            'client_assign_income' => $client_assign_income,
+            'all_info' => $all_info
         ]);
     }
 
@@ -267,6 +309,22 @@ class Clients_Admin_Controller extends Controller
         $edit_client_note_log_entry->save();
 
         return redirect('admin/clients/view_client/' .$client_note_entry->client_id);
+    }
+
+    /* Редактирование информации о клиенте */
+    public function edit_client_info(Request $request, $client_id){
+
+        //dd($client_id);
+
+        DB::table('clients')->where('id', $client_id)
+        ->update([
+            'fio' => $request->fio,
+            'phone' => $request->phone,
+            'discount' => $request->discount,
+        ]);
+
+        return back();
+
     }
 
 

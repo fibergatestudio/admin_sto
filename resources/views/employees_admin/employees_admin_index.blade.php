@@ -20,6 +20,14 @@
 
 @section('content')
 
+@if($message = Session::get('error'))
+   <div class="alert alert-success alert-block">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+           <strong>{{ $message }}</strong>
+   </div>
+@endif
+
+
 <?php $sum_tot = 0 ?>
 @foreach($employee_data as $employee)
         @if ($employee->balance > 0)

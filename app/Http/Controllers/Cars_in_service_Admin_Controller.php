@@ -230,6 +230,14 @@ class Cars_in_service_Admin_Controller extends Controller
         ]);
     }
 
+    /* Страница нарядов на машину */
+    public function car_assignments_view($car_id){
+
+        dd($car_id);
+
+        return view();
+    }
+
     /* - Добавление примечания к машине : страница - */
     public function add_note_to_car_page($car_id){
         $car = Cars_in_service::find($car_id);
