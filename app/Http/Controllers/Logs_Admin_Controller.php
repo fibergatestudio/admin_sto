@@ -19,6 +19,8 @@ use App\Cars_notes_logs;
 use App\Assignment;
 use App\Sub_assignment;
 use App\Workzone;
+use App\User;
+use App\Assignment_logs;
 use Telegram\Bot\Laravel\Facades\Telegram;
 
 class Logs_Admin_Controller extends Controller
@@ -80,15 +82,27 @@ class Logs_Admin_Controller extends Controller
 
             $action_choose = $employee_finances_log_entry->action;
 
+            if ($employee_finances_log_entry->author_id) {
+                $employee_finances_log_entry->author = User::find($employee_finances_log_entry->author_id)->general_name;
+            }
+            else{
+                $employee_finances_log_entry->author = $employee_name;
+            }
+
             if($action_choose == 'deposit')
             {
 
-                $text = 'Сотрудник : '. $employee_name . ' получил начисление : '. $employee_finances_log_entry->amount . ' на основании : '. $employee_finances_log_entry->reason . '. Было на балансе : '. $employee_finances_log_entry->old_balance . '. Стало на балансе : '. ($employee_finances_log_entry->old_balance + $employee_finances_log_entry->amount);  
+                $text = 'Сотрудник : '. $employee_name . ' получил начисление : '. $employee_finances_log_entry->amount . ' на основании : '. $employee_finances_log_entry->reason . '. Было на балансе : '. $employee_finances_log_entry->old_balance . '. Стало на балансе : '. ($employee_finances_log_entry->old_balance + $employee_finances_log_entry->amount);
+
+                $employee_finances_log_entry->employee_name = $employee_name;
+                $employee_finances_log_entry->new_balance = $employee_finances_log_entry->old_balance + $employee_finances_log_entry->amount;
             }
             else
             {
-
                 $text = 'С cотрудника : '. $employee_name . ' списано : '. $employee_finances_log_entry->amount . ' на основании : '. $employee_finances_log_entry->reason . '. Было на балансе : '. $employee_finances_log_entry->old_balance . '. Стало на балансе : '. ($employee_finances_log_entry->old_balance - $employee_finances_log_entry->amount);
+
+                $employee_finances_log_entry->employee_name = $employee_name;
+                $employee_finances_log_entry->new_balance = $employee_finances_log_entry->old_balance - $employee_finances_log_entry->amount;
             }
 
             $employee_finances_log_entry->text = $text;
@@ -97,6 +111,19 @@ class Logs_Admin_Controller extends Controller
         $employees_finances_logs = $paginate_finances_logs;
 
         return view ('admin.logs.finances_logs.finances_logs', compact('employees_finances_logs'));
+        
+    }
+
+
+    /* - Логи по нарядам - */
+    public function assignments_logs()
+    {
+
+        $paginate_assignments_logs = Assignment_logs::orderBy('updated_at', 'desc')->paginate(10);
+       
+        $assignments_logs = $paginate_assignments_logs;
+
+        return view ('admin.logs.assignments_logs.assignments_logs', compact('assignments_logs'));
         
     }
      

@@ -619,6 +619,7 @@ Route::get('/admin/employees_logs', 'Logs_Admin_Controller@employees_logs');  //
 Route::get('/admin/clients_logs', 'Logs_Admin_Controller@clients_logs');  //страница логов по клиентам
 Route::get('/admin/cars_in_service_logs', 'Logs_Admin_Controller@cars_in_service_logs');  //страница логов по авто
 Route::get('/admin/finances_logs', 'Logs_Admin_Controller@finances_logs'); //страница логов по финансам
+Route::get('/admin/assignments_logs', 'Logs_Admin_Controller@assignments_logs'); //страница логов по нарядам
 
 /****************************************/
 /********** РАБОТНИК : секция **********/

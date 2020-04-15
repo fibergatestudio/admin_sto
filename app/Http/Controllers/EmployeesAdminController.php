@@ -740,6 +740,7 @@ class EmployeesAdminController extends Controller
             $employee_balance_log->status = 'Принят(тест)'; // Статус
             $employee_balance_log->employee_id = $employee_id;
             $employee_balance_log->old_balance = $balance;
+            $employee_balance_log->author_id = Auth::user()->id;
             $employee_balance_log->save();
 
             /* Возвращаемся на страницу */
@@ -850,6 +851,7 @@ class EmployeesAdminController extends Controller
         $employee_balance_log->status = 'Принят(тест)'; // Статус
         $employee_balance_log->employee_id = $employee_id;
         $employee_balance_log->old_balance = $balance;
+        $employee_balance_log->author_id = Auth::user()->id;
         $employee_balance_log->save();
 
         /* Возвращаемся на страницу */
@@ -960,6 +962,7 @@ class EmployeesAdminController extends Controller
          $employee_balance_log->status = 'Принят(тест)'; // Статус
          $employee_balance_log->employee_id = $fine->employee_id;
          $employee_balance_log->old_balance = $employee_balance->balance;
+         $employee_balance_log->author_id = Auth::user()->id;
          $employee_balance_log->save();
 
 
@@ -1140,6 +1143,7 @@ class EmployeesAdminController extends Controller
         $employee_balance_log->date = date('Y-m-d');
         $employee_balance_log->employee_id = $employee_id;
         $employee_balance_log->old_balance = $emp_balance;
+        $employee_balance_log->author_id = Auth::user()->id;
         $employee_balance_log->save();
 
 

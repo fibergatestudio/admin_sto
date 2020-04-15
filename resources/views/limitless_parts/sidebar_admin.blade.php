@@ -205,6 +205,7 @@
 								<li class="nav-item"><a href="{{ url('/admin/clients_logs') }}" class="nav-link {{ request()->is('admin/clients_logs') ? 'active' : ''}}  legitRipple">Клиенты</a></li>
 								<li class="nav-item"><a href="{{ url('/admin/cars_in_service_logs') }}" class="nav-link {{ request()->is('admin/cars_in_service_logs') ? 'active' : ''}}  legitRipple">Машины в сервисе</a></li>
 								<li class="nav-item"><a href="{{ url('/admin/finances_logs') }}" class="nav-link {{ request()->is('admin/finances_logs') ? 'active' : ''}}  legitRipple">Финансы</a></li>
+								<li class="nav-item"><a href="{{ url('/admin/assignments_logs') }}" class="nav-link {{ request()->is('admin/assignments_logs') ? 'active' : ''}}  legitRipple">Наряды</a></li>
 								</ul>
 						</li>
 
