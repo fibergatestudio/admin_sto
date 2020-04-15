@@ -23,6 +23,7 @@ use Telegram\Bot\Laravel\Facades\Telegram;
 use App\Assignments_income;
 use App\Assignments_expense;
 use App\Assignments_completed_works;
+use App\Assignment_logs;
 
 use DateTime;
 use App\Exchange_rates;
@@ -39,6 +40,7 @@ use App\Account;
 use App\AccountCategory;
 use App\AccountOperation;
 use App\AccountOperationCategory;
+use App\User;
 
 class Assignments_Admin_Controller extends Controller
 {
@@ -1192,6 +1194,14 @@ class Assignments_Admin_Controller extends Controller
         /* end TEST confirmed */
         $new_assignment->save();
 
+        /* Создаём лог наряда и сохраняем его*/
+        $new_assignment_log = new Assignment_logs();
+        $new_assignment_log->assignment_id = $new_assignment->id;
+        $new_assignment_log->author = Auth::user()->id;
+        $new_assignment_log->type = '';
+        $new_assignment_log->text = 'Создан новый наряд - "'.$new_assignment->description.'"'.' | Автор - '.User::find(Auth::user()->id)->general_name;
+        $new_assignment_log->save();
+
         /* Проверка оповещенияй (включено ли) */
         $user_id = Auth::user()->id;
         $notification_check = DB::table('user_options')->where('id','=', $user_id)->first();
@@ -1441,6 +1451,14 @@ class Assignments_Admin_Controller extends Controller
             ])
             ->delete();
 
+            /* Создаём лог наряда и сохраняем его*/
+            $new_assignment_log = new Assignment_logs();
+            $new_assignment_log->assignment_id = $assignment_id;
+            $new_assignment_log->author = Auth::user()->id;
+            $new_assignment_log->type = '';
+            $new_assignment_log->text = 'Удален зональный наряд из наряда "'.Assignment::find($assignment_id)->description.'"'.' | Автор - '.User::find(Auth::user()->id)->general_name;
+            $new_assignment_log->save();
+
             return $row_index;
         }
 
@@ -1452,7 +1470,7 @@ class Assignments_Admin_Controller extends Controller
         foreach ($sub_assignment_arr[$i] as $key => $value) {
                 $temp_arr[$key] = $value;
             }
-        }
+        }        
 
         $is_post_work_row = null;
         $is_post_spares_row = null;
@@ -1505,8 +1523,17 @@ class Assignments_Admin_Controller extends Controller
             $sub_assignment_expenses->currency = $temp_arr['d_table_currency'];
             $sub_assignment->save();
             $sub_assignment_expenses->save();
+
+            /* Создаём лог наряда и сохраняем его*/
+            $new_assignment_log = new Assignment_logs();
+            $new_assignment_log->assignment_id = $temp_arr['assignment_id'];
+            $new_assignment_log->author = Auth::user()->id;
+            $new_assignment_log->type = '';
+            $new_assignment_log->description = 'New Data: '.'Рабочая зона: "'.$temp_arr['d_table_workzone'].'" Время начала работ: "'.$temp_arr['d_table_time_start'].'" Время окончания работ: "'.$temp_arr['d_table_time_finish'].'" Ответственный сотрудник: "'.$temp_arr['d_table_responsible_officer'].'" Список выполненных работ: "'.$temp_arr['d_table_list_completed_works'].'" Кол-во: "'.$temp_arr['d_table_quantity'].'" Цена: "'.$temp_arr['d_table_price'].'" Валюта: "'.$temp_arr['d_table_currency'].'"';
+            $new_assignment_log->text = 'Создан новый зональный наряд в наряде "'.Assignment::find($temp_arr['assignment_id'])->description.'"'.' | Автор - '.User::find(Auth::user()->id)->general_name;
+            $new_assignment_log->save();
         }
-        elseif (!$is_post_spares_row AND isset($temp_arr['spares_row_index'])) {
+        elseif (!$is_post_spares_row AND isset($temp_arr['spares_row_index'])) {            
             $sub_assignment = new New_sub_assignment();
             $sub_assignment_expenses = new Assignments_expense();
             $sub_assignment->assignment_id = $temp_arr['assignment_id'];
@@ -1529,6 +1556,15 @@ class Assignments_Admin_Controller extends Controller
             $sub_assignment_expenses->currency = $temp_arr['d_table_spares_currency'];
             $sub_assignment->save();
             $sub_assignment_expenses->save();
+
+            /* Создаём лог наряда и сохраняем его*/
+            $new_assignment_log = new Assignment_logs();
+            $new_assignment_log->assignment_id = $temp_arr['assignment_id'];
+            $new_assignment_log->author = Auth::user()->id;
+            $new_assignment_log->type = '';
+            $new_assignment_log->description = 'New Data: '.'Деталь: "'.$temp_arr['d_table_spares_detail'].'" Артикул: "'.$temp_arr['d_table_spares_vendor_code'].'" Ед. измерения: "'.$temp_arr['d_table_spares_unit_measurements'].'" Кол-во: "'.$temp_arr['d_table_spares_quantity'].'" Цена: "'.$temp_arr['d_table_spares_price'].'" Валюта: "'.$temp_arr['d_table_spares_currency'].'"';
+            $new_assignment_log->text = 'Добавлены данные о запчастях в наряде "'.Assignment::find($temp_arr['assignment_id'])->description.'"'.' | Автор - '.User::find(Auth::user()->id)->general_name;
+            $new_assignment_log->save();
         }
         /* Обновление нового зонального наряда */
         elseif($is_post_work_row){
@@ -1558,6 +1594,15 @@ class Assignments_Admin_Controller extends Controller
                 $sub_assignment_expenses->save();
             }
             $is_post_work_row->save();
+
+            /* Создаём лог наряда и сохраняем его*/
+            $new_assignment_log = new Assignment_logs();
+            $new_assignment_log->assignment_id = $temp_arr['assignment_id'];
+            $new_assignment_log->author = Auth::user()->id;
+            $new_assignment_log->type = '';
+            $new_assignment_log->description = 'New Data: '.'Рабочая зона: "'.$temp_arr['d_table_workzone'].'" Время начала работ: "'.$temp_arr['d_table_time_start'].'" Время окончания работ: "'.$temp_arr['d_table_time_finish'].'" Ответственный сотрудник: "'.$temp_arr['d_table_responsible_officer'].'" Список выполненных работ: "'.$temp_arr['d_table_list_completed_works'].'" Кол-во: "'.$temp_arr['d_table_quantity'].'" Цена: "'.$temp_arr['d_table_price'].'" Валюта: "'.$temp_arr['d_table_currency'].'"';
+            $new_assignment_log->text = 'Обновлен зональный наряд в наряде "'.Assignment::find($temp_arr['assignment_id'])->description.'"'.' | Автор - '.User::find(Auth::user()->id)->general_name;
+            $new_assignment_log->save();
         }
         elseif ($is_post_spares_row) {
             $is_post_spares_row->spares_row_index = $temp_arr['spares_row_index'];
@@ -1584,6 +1629,15 @@ class Assignments_Admin_Controller extends Controller
                 $sub_assignment_expenses->save();
             }
             $is_post_spares_row->save();
+
+            /* Создаём лог наряда и сохраняем его*/
+            $new_assignment_log = new Assignment_logs();
+            $new_assignment_log->assignment_id = $temp_arr['assignment_id'];
+            $new_assignment_log->author = Auth::user()->id;
+            $new_assignment_log->description = 'New Data: '.'Деталь: "'.$temp_arr['d_table_spares_detail'].'" Артикул: "'.$temp_arr['d_table_spares_vendor_code'].'" Ед. измерения: "'.$temp_arr['d_table_spares_unit_measurements'].'" Кол-во: "'.$temp_arr['d_table_spares_quantity'].'" Цена: "'.$temp_arr['d_table_spares_price'].'" Валюта: "'.$temp_arr['d_table_spares_currency'].'"';
+            $new_assignment_log->type = '';
+            $new_assignment_log->text = 'Обновлены данные о запчастях в наряде "'.Assignment::find($temp_arr['assignment_id'])->description.'"'.' | Автор - '.User::find(Auth::user()->id)->general_name;
+            $new_assignment_log->save();
         }
 
         return $temp_arr;
