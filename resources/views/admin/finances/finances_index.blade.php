@@ -176,7 +176,7 @@
                 @endphp
                 @foreach($categories as $category)
                     <input type="radio" name="inset" value="" id="tab_<?=$i?>" <?=($i==1)?'checked':''?>>
-                    <label for="tab_<?=$i?>">{{ $category->name }}</label>
+                    <label for="tab_<?=$i?>">{{ $category->name }} <a href="{{ url('/admin/finances/' . $category->name . '/delete') }}"><button class="btn btn-warning">x</button></a></label>
                     @php
                         $i++;
                     @endphp

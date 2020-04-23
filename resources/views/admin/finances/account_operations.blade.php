@@ -419,7 +419,7 @@
 
 @section('content')
 <div class="card card-p">
-    <table class="table table-operations">
+    <table id="table_finances" class="table table-operations">
         <thead>
         <tr>
             <th scope="col">Дата</th>
@@ -474,6 +474,23 @@
 </script>
 
 @section('custom_scripts')
+
+<script type="text/javascript">
+ $(function () {
+   $("#table_finances").DataTable({
+      "language":{
+          "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Russian.json",
+      },
+      "columnDefs": [ {
+          "targets": 'no-sort',
+          "orderable": false,
+    } ]
+   });
+
+ });
+
+</script>
+
 
 <script type="text/javascript">
 

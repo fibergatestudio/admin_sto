@@ -521,6 +521,8 @@ Route::post('/admin/profitability/profitability_index/month', 'Assignments_Admin
 Route::get('/admin/finances/index', 'Finances_Admin_Controller@finances_index')->middleware('can:admin_rights');
 /* Добавление категории */
 Route::post('/admin/finances/add_category', 'Finances_Admin_Controller@add_category')->middleware('can:admin_rights');
+    /* Удаление категории */
+    Route::get('/admin/finances/{fin_cat_id}/delete', 'Finances_Admin_Controller@finances_delete_category')->middleware('can:admin_rights');
 /* Добавление счета */
 Route::post('/admin/finances/add_account', 'Finances_Admin_Controller@add_account')->middleware('can:admin_rights');
 /* Просмотр счета */

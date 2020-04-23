@@ -163,11 +163,11 @@
                 </td>
                 {{-- Кнопка подробнее --}}
                 <td>
-                    <!-- <a href="{{ url('admin/cars_in_service/view_assignments/'.$car->id) }}">
+                    <a href="{{ url('admin/cars_in_service/view_assignments/'.$car->id) }}">
                         <div class="btn btn-primary">
                             Наряды
                         </div>
-                    </a> -->
+                    </a>
                     <a href="{{ url('admin/cars_in_service/view/'.$car->id) }}">
                         <div class="btn btn-secondary">
                             Подробнее

@@ -84,6 +84,15 @@ class Finances_Admin_Controller extends Controller
         return back();
     }
 
+    public function finances_delete_category($fin_cat_name){
+
+        //dd($fin_cat_name);
+
+        DB::table('account_categories')->where('name', $fin_cat_name)->delete();
+
+        return back();
+    }
+
     public function delete_account($account_id){
 
         //dd($account_id);
