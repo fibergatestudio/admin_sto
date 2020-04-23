@@ -658,7 +658,9 @@ class Employee_Dashboard_Controller extends Controller
 
         $curr_user_id = Auth::user()->id;
         /* Получаем из базы данные обо всех активных заказах на поставку */
-        $supply_orders = Supply_order::where('status', 'active')->where('creator_id', Auth::user()->id)->get();
+        $supply_orders = Supply_order::whereIn(
+            'status', ['confirmed', 'active']
+            )->where('creator_id', Auth::user()->id)->orderBy('status', 'asc')->get();
         
         /* Собираем дополнительные данные */
         foreach($supply_orders as $supply_order){
@@ -887,7 +889,7 @@ class Employee_Dashboard_Controller extends Controller
     public function employee_orders_active_index(){
 
         /* Получаем из базы данные обо всех активных заказах на поставку */
-        $supply_orders = Supply_order::where('status', 'active')->where('creator_id', Auth::user()->id)->get();
+        $supply_orders = Supply_order::where('status', 'confirmed')->where('creator_id', Auth::user()->id)->get();
         
         /* Собираем дополнительные данные */
         foreach($supply_orders as $supply_order){

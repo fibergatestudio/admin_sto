@@ -19,7 +19,7 @@ class Supply_officer_Controller extends Controller
     /*** Страница всех активных заказов на снабжение ***/
     public function all_orders(){
         /* Получаем из базы данные обо всех активных заказах на поставку */
-        $supply_orders = Supply_order::where('status', 'active')->get();
+        $supply_orders = Supply_order::where('status', 'confirmed')->get();
         
         /* Собираем дополнительные данные */
         foreach($supply_orders as $supply_order){

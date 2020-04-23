@@ -79,6 +79,7 @@ class Logs_Admin_Controller extends Controller
 
             $employee_id = $employee_finances_log_entry->employee_id;
             $employee_name = Employee::find($employee_id)->general_name;
+            $employee_phone = Employee::find($employee_id)->phone;
 
             $action_choose = $employee_finances_log_entry->action;
 
@@ -87,6 +88,13 @@ class Logs_Admin_Controller extends Controller
             }
             else{
                 $employee_finances_log_entry->author = $employee_name;
+            }
+
+            if ($employee_phone) {
+                $employee_finances_log_entry->phone = $employee_phone;
+            }
+            else{
+                $employee_finances_log_entry->phone = 'Объект';
             }
 
             if($action_choose == 'deposit')
