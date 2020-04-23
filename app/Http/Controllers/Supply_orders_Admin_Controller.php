@@ -22,7 +22,9 @@ class Supply_orders_Admin_Controller extends Controller
     public function supply_orders_index(){
 
         /* Получаем из базы данные обо всех активных заказах на поставку */
-        $supply_orders = Supply_order::where('status', 'active')->get();
+        $supply_orders = Supply_order::whereIn(
+            'status', ['confirmed', 'active']
+            )->orderBy('status', 'asc')->get();
 
         /* Собираем дополнительные данные */
         foreach($supply_orders as $supply_order){
@@ -328,7 +330,9 @@ class Supply_orders_Admin_Controller extends Controller
 
     /* Архив : просмотр */
     public function archive_index(){
-        $archived_orders = Supply_order::where('status', 'archived')->get();
+        $archived_orders = Supply_order::whereIn(
+            'status', ['confirmed', 'archived']
+            )->get();
 
          /* Собираем дополнительные данные */
          foreach($archived_orders as $supply_order){
@@ -395,7 +399,7 @@ class Supply_orders_Admin_Controller extends Controller
     /*Подтверждение заказа (статус изменяется на - active )*/
     public function confirm_supply_order($supply_order_id){
         $supply_order = Supply_order::find($supply_order_id);
-        $supply_order->status = 'active';
+        $supply_order->status = 'confirmed';
         $supply_order->save();
 
         /* Редирект на страницу заказов */

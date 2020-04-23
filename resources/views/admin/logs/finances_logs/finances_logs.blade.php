@@ -39,7 +39,7 @@
                     <td>
                         <p>
                             <a href="/supervisor/employee_finances/{{ $employee_finances_log->employee_id }}">
-                                {{ $employee_finances_log->employee_name}}
+                                {{ $employee_finances_log->phone}}
                             </a>
                         </p>
                     </td>

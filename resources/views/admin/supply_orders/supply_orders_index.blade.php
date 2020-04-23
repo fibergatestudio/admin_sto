@@ -5,7 +5,51 @@
 @endsection
 
 @section('content')
-    {{-- Выводим заказы --}}
+
+
+<!-- Modal -->
+<div class="modal fade" id="completedModal" tabindex="-1" role="dialog" aria-labelledby="completedModalLabel" aria-hidden="true">
+    <form id="form-completed" action="{{ url('/admin/supply_orders/order_completed_action') }}" method="POST">
+    @csrf
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="completedModalLabel">Стоимость</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {{-- ID выполненного заказа --}}
+                    <input type="hidden" name="order_id" value="">
+                    <div class="form-row">
+                        {{-- Сумма --}}
+                        <div class="form-group col-md-6">
+                            <label>Сумма:</label>
+                            <input type="number" min="0" name="sum" class="form-control" required>
+                        </div>
+                        {{-- Валюта --}}
+                        <div class="form-group col-md-6">
+                            <label>Валюта</label>
+                            <select name="currency"class="form-control">
+                                <option value="MDL">MDL</option>
+                                <option value="USD">USD</option>
+                                <option value="EUR">EUR</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+{{-- Выводим заказы --}}
 <div class="card card-p">
     <form class="form" action="{{ url('admin/supply_orders/new') }}" method="POST">
         @csrf
@@ -13,42 +57,6 @@
         {{-- Счётчик количества вхождений --}}
         <input type="hidden" id="counter" name="entries_count" value="0">
 
-    {{-- Строки под элементы заказа на Vue.JS --}}
-    <!-- <div class="form-group">
-            <label class="col-md-4 form-group" style="display: inline-block" for="item_name">Название</label>
-            <label class="col-md-1 form-group" style="display: inline-block" for="item_numbers">Количество</label>
-            <label class="col-md-2 form-group" style="display: inline-block" for="item_urgency">Срочность</label>
-            <label for="order_comment">Комментарий к заказу</label>
-            <div class="form-group">
-                <input type="text" name="item" class="form-control col-md-4" style="display: inline-block" required id="item_name">
-                <input type="number" name="count" class="form-control col-md-1" style="display: inline-block" value="1" min="1" required id="item_numbers">
-                <select name="urgency" class="form-control col-md-3" style="display: inline-block" required id="item_urgency">
-                    <option selected="selected">Выберите срочность</option>
-                    <option value="Не горит">Не горит</option>
-                    <option value="Горит">Горит</option>
-                    <option value="Очень горит">Очень горит</option>
-                </select>
-            </div>
-            {{-- Комментарий к заказу --}}
-            <div class="form-group col-md-8">
-                <textarea class="form-control" rows="3" cols="45" name="order_comment" id="order_comment" placeholder="Введите коментарий к заказу"></textarea>
-            </div>
-            {{-- Добавить новый элемент : кнопка --}}
-            <div class="row">
-                <!-- <div onclick="app1.addNewEntry()" class="btn btn-success m-1">+</div> -->
-        <!-- <button type="submit" class="btn btn-primary m-1">
-            Добавить
-        </button>
-    </div>
-    <hr> -->
-
-        <!-- <div class="form-group">
-            <label for="order_comment">Комментарий к заказу</label>
-        </div>
-        <div class="form-group">
-        <textarea rows="3" cols="45" name="order_comment" id="order_comment" placeholder="Введите коментарий к заказу"></textarea>
-        </div> -->
-        <!-- </div> -->
 
         <div id="app1">
             <label class="col-md-1" style="display: inline-block" for="item_name"></label>
@@ -63,13 +71,12 @@
                 <input type="text" :name="'item'+index" class="form-control col-md-3" style="display: inline-block" required id="item_name">
                 <input type="number" :name="'count'+index" class="form-control col-md-2" style="display: inline-block" value="1" min="1" required id="item_numbers">
                 <select :name="'urgency'+index" class="form-control col-md-2" style="display: inline-block" required id="item_urgency">
-                    <option selected="selected">Выберите срочность</option>
-                    <option value="Не горит">Не горит</option>
+                    <option value="Не горит" selected="selected">Не горит</option>
                     <option value="Горит">Горит</option>
                     <option value="Очень горит">Очень горит</option>
                 </select>
                 <!-- <input type="text" class="form-control col-md-2" style="display: inline-block" > -->
-                <input type="text" :name="'order_comment'+index" class="form-control col-md-3" style="display: inline-block" required id="order_comment">
+                <input type="text" :name="'order_comment'+index" class="form-control col-md-3" style="display: inline-block" id="order_comment">
                 {{-- Комментарий к заказу --}}
                 <!-- <div class="form-group p-2">
                     <textarea class="form-control col-md-2" rows="3" cols="45" :name="'order_comment'+index" id="order_comment" placeholder="Введите коментарий к заказу"></textarea>
@@ -115,11 +122,10 @@
     <hr>
 
 
-    @foreach($supply_orders as $supply_order)
-    <h5><span class="badge badge-primary">Заказ {{ $supply_order->id }}</span></h5>
     <table class="table">
         <thead>
             <tr>
+                <th>№ заказа</th>
                 <th>Имя заказчика</th>
                 <th>Дата создания</th>
                 <th>Название товара</th>
@@ -130,8 +136,19 @@
             </tr>
         </thead>
         <tbody>
-            
+
+            @foreach($supply_orders as $supply_order)
+    
+            @if($supply_order->status === 'active')
+                <tr style="background-color: white;">
+            @else
                 <tr style="background-color: wheat;">
+            @endif        
+                    <td >
+                        {{-- № заказа --}}
+                        №{{ $supply_order->id }}<br>
+                    </td>
+                    
                     <td >
                         {{-- Имя заказчика --}}
                         {{ $supply_order->creator_name }}<br>
@@ -177,32 +194,21 @@
                                 Управление
                             </div>
                         </a>
-                        <form method="POST" action="{{ url('/admin/supply_orders/'.$supply_order->id.'/order_completed_action') }}">
-                            @csrf
-                            {{-- ID выполненного заказа --}}
-                            <input type="hidden" name="order_id" value="{{ $supply_order->id }}">
-
-                            <button type="submit" class="w-100 my-2 btn btn-success">
-                                Исполнено
-                            </button>
-                        </form>
+                        <input type="hidden" name="order_id_table" value="{{ $supply_order->id }}">
+                        <button class="w-100 my-2 btn btn-success button-completed" data-toggle="modal" data-target="#completedModal">
+                            Исполнено
+                        </button>
                     </td>
                 </tr> 
+        
+            @endforeach
+
         </tbody>
     </table>
     <hr>
-   @endforeach
         
     
     {{-- Конец вывода --}}
-
-    {{-- Новый заказ : кнопка --}}
-    <!-- <a href="{{ url('admin/supply_orders/new') }}">
-        <div class="btn btn-success">
-            Новый заказ
-        </div>
-    </a> -->
-
         
         <div class="row">
             {{-- Заказы для подтверждения : кнопка --}}
@@ -243,6 +249,14 @@
                     document.getElementById("counter").value = currentCounter;
                 },
             }
+        });
+
+
+        $('.button-completed').click(function () {
+            let val = $(this).siblings('input').val();
+            $('[name="order_id"]').val(val);
+            let action = $('#form-completed').attr('action');
+            $('#form-completed').attr('action', action+'/'+val);
         });
     </script>
 @endsection

@@ -557,7 +557,7 @@ Route::get('/admin/cars/index', 'Cars_Admin_Controller@cars_index')->middleware(
 Route::get('/admin/supply_orders/index', 'Supply_orders_Admin_Controller@supply_orders_index')->middleware('can:admin_rights');
 
   /* Управление заказом : Выполнить */
-  Route::post('/admin/supply_orders/{supply_order_id}/order_completed_action', 'Supply_orders_Admin_Controller@admin_order_completed_action')->middleware('can:admin_rights');
+  Route::post('/admin/supply_orders/order_completed_action/{supply_order_id}', 'Supply_orders_Admin_Controller@admin_order_completed_action')->middleware('can:admin_rights');
 
 /* Добавить заказ */
 Route::get('/admin/supply_orders/new', 'Supply_orders_Admin_Controller@new_supply_order')->middleware('can:admin_rights');
