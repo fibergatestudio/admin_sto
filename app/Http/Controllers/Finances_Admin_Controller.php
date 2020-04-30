@@ -10,6 +10,7 @@ use App\Account;
 use App\AccountCategory;
 use App\AccountOperation;
 use App\AccountOperationCategory;
+use App\AccountCategoryArchive;
 
 class Finances_Admin_Controller extends Controller
 {
@@ -84,13 +85,28 @@ class Finances_Admin_Controller extends Controller
         return back();
     }
 
-    public function finances_delete_category($fin_cat_name){
+    public function finances_archive_category($fin_cat_name){
 
         //dd($fin_cat_name);
 
         DB::table('account_categories')->where('name', $fin_cat_name)->delete();
 
+        $archive_cat = DB::table('account_categories')->where('name', $fin_cat_name)->first();
+
+        $new_arch = new AccountCategoryArchive();
+        $new_arch->name = $fin_cat_name;
+        $new_arch->save();
+
+        //DB::table('account_categories_archive')->
+
         return back();
+    }
+
+    public function finances_archive(){
+
+        $all_cats = AccountCategoryArchive::all();
+
+        return view('admin.finances.finances_archive', compact('all_cats') );
     }
 
     public function delete_account($account_id){
@@ -105,6 +121,130 @@ class Finances_Admin_Controller extends Controller
 
         return back();
     }
+
+    //Расход
+    public function add_outgo(Request $request, $account_id){
+
+        $type = $request->type_operation;
+        //$tag = $request->tag;
+        $category = $request->category;
+        $expense = $request->expense;
+        //$date = $request->date;
+
+        //dd($account_id, $type, $tag, $category, $expense, $date);
+
+        $account_operation = AccountOperation::where('account_id', $account_id)->latest()->first();
+        $account = Account::find($account_id);
+
+        $new_account_operation = new AccountOperation();
+        $new_account_operation->account_id = $account_id;
+        $new_account_operation->author = Auth::User()->name;
+        $new_account_operation->tag = $request->tag;       
+        $new_account_operation->comment = $request->comment;
+        $new_account_operation->date = $request->date;
+        if (isset($request->expense)) {
+            $new_account_operation->expense = $request->expense;
+            if ($account_operation->balance < $new_account_operation->expense) {
+                //return "Недостаточно средств !";
+                return back()->with('error', 'Недостаточно средств !');
+            }
+            $new_account_operation->balance = $account_operation->balance - $new_account_operation->expense;
+        }
+        $new_account_operation->save();
+        //Сохраняем новый баланс
+        $account->balance = $new_account_operation->balance;
+        $account->save();
+
+        return back();
+    }
+    //Доход
+    public function add_income(Request $request, $account_id){
+        $type = $request->type_operation;
+        //$tag = $request->tag;
+        $category = $request->category;
+        $expense = $request->expense;
+        $income = $request->income;
+        //dd($income);
+        //$date = $request->date;
+
+        //dd($account_id, $type, $tag, $category, $expense, $date);
+
+        $account_operation = AccountOperation::where('account_id', $account_id)->latest()->first();
+        $account = Account::find($account_id);
+
+        $new_account_operation = new AccountOperation();
+        $new_account_operation->account_id = $account_id;
+        $new_account_operation->author = Auth::User()->name;
+        $new_account_operation->tag = $request->tag;       
+        $new_account_operation->comment = $request->comment;
+        $new_account_operation->date = $request->date;
+        if (isset($request->income)) {
+            $new_account_operation->income = $request->income;
+            $new_account_operation->balance = $account_operation->balance + $new_account_operation->income;
+            //return back()->with('error', 'Недостаточно средств !');
+        }
+        $new_account_operation->save();
+        //Сохраняем новый баланс
+        $account->balance = $new_account_operation->balance;
+        $account->save();
+
+        return back();
+    }
+    //Перевод
+
+    public function add_transfer(Request $request, $account_id){
+
+        $account_operation = AccountOperation::where('account_id', $account_id)->latest()->first();
+        $account = Account::find($account_id);
+
+        $new_account_operation = new AccountOperation();
+        $new_account_operation->account_id = $account_id;
+        $new_account_operation->author = Auth::User()->name;
+        $new_account_operation->tag = $request->tag;       
+        $new_account_operation->comment = $request->comment;
+        $new_account_operation->date = $request->date;
+        //dd($request->type_operation);
+        if ($request->type_operation === 'Перевод на счет') {
+            //dd($request->type_operation);
+            $to_account = Account::find($request->to_account_id);
+            $new_account_operation->category = 'Перевод на счет: '.$to_account->name;
+            $new_account_operation_to = new AccountOperation();
+            $new_account_operation_to->account_id = $request->to_account_id;
+            $new_account_operation_to->author = Auth::User()->name;
+            $new_account_operation_to->category = 'Перевод со счета: '.$account->name;
+            $new_account_operation_to->comment = $request->comment;
+            $new_account_operation_to->date = $request->date;
+            $new_account_operation_to->income = $request->income_to;
+            $account_operation_to = AccountOperation::where('account_id', $request->to_account_id)->latest()->first();
+            $new_account_operation_to->balance = $account_operation_to->balance + $new_account_operation_to->income;
+            //dd($account_operation_to->balance + $new_account_operation_to->income);
+            $new_account_operation_to->save();
+            $to_account->balance = $new_account_operation_to->balance;
+            $to_account->save();
+        }
+        else {
+            $new_account_operation->category = $request->category;
+        }
+        $new_account_operation->save();
+        //Сохраняем новый баланс
+        $account->balance = $new_account_operation_to->balance;
+        $account->save();
+
+        $account_operation_category = AccountOperationCategory::where([
+            ['type_operation','=', $request->type_operation],
+            ['name','=', $request->category]
+        ])->first();
+
+        if (empty($account_operation_category) AND $request->type_operation !== 'Перевод на счет') {
+            $new_account_operation_category = new AccountOperationCategory();
+            $new_account_operation_category->type_operation = $request->type_operation;
+            $new_account_operation_category->name = $request->category;
+            $new_account_operation_category->save();
+        }  
+
+        return back();
+    }
+
 
     // Добавление операции
     public function add_operation(Request $request, $account_id)

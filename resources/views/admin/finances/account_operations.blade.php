@@ -26,6 +26,239 @@
   <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addOperation" style="margin: 10px">
       Добавить операцию
   </button>
+  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addOperationRemake" style="margin: 10px">
+      Добавить операцию (new)
+  </button>
+
+@if (Session::has('error'))
+   <div class="alert alert-warning">{{ Session::get('error') }}</div>
+@endif
+@if (Session::has('success'))
+   <div class="alert alert-success">{{ Session::get('success') }}</div>
+@endif
+
+  <div class="modal fade" id="addOperationRemake" tabindex="-1" role="dialog" aria-labelledby="addOperationModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addOperationModalLabel">Добавить операцию</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+        <div id="accordion">
+          <div class="card">
+            <div class="card-header" id="headingOne">
+              <h5 class="mb-0">
+                <button class="btn btn-success" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                  Расход
+                </button>
+              </h5>
+            </div>
+
+            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+              <div class="card-body">
+              <!-- HERE -->
+              <form action="{{ url('/admin/accounts/add_outgo/'.$account_operations[0]->account_id) }}" method="POST">
+                @csrf
+                {{-- Тип операции --}}
+                <input type="hidden" name="type_operation" value="Расход">
+
+                <div class="form-row">
+                  {{-- Тег --}}
+                  <div class="form-group col-md-6">
+                      <label>Тег</label>
+                      <input type="text" name="tag" class="form-control">
+                  </div>
+
+                  {{-- Категория --}}
+                  <div class="form-group col-md-6">
+
+                      <label>Категория</label>
+
+                      <select class="form-control" name="category">
+                        <option>Выберите категорию</option>
+                        @foreach($account_operation_categories as $cat)
+                          <option>{{ $cat->name }}</option>
+                        @endforeach
+                      </select>
+
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  {{-- Сумма --}}
+                  <div class="form-group col-md-6">
+                    <label>Сумма</label>
+                    <input type="text" name="expense" class="form-control" required>
+                  </div>
+                  {{-- Дата --}}
+                  <div class="form-group col-md-6">
+                    <label>Дата</label>
+                    <input type="text" name="disabled-date" class="form-control" disabled value="{{ date('Y-m-d H:i:s') }}">
+                    <input type="hidden" name="date" value="{{ date('Y-m-d H:i:s') }}">
+                  </div>
+                </div>
+
+                {{-- Описание --}}
+                <div class="col-md-12 px-0">
+                  <label>Описание</label>
+                  <textarea name="comment" class="form-control"></textarea>
+                </div>
+
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-success">Добавить</button>
+                </div>
+                </form>
+
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header" id="headingTwo">
+              <h5 class="mb-0">
+                <button class="btn btn-success" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                  Доход
+                </button>
+              </h5>
+            </div>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+              <div class="card-body">
+              <form action="{{ url('/admin/accounts/add_income/'.$account_operations[0]->account_id) }}" method="POST">
+              @csrf
+              {{-- Тип операции --}}
+                <input type="hidden" name="type_operation" value="Доход">
+
+                <div class="form-row">
+                  {{-- Тег --}}
+                  <div class="form-group col-md-6">
+                      <label>Тег</label>
+                      <input type="text" name="tag" class="form-control">
+                  </div>
+                  {{-- Категория --}}
+                  <div class="form-group col-md-6 choose-category">
+                      <label>Категория</label>
+
+                      @if(count($account_operation_categories) > 0)
+                      <p onclick="chooseCategory()" class="form-control">Выберите</p>
+                      <ul class="listCategories">
+                        @php
+                        $categories_arr = [];
+                        @endphp
+                        <li><input type="text" name="category" onblur="createCategory(this)" class="form-control" placeholder="Введите новую категорию" autocomplete="off"></li>
+                        @foreach($account_operation_categories as $category)
+                        @php
+                        $categories_arr[] = $category->name;
+                        @endphp
+                        <li class="form-control" data-value="{{ $category->name }}">{{ $category->name }}</li>
+                        @endforeach
+                      </ul>
+                      @else
+                      <input type="text" name="category" class="form-control" placeholder="Введите новую категорию" required>
+                      @endif
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  {{-- Сумма --}}
+                  <div class="form-group col-md-6">
+                    <label>Сумма</label>
+                    <input type="text" name="income" class="form-control" required>
+                  </div>
+                  {{-- Дата --}}
+                  <div class="form-group col-md-6">
+                    <label>Дата</label>
+                    <input type="text" name="disabled-date" class="form-control" disabled value="{{ date('Y-m-d H:i:s') }}">
+                    <input type="hidden" name="date" value="{{ date('Y-m-d H:i:s') }}">
+                  </div>
+                </div>
+
+                {{-- Описание --}}
+                <div class="col-md-12 px-0">
+                  <label>Описание</label>
+                  <textarea name="comment" class="form-control"></textarea>
+                </div>
+
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-success">Добавить</button>
+                </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header" id="headingThree">
+              <h5 class="mb-0">
+                <button class="btn btn-success" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                  Перевод
+                </button>
+              </h5>
+            </div>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+              <div class="card-body">
+              <form action="{{ url('/admin/accounts/add_transfer/'.$account_operations[0]->account_id) }}" method="POST">
+              @csrf
+              {{-- Тип операции --}}
+                <input type="hidden" name="type_operation" value="Перевод на счет">
+
+                <div class="form-row">
+                  {{-- На счет --}}
+                  <div class="form-group col-md-6">
+                      <label>На счет</label>
+                      <select name="to_account_id" class="form-control">
+                          @foreach($accounts as $account)
+                          @if($account->id != $account_operations[0]->account_id)
+                          <option value="{{ $account->id }}">{{ $account->name }} {{ $account->currency }}</option>
+                          @endif
+                          @endforeach
+                      </select>
+                  </div>
+                  {{-- Описание --}}
+                  <div class="form-group col-md-6">
+                    <label>Описание</label>
+                    <textarea name="comment" class="form-control"></textarea>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  {{-- Сумма --}}
+                  <div class="form-group col-md-6">
+                    <label>Сумма</label>
+                    <input type="text" name="expense" class="form-control" required>
+                  </div>
+                  {{-- Сумма получения--}}
+                  <div class="form-group col-md-6">
+                    <label>Сумма получения</label>
+                    <input type="text" name="income_to" class="form-control" value="">
+                  </div>
+                </div>
+
+                {{-- Дата --}}
+                <div class="form-group col-md-6">
+                  <label>Дата</label>
+                  <input type="text" name="disabled-date" class="form-control" disabled value="{{ date('Y-m-d H:i:s') }}">
+                  <input type="hidden" name="date" value="{{ date('Y-m-d H:i:s') }}">
+                </div>
+
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-success">Добавить</button>
+                </div>
+              </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div><!-- modal-body -->
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+          <button type="submit" id="createOperation" class="btn btn-primary">Создать</button>
+        </div>
+      </div>
+    </div>
+</div>
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#searchModal" style="margin: 10px">Поиск</button>
   <button type="button" class="btn btn-primary" style="margin: 10px">Архив</button>
 
@@ -212,6 +445,7 @@
         </div>
       </div>
 </div>
+
 
 
 <div class="modal fade" id="addOperation" tabindex="-1" role="dialog" aria-labelledby="addOperationModalLabel" aria-hidden="true">

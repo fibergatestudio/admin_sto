@@ -521,8 +521,10 @@ Route::post('/admin/profitability/profitability_index/month', 'Assignments_Admin
 Route::get('/admin/finances/index', 'Finances_Admin_Controller@finances_index')->middleware('can:admin_rights');
 /* Добавление категории */
 Route::post('/admin/finances/add_category', 'Finances_Admin_Controller@add_category')->middleware('can:admin_rights');
-    /* Удаление категории */
-    Route::get('/admin/finances/{fin_cat_id}/delete', 'Finances_Admin_Controller@finances_delete_category')->middleware('can:admin_rights');
+    /* Перенос категории в архив */
+    Route::get('/admin/finances/{fin_cat_id}/archive', 'Finances_Admin_Controller@finances_archive_category')->middleware('can:admin_rights');
+    /* Архив категорий */
+    Route::get('/admin/finances/archive_list', 'Finances_Admin_Controller@finances_archive')->middleware('can:admin_rights');
 /* Добавление счета */
 Route::post('/admin/finances/add_account', 'Finances_Admin_Controller@add_account')->middleware('can:admin_rights');
 /* Просмотр счета */
@@ -533,6 +535,16 @@ Route::get('/admin/accounts/view/{account_id}', 'Finances_Admin_Controller@show_
 Route::get('/admin/finances/{account_id}/delete', 'Finances_Admin_Controller@delete_account')->middleware('can:admin_rights');
 /* Добавление операции */
 Route::post('/admin/accounts/add_operation/{account_id}', 'Finances_Admin_Controller@add_operation')->middleware('can:admin_rights');
+
+    /* Добавление расхода */
+    Route::post('/admin/accounts/add_outgo/{account_id}', 'Finances_Admin_Controller@add_outgo')->middleware('can:admin_rights');
+
+    /* Добавление дохода */
+    Route::post('/admin/accounts/add_income/{account_id}', 'Finances_Admin_Controller@add_income')->middleware('can:admin_rights');
+
+    /* Добавление перевода */
+    Route::post('/admin/accounts/add_transfer/{account_id}', 'Finances_Admin_Controller@add_transfer')->middleware('can:admin_rights');
+
 
 
 /****** Модели машин : Администратор ******/

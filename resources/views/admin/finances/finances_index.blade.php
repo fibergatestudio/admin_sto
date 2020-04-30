@@ -3,15 +3,15 @@
 @section('page_name')
 <div style="margin-top: 10px">
   <!-- Вызов попапа Добавить счет -->
-  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addAccount" style="margin: 10px">
+  <!-- <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addAccount" style="margin: 10px">
       Добавить счет
-  </button>
+  </button> -->
   <!-- Вызов попапа Добавить(Изменить) категорию -->
   <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addCategory" style="margin: 10px">
       Добавить(Изменить) категорию
   </button>
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#searchModal" style="margin: 10px">Поиск</button>
-  <button type="button" class="btn btn-primary" style="margin: 10px">Архив</button>
+  <a href="{{ url('/admin/finances/archive_list') }}"><button type="button" class="btn btn-primary" style="margin: 10px">Архив</button></a>
 
 </div>
 
@@ -176,7 +176,7 @@
                 @endphp
                 @foreach($categories as $category)
                     <input type="radio" name="inset" value="" id="tab_<?=$i?>" <?=($i==1)?'checked':''?>>
-                    <label for="tab_<?=$i?>">{{ $category->name }} <a href="{{ url('/admin/finances/' . $category->name . '/delete') }}"><button class="btn btn-warning">x</button></a></label>
+                    <label for="tab_<?=$i?>">{{ $category->name }}</label>
                     @php
                         $i++;
                     @endphp
@@ -187,7 +187,6 @@
                     $i = 1;
                 @endphp
                 @foreach($categories as $category)
-
                     <div id="txt_<?=$i?>">
                         <table class="table">
                             <thead>
@@ -235,6 +234,7 @@
                           <hr>
                           <h4>Всего: {{ $sum_tot_price }}<span>лей</span></h4>
                           <h4>Оборот: {{ $sum_tot_price }}<span>лей</span></h4>
+                          <a href="{{ url('/admin/finances/' . $category->name . '/archive') }}"><button class="btn btn-warning">Перевести счет в архив</button></a>
                         </div>
                     </div>
 

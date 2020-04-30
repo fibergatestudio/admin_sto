@@ -95,7 +95,7 @@
                     <div class="form-group col-md-1">
                         <div class="custom-control custom-checkbox">
                             <input type="checkbox" name="wash_services[]" value="Мотор" class="custom-control-input" id="check4" v-model="fine">
-                            <label class="custom-control-label" for="check4">Мотор</label>
+                            <label class="custom-control-label" for="check4">Двигатель</label>
                         </div>
                         <div class="custom-control custom-checkbox">
                             <input type="checkbox" name="wash_services[]" value="Радиатор" class="custom-control-input" id="check5" v-model="fine">
