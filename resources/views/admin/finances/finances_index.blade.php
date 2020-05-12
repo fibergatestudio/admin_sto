@@ -3,9 +3,9 @@
 @section('page_name')
 <div style="margin-top: 10px">
   <!-- Вызов попапа Добавить счет -->
-  <!-- <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addAccount" style="margin: 10px">
+  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addAccount" style="margin: 10px">
       Добавить счет
-  </button> -->
+  </button>
   <!-- Вызов попапа Добавить(Изменить) категорию -->
   <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addCategory" style="margin: 10px">
       Добавить(Изменить) категорию
