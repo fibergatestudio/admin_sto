@@ -331,7 +331,7 @@ class Supply_orders_Admin_Controller extends Controller
     /* Архив : просмотр */
     public function archive_index(){
         $archived_orders = Supply_order::whereIn(
-            'status', ['confirmed', 'archived']
+            'status', ['completed', 'archived']
             )->get();
 
          /* Собираем дополнительные данные */

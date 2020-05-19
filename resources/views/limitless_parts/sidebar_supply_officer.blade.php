@@ -29,6 +29,15 @@
 						<li class="nav-item-header"><div class="text-uppercase font-size-xs line-height-xs">Меню</div> <i class="icon-menu" title="Main"></i></li>
 
 						<li class="nav-item">
+							<a href="{{ url('/supply_officer/finances/index') }}" class="nav-link {{ request()->is('supply_officer/finances/*') ? 'active' : ''}}">
+								<i class="icon-book3"></i>
+								<span>
+									Счета
+								</span>
+							</a>
+						</li>
+
+						<li class="nav-item">
 							<a href="{{ url('supply_officer/all_orders/list') }}" class="nav-link {{ request()->is('supply_officer/all_orders/*') ? 'active' : ''}}">
 								Заказы на снабжение (активные)
 							</a>

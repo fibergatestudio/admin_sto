@@ -536,16 +536,6 @@ Route::get('/admin/finances/{account_id}/delete', 'Finances_Admin_Controller@del
 /* Добавление операции */
 Route::post('/admin/accounts/add_operation/{account_id}', 'Finances_Admin_Controller@add_operation')->middleware('can:admin_rights');
 
-    /* Добавление расхода */
-    Route::post('/admin/accounts/add_outgo/{account_id}', 'Finances_Admin_Controller@add_outgo')->middleware('can:admin_rights');
-
-    /* Добавление дохода */
-    Route::post('/admin/accounts/add_income/{account_id}', 'Finances_Admin_Controller@add_income')->middleware('can:admin_rights');
-
-    /* Добавление перевода */
-    Route::post('/admin/accounts/add_transfer/{account_id}', 'Finances_Admin_Controller@add_transfer')->middleware('can:admin_rights');
-
-
 
 /****** Модели машин : Администратор ******/
 Route::get('/admin/cars/index', 'Cars_Admin_Controller@cars_index')->middleware('can:admin_rights');
@@ -769,20 +759,35 @@ Route::get('/employee/dashboard', 'Employee_Dashboard_Controller@index');
 
     /* Главная страница */
     Route::get('/supply_officer/index', 'Supply_officer_Controller@index')->middleware('can:supply_officer_rights');
+    
+    /* Счета */
+    /* Просмотр счетов */
+    Route::get('/supply_officer/finances/index', 'Supply_officer_Controller@finances_index')->middleware('can:supply_officer_rights');
+    /* Добавление счета */
+    Route::post('/supply_officer/finances/add_account', 'Supply_officer_Controller@add_account')->middleware('can:supply_officer_rights');
+    /* Просмотр счета */
+    Route::get('/supply_officer/accounts/view/{account_id}', 'Supply_officer_Controller@show_account')->middleware('can:supply_officer_rights');
+    /* Редактирование счета */
+    Route::post('/supply_officer/accounts/view/apply_edit', 'Supply_officer_Controller@apply_edit')->middleware('can:supply_officer_rights');
+    /* Удаление */
+    Route::get('/supply_officer/finances/{account_id}/delete', 'Supply_officer_Controller@delete_account')->middleware('can:supply_officer_rights');
+    /* Добавление операции */
+    Route::post('/supply_officer/accounts/add_operation/{account_id}', 'Supply_officer_Controller@add_operation')->middleware('can:supply_officer_rights');
 
+    
+    /* Заказы */
     /* Активные заказы : список */
     Route::get('/supply_officer/all_orders/list', 'Supply_officer_Controller@all_orders')->middleware('can:supply_officer_rights');
         /* Применить изменения заказа */
         Route::post('/supply_officer/all_orders/list/apply_order_edit', 'Supply_officer_Controller@apply_order_edit')->middleware('can:supply_officer_rights');
-
     /* Выполненные заказы : список */
     Route::get('/supply_officer/completed_orders', 'Supply_officer_Controller@completed_orders')->middleware('can:supply_officer_rights');
-
     /* Страница одного заказа : просмотр */
     Route::get('/supply_officer/all_orders/view_order/{order_id}', 'Supply_officer_Controller@view_order')->middleware('can:supply_officer_rights');
-
+    /* Управление заказом : Выполнить */
+    Route::post('/supply_officer/supply_orders/order_completed_action', 'Supply_officer_Controller@order_completed_action')->middleware('can:supply_officer_rights');
     /* Заказ выполнен : POST */
-    Route::post('/supply_officer/order_completed_action', 'Supply_officer_Controller@order_completed_action')->middleware('can:supply_officer_rights');
+    /*Route::post('/supply_officer/order_completed_action', 'Supply_officer_Controller@order_completed_action')->middleware('can:supply_officer_rights');*/
 
 /****************************************/
 /*********** КЛИЕНТ : секция ************/

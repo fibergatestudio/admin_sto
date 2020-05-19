@@ -3,21 +3,21 @@
 @section('page_name')
 <div style="margin-top: 10px">
   <!-- Вызов попапа Добавить счет -->
-  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addAccount" style="margin: 10px">
+  <!-- <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addAccount" style="margin: 10px">
       Добавить счет
-  </button>
+  </button> -->
   <!-- Вызов попапа Добавить(Изменить) категорию -->
   <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addCategory" style="margin: 10px">
       Добавить(Изменить) категорию
   </button>
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#searchModal" style="margin: 10px">Поиск</button>
-  <a href="{{ url('/admin/finances/archive_list') }}"><button type="button" class="btn btn-primary" style="margin: 10px">Архив</button></a>
+  <a href="{{ url('/supply_officer/finances/archive_list') }}"><button type="button" class="btn btn-primary" style="margin: 10px">Архив</button></a>
 
 </div>
 
 <!-- Модальное окно Добавить счет -->
 <div class="modal fade" id="addAccount" tabindex="-1" role="dialog" aria-labelledby="addAccountModalLabel" aria-hidden="true">
-  <form action="{{ url('/admin/finances/add_account') }}" method="POST">
+  <form action="{{ url('/supply_officer/finances/add_account') }}" method="POST">
     @csrf
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -80,7 +80,7 @@
 
 <!-- Модальное окно Добавить(Изменить) категорию -->
 <div class="modal fade" id="addCategory" tabindex="-1" role="dialog" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
-  <form action="{{ url('/admin/finances/add_category') }}" method="POST">
+  <form action="{{ url('/supply_officer/finances/add_category') }}" method="POST">
     @csrf
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -225,12 +225,12 @@
 
                                         {{-- Кнопка подробнее --}}
                                         <td>
-                                            <a href="{{ url('/admin/accounts/view/'.$account->id) }}">
+                                            <a href="{{ url('/supply_officer/accounts/view/'.$account->id) }}">
                                                 <div class="btn btn-primary">
                                                     Подробнее
                                                 </div>
                                             </a>
-                                            <a href="{{ url('/admin/finances/' . $account->id . '/delete') }}">
+                                            <a href="{{ url('/supply_officer/finances/' . $account->id . '/delete') }}">
                                                 <div class="btn btn-warning">
                                                     Удалить
                                                 </div>
@@ -245,7 +245,7 @@
                           <hr>
                           <h4>Всего: {{ $sum_tot_price }}<span>лей</span></h4>
                           <h4>Оборот: {{ $sum_tot_price }}<span>лей</span></h4>
-                          <a href="{{ url('/admin/finances/' . $category->name . '/archive') }}"><button class="btn btn-warning">Перевести счет в архив</button></a>
+                          <a href="{{ url('/supply_officer/finances/' . $category->name . '/archive') }}"><button class="btn btn-warning">Перевести счет в архив</button></a>
                         </div>
                     </div>
 
