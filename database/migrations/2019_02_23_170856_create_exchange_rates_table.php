@@ -14,15 +14,15 @@ class CreateExchangeRatesTable extends Migration
     public function up()
     {
         Schema::create('exchange_rates', function (Blueprint $table) {
-            $table->float('usd')->nullable();
-            $table->float('eur')->nullable();
+            $table->double('usd')->nullable();
+            $table->double('eur')->nullable();
             $table->timestamps();
         });
 
         $demo_values = [
             [
-                'usd' => 0.57,
-                'eur'=> 0.52
+                'usd' => 0.056,
+                'eur'=> 0.052
             ]
         ];
 

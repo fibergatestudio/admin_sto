@@ -8,12 +8,12 @@
 
 @section('content')
     {{-- Выводим заказы --}}
-    @foreach($supply_orders as $supply_order)
-    <h5><span class="badge badge-primary">Заказ {{ $supply_order->id }}</span></h5>
+    
     <div class="card card-p">
         <table class="table">
             <thead>
             <tr>
+                <th>№ заказа</th>
                 <th>Имя заказчика</th>
                 <th>Дата создания</th>
                 <th>Название товара</th>
@@ -24,8 +24,15 @@
             </tr>
             </thead>
             <tbody>
-
+           
+            @foreach($supply_orders as $supply_order)
             <tr>
+
+                <td >
+                    {{-- № заказа --}}
+                    <span class="badge badge-primary">Заказ {{ $supply_order->id }}</span><br>
+                </td>
+                
                 <td >
                     {{-- Имя заказчика --}}
                     {{ $supply_order->creator_name }}<br>
@@ -59,8 +66,6 @@
                     </td>
                 @endforeach
 
-
-
                 <td >
                     {{-- Комментарий --}}
                     {{ $supply_order->order_comment }}
@@ -74,28 +79,21 @@
                             Редактировать
                         </div>
                     </a>
+                    <hr>
+                    <a href="{{ url('/admin/supply_orders/confirm/'.$supply_order->id) }}">
+                        <div class="btn btn-primary">
+                            Подтвердить
+                        </div>
+                    </a>
 
                 </td>
             </tr>
-            </tbody>
-        </table>
-    </div>
 
-    <hr>
-    <a href="{{ url('/admin/supply_orders/confirm/'.$supply_order->id) }}">
-        <div class="btn btn-primary">
-                Подтвердить
-        </div>
-    </a>
-    <hr>
-   @endforeach
+
+   @endforeach  
     
-   
-    
-    {{-- Конец вывода --}}
-    <hr>
-    
-    
-    
-    
+    </tbody>
+</table>    
+</div>    
+
 @endsection

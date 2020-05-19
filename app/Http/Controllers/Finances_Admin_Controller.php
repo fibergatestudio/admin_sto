@@ -20,8 +20,23 @@ class Finances_Admin_Controller extends Controller
         $users = User::all();
         $categories = AccountCategory::all();
         $accounts = Account::all();
+        /* Получаем курс валют */
+        $usd = DB::table('exchange_rates')->select('usd')->get();
+        foreach ($usd as $value) {
+            $usd = $value->usd;
+        }
+        $eur = DB::table('exchange_rates')->select('eur')->get();
+        foreach ($eur as $value) {
+            $eur = $value->eur;
+        }
 
-        return view('admin.finances.finances_index', ['users' => $users, 'categories' => $categories, 'accounts' => $accounts]);
+        return view('admin.finances.finances_index', [
+            'users' => $users, 
+            'categories' => $categories, 
+            'accounts' => $accounts,
+            'usd' => $usd,
+            'eur' => $eur
+        ]);
     }
 
     // Добавление счета
@@ -52,13 +67,25 @@ class Finances_Admin_Controller extends Controller
         $categories = AccountCategory::all();
         $account_operations = AccountOperation::where('account_id', $account_id)->orderBy('created_at', 'DESC')->get();
         $account_operation_categories = AccountOperationCategory::all();
+        /* Получаем курс валют */
+        $usd = DB::table('exchange_rates')->select('usd')->get();
+        foreach ($usd as $value) {
+            $usd = $value->usd;
+        }
+        $eur = DB::table('exchange_rates')->select('eur')->get();
+        foreach ($eur as $value) {
+            $eur = $value->eur;
+        }
+        
         return view('admin.finances.account_operations', [
             'account_operations' => $account_operations, 
             'categories' => $categories, 
             'users' => $users, 
             'account_operation_categories' => $account_operation_categories,
             'accounts' => $accounts,
-            'account' => $account
+            'account' => $account,
+            'usd' => $usd,
+            'eur' => $eur
         ]);
     }
 
@@ -118,129 +145,6 @@ class Finances_Admin_Controller extends Controller
             'id' => $account_id,
         ])
         ->delete();
-
-        return back();
-    }
-
-    //Расход
-    public function add_outgo(Request $request, $account_id){
-
-        $type = $request->type_operation;
-        //$tag = $request->tag;
-        $category = $request->category;
-        $expense = $request->expense;
-        //$date = $request->date;
-
-        //dd($account_id, $type, $tag, $category, $expense, $date);
-
-        $account_operation = AccountOperation::where('account_id', $account_id)->latest()->first();
-        $account = Account::find($account_id);
-
-        $new_account_operation = new AccountOperation();
-        $new_account_operation->account_id = $account_id;
-        $new_account_operation->author = Auth::User()->name;
-        $new_account_operation->tag = $request->tag;       
-        $new_account_operation->comment = $request->comment;
-        $new_account_operation->date = $request->date;
-        if (isset($request->expense)) {
-            $new_account_operation->expense = $request->expense;
-            if ($account_operation->balance < $new_account_operation->expense) {
-                //return "Недостаточно средств !";
-                return back()->with('error', 'Недостаточно средств !');
-            }
-            $new_account_operation->balance = $account_operation->balance - $new_account_operation->expense;
-        }
-        $new_account_operation->save();
-        //Сохраняем новый баланс
-        $account->balance = $new_account_operation->balance;
-        $account->save();
-
-        return back();
-    }
-    //Доход
-    public function add_income(Request $request, $account_id){
-        $type = $request->type_operation;
-        //$tag = $request->tag;
-        $category = $request->category;
-        $expense = $request->expense;
-        $income = $request->income;
-        //dd($income);
-        //$date = $request->date;
-
-        //dd($account_id, $type, $tag, $category, $expense, $date);
-
-        $account_operation = AccountOperation::where('account_id', $account_id)->latest()->first();
-        $account = Account::find($account_id);
-
-        $new_account_operation = new AccountOperation();
-        $new_account_operation->account_id = $account_id;
-        $new_account_operation->author = Auth::User()->name;
-        $new_account_operation->tag = $request->tag;       
-        $new_account_operation->comment = $request->comment;
-        $new_account_operation->date = $request->date;
-        if (isset($request->income)) {
-            $new_account_operation->income = $request->income;
-            $new_account_operation->balance = $account_operation->balance + $new_account_operation->income;
-            //return back()->with('error', 'Недостаточно средств !');
-        }
-        $new_account_operation->save();
-        //Сохраняем новый баланс
-        $account->balance = $new_account_operation->balance;
-        $account->save();
-
-        return back();
-    }
-    //Перевод
-
-    public function add_transfer(Request $request, $account_id){
-
-        $account_operation = AccountOperation::where('account_id', $account_id)->latest()->first();
-        $account = Account::find($account_id);
-
-        $new_account_operation = new AccountOperation();
-        $new_account_operation->account_id = $account_id;
-        $new_account_operation->author = Auth::User()->name;
-        $new_account_operation->tag = $request->tag;       
-        $new_account_operation->comment = $request->comment;
-        $new_account_operation->date = $request->date;
-        //dd($request->type_operation);
-        if ($request->type_operation === 'Перевод на счет') {
-            //dd($request->type_operation);
-            $to_account = Account::find($request->to_account_id);
-            $new_account_operation->category = 'Перевод на счет: '.$to_account->name;
-            $new_account_operation_to = new AccountOperation();
-            $new_account_operation_to->account_id = $request->to_account_id;
-            $new_account_operation_to->author = Auth::User()->name;
-            $new_account_operation_to->category = 'Перевод со счета: '.$account->name;
-            $new_account_operation_to->comment = $request->comment;
-            $new_account_operation_to->date = $request->date;
-            $new_account_operation_to->income = $request->income_to;
-            $account_operation_to = AccountOperation::where('account_id', $request->to_account_id)->latest()->first();
-            $new_account_operation_to->balance = $account_operation_to->balance + $new_account_operation_to->income;
-            //dd($account_operation_to->balance + $new_account_operation_to->income);
-            $new_account_operation_to->save();
-            $to_account->balance = $new_account_operation_to->balance;
-            $to_account->save();
-        }
-        else {
-            $new_account_operation->category = $request->category;
-        }
-        $new_account_operation->save();
-        //Сохраняем новый баланс
-        $account->balance = $new_account_operation_to->balance;
-        $account->save();
-
-        $account_operation_category = AccountOperationCategory::where([
-            ['type_operation','=', $request->type_operation],
-            ['name','=', $request->category]
-        ])->first();
-
-        if (empty($account_operation_category) AND $request->type_operation !== 'Перевод на счет') {
-            $new_account_operation_category = new AccountOperationCategory();
-            $new_account_operation_category->type_operation = $request->type_operation;
-            $new_account_operation_category->name = $request->category;
-            $new_account_operation_category->save();
-        }  
 
         return back();
     }

@@ -13,7 +13,7 @@
 Операции со счетом
 
 <div style="margin-top: 10px">
-  <a href="{{ url('/admin/finances/index') }}" class="btn btn-danger" style="margin: 10px">Вернуться</a>
+  <a href="{{ url('/supply_officer/finances/index') }}" class="btn btn-danger" style="margin: 10px">Вернуться</a>
 
   <!-- Вызов попапа Изменить счет -->
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#changeAccount" style="margin: 10px">
@@ -91,7 +91,7 @@
 <!-- <h1>{{ $account->currency }}</h1> -->
 
 <div class="modal fade" id="changeAccount" tabindex="-1" role="dialog" aria-labelledby="changeAccountModalLabel" aria-hidden="true">
-  <form action="{{ url('/admin/accounts/view/apply_edit') }}" method="POST">
+  <form action="{{ url('/supply_officer/accounts/view/apply_edit') }}" method="POST">
       @csrf
       <input type="hidden" name="account_id" value="{{ $account->id }}">
       <input type="hidden" name="balance" value="{{ $account->balance }}">
@@ -161,7 +161,7 @@
 
 
 <div class="modal fade" id="addOperation" tabindex="-1" role="dialog" aria-labelledby="addOperationModalLabel" aria-hidden="true">
-  <form action="{{ url('/admin/accounts/add_operation/'.$account_operations[0]->account_id) }}" method="POST">
+  <form action="{{ url('/supply_officer/accounts/add_operation/'.$account_operations[0]->account_id) }}" method="POST">
     @csrf
     <div class="modal-dialog" role="document">
       <div class="modal-content">
