@@ -40,7 +40,7 @@
 @section('content')
     
     {{-- Баланс сотрудника --}}
-    <b class="mr-2">Баланс сотрудника:</b>    <div class="btn btn-success">{{ $employee->balance }}</div><br>
+    <b class="mr-2">Баланс сотрудника:</b>    <div class="btn btn-success">{{ $employee->balance }} MDL</div><br>
     
     <hr>
     {{-- Наряды сотрудника --}}
@@ -192,7 +192,7 @@
                         <th>Статус</th>
                     </tr>
                 </thead>
-                <tbody v-if="!sort" id="tablecontents">         
+                <tbody v-if="!sort" id="tablecontents">        
                     @foreach($all_logs_asc as $all_logs_asc_entry)
                         <tr v-if="{{ $all_logs_asc_entry->eng_type }}">
                                 <td>

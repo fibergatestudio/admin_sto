@@ -16,6 +16,21 @@
         </div>
 </div>
 
+<style>
+
+.paging_simple_numbers{
+    padding-top: 20px;
+}
+
+#table_all_filter{
+
+    position: absolute;
+    right: 0px;
+    top: -5%;
+}
+
+</style>
+
 @endsection
 
 @section('content')
