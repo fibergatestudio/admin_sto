@@ -150,6 +150,27 @@ class Finances_Admin_Controller extends Controller
     }
 
 
+    public function archive_account($account_id){
+
+        //$acc = DB::table('accounts')->where('id', $account_id)->first();
+
+        DB::table('accounts')->where('id', $account_id)
+        ->update([
+            'status' => 'archived',
+        ]);
+
+        return back();
+    }
+
+    public function view_archive(){
+
+        $archive_acc = DB::table('accounts')->where('status', 'archived')->get();
+
+        
+
+        return view('admin.finances.accounts_archive', compact('archive_acc') );
+    }
+
     // Добавление операции
     public function add_operation(Request $request, $account_id)
     {

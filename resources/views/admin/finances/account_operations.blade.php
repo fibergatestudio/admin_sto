@@ -32,7 +32,9 @@
 @endif
 
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#searchModal" style="margin: 10px">Поиск</button>
-  <button type="button" class="btn btn-primary" style="margin: 10px">Архив</button>
+
+  <a href="{{ url('/admin/accounts/view/' . $account->id . '/archive') }}"><button type="button" class="btn btn-primary" style="margin: 10px">Архив</button></a>
+  <a href="{{ url('/admin/accounts/view/' . $account->id . '/delete') }}"><button type="button" class="btn btn-danger" style="margin: 10px">Удалить</button></a>
 
 </div>
 

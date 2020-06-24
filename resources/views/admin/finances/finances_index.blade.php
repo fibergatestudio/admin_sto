@@ -12,6 +12,7 @@
   </button>
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#searchModal" style="margin: 10px">Поиск</button>
   <a href="{{ url('/admin/finances/archive_list') }}"><button type="button" class="btn btn-primary" style="margin: 10px">Архив</button></a>
+  <a href="{{ url('/admin/accounts/view_archive') }}"><button type="button" class="btn btn-primary" style="margin: 10px">Архив Аккаунтов</button></a>
 
 </div>
 
@@ -230,11 +231,11 @@
                                                     Подробнее
                                                 </div>
                                             </a>
-                                            <a href="{{ url('/admin/finances/' . $account->id . '/delete') }}">
+                                            <!-- <a href="{{ url('/admin/finances/' . $account->id . '/delete') }}">
                                                 <div class="btn btn-warning">
                                                     Удалить
                                                 </div>
-                                            </a>
+                                            </a> -->
                                         </td>
                                     </tr>
                                 @endif
