@@ -15,7 +15,7 @@
     <div class="d-flex">
         <p>Клиент-владелец:
             <a href="{{ url('admin/clients/view_client/'.$client->id) }}">
-                {{ $client->general_name }}
+                {{ $client->fio }}
             </a>
 
         </p>
@@ -23,7 +23,7 @@
 
     <hr>
     {{-- Текущие наряды : вывод --}}
-    <div class="d-flex">
+    <div>
         Текущие наряды по авто:<br>
         @foreach($assignments as $assignment)
             {{-- Название наряда + переход на страницу наряда--}}

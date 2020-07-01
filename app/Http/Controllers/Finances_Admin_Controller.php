@@ -192,6 +192,9 @@ class Finances_Admin_Controller extends Controller
         else {
             $new_account_operation->category = $request->category;
         }
+        if ($request->assignment_id) {
+            $new_account_operation->assignment_id = $request->assignment_id;
+        }
         $new_account_operation->save();
         $account->balance = $new_account_operation->balance;
         $account->save();

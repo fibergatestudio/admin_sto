@@ -49,6 +49,7 @@ class Clients_Admin_Controller extends Controller
 
 
             $all_info[$number]['id'] = $client->id;
+            $all_info[$number]['general_name'] = $client->general_name;
             $all_info[$number]['fio'] = $client->fio; 
             //Берем машины клиента (их кол-во)
             $client_cars = DB::table('cars_in_service')->where('owner_client_id', $client->id)->get();
@@ -105,24 +106,19 @@ class Clients_Admin_Controller extends Controller
     /* Добавить клиента: обработка POST запроса */
     public function add_client_post(Request $request){
 
-        //$user_id = Auth::user()->id;
-        //dd($request->name);
-        
-
         $new_client = new Client();
 
         $name = $request->name;
-        // $surname = $request->surname;
-        // $fio = $name.' '.$surname;
-        $fio = $request->fio;
+        $surname = $request->surname;
 
         $new_client->general_name = $name;
-        //$new_client->surname = $request->surname;
+        $new_client->surname = $surname;
         //Новые поля в добавлении клиента
-        $new_client->fio = $name;
+        $new_client->fio = $name.' '.$surname;
         $new_client->organization = $request->organization;
         $new_client->phone = $request->phone;
-        $new_client->referral = $request->referral;
+        $new_client->discount = $request->discount;
+        $new_client->referral = $request->referral_id;
 
         $new_client->save();
 

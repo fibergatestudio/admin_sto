@@ -1227,13 +1227,12 @@ class Assignments_Admin_Controller extends Controller
             'text' => $text
             ]);
 
-        } else {
+        } 
 
-        }
-
-
-        /* Возвращаемся на страницу нарядов по авто */
-        return redirect('admin/cars_in_service/view/'.$car_id);
+        // Возвращаемся на страницу нарядов по авто 
+        //return redirect('admin/cars_in_service/view/'.$car_id);
+        // Переходим на страницу наряда
+        return redirect('admin/assignments/view/'.$new_assignment->id);
     }
 
     /* Просмотр наряда : страница */
@@ -1361,6 +1360,12 @@ class Assignments_Admin_Controller extends Controller
         $currency_arr = ['MDL','USD','EUR'];
 
         $accounts = Account::where('status', 'active')->get();
+        /* Получаем финансовые операции в наряде */
+        $assignment_operations = AccountOperation::where('assignment_id', $assignment_id)->get();
+        foreach ($assignment_operations as $value){
+            $account = Account::where('id', $value->account_id)->get();
+            $value->currency = $account[0]->currency;
+        }
 
         /* Возвращаем представление */
         return view('admin.assignments.view_assignment_page',
@@ -1383,6 +1388,7 @@ class Assignments_Admin_Controller extends Controller
                 'currency_arr' => $currency_arr,
                 'new_sub_assignments_arr' => $new_sub_assignments_arr,
                 'accounts' => $accounts,
+                'assignment_operations' => $assignment_operations,
             ]);
     }
 

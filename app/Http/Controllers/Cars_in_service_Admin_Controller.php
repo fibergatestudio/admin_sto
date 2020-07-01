@@ -141,8 +141,11 @@ class Cars_in_service_Admin_Controller extends Controller
             $request->document->store('public1');
         }
 
-        /* И перенаправить на страницу клиента */
-        return redirect()->route('admin_view_client', ['client_id' => $request->client_id]);
+        // И перенаправить на страницу клиента 
+        //return redirect()->route('admin_view_client', ['client_id' => $request->client_id]);
+
+        // Перенаправить на страницу добавления наряда
+        return redirect('admin/assignments/add/'.$car_id);
     }
 
     /* Изменение машины : POST */

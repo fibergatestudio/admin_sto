@@ -6,7 +6,7 @@
 
 @section('content')
     <p>
-        Клиент: {{ $owner->general_name }}<br>
+        Клиент: {{ $owner->fio }}<br>
         Авто: {{ $car->general_name }}
     </p>
 <div class="card card-p">

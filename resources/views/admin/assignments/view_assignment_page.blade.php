@@ -97,7 +97,7 @@
 
 <!-- Модальное окно принятия аванса -->
 <div class="modal fade" id="prepaidModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <form action="{{ url('/admin/manage_assignment/add_income_entry') }}" method="POST">
+        <form  id="form-add-income" action="{{ url('/admin/manage_assignment/add_income_entry') }}" method="POST">
             @csrf
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -117,6 +117,15 @@
                             <div class="form-group col-md-6">
                                 <label>Сумма Аванса</label>
                                 <input type="number" name="amount" min="0" class="form-control" required>
+                            </div>
+                            {{-- На счет --}}
+                            <div class="form-group col-md-6">
+                                <label>На счет</label>
+                                <select name="to_account_id" class="form-control">
+                                    @foreach($accounts as $account)
+                                    <option value="{{ $account->id }}" data-currency="{{ $account->currency }}">{{ $account->name }} {{ $account->currency }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                             {{-- Валюта --}}
                             <div class="form-group col-md-6">
@@ -143,7 +152,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                        <button type="submit" class="btn btn-primary">Принять</button>
+                        <button id="accept-advance" type="submit" class="btn btn-primary">Принять</button>
                     </div>
                 </div>
             </div>
@@ -357,7 +366,7 @@ label{
   <label for="tab_3">Информация клиента</label>
 
   <input type="radio" name="inset" value="" id="tab_4">
-  <label for="tab_4">Доходная часть</label>
+  <label for="tab_4">История Финансов</label>
 
   <input type="radio" name="inset" value="" id="tab_5">
   <label for="tab_5">Настройки печати</label>
@@ -428,11 +437,21 @@ label{
 
       table.table-income td {
           vertical-align: top;
-
       }
-      table.table th{
+      table.table tr td.info:last-child{
+        display: table-cell;
+      }
+      table.table th, table.table-income td.info{
         text-align: center;
         vertical-align: middle;
+      }
+      .currency-style{
+        display: flex;
+        justify-content: space-around;
+      }
+      .currency-style label{
+        margin-top: 10px;
+        margin-left: 20px;
       }
       form:nth-child(2) table.table tr td:first-child, form:nth-child(2) table.table tr th:first-child
       {
@@ -557,6 +576,8 @@ label{
                         $selected_employee_id = 0;
                         $total_work_sum = 0;
                         $thead_work = true;
+
+                        //echo '<pre>'.print_r($new_sub_work_assignments,true).'</pre>';
                   ?>
                   @foreach($new_sub_work_assignments as $new_sub_assignment)
 
@@ -598,7 +619,7 @@ label{
                                         @endif
                                         <option value="">Выбрать</option>
                                         @foreach($workzone_data as $work_data)
-                                            @if($selected_work_id == $work_data->id)
+                                            @if($new_sub_assignment->d_table_workzone == $work_data->id)
                                                 <option selected value="{{ $work_data->id }}">{{ $work_data->general_name }}</option>
                                             @else
                                                 <option value="{{ $work_data->id }}">{{ $work_data->general_name }}</option>
@@ -634,7 +655,7 @@ label{
                                         @endif
                                         <option value="">Выбрать</option>
                                         @foreach($employees as $employee)
-                                            @if($selected_employee_id == $employee->id)
+                                            @if($new_sub_assignment->d_table_responsible_officer == $employee->id)
                                                 <option selected value="{{ $employee->id }}">{{ $employee->general_name }}</option>
                                             @else
                                                 <option value="{{ $employee->id }}">{{ $employee->general_name }}</option>
@@ -2593,15 +2614,17 @@ label{
   
   <div id="txt_4">
       
-      <h3>Доходная часть</h3>
+      <h3>История Финансов</h3>
       
 
 <div class="card card-p">
     <form class="text-center" method="POST" action="{{ url('/admin/profitability/profitability_index') }}">
         @csrf
         <div class="form-row mb-3">
-            <div class="form-group  text-center col-md-6" style="margin: 0 auto;">
+            <div class="form-group currency-style text-center col-md-6" style="margin: 0 auto;">
+                <label>USD</label>
                 <input class="py-1" type="number" name="usd_currency" value="{{ $usd }}" step="0.00001">
+                <label>EUR</label>
                 <input class="py-1" type="number" name="eur_currency" value="{{ $eur }}" step="0.00001">
                 <input class="py-1" type="hidden" name="assignment_id" value="{{ $assignment->id }}">
                 <button type="submit" class="btn btn-success">Сохранить</button>
@@ -2613,14 +2636,41 @@ label{
 
     <br/>
 
-    {{-- Тип операции --}}
+    <table class="table table-deb table-income">
+      <thead>
+        <tr>
+          <th scope="col">Действие</th>
+          <th scope="col">Сумма</th>
+          <th scope="col">Дата</th>
+          <th scope="col">Описание</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if(count($assignment_operations) > 0)
+          @foreach($assignment_operations as $operation)
+          <tr>
+            <td class="info">{{ $operation->category }}</td>
+            <td class="info">{{ $operation->income }} {{ $operation->currency }}</td>
+            <td class="info">{{ $operation->created_at }}</td>
+            <td class="info">{{ $operation->comment }}</td>
+          </tr>
+          @endforeach
+        @endif
+      </tbody>        
+    </table>
+
+    <hr>
+    <!-- {{-- Тип операции --}}
     <input type="hidden" name="type_operation" value="Доход">
     {{-- Категория --}}
     <input type="hidden" name="category" value="">
     {{-- Тег --}}
     <input type="hidden" name="tag" value="">
     {{-- Описание --}}
-    <input type="hidden" name="comment" value="">
+    <input type="hidden" name="comment" value=""> -->
+
+    <form id="form-closed-assignment" action="{{ url('/admin/manage_assignment/add_income_entry') }}" method="POST">
+                @csrf
     <table class="table table-deb table-income">
         <thead>
         <tr>
@@ -2630,22 +2680,20 @@ label{
             <th scope="col">Действие</th>
         </tr>
         </thead>
-        <tbody>
-        <tr>
-
-            <form action="{{ url('/admin/manage_assignment/add_income_entry') }}" method="POST">
-                @csrf
-                <input type="hidden" name="assignment_id" value="{{ $assignment->id }}">
-                <input type="hidden" name="currency" value="MDL">
-                <input type="hidden" name="basis" value="Закрытие наряда">
-                <input type="hidden" name="description" value="Закрытие наряда">
+        
+          <tbody>
+            <tr>                           
                 <td>
+                    <input type="hidden" name="assignment_id" value="{{ $assignment->id }}">
+                    <input type="hidden" name="currency" value="MDL">
+                    <input type="hidden" name="basis" value="Закрытие наряда">
+                    <input type="hidden" name="description" value="Закрытие наряда">
                     <select name="account_id" class="form-control">
                         @foreach($accounts as $account)
                             @if(isset($_GET['account_id']) && $_GET['account_id'] == $account->id)
-                                <option value="{{ $account->id }}" selected>{{ $account->name }}</option>
+                                <option value="{{ $account->id }}" data-currency="{{ $account->currency }}" selected>{{ $account->name }} {{ $account->currency }}</option>
                             @else
-                                <option value="{{ $account->id }}">{{ $account->name }}</option>
+                                <option value="{{ $account->id }}" data-currency="{{ $account->currency }}">{{ $account->name }} {{ $account->currency }}</option>
                             @endif
                         @endforeach
                     </select>
@@ -2658,15 +2706,14 @@ label{
                     <input type="hidden" name="date" value="{{ date('Y-m-d H:i:s') }}">
                 </td>
                 <td>
-                    <button class="icon-plus-custom" type="submit">+</button>
-                </td>
-            </form>
-
-        </tr>
-        </tbody>
-
+                    <button id="button-closed-assignment" class="icon-plus-custom" type="submit" style="cursor: pointer;">+</button>
+                </td>                
+            </tr>
+          </tbody>        
     </table>
 
+  </form>
+    
     <p class="text-left mt-3">*Для закрытия наряда внесите полную сумму и загрузите акты принятия и выдачи машины клиенту</p>
     <div class="form-row">
         <div class="ml-auto form-group col-md-3" style="">
@@ -2690,7 +2737,7 @@ label{
       </form>
       @endif
   
-  </div><!-- txt_4 Доходная часть-->
+  </div><!-- txt_4 История Финансов-->
   
   
   <div id="txt_5">
@@ -3016,6 +3063,7 @@ $(document)
 
   //Функция для выбора рабочих постов в таблице
   function workzoneSelect(element) {
+    console.log(element)
     dataTransmission(element);
   }
 
@@ -3054,7 +3102,6 @@ $(document)
 
     if ($("div.dynamic-"+valId).css('display') == 'none') {
       $("div.dynamic-"+valId).css('display','block');
-      alert("Таблица добавлена !");
     }
     else{
       alert("Таблица уже существует !");
@@ -3129,10 +3176,10 @@ $(document)
         'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
       },
       success: function (data) {
-        //console.log(data);
+        console.log(data);
       },
       error: function (msg) {
-        //alert('Ошибка admin');
+        alert('Ошибка admin');
       }
     });
   }
@@ -3324,5 +3371,127 @@ var assignmentId = "{{ $assignment->id }}";
   });
 
 </script>
+
+<script type="text/javascript">
+  
+  var usd = '<?= $usd ?>';
+  var eur = '<?= $eur ?>';
+  
+  //Принятие аванса на счет 
+  $("#accept-advance").click(function(e){
+
+    e.preventDefault();
+    const income = $('#prepaidModal1 [name="amount"]').val();
+    const assignmentId = $('#prepaidModal1 [name="assignment_id"]').val();   
+    const accountId = $('#prepaidModal1 [name="to_account_id"]').val();
+    const currencyFrom = $('#prepaidModal1 [name="currency"]').val();
+    const currencyTo = $('select[name="to_account_id"] option:selected').attr('data-currency');
+    const date = "{{ date('Y-m-d H:i:s') }}";
+    let sum = 0;
+    
+    if (currencyTo !== currencyFrom) {
+      if (currencyTo === 'MDL' && currencyFrom === 'USD') {
+        sum = Math.round(income/usd);
+      }
+      else if (currencyTo === 'MDL' && currencyFrom === 'EUR') {
+        sum = Math.round(income/eur);
+      }
+      else if (currencyTo === 'USD' && currencyFrom === 'MDL') {
+        sum = Math.round(income*usd);
+      }
+      else if (currencyTo === 'EUR' && currencyFrom === 'MDL') {
+        sum = Math.round(income*eur);
+      }
+      else if (currencyTo === 'USD' && currencyFrom === 'EUR') {
+        let temp = Math.round(income/eur*100)/100;
+        sum = Math.round(temp*usd);
+      }
+      else if (currencyTo === 'EUR' && currencyFrom === 'USD') {
+        let temp = Math.round(income/usd*100)/100;
+        sum = Math.round(temp*eur);
+      }
+    }
+    else{
+      sum = income;
+    }
+
+    $.ajax({
+      url: "{{ url('/admin/accounts/add_operation/') }}"+'/'+accountId,
+      type: "POST",
+      data: {"_token": "{{ csrf_token() }}", "income": sum, "date": date, "type_operation": "Доход", "tag": '', "category": "Аванс от заказчика", "assignment_id": assignmentId, "comment": "Аванс от заказчика в наряде № "+assignmentId},
+      headers: {
+        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      },
+      success: function (data) {
+        //console.log(data);
+      },
+      error: function (msg) {
+        //alert('Ошибка admin');
+      }
+    });
+
+    $('#form-add-income').submit();
+  });
+
+  
+  // Прием денег в Закрытие наряда 
+  $("#button-closed-assignment").click(function(e){
+
+    e.preventDefault();
+    const income = $('#form-closed-assignment [name="amount"]').val();
+    const assignmentId = $('#form-closed-assignment [name="assignment_id"]').val();   
+    const accountId = $('#form-closed-assignment [name="account_id"]').val();
+    const currencyFrom = 'MDL';
+    const currencyTo = $('#form-closed-assignment select[name="account_id"] option:selected').attr('data-currency');
+    const date = "{{ date('Y-m-d H:i:s') }}";
+    let sum = 0;
+    
+    if (currencyTo !== currencyFrom) {
+      if (currencyTo === 'MDL' && currencyFrom === 'USD') {
+        sum = Math.round(income/usd);
+      }
+      else if (currencyTo === 'MDL' && currencyFrom === 'EUR') {
+        sum = Math.round(income/eur);
+      }
+      else if (currencyTo === 'USD' && currencyFrom === 'MDL') {
+        sum = Math.round(income*usd);
+      }
+      else if (currencyTo === 'EUR' && currencyFrom === 'MDL') {
+        sum = Math.round(income*eur);
+      }
+      else if (currencyTo === 'USD' && currencyFrom === 'EUR') {
+        let temp = Math.round(income/eur*100)/100;
+        sum = Math.round(temp*usd);
+      }
+      else if (currencyTo === 'EUR' && currencyFrom === 'USD') {
+        let temp = Math.round(income/usd*100)/100;
+        sum = Math.round(temp*eur);
+      }
+    }
+    else{
+      sum = income;
+    }
+
+    $.ajax({
+      url: "{{ url('/admin/accounts/add_operation/') }}"+'/'+accountId,
+      type: "POST",
+      data: {"_token": "{{ csrf_token() }}", "income": sum, "date": date, "type_operation": "Доход", "tag": '', "category": "Закрытие наряда", "assignment_id": assignmentId, "comment": "Закрытие наряда № "+assignmentId},
+      headers: {
+        'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+      },
+      success: function (data) {
+        //console.log(data);
+      },
+      error: function (msg) {
+        //alert('Ошибка admin');
+      }
+    });
+
+    $('#form-closed-assignment').submit();
+  });
+
+
+</script>
+
 
 @endsection

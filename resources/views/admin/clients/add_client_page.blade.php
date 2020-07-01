@@ -21,28 +21,23 @@
         </div> -->
 
             <div class="form-group">
-                <label>Выбрать клиента</label>
+                <label>Выбрать реферала</label>
                 <!-- <input class="form-control" type="name" name="name" required> -->
-                <select id="service_id" class="form-control">
-                    <option>-- Выберите --</option>
+                <select id="service_id" class="form-control" name="referral_id">
+                    <option value="">-- Выберите --</option>
                     @foreach ($clients as $client)
-                        <option data-fio="{{ $client->fio }}" data-org="{{ $client->organization }}" data-phone="{{ $client->phone }}">#{{ $client->id }} {{ $client->general_name }}</option>
+                        <option value="{{ $client->id }}">№{{ $client->id }} {{ $client->fio }}</option>
                     @endforeach
                 </select>
             </div>
 
-            <!-- <div class="form-group">
+            <div class="form-group">
                 <label>Имя</label>
-                <input id="price" class="form-control" type="name" name="name" value="" required>
+                <input class="form-control" type="name" name="name" required>
             </div>
             <div class="form-group">
                 <label>Фамилия</label>
                 <input class="form-control" type="text" name="surname" required>
-            </div> -->
-
-            <div class="form-group">
-                <label>ФИО</label>
-                <input id="fio" class="form-control" type="text" name="name" required>
             </div>
 
             <div class="form-group">
@@ -55,23 +50,28 @@
             </div>
 
             <div class="form-group">
+                <label>Скидка</label>
+                <input class="form-control" type="text" name="discount" value="0">
+            </div>
+
+            <!-- <div class="form-group">
                 <label>Реферал?</label>
                 <div class="row">
                     <div class="p-1">
                         <input type="radio" id="da" name="referral" value="yes">
                         <label for="da">Да</label>
                     </div>
-
+            
                     <div class="p-1">
                         <input type="radio" id="net" name="referral" value="no" checked>
                         <label for="net">Нет</label>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <div class="form-group">
                 <label>Примечание</label>
-                <input class="form-control" type="text" name="client_note" required>
+                <input class="form-control" type="text" name="client_note">
             </div>
 
             <button type="submit" class="px-5 btn btn-primary">
