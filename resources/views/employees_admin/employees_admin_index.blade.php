@@ -90,9 +90,9 @@
 
                     <td>Должность</td>
 
-                    <td>
+                    <td data-order="<?php echo (int)$employee->balance; ?>"> 
                     
-                    {{ $employee->balance }}
+                    <?php echo (int)$employee->balance . " MDL"; ?>
                     </td>
                     <td style="width: 10px;">MDL</td>
                     <td>
@@ -180,7 +180,7 @@
           "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Russian.json",
       },
       "columnDefs": [ {
-          "targets": 'no-sort',
+          "targets": ['no-sort'],
           "orderable": false,
     } ]
    });

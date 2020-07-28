@@ -120,17 +120,47 @@
 
 			<!-- Вывод fio работников у кого сегодня и завтра день рождения, видят все кроме работников у которых сегодня и завтра ДР-->
 						@php
+						
                             $dateToday = date("m-d");
                             $namesToday = ''; // имена тех у кого сегодня ДР
                             $namesTomorrow = ''; // имена тех у кого завтра ДР
-                            foreach(App\Employee::getBirthdayToday() as $employeeToday){                     
-                                $namesToday .= $employeeToday->fio.', ';                                 
-                            }
-                            foreach(App\Employee::getBirthdayTomorrow() as $employeeTomorrow){                      
-                                $namesTomorrow .= $employeeTomorrow->fio.', ';                                  
+
+							$names_today_amount = count(App\Employee::getBirthdayToday());
+							$count_today = 1;
+                            foreach(App\Employee::getBirthdayToday() as $employeeToday){   
+
+								if($names_today_amount > 1){ 
+									if($names_today_amount != $count_today){
+										$namesToday .= $employeeToday->fio.', ';
+									} else {
+										$namesToday .= $employeeToday->fio.'.';
+									}
+
+								} else {
+									$namesToday .= $employeeToday->fio.'.';
+								}   
+
+								$count_today++;                           
+							}
+							
+							$names_tommorrow_amount = count(App\Employee::getBirthdayTomorrow());
+							$count_tomorrow = 1;
+                            foreach(App\Employee::getBirthdayTomorrow() as $employeeTomorrow){   
+
+								if($names_tommorrow_amount > 1){ 
+									if($names_tommorrow_amount != $count_tomorrow){
+										$namesTomorrow .= $employeeTomorrow->fio.', ';
+									} else {
+										$namesTomorrow .= $employeeTomorrow->fio.'.';
+									}
+								} else {
+									$namesTomorrow .= $employeeTomorrow->fio.'.';
+								}                   
+								$count_tomorrow++;                           
                             }
                             $textToday = "Сегодня День рождения у \n". $namesToday;
                             $textTomorrow = "Завтра День рождения у \n". $namesTomorrow;
+			
                         @endphp
                         
                         <!-- Вариант 1  - без Алерта 
